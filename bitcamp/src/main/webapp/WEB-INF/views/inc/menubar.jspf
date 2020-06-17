@@ -102,8 +102,8 @@
 			</ul>
 			<div id="center-nav">
 				<ul>
-					<li data-toggle="tooltip" title="맨위로"><a href="#main-top"><i class="fas fa-angle-up fa-2x"></i></a></li>
-					<li data-toggle="tooltip" data-placement="left" title="맨밑으로"><a href="#footer"><i class="fas fa-angle-down fa-2x"></i></a></li>
+					<li data-toggle="tooltip" title="맨위로"><a href="javascript:$(document).scrollTop(0)"><i class="fas fa-angle-up fa-2x"></i></a></li>
+					<li data-toggle="tooltip" data-placement="left" title="맨밑으로"><a href="javascript:$(document).scrollTop($(document).height())"><i class="fas fa-angle-down fa-2x"></i></a></li>
 					<li data-toggle="tooltip" data-placement="left" title="홈"><a href="#"><i class="fas fa-home fa-2x"></i></a></li>
 					<li data-toggle="tooltip" data-placement="left" title="마이홈"><a href="#"><i class="fas fa-user fa-2x"></i></a></li>
 					<li data-toggle="tooltip" data-placement="left" title="장바구니"><a href="#"><i class="fas fa-shopping-cart fa-2x"></i></a></li>

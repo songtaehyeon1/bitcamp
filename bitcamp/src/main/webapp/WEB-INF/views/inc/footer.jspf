@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
 <footer>
 	<div id="footerWrap">
 		<div class="fmenu">
-			<ul class="f_cs container">
+			<ul class="f_cs">
 				<!----------------------------------------------------------- 하단 고객센터 --------------------------------------------------->
 				<li>
 					<p class="f_title">CS CENTER</p>
