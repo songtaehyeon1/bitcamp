@@ -3,7 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
@@ -11,10 +13,12 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
-
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/css/**" location="/css/" />
+	<resources mapping="/js/**" location="/js/" />
+	<resources mapping="/editor/**" location="/editor/" />
+	<resources mapping="/upload/**" location="/upload/" />
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
@@ -34,10 +38,12 @@
 	<!-- Mybatis 객체 생성 -sqlSessionFactory ->sqlSession 객체 생성 -->
 	<beans:bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<beans:property name="dataSource" ref="dataSource"></beans:property>
+		<beans:property name="configLocation">
+				<beans:value>classpath:kr/co/bitcamp/mapper/mybatis-config.xml</beans:value>
+		</beans:property>
 		<beans:property name="mapperLocations">
 			<beans:list>
-				<beans:value>classpath:kr/co/bitcamp/mapper/*.xml</beans:value>
-				<!-- <beans:value>classpath:kr/co/bitcamp/mapper/BoardMapper.xml</beans:value> -->
+				<beans:value>classpath:kr/co/bitcamp/mapper/productMapper.xml</beans:value>
 			</beans:list>				
 		</beans:property>	
 	</beans:bean>
@@ -45,7 +51,4 @@
 		<beans:constructor-arg index="0" ref="sqlSessionFactory"></beans:constructor-arg>
 	</beans:bean>
 	<!-- Mybatis 객체 생성 -->
-	
-	
-	
 </beans:beans>
