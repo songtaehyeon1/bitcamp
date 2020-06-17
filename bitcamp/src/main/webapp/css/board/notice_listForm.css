@@ -1,0 +1,247 @@
+@charset "UTF-8";
+#notice_listFormBody{
+	width : 1400px;
+	margin-left : 250px;
+}
+
+#notice_listFormBody a:hover, #notice_listFormBody a:link, #notice_listFormBody a:visited{
+	text-decoration : none;
+	color : black;
+}
+
+#notice_listFormBody a:hover{
+	color : gray;
+}
+
+#notice_listFormBody ul, #notice_listFormBody li{
+	margin : 0;
+	padding : 0;
+	list-style : none;
+	float : left;
+}
+
+/* 맨 위 오른쪽 */
+#nLink{
+	width : 1400px;
+	height : 70px;
+	line-height : 70px;
+	text-align : right;
+	font-size : 13px;
+	margin-top : 100px;
+}
+
+#nLink span{
+	font-weight : bold;
+	font-size : 1.1em;
+}
+
+/* title */
+#nTitle{
+	width : 1400px;
+	height : 60px;
+	line-height : 60px;
+}
+
+#nTitle>span:nth-of-type(2){
+	font-size : 13px;
+	color : #757575;
+}
+
+#nTitle>span:nth-of-type(1){
+	font-size : 2em;
+	font-weight : bold;
+}
+
+/* 카테고리 */
+#boardCate{
+	 width : 1400px;
+	 height : 72px;
+	 background : black;
+}
+
+#boardCate li{
+	 width : 33.3333333333333333333%;
+	 height : 70px;
+	 line-height : 70px;
+	 text-align : center;
+	 text-vertical : middle;
+	 color : white;
+	 font-size : 1.3em;
+	 font-weight : bold;
+	 cursor : pointer;
+}
+
+#boardCate li:nth-of-type(2){
+	 border-left : 1px solid white;
+	 border-right : 1px solid white;
+}
+
+/* 글 */
+#listForm{
+	/*margin-top : 20px;*/
+	width : 1400px;
+	border : 1px solid black;
+}
+
+#listForm *{
+	font-size : 13px;
+}
+
+#listForm>li:nth-of-type(1){
+	border-bottom : 1px solid white;
+}
+
+#listForm>li:nth-of-type(1), #listForm>li:nth-of-type(3){
+	width : 10%;
+	height : 40px;
+	background : black;
+	color : white;
+	padding : 10px;
+}
+
+#listForm>li:nth-of-type(2), #listForm>li:nth-of-type(4){
+	width : 90%;
+	height : 40px;
+	border-bottom : 1px solid black;
+	padding : 10px;
+}
+
+#listForm>li:nth-of-type(5){
+	width : 100%;
+	padding : 20px;
+}
+
+#listForm hr{
+	padding : 0;
+	margin : 20px 0;
+}
+
+/* 목록으로, 수정, 삭제 */
+#boardGo{
+	width : 1400px;
+	height : 90px;
+	line-height : 90px;
+	float : left;
+}
+
+#boardGo>button{
+	width : 200px;
+	height : 50px;
+	line-height : 50px;
+	border : none;
+	background : black;
+	color : white;
+	font-weight : bold;
+	font-size : 1.2em;
+}
+
+.boardGo_right{
+	float : right;
+}
+
+.boardList_edit, .boardList_del{
+	width : 60px;
+	height : 50px;
+	line-height : 50px;
+	border : none;
+	background : black;
+	color : white;
+	font-size : 13px;
+}
+
+/* 이전 다음 */
+#listMove *{
+	font-size : 13px;
+}
+
+#listMove{
+	width : 1400px;
+	float : left;
+}
+
+#listMove>ul{
+	width : 1400px;
+	border : 1px solid black;
+}
+
+#listMove li{
+	padding-left : 10px;
+}
+
+#listMove li:nth-of-type(1){
+	border-bottom : 1px solid white;
+}
+
+#listMove li:nth-of-type(2){
+	border-bottom : 1px solid black;
+}
+
+#listMove li:nth-of-type(2n + 1){
+	width : 8%;
+	height : 40px;
+	line-height : 40px;
+	background : black;
+	color : white;
+	padding-left : 20px;
+}
+
+#listMove li:nth-of-type(2n){
+	width : 92%;
+	height : 40px;
+	line-height : 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

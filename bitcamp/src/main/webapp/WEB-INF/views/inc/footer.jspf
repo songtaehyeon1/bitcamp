@@ -1,0 +1,92 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<footer>
+	<div id="footerWrap">
+		<div class="fmenu">
+			<ul class="f_cs container">
+				<!----------------------------------------------------------- 하단 고객센터 --------------------------------------------------->
+				<li>
+					<p class="f_title">CS CENTER</p>
+					<p class="f_boldB">1688-1234</p>
+					<div class="f_cont">
+						운영시간 : 평일 10:00 ~ 17:00<br> 점심시간 : 12:30~13:30<br> 토, 일,
+						공휴일 휴무
+					</div>
+				</li>
+				<li>
+					<p class="f_title">BANK ACCOUNT</p>
+					<div class="f_cont">
+						<p class="f_boldS">111-1111-1111-11</p>
+						농협은행 / 예금주 비트캠프<br>
+					</div>
+					<div class="f_cont">
+						<p class="f_boldS">2222-222-222222</p>
+						우리은행 / 예금주 비트캠프<br>
+					</div>
+					<div class="f_cont">
+						<p class="f_boldS">333-33333-33-333</p>
+						기업은행 / 예금주 비트캠프<br>
+					</div>
+				</li>
+				<!----------------------------------------------------------- // 하단 고객센터 --------------------------------------------------->
+				<li>
+					<p class="f_title">SUPPORT</p>
+					<div class="f_support">
+						<p class="su_cont">
+							<a href="#">공지사항</a><a href="#">고객문의</a><a href="#">상품후기</a><a
+								href="#">마이쇼핑</a>
+						</p>
+						<p class="su_cont">
+							<a href="#">장바구니</a><a href="#">주문조회</a><a href="#">관심상품</a><a
+								href="#">배송조회</a>
+						</p>
+
+					</div>
+				</li>
+				<!---------------------------------------------- 하단 SNS --------------------------------------------->
+				<li>
+					<p class="f_title">FOLLOW US</p>
+					<div class="f_sns">
+						<p>
+							<a href="#"><i class="fas fa-comment fa-2x"></i> 카카오톡 상담</a>
+						</p>
+						<p>
+							<a href="https://www.instagram.com/" target="_blank"><i
+								class="fab fa-instagram fa-2x"></i> 인스타그램</a>
+						</p>
+
+					</div>
+				</li>
+				<!---------------------------------------------- //하단 SNS --------------------------------------------->
+			</ul>
+			<div id="footer">
+				<div class="inner">
+					<div id="footer-corpinfo">
+						<p class="address">
+							<span>회사명 : 비트캠프 </span><span>대표 : 홍길동</span> <span>사업자등록번호
+								: 111-22-33333</span> <span>통신판매업신고 : 제2020-서울마포-0001호</span> <br>
+							<span>전화 : 1688-1111</span> <span>주소 : 서울시 마포구 백범로 비트캠프</span> <span>개인정보보호책임자
+								: <a href="mailto:information@bitcamp.co.kr">(information@bitcamp.co.kr)</a>
+							</span><br> <span>Copyright © 비트캠프. All rights reserved.</span>
+						</p>
+						<!----------------------------- 하단 인증마크 ----------------------------------------------->
+						<p class="f_mark">
+							<a href="http://www.ftc.go.kr/" target="_blank"><img
+								src="<%=request.getContextPath()%>/resources/footer/bottom_mark01.gif"
+								alt="공정거래위원회"></a> <img
+								src="<%=request.getContextPath()%>/resources/footer/bottom_mark02.gif"
+								alt="SSL"> &nbsp;<img
+								src="<%=request.getContextPath()%>/resources/footer/bottom_mark03.gif"
+								alt="현금영수증">&nbsp;<img
+								src="<%=request.getContextPath()%>/resources/footer/bottom_mark_inisis.gif"
+								alt="구매안전 서비스">
+						</p>
+						<!----------------------------- //하단 인증마크 ----------------------------------------------->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+</body>
+</html>

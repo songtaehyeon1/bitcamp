@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- Intercepter 처리를 할 컨트롤러 목록을 생성하면 dispatherServlet 클래스가 매핑주소에 따라서 Intercept해준다 
+		beans 시작태그에 context, mvc를 추가(하단 Namespaces)
+	-->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/boardWrite"/>
+			<mvc:mapping path="/boardWriteOk"/>
+			<mvc:mapping path="/boardEdit"/>
+			<mvc:mapping path="/boardEditOk"/>
+			<mvc:mapping path="/boardDel"/>
+			<bean class="kr.co.bitcamp.intercepter.LoginIntercepter"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+		
+</beans>

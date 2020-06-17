@@ -1,0 +1,331 @@
+@charset "UTF-8";
+#enquiry_listFormBody{
+	width : 1400px;
+	margin-left : 250px;
+}
+
+#enquiry_listFormBody a:hover, #enquiry_listFormBody a:link, #enquiry_listFormBody a:visited{
+	text-decoration : none;
+	color : black;
+}
+
+#enquiry_listFormBody a:hover{
+	color : gray;
+}
+
+#enquiry_listFormBody ul, #enquiry_listFormBody li{
+	margin : 0;
+	padding : 0;
+	list-style : none;
+	float : left;
+}
+
+/* 맨 위 오른쪽 */
+#nLink{
+	width : 1400px;
+	height : 70px;
+	line-height : 70px;
+	text-align : right;
+	font-size : 13px;
+	margin-top : 100px;
+}
+
+#nLink span{
+	font-weight : bold;
+	font-size : 1.1em;
+}
+
+/* title */
+#nTitle{
+	width : 1400px;
+	height : 60px;
+	line-height : 60px;
+}
+
+#nTitle>span:nth-of-type(2){
+	font-size : 13px;
+	color : #757575;
+}
+
+#nTitle>span:nth-of-type(1){
+	font-size : 2em;
+	font-weight : bold;
+}
+
+/* 카테고리 */
+#boardCate{
+	 width : 1400px;
+	 height : 72px;
+	 background : black;
+}
+
+#boardCate li{
+	 width : 33.3333333333333333333%;
+	 height : 70px;
+	 line-height : 70px;
+	 text-align : center;
+	 text-vertical : middle;
+	 color : white;
+	 font-size : 1.3em;
+	 font-weight : bold;
+	 cursor : pointer;
+}
+
+#boardCate li:nth-of-type(2){
+	 border-left : 1px solid white;
+	 border-right : 1px solid white;
+}
+
+/* 상품 */
+#goods{
+	width : 1400px;
+	height : 150px;
+	line-height : 150px;
+	border : 5px solid black;
+	float : left;
+	/*margin-top : 20px;*/
+	padding : 20px;
+}
+
+#goods *{
+	float : left;
+}
+
+#goods>img{
+	width : 100px;
+	height : 100px;
+	margin-right : 20px;
+}
+
+#goods>span/*, #goods>button*/{
+	width : 1230px;
+	height : 30px;
+	line-height : 30px;
+}
+
+#goods>span:nth-of-type(1){
+	font-weight : bold;
+	font-size : 1.1em;
+}
+
+#goods>span:nth-of-type(2){
+	font-size : 13px;
+	color : red;
+}
+
+/*#goods>button{
+	border : none;
+	width : 170px;
+	height : 40px;
+	line-height : 40px;
+	border : 1px solid black;
+	background : white;
+	font-weight : bold;
+	font-size : 13px;
+}*/
+
+/* 글 */
+#listForm{
+	margin-top : 20px;
+	width : 1400px;
+	border : 1px solid black;
+}
+
+#listForm *{
+	font-size : 13px;
+}
+
+#listForm>li:nth-of-type(1){
+	border-bottom : 1px solid white;
+}
+
+#listForm>li:nth-of-type(1), #listForm>li:nth-of-type(3){
+	width : 10%;
+	height : 40px;
+	background : black;
+	color : white;
+	padding : 10px;
+}
+
+#listForm>li:nth-of-type(2), #listForm>li:nth-of-type(4){
+	width : 90%;
+	height : 40px;
+	border-bottom : 1px solid black;
+	padding : 10px;
+}
+
+#listForm>li:nth-of-type(5){
+	width : 100%;
+	padding : 20px;
+}
+
+/* 목록으로, 수정, 삭제 */
+#boardGo{
+	width : 1400px;
+	height : 90px;
+	line-height : 90px;
+	float : left;
+}
+
+#boardGo>button{
+	width : 200px;
+	height : 50px;
+	line-height : 50px;
+	border : none;
+	background : black;
+	color : white;
+	font-weight : bold;
+	font-size : 1.2em;
+}
+
+.boardGo_right{
+	float : right;
+}
+
+.boardList_edit, .boardList_del{
+	width : 60px;
+	height : 50px;
+	line-height : 50px;
+	border : none;
+	background : black;
+	color : white;
+	font-size : 13px;
+}
+
+/* 댓글 폼 */
+#replyForm *{
+	font-size : 13px;
+}
+
+#replyForm>div{
+	width : 1370px;
+}
+
+#replyForm{
+	width : 1400px;
+	border : 1px solid #EAEAEA;
+	background : #FCFCFC;
+	float : left;
+	padding : 10px;
+}
+
+#replyForm_above>span:nth-of-type(1){
+	font-weight : bold;
+	font-size : 1.1em;
+}
+
+.content{
+	margin-top : 10px;
+	resize : none;
+	width : 1370px;
+	height : 41px;
+	border : 1px solid #EAEAEA;
+	max-height : 200px;
+}
+
+#replyBtn{
+	float : right;
+	border : none;
+	width : 60px;
+	height : 40px;
+	line-height : 40px;
+	background : black;
+	color : white;
+	margin-top : 5px;
+}
+
+.count{
+	float : right;
+}
+
+/* 댓글 */
+#reply>div, #reply>hr{
+	float : left;
+	width : 1400px;
+}
+
+#reply>div{
+	padding-left : 20px;
+	font-size : 13px;
+}
+
+#reply{
+	height : 70px;
+}
+
+.reply_span1{
+	font-weight : bold;
+	font-size : 1.1em;
+}
+
+.reply_content{
+	margin : 10px 0;
+}
+
+.reply_edit, .reply_del{
+	border : none;
+	width : 60px;
+	height : 30px;
+	line-height : 30px;
+	background : black;
+	color : white;
+}
+
+.reply_right{
+	float : right;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
