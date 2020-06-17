@@ -52,7 +52,48 @@
 
 	});
 </script>
+<style>
+.badge{
+	position:relative;
+	left:-73px;
+	top:-25px;
+	/*
+	animation:blink 1s ease-in-out infinite alternate;
+   	-webkit-animation:blink 1s ease-in-out infinite alternate;
+	*/
+	animation:bounce .5s ease-in-out infinite alternate;
+	-webkit-animation:bounce .5s ease-in-out infinite alternate;
+}
+/*장바구니 뱃지 애니메이션 효과*/
+/*
+@keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-webkit-keyframes blink{
+     0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-moz-keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+*/
+@keyframes bounce{
+	0% {transform: translateY(0px);}
+	100% {transform: translateY(-5px);}
+}
+@-webkit-keyframes bounce{
+	0% {transform: translateY(0px);}
+	100% {transform: translateY(-5px);}
+}
+@-moz-keyframes bounce{
+	0% {transform: translateY(0px);}
+	100% {transform: translateY(-5px);}
+}
+</style>
 </head>
+
 <body>
 	<div id="main-top"></div>
 	<header>
@@ -97,6 +138,7 @@
 				<li>
 					<div id="cart-box">
 						<a href="#"><i class="fas fa-shopping-cart"></i> Cart</a>
+						<span class="badge badge-pill badge-light blink bounce">0</span>
 					</div>
 				</li>
 			</ul>
