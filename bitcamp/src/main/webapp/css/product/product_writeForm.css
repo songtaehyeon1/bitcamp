@@ -1,0 +1,171 @@
+@charset "UTF-8";
+#product_writeForm{
+	width : 1400px;
+	margin-left : 250px;
+}
+
+#product_writeForm a:hover, #product_writeForm a:link, #product_writeForm a:visited{
+	text-decoration : none;
+	color : black;
+}
+
+#product_writeForm a:hover{
+	color : gray;
+}
+
+#product_writeForm ul, #product_writeForm li{
+	margin : 0;
+	padding : 0;
+	list-style : none;
+	float : left;
+}
+
+/* 맨 위 오른쪽 */
+#nLink{
+	width : 1400px;
+	height : 70px;
+	line-height : 70px;
+	text-align : right;
+	font-size : 13px;
+	margin-top : 100px;
+}
+
+#nLink span{
+	font-weight : bold;
+	font-size : 1.1em;
+}
+
+/* title */
+#nTitle{
+	width : 1400px;
+	height : 60px;
+	line-height : 60px;
+}
+
+#nTitle>span:nth-of-type(2){
+	font-size : 13px;
+	color : #757575;
+}
+
+#nTitle>span:nth-of-type(1){
+	font-size : 2em;
+	font-weight : bold;
+}
+
+/* 글 폼 */
+#productWriteForm *{
+	font-size : 13px;
+}
+
+#productWriteForm{
+	width : 1400px;
+	border : 1px solid black;
+	/*margin-top : 20px;*/
+}
+#productWriteForm .left{
+	width : 10%;
+	height : 40px;
+	background : black;
+	color : white;
+	padding : 10px;
+	float:left;
+	border-bottom : 1px solid white;
+}
+#productWriteForm .right{
+	width : 90%;
+	height : 40px;
+	padding : 10px;
+	border-bottom : 1px solid black;
+}
+
+#categorySelectList>select{
+	width : 230px;
+}
+
+#priceInput>select{
+	width : 400px;
+}
+
+
+/* 목록, 등록, 취소 버튼 */
+#goBtn{
+	width : 1400px;
+	height : 90px;
+	line-height : 90px;
+	float : left;
+}
+
+#goBtn input{
+	border : none;
+	width : 200px;
+	height : 50px;
+	line-height : 50px;
+	background : black;
+	color : white;
+}
+
+#regiDiv{
+	float : right;
+	width : 405px;
+}
+
+#regiDiv input:nth-of-type(1){
+	background : white;
+	color : black;
+	border : 1px solid black;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
