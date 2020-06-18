@@ -13,6 +13,9 @@ public class ProductVO {
 	private String p_filename3;//상품사진3
 	private String p_filename4;//상품사진4
 	private String p_filename5;//상품사진5
+	private String orderStart;//주문 시작일
+	private String orderEnd;//주문 마감일
+	
 	public int getC_no() {
 		return c_no;
 	}
@@ -84,6 +87,18 @@ public class ProductVO {
 	}
 	public void setP_filename5(String p_filename5) {
 		this.p_filename5 = p_filename5;
+	}
+	public String getOrderStart() {
+		return orderStart;
+	}
+	public void setOrderStart(String orderStart) {
+		this.orderStart = orderStart;
+	}
+	public String getOrderEnd() {
+		return orderEnd;
+	}
+	public void setOrderEnd(String orderEnd) {
+		this.orderEnd = orderEnd;
 	}
 	
 }
