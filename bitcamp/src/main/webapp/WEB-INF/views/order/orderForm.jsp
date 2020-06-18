@@ -1,11 +1,13 @@
+<%@page import="kr.co.bitcamp.product.ProductVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <style>
-table{
-	width:100%
+table {
+	width: 100%
 }
+
 #orderForm {
 	font-family: Nanum Gothic, "나눔고딕"
 }
@@ -154,7 +156,7 @@ table{
 	background-color: #fafafa;
 }
 
-#total_price th{
+#total_price th, .payment th {
 	text-align: center;
 	padding: 10px 0 10px;
 	font-size: 13px;
@@ -163,34 +165,89 @@ table{
 	color: white;
 }
 
-#total_price td{
+#total_price td {
 	text-align: center;
 	font-size: 23px;
 	padding: 8px 0px 8px;
-
 }
 
 #total_price td:last-child {
-	color:#d74f4b;
-	padding : 30px 0 30px;
+	color: #d74f4b;
+	padding: 30px 0 30px;
 }
-#total_price_detail th{
+
+#total_price_detail th {
 	text-align: center;
 	padding: 10px 0 10px;
 	font-size: 20px;
 	background-color: #3d3d4f;
 	color: white;
 }
-#total_price_detail td{
-	padding : 30px;
+
+#total_price_detail td {
+	padding: 30px;
 	font-size: 30px;
 }
+
 #total_price_detail td:last-child {
 	font-size: 17px;
 }
 
-</style>
+.payArea {
+	margin: 0;
+	overflow: hidden;
+	position: relative;
+	padding: 10px 241px 10px 10px;
+	border: 1px solid #777;
+	color: #353535;
+	line-height: 1.5;
+	background: #fbfafa;
+}
 
+#end_price {
+	color: #353535;
+	line-height: 1.5;
+	padding:;
+	float: right;
+	width: 240px;
+	margin: 0 -241px 0 0;
+	text-align: right;
+	background: #fbfafa;
+}
+
+.payment {
+	color: #353535;
+	line-height: 1.5;
+	margin: 0;
+	padding: 0;
+	float: left;
+	width: 100%;
+	background: white;
+	background: #fbfafa;
+}
+
+</style>
+<script>
+$(function() {
+	$("#addr_paymethod0").click(function() {
+		$("#card-form").css("display","block");
+		$("#card-agree").css("display","block");
+		$("#cash-form").css("display","none");
+		$("#current_pay_name").html("카드 결제");
+	});
+	$("#addr_paymethod1").click(function() {
+		$("#card-form").css("display","none");
+		$("#card-agree").css("display","none");
+		$("#cash-form").css("display","block");
+		$("#current_pay_name").html("무통장 입금");
+	});
+})
+
+</script>
+<c:forEach var="vo" items="${productList }">
+	${vo.p_no },${vo.orderStart },${vo.orderEnd }
+</c:forEach>
+<form method="post" action="/bitcamp/orderOk">
 <div id="orderForm" class="container">
 	<div style="height: 130px"></div>
 	<div class="titleArea">
@@ -284,17 +341,17 @@ table{
 					</tr>
 					<tr>
 						<th scope="row">주소</th>
-						<td><input id="ozipcode1" name="ozipcode1" size="6"
+						<td><input id="ozipcode" name="ozipcode" size="6"
 							maxlength="6" readonly type="text"> <a href="#"
-							class="btn btn-dark">우편번호</a><br> <input id="oaddr1"
-							name="oaddr1" size="40" readonly type="text"
+							class="btn btn-dark">우편번호</a><br> <input id="oaddr"
+							name="oaddr" size="40" readonly type="text"
 							style="margin-top: 10px"> <span>기본주소</span><br> <input
-							id="oaddr2" name="oaddr2" size="40" type="text"
+							id="oaddrdetail" name="oaddrdetail" size="40" type="text"
 							style="margin-top: 10px"> <span>나머지주소</span><span>(선택입력가능)</span></td>
 					</tr>
 					<tr>
 						<th scope="row">연락처</th>
-						<td><select id="ophone1_1" name="ophone1_[]">
+						<td><select id="otel1" name="otel1">
 								<option value="02">02</option>
 								<option value="031">031</option>
 								<option value="032">032</option>
@@ -326,8 +383,8 @@ table{
 								<option value="018">018</option>
 								<option value="019">019</option>
 								<option value="0508">0508</option>
-						</select>-<input id="ophone1_2" name="ophone1_[]" maxlength="4" size="4"
-							type="text">-<input id="ophone1_3" name="ophone1_[]"
+						</select>-<input id="otel2" name="otel2" maxlength="4" size="4"
+							type="text">-<input id="otel3" name="otel3"
 							maxlength="4" size="4" type="text"></td>
 					</tr>
 				</tbody>
@@ -361,7 +418,7 @@ table{
 				<tbody>
 					<tr>
 						<th scope="row">주문조회 비밀번호</th>
-						<td><input id="order_password" name="order_password" size="7"
+						<td><input id="opassword" name="opassword" size="7"
 							maxlength="12" type="password"> (주문조회시 필요합니다. 4자에서 12자 영문
 							또는 숫자 대소문자 구분)</td>
 					</tr>
@@ -404,7 +461,7 @@ table{
 					</tr>
 					<tr>
 						<th scope="row">주소</th>
-						<td><input id="rzipcode1" name="rzipcode1" size="6"
+						<td><input id="rzipcode" name="rzipcode" size="6"
 							maxlength="6" readonly type="text"> <a href="#"
 							class="btn btn-dark">우편번호</a><br> <input id="raddr1"
 							name="raddr1" size="40" readonly type="text"
@@ -414,7 +471,7 @@ table{
 					</tr>
 					<tr class="">
 						<th scope="row">연락처</th>
-						<td><select id="rphone1_1" name="rphone1_[]">
+						<td><select id="rtel1" name="rtel1">
 								<option value="02">02</option>
 								<option value="031">031</option>
 								<option value="032">032</option>
@@ -446,8 +503,8 @@ table{
 								<option value="018">018</option>
 								<option value="019">019</option>
 								<option value="0508">0508</option>
-						</select>-<input id="rphone1_2" name="rphone1_[]" maxlength="4" size="4"
-							type="text">-<input id="rphone1_3" name="rphone1_[]"
+						</select>-<input id="rtel2" name="rtel2" maxlength="4" size="4"
+							type="text">-<input id="rtel3" name="rtel3"
 							maxlength="4" size="4" type="text"></td>
 					</tr>
 					<tr>
@@ -462,7 +519,7 @@ table{
 
 
 
-	<div >
+	<div>
 		<div style="margin-top: 20px">
 			<h5>결제 예정 금액</h5>
 		</div>
@@ -477,42 +534,42 @@ table{
 					<tr>
 						<th scope="col"><strong>총 주문 금액</strong></th>
 						<th scope="col"><strong>총 </strong><strong
-							id="total_addsale_text">할인</strong><strong	id="plus_mark" > + </strong><strong
-							id="total_addpay_text">부가결제</strong><strong> 금액</strong>
-						</th>
+							id="total_addsale_text">할인</strong><strong id="plus_mark">
+								+ </strong><strong id="total_addpay_text">부가결제</strong><strong>
+								금액</strong></th>
 						<th scope="col"><strong>총 결제예정 금액</strong></th>
 					</tr>
 				</thead>
-				
+
 				<tbody>
 					<tr>
 						<td>
 							<div>
-								<strong><span id="total_order_price_view">54,000</span>원</strong>																
+								<strong><span id="total_order_price_view">54,000</span>원</strong>
 							</div>
 						</td>
 						<td>
 							<div>
-								<strong>-</strong> 
-								<strong><span id="total_sale_price_view">2,000</span>원</strong>								
+								<strong>-</strong> <strong><span
+									id="total_sale_price_view">2,000</span>원</strong>
 							</div>
 						</td>
 						<td>
 							<div>
-								<strong>=</strong>
-								<strong>
-								<span id="total_order_sale_price_view">52,000</span>원</strong>								
+								<strong>=</strong> <strong> <span
+									id="total_order_sale_price_view">52,000</span>원
+								</strong>
 							</div>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		
+
 		<!-- 비회원은 안보임 -->
 		<div id="total_price_detail">
 			<div>
-				<table border="1">					
+				<table border="1">
 					<colgroup>
 						<col style="width: 160px">
 						<col style="width: auto">
@@ -530,22 +587,160 @@ table{
 							<th scope="row">적립금</th>
 							<td>
 								<p>
-									<input id="input_mile" name="input_mile"										
-										size="10" type="text"> 원 (총 사용가능 적립금 : <strong>2,000</strong>원)
+									<input id="input_mile" name="mileage" size="10" type="text">
+									원 (총 사용가능 적립금 : <strong>2,000</strong>원)
 								</p>
 								<ul class="info">
-									<li>적립금은 최소 0 이상일 때 결제가 가능합니다.</li>									
+									<li>적립금은 최소 0 이상일 때 결제가 가능합니다.</li>
 									<li id="mileage_max_limit" class="">1회 구매시 적립금 최대 사용금액은
-										2,000입니다.</li>								
+										2,000입니다.</li>
 								</ul>
 							</td>
-						</tr>					
+						</tr>
 					</tbody>
 				</table>
 			</div>
-			
+
 		</div>
 	</div>
 
+	<div style="margin-top: 20px">
+		<h5>결제 수단</h5>
+	</div>
+	<div class="payArea">
+		<div class="payment">
+			<div class="method"
+				style="border-bottom: 3px gray double; margin-bottom: 5px">
+				<span> <input id="addr_paymethod0" name="addr_paymethod"
+					value="card" type="radio" checked="checked"> <label
+					for="addr_paymethod0">카드 결제</label>
+				</span> <span> <input id="addr_paymethod1" name="addr_paymethod"
+					value="cash" type="radio"> <label for="addr_paymethod1">무통장
+						입금</label>
+				</span>
+			</div>
+
+
+			<div id="card-form"
+				style="display: block;">
+				<div>
+					<table border="1">
+						<colgroup>
+							<col style="width: 15%">
+							<col style="width: auto">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">카드선택</th>
+								<td><select id="card_corp" name="card_corp">
+										<option value="" selected="selected">선택해주세요.</option>
+										<option value="신한카드">신한카드(구 LG카드 포함)</option>
+										<option value="비씨카드">비씨카드</option>
+										<option value="국민카드">KB국민카드</option>
+										<option value="하나카드(구 외환)">하나카드(구 외환)</option>
+										<option value="삼성카드">삼성카드</option>
+										<option value="현대카드">현대카드</option>
+										<option value="롯데카드">롯데카드</option>
+										<option value="우리카드">우리카드</option>
+										<option value="하나카드(구 하나SK)">하나카드(구 하나SK)</option>
+										<option value="NH농협카드">NH농협카드</option>
+										<option value="씨티카드">씨티카드</option>
+										<option value="수협카드">수협카드</option>
+										<option value="광주은행카드">광주은행카드</option>
+										<option value="전북은행카드">전북은행카드</option>
+										<option value="제주은행카드">제주은행카드</option>
+								</select></td>
+							</tr>
+							<tr>
+								<th scope="row">할부기간</th>
+								<td><select id="directpay_card_installment_select"
+									disabled="disabled"><option value="0">일시불</option></select></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div id="card-agree"
+				style="display: block;">
+				<div class="paymentAgree">
+					<div style="margin-top: 10px">
+						<input type="checkbox" id="directpay_card_agree_all">
+						&nbsp;<label for="directpay_card_agree_all">결제대행서비스 약관에 모두
+							동의합니다.</label>
+						<button type="button" id="ec-order-directpay-card-agree-toggle">전체보기</button>
+					</div>
+					<div>
+						<p>
+							<input type="checkbox" id="directpay_card_agree_financial"
+								class="directpay_card_agree_checkbox"> <label
+								for="directpay_card_agree_financial">전자금융거래 기본약관</label> <a
+								href="#"
+								onclick="window.open('/protected/order/payment_agree_financial.html', '', 'width=460,height=382');return false;">[내용보기]</a>
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div id="cash-form" style="display:none" >
+				<!-- 무통장입금 -->
+				<table border="1">
+					<caption>무통장입금</caption>
+					<colgroup>
+						<col style="width: 139px">
+						<col style="width: auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row">입금자명</th>
+							<td><input id="depositor" name="depositor" size="15" maxlength="20"
+								type="text"></td>
+						</tr>
+						<tr>
+							<th scope="row">입금은행</th>
+							<td><select id="bank" name="bank">
+									<option value="-1">::: 선택해 주세요. :::</option>
+									<option value="농협">농협회원조합:111-1111-1111-11 비트캠프</option>
+									<option value="기업">기업은행:333-33333-33-333 비트캠프</option>
+									<option value="우리">우리은행:2222-222-222222 비트캠프</option>
+							</select></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+
+		<!-- 최종결제금액 -->
+		<div id="end_price" style="padding: 10px 10px 10px; height: 100%">
+			<h4 style="font-size: 1em">
+				<strong id="current_pay_name">카드 결제</strong> <span>최종결제 금액</span>
+			</h4>
+			<p>
+				<input id="total_price" name="total_price"
+					style="text-align: right; border: none; float: none; font-size: 1.5em; background: #fafafa"
+					size="10" readonly value="25000" type="text"><span>원</span>
+			</p>
+			
+			<p id="chk_purchase_agreement" style="display: none;">
+				<input id="chk_purchase_agreement0" name="chk_purchase_agreement"
+					value="T" type="checkbox" style="display: none;"><label
+					for="chk_purchase_agreement0">결제정보를 확인하였으며, 구매진행에 동의합니다.</label>
+			</p>
+			<div>
+				<input type="submit" id="btn_payment" class="btn btn-dark" value="결제하기">
+			</div>
+			<div>
+				<dl>
+					<dt>
+						<strong>총 적립예정금액</strong>
+					</dt>
+					<dd id="mAllMileageSum" style="display: block;">0원</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
 
 </div>
+</form>

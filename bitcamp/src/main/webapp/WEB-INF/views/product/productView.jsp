@@ -19,6 +19,8 @@
 	rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/product/product_view.css" />
+<link rel="stylesheet" type="text/css"
+	href="<%=request.getContextPath()%>/css/product/review_in_productPage.css" />
 <script src="<%=request.getContextPath()%>/js/product/product.js"></script>
 </head>
 <body >
@@ -78,7 +80,7 @@
 				<hr>
 			<!-- 옵션 선택 -->
 				<div class="optionChoice" onchange="optionChoice()">
-<form method="post" action="/bitcamp/productOrder" id="productWriteForm"><!-- 폼 시작 -->
+<!-- <form method="post" action="/bitcamp/order" id="productWriteForm">폼 시작 -->
 					<ul>
 						<li><span class="spanWidth150 col-4">상품명</span>${product.p_name}</li>
 						<li><span class="spanWidth150 col-4">배송방법</span>택배</li>
@@ -169,7 +171,7 @@
 						<a class="cartAndInterest"style="margin-right:2%" >장바구니 담기</a>
 						<a class="cartAndInterest">관심상품 등록</a>
 					</div>
-</form><!-- 폼 끝 -->
+<!-- </form>폼 끝 -->
 				</div>
 			</div>
 		</div>
@@ -187,80 +189,78 @@
 		</div> <!--탭 끝 -->
 	
 			<!-- 	///////////// -->
-		<p id="product_information">상세정보</p>
-		<img src="<%=request.getContextPath()%>/resources/products/wini.jpg">	
-  		<p id="product_review">리뷰</p>
   		<div>
-		   	카테고리:${product.c_name}<hr>
-			상품코드:${product.p_no }<hr>
-			상품명:${product.p_name }<hr>
-			가격:${product.price }<hr>
+		<p id="product_information"><span><h1>상세정보</h1></span></p>
 			상품설명:${product.p_commnet }<hr>
-			<c:if test="${product.p_filename1!=null }">
-				미리보기:<img src="/bitcamp/upload/${product.p_filename1 }"><br>
-			</c:if>
-			미리보기:<img src="/bitcamp/upload/${product.p_filename2 }"><br>
-			미리보기:<img src="/bitcamp/upload/${product.p_filename3 }"><br>
-			미리보기:<img src="/bitcamp/upload/${product.p_filename4 }"><br>
-			미리보기:<img src="/bitcamp/upload/${product.p_filename5 }"><br><hr>
-			
 		</div>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p id="product_QA">Q&A</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-	 	  <p id="product_returnExchange">반품/교환정보</p>	
-	 	  <img src="<%=request.getContextPath()%>/resources/products/notice.jpg">	  
+		
+			<p id="product_review"><span><h1>REVIEW</h1></span> </p>
+			<div>
+				<div>
+					<ul class = "reviewList">
+						<li class="ListTop list1">작성일</li>
+						<li class="ListTop list2">제목</li>
+						<li class="ListTop list3">작성자</li>
+						<li class="ListTop list4">조회수</li>
+						<li class="ListTop list5">추천</li>
+						<li class="ListTop list6">평점</li>
+					</ul>
+					<ul class="reviewList"><!-- 반복문 돌릴부분 -->
+						<li class="list1">2020-06-10</li>
+						<li class="list2" onclick="showMoreText(this)">
+							<a href="javascript:;" role="button" >제목1</a>
+						</li>
+						<li class="list3">작성자1</li>
+						<li class="list4">조회수1</li>
+						<li class="list5">추천1</li>
+						<li class="list6">평점1</li>
+						<div class="moreText">
+							<span class="text_info">leez****/</span>
+				            <span class="text_info">20.05.15~20.05.20/</span>
+				            <p class="moreTextStatus">옵션 : 모델명: hd10 / 컬러: 화이트 / 용량: 32GB</p>
+				            <div class="moreTextContents">제품 참 좋네요~~</div>
+						</div>
+					</ul><!-- 반복문 돌릴부분 -->
+				</div>
+			</div>
+		
+		
+		
+		
+		<p id="product_QA"><span><h1>Q&A</h1></span> </p>
+			<div>
+				<div>
+					<ul class = "QAList">
+						<li class="ListTop list1">작성일</li>
+						<li class="ListTop list2">제목</li>
+						<li class="ListTop list3">작성자</li>
+						<li class="ListTop list4">조회수</li>
+						<li class="ListTop list5">추천</li>
+						<li class="ListTop list6">평점</li>
+					</ul>
+					<ul class="QAList"><!-- 반복문 돌릴부분 -->
+						<li class="list1">2020-06-10</li>
+						<li class="list2" onclick="showMoreText(this)">
+							<a href="javascript:;" role="button" >제목1</a>
+						</li>
+						<li class="list3">작성자1</li>
+						<li class="list4">조회수1</li>
+						<li class="list5">추천1</li>
+						<li class="list6">평점1</li>
+						<div class="moreText">
+							<span class="text_info">leez****/</span>
+				            <span class="text_info">20.05.15~20.05.20/</span>
+				            <p class="moreTextStatus">옵션 : 모델명: hd10 / 컬러: 화이트 / 용량: 32GB</p>
+				            <div class="moreTextContents">이거 내구도 좋은가요</div>
+						</div>
+					</ul><!-- 반복문 돌릴부분 -->
+				</div>
+			</div>
+		
+		
+		
+        <p id="product_returnExchange"><span><h1>반품/교환정보</h1></span></p>	
+ 	    <img src="<%=request.getContextPath()%>/resources/products/notice.jpg" width="30%">	  
 	</div>
 	
 </body>
