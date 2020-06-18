@@ -235,9 +235,12 @@ function optionChoice(){
 
 //리뷰 더보기
 function showMoreText(obj){
-	console.log(obj)//li 선택.-> 리스트 부모(ul) -> ul부모(div)-> div의 자식중 moreText선택
+	console.log(obj)//li 선택.-> 부모 -> 마지막 노드
 	$(obj).children('.moreText').css('display','block');
 	console.log($(obj).parent())
+	console.log($($(obj).parent()).children().last())
+	var $moreContents = $($(obj).parent()).children().last();
+	$moreContents.css('display','none')
 }
 
 ///////////////////////////////////////////////////////////////////
