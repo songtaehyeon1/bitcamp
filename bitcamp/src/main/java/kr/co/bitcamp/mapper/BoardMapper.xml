@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.bitcamp.board.NoticeDAO">
+	<select id = "allList" resultType="kr.co.bitcamp.board.NoticeVO">
+		select * from (
+			select * from (
+				select notice_no, notice_subject, notice_hit 
+				from board_notice 
+				<if test = "searchKey != null and searchWord != null">
+					where ${searchKey} like '%'||#{searchWord}||'%' 
+				</if>
+				order by notice_no desc) 
+			where rownum <![CDATA[<=]]> #{pageNum} * #{onePageRecord} 
+			order by notice_no asc) 
+		where rownum <![CDATA[<=]]> <if test = "pageNum == totalPage">#{lastPageRecord}</if><if test = "pageNum != totalPage">#{onePageRecord}</if> 
+		order by notice_no desc
+		
+		<!-- select notice_no, notice_subject, notice_hit from board_notice 
+			<if test = "searchKey != null and searchWord != null">
+				where ${searchKey} like '%'||#{searchWord}||'%' 
+			</if>
+		order by notice_no desc-->
+	</select>
+	<select id = "list" resultType="kr.co.bitcamp.board.NoticeVO">
+		select notice_no, notice_subject, notice_content, notice_hit, to_char(notice_writedate, 'YYYY-MM-DD HH24:MI') notice_writedate from board_notice where notice_no = #{param1}
+	</select>
+	<insert id = "noticeInsert" parameterType="kr.co.bitcamp.board.NoticeVO">
+		insert into board_notice(notice_no, notice_subject, notice_content, notice_hit, notice_writedate) 
+		values(notice_sq.nextval, #{notice_subject}, #{notice_content}, 0, sysdate)
+	</insert>
+	<update id = "noticeUpdate" parameterType="kr.co.bitcamp.board.NoticeVO">
+		update board_notice set notice_subject = #{notice_subject}, notice_content = #{notice_content} where notice_no = #{notice_no}
+	</update>
+	<delete id = "noticeDelete">
+		delete from board_notice where notice_no = #{no}
+	</delete>
+	<update id = "noticeHit">
+		update board_notice set notice_hit = notice_hit + 1 where notice_no = #{param1}
+	</update>
+	<select id = "noticeSearch" resultType = "kr.co.bitcamp.board.NoticeVO">
+		select notice_no, notice_subject, notice_hit from board_notice where 
+			<if test = "param1.equals('title')">notice_subject like '%'||#{param2}||'%' </if>
+			<if test = "param1.equals('content')">notice_content like '%'||#{param2}||'%' </if>
+		order by notice_no desc
+	</select>
+	<select id = "getTotalRecord" resultType = "int">
+		select count(notice_no) from board_notice
+		<if test = "searchKey != null and searchWord != null">
+				where ${searchKey} like '%'||#{searchWord}||'%'
+		</if>
+	</select>
+</mapper>

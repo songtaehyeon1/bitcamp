@@ -200,6 +200,10 @@
 	margin : 0 auto; 
 }
 
+.black, .black:hover, .black:link, .black:visited{
+	background : black;
+}
+
 
 
 
