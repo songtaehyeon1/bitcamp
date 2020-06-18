@@ -151,6 +151,22 @@ public class ProductController {
 	        response.setCharacterEncoding("utf-8");
 	        response.setContentType("text/html;charset=utf-8");
 	        String path = request.getSession().getServletContext().getRealPath("/ckupload/");
+	        
+	        
+			File folder = new File(path);
+	        if (!folder.exists()) {
+				try {
+					folder.mkdir();// 폴더 안만들었을시 폴더 생성
+				} catch (Exception e) {
+					System.out.println("파일 저장 폴더를 생성하는데 실패함." + e.getMessage());
+					e.printStackTrace();
+				}
+			} else {
+				System.out.println("폴더가 이미 존재해서 따로 안만들어도 됨.");
+			}
+	        
+	        
+	        
 	        try{
 	 
 	            String fileName = upload.getOriginalFilename();

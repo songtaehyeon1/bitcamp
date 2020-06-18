@@ -25,6 +25,7 @@ $(function() {
 		var file1 = $("#file1").val();//첨부파일1
 	
 		if(!product_code){
+			alert("상품코드를 입력해주셔야 합니다.")
 			$("#p_no").focus()
 			return false;
 		}else if(!product_name){
@@ -47,12 +48,16 @@ $(function() {
 			return true;
 		}
 	})
-	
+	//ckeditor 사진 업로드
 	CKEDITOR.replace("p_commnet",{
 		filebrowserUploadUrl : "/bitcamp/imageUpload"
 	});
+	//ckeditor높이
 	CKEDITOR.config.height = 400;
-
+	//ckeditor 기본 내용
+	CKEDITOR.instances.p_commnet.setData("<p>이미지 폭은 1200 이하로 설정해주세요.</p>")
+	
+	
 
 	// 배송비 직접 입력창
 	$("#delivery_fee").change(function() {
