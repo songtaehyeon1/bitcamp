@@ -78,7 +78,7 @@
 				<hr>
 			<!-- 옵션 선택 -->
 				<div class="optionChoice" onchange="optionChoice()">
-<form method="post" action="/bitcamp/productOrder" id="productWriteForm"><!-- 폼 시작 -->
+<form method="post" action="/bitcamp/order" id="productWriteForm"><!-- 폼 시작 -->
 					<ul>
 						<li><span class="spanWidth150 col-4">상품명</span>${product.p_name}</li>
 						<li><span class="spanWidth150 col-4">배송방법</span>택배</li>
@@ -188,7 +188,7 @@
 	
 			<!-- 	///////////// -->
 		<p id="product_information">상세정보</p>
-		<img src="<%=request.getContextPath()%>/resources/products/wini.jpg">	
+<%-- 		<img src="<%=request.getContextPath()%>/resources/products/wini.jpg">	 --%>
   		<p id="product_review">리뷰</p>
   		<div>
 		   	카테고리:${product.c_name}<hr>
@@ -196,70 +196,10 @@
 			상품명:${product.p_name }<hr>
 			가격:${product.price }<hr>
 			상품설명:${product.p_commnet }<hr>
-			<c:if test="${product.p_filename1!=null }">
-				미리보기:<img src="/bitcamp/upload/${product.p_filename1 }"><br>
-			</c:if>
-			미리보기:<img src="/bitcamp/upload/${product.p_filename2 }"><br>
-			미리보기:<img src="/bitcamp/upload/${product.p_filename3 }"><br>
-			미리보기:<img src="/bitcamp/upload/${product.p_filename4 }"><br>
-			미리보기:<img src="/bitcamp/upload/${product.p_filename5 }"><br><hr>
-			
 		</div>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p id="product_QA">Q&A</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-		  <p>Some example text. Some example text. Some example text. Some example text. Some example text.</p>
-	 	  <p id="product_returnExchange">반품/교환정보</p>	
+		<p id="product_QA"> <h1>Q&A</h1> </p>
+	 	  <p id="product_returnExchange"><h1>반품/교환정보</h1></p>	
+	 	  <h2>교환정보..........</h2>
 	 	  <img src="<%=request.getContextPath()%>/resources/products/notice.jpg">	  
 	</div>
 	

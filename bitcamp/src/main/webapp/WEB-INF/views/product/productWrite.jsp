@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html>
-<head>
+
+
+
 <meta charset="UTF-8">
-<title>THE Bitcamp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -15,15 +14,14 @@
 <link rel = "stylesheet" href = "/bitcamp/css/product/product_writeForm.css" type = "text/css">
 <script src="<%=request.getContextPath()%>/js/product/product_write.js"></script>
 <script src = "<%=request.getContextPath()%>/editor/ckeditor/ckeditor.js"></script>
-</head>
-<body >
+
 
 <div class = "container" id = "product_writeForm">
 	<div id = "nLink"><a href = "/bitcamp/">홈</a>&nbsp;>&nbsp;<span>상품글 작성</span></div>
 	<div id = "nTitle"><span>상품글 작성</span></div>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<form name="productWrite" id="productWirte" method="post" action="/bitcamp/productWirteOk" enctype="multipart/form-data">
-		<div>
+		<div style="height:1000px">
 		<ul id = "productWriteForm">
 			<li class="left">상품</li>
 			<li id = "categorySelectList" class="right">
@@ -43,7 +41,7 @@
 			</li>
 			<li class="left">상품명</li>
 			<li class="right">
-				<input type="text" id="p_name" name="p_name" value="상품명을 입력해주세요"placeholder="상품명을 입력해주세요">
+				<input type="text" id="p_name" name="p_name" placeholder="상품명을 입력해주세요">
 			</li>
 			<li class="left">2박3일 대여 가격</li>
 			<li id = "priceInput" class="right">
@@ -63,7 +61,6 @@
 			<li style="width : 100%;border-bottom : 1px solid black;">
 				<textarea id ="p_commnet" name="p_commnet"></textarea>
 			</li>
-			
 			<li class="left">첨부파일1<span style="color:red">(필수)</span></li>
 			<li class="right">
 				<input type = "file" name = "p_filename" id="file1" accept=".gif,.jpg, .jpeg, .png">
@@ -95,5 +92,4 @@
 		</div>
 	</form>
 </div>
-</body>
-</html>
+

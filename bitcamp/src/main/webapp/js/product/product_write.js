@@ -1,6 +1,6 @@
 $(function() {
 	
-	$("input[type='file']").change(function(obj){
+	$("input[type='file']").change(function(){
 		var pathpoint = this.value.lastIndexOf('.');
 		var filepoint = this.value.substring(pathpoint+1,this.length);
 		var	filetype = filepoint.toLowerCase();
@@ -8,9 +8,9 @@ $(function() {
 			//정상적인 이미지 확장자
 		}else{
 			alert('이미지 파일만 선택할 수 있습니다')
-			var parent_Obj = obj.parentNode;
-			console.log(parent_Obj)
-			var node = parent_Obj.replaceChild(obj.cloneNode(true),obj);
+			this.value = "";    //초기화를 위한 추가 코드
+			var selection = window.getSelection();        //초기화를 위한 추가 코드
+			selection.removeAllRanges(); // 필수는 아니지만 크롬외의 다른 브라우저에서 혹시 필요할수도 있음. 
 			return false;
 		}
 	})
@@ -48,10 +48,11 @@ $(function() {
 		}
 	})
 	
-	CKEDITOR.replace("p_commnet");
+	CKEDITOR.replace("p_commnet",{
+		filebrowserUploadUrl : "/bitcamp/imageUpload"
+	});
 	CKEDITOR.config.height = 400;
 
-	// CKEDITOR.instances.content.getData();
 
 	// 배송비 직접 입력창
 	$("#delivery_fee").change(function() {
