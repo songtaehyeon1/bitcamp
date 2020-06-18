@@ -1,3 +1,4 @@
+<%@page import="kr.co.bitcamp.product.ProductVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -224,8 +225,29 @@ table {
 	background: white;
 	background: #fbfafa;
 }
-</style>
 
+</style>
+<script>
+$(function() {
+	$("#addr_paymethod0").click(function() {
+		$("#card-form").css("display","block");
+		$("#card-agree").css("display","block");
+		$("#cash-form").css("display","none");
+		$("#current_pay_name").html("카드 결제");
+	});
+	$("#addr_paymethod1").click(function() {
+		$("#card-form").css("display","none");
+		$("#card-agree").css("display","none");
+		$("#cash-form").css("display","block");
+		$("#current_pay_name").html("무통장 입금");
+	});
+})
+
+</script>
+<c:forEach var="vo" items="${productList }">
+	${vo.p_no },${vo.orderStart },${vo.orderEnd }
+</c:forEach>
+<form method="post" action="/bitcamp/orderOk">
 <div id="orderForm" class="container">
 	<div style="height: 130px"></div>
 	<div class="titleArea">
@@ -319,17 +341,17 @@ table {
 					</tr>
 					<tr>
 						<th scope="row">주소</th>
-						<td><input id="ozipcode1" name="ozipcode1" size="6"
+						<td><input id="ozipcode" name="ozipcode" size="6"
 							maxlength="6" readonly type="text"> <a href="#"
-							class="btn btn-dark">우편번호</a><br> <input id="oaddr1"
-							name="oaddr1" size="40" readonly type="text"
+							class="btn btn-dark">우편번호</a><br> <input id="oaddr"
+							name="oaddr" size="40" readonly type="text"
 							style="margin-top: 10px"> <span>기본주소</span><br> <input
-							id="oaddr2" name="oaddr2" size="40" type="text"
+							id="oaddrdetail" name="oaddrdetail" size="40" type="text"
 							style="margin-top: 10px"> <span>나머지주소</span><span>(선택입력가능)</span></td>
 					</tr>
 					<tr>
 						<th scope="row">연락처</th>
-						<td><select id="ophone1_1" name="ophone1_[]">
+						<td><select id="otel1" name="otel1">
 								<option value="02">02</option>
 								<option value="031">031</option>
 								<option value="032">032</option>
@@ -361,8 +383,8 @@ table {
 								<option value="018">018</option>
 								<option value="019">019</option>
 								<option value="0508">0508</option>
-						</select>-<input id="ophone1_2" name="ophone1_[]" maxlength="4" size="4"
-							type="text">-<input id="ophone1_3" name="ophone1_[]"
+						</select>-<input id="otel2" name="otel2" maxlength="4" size="4"
+							type="text">-<input id="otel3" name="otel3"
 							maxlength="4" size="4" type="text"></td>
 					</tr>
 				</tbody>
@@ -396,7 +418,7 @@ table {
 				<tbody>
 					<tr>
 						<th scope="row">주문조회 비밀번호</th>
-						<td><input id="order_password" name="order_password" size="7"
+						<td><input id="opassword" name="opassword" size="7"
 							maxlength="12" type="password"> (주문조회시 필요합니다. 4자에서 12자 영문
 							또는 숫자 대소문자 구분)</td>
 					</tr>
@@ -439,7 +461,7 @@ table {
 					</tr>
 					<tr>
 						<th scope="row">주소</th>
-						<td><input id="rzipcode1" name="rzipcode1" size="6"
+						<td><input id="rzipcode" name="rzipcode" size="6"
 							maxlength="6" readonly type="text"> <a href="#"
 							class="btn btn-dark">우편번호</a><br> <input id="raddr1"
 							name="raddr1" size="40" readonly type="text"
@@ -449,7 +471,7 @@ table {
 					</tr>
 					<tr class="">
 						<th scope="row">연락처</th>
-						<td><select id="rphone1_1" name="rphone1_[]">
+						<td><select id="rtel1" name="rtel1">
 								<option value="02">02</option>
 								<option value="031">031</option>
 								<option value="032">032</option>
@@ -481,8 +503,8 @@ table {
 								<option value="018">018</option>
 								<option value="019">019</option>
 								<option value="0508">0508</option>
-						</select>-<input id="rphone1_2" name="rphone1_[]" maxlength="4" size="4"
-							type="text">-<input id="rphone1_3" name="rphone1_[]"
+						</select>-<input id="rtel2" name="rtel2" maxlength="4" size="4"
+							type="text">-<input id="rtel3" name="rtel3"
 							maxlength="4" size="4" type="text"></td>
 					</tr>
 					<tr>
@@ -565,7 +587,7 @@ table {
 							<th scope="row">적립금</th>
 							<td>
 								<p>
-									<input id="input_mile" name="input_mile" size="10" type="text">
+									<input id="input_mile" name="mileage" size="10" type="text">
 									원 (총 사용가능 적립금 : <strong>2,000</strong>원)
 								</p>
 								<ul class="info">
@@ -592,14 +614,14 @@ table {
 				<span> <input id="addr_paymethod0" name="addr_paymethod"
 					value="card" type="radio" checked="checked"> <label
 					for="addr_paymethod0">카드 결제</label>
-				</span> <span> <input id="addr_paymethod2" name="addr_paymethod"
-					value="cash" type="radio"> <label for="addr_paymethod2">무통장
+				</span> <span> <input id="addr_paymethod1" name="addr_paymethod"
+					value="cash" type="radio"> <label for="addr_paymethod1">무통장
 						입금</label>
 				</span>
 			</div>
 
 
-			<div id="ec-order-payment-directpay-card-form"
+			<div id="card-form"
 				style="display: block;">
 				<div>
 					<table border="1">
@@ -610,23 +632,23 @@ table {
 						<tbody>
 							<tr>
 								<th scope="row">카드선택</th>
-								<td><select id="directpay_card_code_select">
+								<td><select id="card_corp" name="card_corp">
 										<option value="" selected="selected">선택해주세요.</option>
-										<option value="card_12">신한카드(구 LG카드 포함)</option>
-										<option value="card_04">비씨카드</option>
-										<option value="card_01">KB국민카드</option>
-										<option value="card_05">하나카드(구 외환)</option>
-										<option value="card_16">삼성카드</option>
-										<option value="card_17">현대카드</option>
-										<option value="card_18">롯데카드</option>
-										<option value="card_06">우리카드</option>
-										<option value="card_02">하나카드(구 하나SK)</option>
-										<option value="card_19">NH농협카드</option>
-										<option value="card_09">씨티카드</option>
-										<option value="card_07">수협카드</option>
-										<option value="card_15">광주은행카드</option>
-										<option value="card_08">전북은행카드</option>
-										<option value="card_14">제주은행카드</option>
+										<option value="신한카드">신한카드(구 LG카드 포함)</option>
+										<option value="비씨카드">비씨카드</option>
+										<option value="국민카드">KB국민카드</option>
+										<option value="하나카드(구 외환)">하나카드(구 외환)</option>
+										<option value="삼성카드">삼성카드</option>
+										<option value="현대카드">현대카드</option>
+										<option value="롯데카드">롯데카드</option>
+										<option value="우리카드">우리카드</option>
+										<option value="하나카드(구 하나SK)">하나카드(구 하나SK)</option>
+										<option value="NH농협카드">NH농협카드</option>
+										<option value="씨티카드">씨티카드</option>
+										<option value="수협카드">수협카드</option>
+										<option value="광주은행카드">광주은행카드</option>
+										<option value="전북은행카드">전북은행카드</option>
+										<option value="제주은행카드">제주은행카드</option>
 								</select></td>
 							</tr>
 							<tr>
@@ -639,7 +661,7 @@ table {
 				</div>
 			</div>
 
-			<div id="ec-order-payment-directpay-card-agree"
+			<div id="card-agree"
 				style="display: block;">
 				<div class="paymentAgree">
 					<div style="margin-top: 10px">
@@ -660,9 +682,9 @@ table {
 				</div>
 			</div>
 
-			<div>
+			<div id="cash-form" style="display:none" >
 				<!-- 무통장입금 -->
-				<table border="1" id="payment_input_cash" style="display: none;">
+				<table border="1">
 					<caption>무통장입금</caption>
 					<colgroup>
 						<col style="width: 139px">
@@ -671,12 +693,12 @@ table {
 					<tbody>
 						<tr>
 							<th scope="row">입금자명</th>
-							<td><input id="pname" name="pname" size="15" maxlength="20"
+							<td><input id="depositor" name="depositor" size="15" maxlength="20"
 								type="text"></td>
 						</tr>
 						<tr>
 							<th scope="row">입금은행</th>
-							<td><select id="bankaccount" name="bankaccount">
+							<td><select id="bank" name="bank">
 									<option value="-1">::: 선택해 주세요. :::</option>
 									<option value="농협">농협회원조합:111-1111-1111-11 비트캠프</option>
 									<option value="기업">기업은행:333-33333-33-333 비트캠프</option>
@@ -686,13 +708,6 @@ table {
 					</tbody>
 				</table>
 
-				<!-- 무통장입금, 카드결제, 휴대폰결제, 실시간계좌이체 -->
-				<div id="pg_paymethod_info" style="display: block;">
-					<p id="pg_paymethod_info_shipfee" style="display: none;">최소 결제
-						가능 금액은 결제금액에서 배송비를 제외한 금액입니다.</p>
-					<p id="pg_paymethod_info_pg">소액 결제의 경우 PG사 정책에 따라 결제 금액 제한이 있을
-						수 있습니다.</p>
-				</div>
 			</div>
 
 		</div>
@@ -707,13 +722,14 @@ table {
 					style="text-align: right; border: none; float: none; font-size: 1.5em; background: #fafafa"
 					size="10" readonly value="25000" type="text"><span>원</span>
 			</p>
+			
 			<p id="chk_purchase_agreement" style="display: none;">
 				<input id="chk_purchase_agreement0" name="chk_purchase_agreement"
 					value="T" type="checkbox" style="display: none;"><label
 					for="chk_purchase_agreement0">결제정보를 확인하였으며, 구매진행에 동의합니다.</label>
 			</p>
 			<div>
-				<a href="#" id="btn_payment" class="btn btn-dark">결제하기</a>
+				<input type="submit" id="btn_payment" class="btn btn-dark" value="결제하기">
 			</div>
 			<div>
 				<dl>
@@ -727,3 +743,4 @@ table {
 	</div>
 
 </div>
+</form>
