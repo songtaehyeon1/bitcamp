@@ -2,6 +2,19 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <link rel = "stylesheet" href = "/bitcamp/css/board/notice_writeForm.css" type = "text/css">
 <script>
+$(function(){
+	$("#write").submit(function(){
+		if($("#subject").val() == ""){
+			alert("제목을 입력해 주세요.");
+			return false;
+		}
+		if($("#content").val() == ""){
+			alert("내용을 입력해 주세요.");
+			return false;
+		}
+	});
+});
+
 // 목록, 취소 버튼
 function goboard(){
 	if($("#subject").val() != "" || $("#content").val() != ""){
@@ -22,12 +35,12 @@ function goboard(){
 		<li onclick = "location.href = '/bitcamp/boardReview'">상품후기</li>
 	</ul>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
-	<form method = "post" action = "/bitcamp/notice_writeOk">
+	<form method = "post" action = "/bitcamp/notice_writeOk" id = "write">
 		<ul id = "writeForm">
 			<li>제목</li>
-			<li><input type = "text" id = "subject" name = "subject"></li>
+			<li><input type = "text" id = "subject" name = "notice_subject"></li>
 			<li>
-				<textarea id = "content" name = "content"></textarea>
+				<textarea id = "content" name = "notice_content"></textarea>
 			</li>
 		</ul>
 		<div id = "goBtn">

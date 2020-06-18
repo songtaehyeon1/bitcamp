@@ -2,6 +2,19 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <link rel = "stylesheet" href = "/bitcamp/css/board/notice_editForm.css" type = "text/css">
 <script>
+$(function(){
+	$("#edit").submit(function(){
+		if($("#subject").val() == ""){
+			alert("제목을 입력해 주세요.");
+			return false;
+		}
+		if($("#content").val() == ""){
+			alert("내용을 입력해 주세요.");
+			return false;
+		}
+	});
+});
+
 // 목록, 취소 버튼
 function goboard(){
 	if(confirm("작성한 내용이 적용되지 않습니다.")){
@@ -18,12 +31,12 @@ function goboard(){
 		<li onclick = "location.href = '/bitcamp/boardReview'">상품후기</li>
 	</ul>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
-	<form method = "post" action = "/bitcamp/notice_editOk">
+	<form method = "post" action = "/bitcamp/notice_editOk" id = "edit">
 		<ul id = "writeForm">
 			<li>제목</li>
-			<li><input type = "text" id = "subject" name = "subject"></li>
+			<li><input type = "text" id = "subject" name = "notice_subject" value = "${vo.notice_subject}"></li>
 			<li>
-				<textarea id = "content" name = "content"></textarea>
+				<textarea id = "content" name = "notice_content">${vo.notice_content}</textarea>
 			</li>
 		</ul>
 		<div id = "goBtn">
@@ -33,5 +46,6 @@ function goboard(){
 				<input type = "button" value = "취소" onclick = "goboard();">
 			</div>
 		</div>
+		<input type = "hidden" name = "notice_no" value = "${vo.notice_no}">
 	</form>
 </div>
