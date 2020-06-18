@@ -53,6 +53,7 @@ form>div:nth-child(7){margin-top:15px;}
 }
 .agree_article ~ .btn-secondary{margin:30px 0;}
 </style>
+
 <script>
 $(function(){
 	//회원가입 유효성 검사
@@ -153,27 +154,37 @@ $(function(){
 	
 	//아이디 중복검사
 	$("#idChk").click(function(){		
-		var url = "/bitcamp/searchId";
+		var url = "/bitcamp/idChk";
 		var params = "userid="+$('#userid').val();  // userid=hong
+		
 		console.log(params);
+		
 		$.ajax({
-			type : "GET",
+			type : "POST",
 			url : url,
 			data : params,
 			success : function(result){
 				console.log(result);
+				if(result=="Y"){
+					$("#idStatus").val("Y");
+					alert("사용할 수 있는 아이디입니다.");
+				}else if(result=='N'){
+					$("#idStatus").val("N");
+					alert("사용할 수 있는 아이디입니다.");
+				}
 			},
 			error : function(e){
 				console.log(e.status);
 				console.log(e.responseText);
 			}
+			
 		});
 
 	});
 	
 	//아이디 중복확인 버튼 활성화
 	$(document).on("keyup", "#userid", function(){		
-		$(".idChk").attr("disabled",false);
+		$("#idChk").attr("disabled",false);
 	});
 
 	//전체동의 체크박스
@@ -230,7 +241,7 @@ function openDaumZipAddress() {
 				<label for="userid" class="lbl_userid">아이디</label> 
 				<input type="text" class="form-control" id="userid" placeholder="첫번째 문자는 반드시 영문자이며, 4~20자의 숫자, 영문 대소문자만 허용" name="userid" maxlength="20"> 
 				<div class="input-group-append">
-					<button type="button" id="idChk" class="btn btn-secondary idChk" disabled>중복확인</button> 
+					<button type="button" id="idChk" class="btn btn-secondary" disabled>중복확인</button> 
 				</div>
 				<!-- 아이디 중복검사 여부 설정 --> 
 				<input type="hidden" id="idStatus" value="N"/>
