@@ -1,6 +1,6 @@
 $(function() {
 	
-	$("input[type='file']").change(function(obj){
+	$("input[type='file']").change(function(){
 		var pathpoint = this.value.lastIndexOf('.');
 		var filepoint = this.value.substring(pathpoint+1,this.length);
 		var	filetype = filepoint.toLowerCase();
@@ -8,9 +8,9 @@ $(function() {
 			//정상적인 이미지 확장자
 		}else{
 			alert('이미지 파일만 선택할 수 있습니다')
-			var parent_Obj = obj.parentNode;
-			console.log(parent_Obj)
-			var node = parent_Obj.replaceChild(obj.cloneNode(true),obj);
+			this.value = "";    //초기화를 위한 추가 코드
+			var selection = window.getSelection();        //초기화를 위한 추가 코드
+			selection.removeAllRanges(); // 필수는 아니지만 크롬외의 다른 브라우저에서 혹시 필요할수도 있음. 
 			return false;
 		}
 	})
@@ -25,6 +25,7 @@ $(function() {
 		var file1 = $("#file1").val();//첨부파일1
 	
 		if(!product_code){
+			alert("상품코드를 입력해주셔야 합니다.")
 			$("#p_no").focus()
 			return false;
 		}else if(!product_name){
@@ -47,11 +48,16 @@ $(function() {
 			return true;
 		}
 	})
-	
-	CKEDITOR.replace("p_commnet");
+	//ckeditor 사진 업로드
+	CKEDITOR.replace("p_commnet",{
+		filebrowserUploadUrl : "/bitcamp/imageUpload"
+	});
+	//ckeditor높이
 	CKEDITOR.config.height = 400;
-
-	// CKEDITOR.instances.content.getData();
+	//ckeditor 기본 내용
+	CKEDITOR.instances.p_commnet.setData("<p>이미지 폭은 1200 이하로 설정해주세요.</p>")
+	
+	
 
 	// 배송비 직접 입력창
 	$("#delivery_fee").change(function() {

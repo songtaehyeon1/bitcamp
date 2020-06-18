@@ -1,0 +1,74 @@
+@charset "UTF-8";
+/* 리스트 */
+
+/* 리뷰/Q&A 더 보기 */
+.moreTextStatus {
+	white-space: nowrap;
+	display: inline;
+	color: #aaa;
+	line-height: 16px;
+	font-size: 13px;
+}
+
+.text_info {
+	white-space: break-spaces;
+	color: #999;
+	line-height: 16px;
+	font-size: 14px;
+}
+
+.moreText {
+	/* 	display:none; */
+	width: 100%;
+	border: 1px solid black;
+}
+
+
+/* Q&A // Review 리스트 */
+.list1 {
+	width: 15%;
+	white-space: nowrap;
+}
+
+.list2 {
+	width: 45%;
+	text-align: left;
+}
+
+.list3 {
+	width: 10%;
+	padding: 0;
+}
+
+.list4 {
+	width: 10%;
+}
+
+.list5 {
+	width: 10%;
+}
+
+.list6 {
+	width: 10%;
+}
+
+.reviewList, .QAList {
+	marign: 0;
+	padding: 0;
+	list-style-type:none;
+	width:100%;
+}
+
+.reviewList li, .QAList li {
+	list-style-type: none;
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+.ListTop{
+	background : black;
+	color : white;
+	height : 40px;
+	line-height : 40px;
+	border:1px solid #fff;
+}
