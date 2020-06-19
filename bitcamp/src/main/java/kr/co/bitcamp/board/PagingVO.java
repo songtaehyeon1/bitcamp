@@ -14,6 +14,10 @@ public class PagingVO {
 	private String searchKey;
 	private String searchWord;
 	
+	private int notice_no;
+	private int enquiry_no;
+	private int review_no;
+	
 	public PagingVO() {
 	}
 
@@ -96,6 +100,30 @@ public class PagingVO {
 
 	public void setLastPageRecord(int lastPageRecord) {
 		this.lastPageRecord = lastPageRecord;
+	}
+
+	public int getNotice_no() {
+		return notice_no;
+	}
+
+	public void setNotice_no(int notice_no) {
+		this.notice_no = notice_no;
+	}
+
+	public int getEnquiry_no() {
+		return enquiry_no;
+	}
+
+	public void setEnquiry_no(int enquiry_no) {
+		this.enquiry_no = enquiry_no;
+	}
+
+	public int getReview_no() {
+		return review_no;
+	}
+
+	public void setReview_no(int review_no) {
+		this.review_no = review_no;
 	}
 
 }

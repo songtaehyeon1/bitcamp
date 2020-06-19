@@ -138,6 +138,20 @@
 	border-right : 1px solid black;
 }
 
+.wordCut{
+	white-space : nowrap;
+	overflow : hidden;
+	text-overflow : ellipsis;
+}
+
+.pointer{
+	cursor : pointer;
+}
+
+.pointer:hover{
+	color : #B4B4B4;
+}
+
 /* 검색 */
 #wsDiv{
 	width : 1400px;
@@ -193,6 +207,25 @@
 	background : black;
 	border : none;
 	border-radius : 1px;
+}
+
+/* 페이징 */
+#notice_paging{
+	height : 80px;
+	line-height : 80px;
+	border : 1px solid red;
+	clear : left;
+	background : green;
+    display:inline-block;
+	margin : 0 auto; 
+}
+
+.black, .black:hover, .black:link, .black:visited{
+	background : black;
+}
+
+.pages:hover{
+	background : black;
 }
 
 

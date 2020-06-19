@@ -191,6 +191,14 @@
 	line-height : 40px;
 }
 
+.pointer{
+	cursor : pointer;
+}
+
+.pointer:hover{
+	color : #B4B4B4;
+}
+
 
 
 
