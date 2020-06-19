@@ -22,6 +22,7 @@ $(function() {
 		var product_name = $("#p_name").val();//상품명
 		var product_price = $("#price").val();//상품명
 		var delivery_fee = $("#delivery_fee").val();//배송비
+		var delivery_fee_direct = $("#delivery_fee_direct").val();//배송비
 		var file1 = $("#file1").val();//첨부파일1
 	
 		if(!product_code){
@@ -36,7 +37,7 @@ $(function() {
 			alert("상품 2박3일 대여가격을 등록해주셔야 합니다.")
 			$("#p_name").focus()
 			return false;
-		}else if(!delivery_fee||(delivery_fee=='direct')){
+		}else if( (delivery_fee==-1) && (!delivery_fee_direct) ){
 			alert("배송비를 입력해주셔야 합니다.")
 			$("#delivery_fee").focus()
 			return false;
@@ -62,7 +63,7 @@ $(function() {
 	// 배송비 직접 입력창
 	$("#delivery_fee").change(function() {
 		var fee = $("#delivery_fee").val();
-		if (fee == 'direct') {
+		if (fee == -1) {
 			$("#delivery_fee_direct").css('display', 'inline-block');
 			$("#delivery_fee_direct").focus();
 		} else {

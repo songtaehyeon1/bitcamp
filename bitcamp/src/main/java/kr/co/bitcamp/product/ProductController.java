@@ -1,5 +1,6 @@
 package kr.co.bitcamp.product;
 
+import kr.co.bitcamp.board.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,17 +35,28 @@ public class ProductController {
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
-
+////////////////////////장바구니
+	@RequestMapping("/productInterest")
+	public ModelAndView productInterest() {
+		ModelAndView mav = new ModelAndView();
+		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
+		mav.addObject("interests",dao.selectInterest());
+		mav.setViewName("product/productInterest");
+		return mav;
+	}
+	
+	
+	
+////////////////////////상품 상세글
 	@RequestMapping("/productView")
 	public ModelAndView productView(int p_no) {
 		ModelAndView mav = new ModelAndView();
 		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
 		mav.addObject("product", dao.productView(p_no));
-		mav.addObject("image", dao.productView(p_no));
 		mav.setViewName("product/productView");
 		return mav;
 	}
-
+/////////////////////////상품 리스트
 	@RequestMapping("/productList")
 	public ModelAndView productList() {
 		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
@@ -63,7 +75,7 @@ public class ProductController {
 	public String productWrite() {
 		return "product/productWrite";
 	}
-
+/////////////////////////////////////// 상품글 쓰기
 	@RequestMapping(value = "/productWirteOk", method = RequestMethod.POST)
 	public ModelAndView productWriteOk(ProductVO vo, HttpServletRequest req) {
 		// request객체로 --> MultipartHttpServletRequest생성하여 파일 업로드 처리를 한다.
@@ -120,7 +132,14 @@ public class ProductController {
 			vo.setP_filename3(p_filenames[2]);
 			vo.setP_filename4(p_filenames[3]);
 			vo.setP_filename5(p_filenames[4]);
+			if((vo.getDelivery_fee())==-1) {
+				System.out.println("배송비 직접 입력");
+				vo.setDelivery_fee(vo.getDelivery_fee_direct());
+				System.out.println(vo.getDelivery_fee());
+			}
 		}
+		
+		
 		ModelAndView mav = new ModelAndView();
 		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
 		int result = dao.productWrite(vo);
@@ -204,4 +223,49 @@ public class ProductController {
 	        return;
 	    }
 
+//////////////////////////// review 글 땡겨오기
+//	   @RequestMapping("/productReview")/////////////////////나중에 태현이거 긁어오기
+//		public ModelAndView productReview() {
+//			ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
+//			ModelAndView mav = new ModelAndView();
+//			mav.addObject("list", dao.allSelectRecord());
+//			mav.setViewName("product/productList");
+//			return mav;
+//		}
+	   
+//////////////////////////// enquiry 글 땡겨오기
+//	   @RequestMapping("/productEnquiry")/////////////////////나중에 태현이거 긁어오기
+//		public ModelAndView productEnquiry() {
+//			ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
+//			ModelAndView mav = new ModelAndView();
+//			mav.addObject("list", dao.allSelectRecord());
+//			mav.setViewName("product/productList");
+//			return mav;
+//		}
+	   
+	   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

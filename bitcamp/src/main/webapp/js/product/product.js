@@ -235,12 +235,14 @@ function optionChoice(){
 
 //리뷰 더보기
 function showMoreText(obj){
-	console.log(obj)//li 선택.-> 부모 -> 마지막 노드
-	$(obj).children('.moreText').css('display','block');
-	console.log($(obj).parent())
-	console.log($($(obj).parent()).children().last())
-	var $moreContents = $($(obj).parent()).children().last();
-	$moreContents.css('display','none')
+	var $moreContents = $($(obj).parent()).children().last();//상세보기창 접어놓은거...
+	if($moreContents.css('display')=='none'){
+		$moreContents.css('display','block')
+	}else{
+		$moreContents.css('display','none')
+	}
+	
+	
 }
 
 ///////////////////////////////////////////////////////////////////
