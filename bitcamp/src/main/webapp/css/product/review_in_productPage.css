@@ -18,9 +18,8 @@
 }
 
 .moreText {
-	/* 	display:none; */
+	display:none;
 	width: 100%;
-	border: 1px solid black;
 }
 
 
@@ -53,10 +52,10 @@
 }
 
 .reviewList, .QAList {
-	marign: 0;
-	padding: 0;
 	list-style-type:none;
 	width:100%;
+	overflow:hidden;
+	border-bottom:1px solid gray
 }
 
 .reviewList li, .QAList li {
@@ -72,3 +71,9 @@
 	line-height : 40px;
 	border:1px solid #fff;
 }
+
+.QAWrap ,.ReviewWrap{
+	overflow:hidden;
+	border:1px solid gray
+}
+

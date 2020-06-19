@@ -2,230 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <style>
-table {
-	width: 100%
-}
 
-#orderForm {
-	font-family: Nanum Gothic, "나눔고딕"
-}
-
-.titleArea {
-	color: #353535;
-	padding: 0;
-	min-height: 30px;
-	margin: 10px 0 20px;
-	border-bottom: 1px solid #e8e8e8;
-}
-
-#titleArea>h2 {
-	margin: 0;
-	display: inline-block;
-	padding: 20px 0;
-	color: #555;
-	font-size: 30px;
-	font-weight: 700;
-}
-
-#benefit_info {
-	margin: 20px 0;
-	line-height: 1.5;
-	margin-left: auto;
-	margin-right: auto;
-	border: 5px solid #e8e8e8;
-	color: #404040;
-	padding: 0;
-}
-
-#benefit_info ul {
-	color: #404040;
-	line-height: 1.5em;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	list-style-type: none;
-}
-
-#benefit_info li {
-	font-size: 1rem;
-	font-weight: 400;
-	color: #404040;
-	line-height: 1.5em;
-	box-sizing: border-box;
-	list-style-type: none;
-}
-
-#benefit_title {
-	line-height: 1.5;
-	color: #404040;
-	font-size: 12px;
-	margin: 40px 0 10px 10px;
-	display: table-cell;
-	padding: 0;
-	width: 70px;
-	text-align: center;
-	vertical-align: middle;
-}
-
-#benefit_info a {
-	text-decoration: none;
-	color: #A29C9C;
-	font-size: 13px
-}
-
-#benefit_info a:hover {
-	text-decoration: none;
-}
-
-#benifit_descript {
-	color: #404040;
-	margin: 0;
-	display: table-cell;
-	padding: 0 10px;
-	width: auto;
-	line-height: 1.5em;
-	border-left: 1px solid #e8e8e8;
-	vertical-align: middle;
-}
-
-#product_info thead th {
-	text-align: center;
-	padding: 10px 0 10px;
-	font-size: 13px;
-	font: 0.75em;
-	background-color: #3d3d4f;
-	color: white;
-}
-
-#product_info tbody td {
-	text-align: center;
-}
-
-#product_info tbody {
-	text-align: center;
-	height: 100px;
-	background-color: #fafafa;
-}
-
-#product_info tfoot {
-	text-align: right;
-	background-color: #fafafa;
-}
-
-#product_info a {
-	text-decoration: none;
-	color: black;
-	font-size: 17px;
-}
-
-#product_info a:hover {
-	text-decoration: none;
-}
-
-#order_info th, #recipient_info th {
-	text-align: center;
-	padding: 10px 0 10px;
-	font-size: 13px;
-	font: 0.75em;
-	background-color: #3d3d4f;
-	color: white;
-}
-
-#order_info ul, #recipient_info ul {
-	color: #404040;
-	line-height: 1.5em;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	list-style-type: none;
-}
-
-#order_info li, #recipient_info li {
-	font-size: 1rem;
-	font-weight: 400;
-	color: #404040;
-	line-height: 1.5em;
-	box-sizing: border-box;
-	list-style-type: none;
-}
-
-#order_info td, #recipient_info td {
-	padding: 10px;
-	background-color: #fafafa;
-}
-
-#total_price th, .payment th {
-	text-align: center;
-	padding: 10px 0 10px;
-	font-size: 13px;
-	font: 0.75em;
-	background-color: #3d3d4f;
-	color: white;
-}
-
-#total_price td {
-	text-align: center;
-	font-size: 23px;
-	padding: 8px 0px 8px;
-}
-
-#total_price td:last-child {
-	color: #d74f4b;
-	padding: 30px 0 30px;
-}
-
-#total_price_detail th {
-	text-align: center;
-	padding: 10px 0 10px;
-	font-size: 20px;
-	background-color: #3d3d4f;
-	color: white;
-}
-
-#total_price_detail td {
-	padding: 30px;
-	font-size: 30px;
-}
-
-#total_price_detail td:last-child {
-	font-size: 17px;
-}
-
-.payArea {
-	margin: 0;
-	overflow: hidden;
-	position: relative;
-	padding: 10px 241px 10px 10px;
-	border: 1px solid #777;
-	color: #353535;
-	line-height: 1.5;
-	background: #fbfafa;
-}
-
-#end_price {
-	color: #353535;
-	line-height: 1.5;
-	padding:;
-	float: right;
-	width: 240px;
-	margin: 0 -241px 0 0;
-	text-align: right;
-	background: #fbfafa;
-}
-
-.payment {
-	color: #353535;
-	line-height: 1.5;
-	margin: 0;
-	padding: 0;
-	float: left;
-	width: 100%;
-	background: white;
-	background: #fbfafa;
-}
 
 </style>
 <script>
@@ -242,48 +21,7 @@ $(function() {
 		$("#cash-form").css("display","block");
 		$("#current_pay_name").html("무통장 입금");
 	});
-	
-	$("#sameaddr0").click(function() {
-		$("#rname").attr("value",$("#oname").val());
-		$("#rzipcode").attr("value",$("#ozipcode").val());
-		$("#raddr").attr("value",$("#oaddr").val());
-		$("#raddrdetail").attr("value",$("#oaddrdetail").val());
-		$("#rtel1").val($("#otel1").val()).prop("selected",true);
-		$("#rtel2").attr("value",$("#otel2").val());
-		$("#rtel3").attr("value",$("#otel3").val());
-	})
-	
-	$("#sameaddr1").click(function() {
-		$("#rname").attr("value","");
-		$("#rzipcode").attr("value","");
-		$("#raddr").attr("value","");
-		$("#raddrdetail").attr("value","");
-		$("#rtel1").val("02").prop("selected",true);
-		$("#rtel2").attr("value","");
-		$("#rtel3").attr("value","");
-	});
 })
-
-function openDaumZipAddress(type) {
-	if(type =='o'){
-		new daum.Postcode({
-			oncomplete:function(data) {
-				jQuery("#ozipcode").val(data.zonecode);
-				jQuery("#oaddr").val(data.address);
-				jQuery("#oaddrdetail").focus();
-			}
-		}).open();
-	}else if(type=='r'){
-		new daum.Postcode({
-			oncomplete:function(data) {
-				jQuery("#rzipcode").val(data.zonecode);
-				jQuery("#raddr").val(data.address);
-				jQuery("#raddrdetail").focus();
-			}
-		}).open();
-		
-	}
-}
 
 </script>
 <c:forEach var="vo" items="${productList }">
@@ -367,7 +105,7 @@ function openDaumZipAddress(type) {
 
 	<div id="order_info">
 		<div style="margin-top: 20px">
-			<h5>주문 정보 </h5>
+			<h5>주문 정보</h5>
 		</div>
 		<div>
 			<table border="1">
@@ -384,8 +122,8 @@ function openDaumZipAddress(type) {
 					<tr>
 						<th scope="row">주소</th>
 						<td><input id="ozipcode" name="ozipcode" size="6"
-							maxlength="6" readonly type="text"> <button type="button"
-							class="btn btn-dark" onclick="openDaumZipAddress('o');">우편번호</button><br> <input id="oaddr"
+							maxlength="6" readonly type="text"> <a href="#"
+							class="btn btn-dark">우편번호</a><br> <input id="oaddr"
 							name="oaddr" size="40" readonly type="text"
 							style="margin-top: 10px"> <span>기본주소</span><br> <input
 							id="oaddrdetail" name="oaddrdetail" size="40" type="text"
@@ -476,88 +214,258 @@ function openDaumZipAddress(type) {
 	</div>
 
 
-	<div id="recipient_info">
-		<div style="margin-top: 20px">
-			<h5>배송 정보</h5>
-		</div>
-		<div>
-			<table border="1">
-				<colgroup>
-					<col style="width: 150px;">
-					<col style="width: auto;">
-				</colgroup>
 
-				<tbody>
-					<tr>
-						<th scope="row">배송지 선택</th>
-						<td><div>
-								<input id="sameaddr0" name="sameaddr" type="radio"> <label
-									for="sameaddr0">주문자 정보와 동일</label> <input id="sameaddr1"
-									name="sameaddr" type="radio"> <label for="sameaddr1">새로운배송지</label>
-								<a href="#" id="btn_shipp_addr" class="btn btn-dark">주소록 보기</a>
-							</div></td>
-					</tr>
-					<tr>
-						<th scope="row">받으시는 분</th>
-						<td><input id="rname" name="rname" size="15" type="text"></td>
-					</tr>
-					<tr>
-						<th scope="row">주소</th>
-						<td><input id="rzipcode" name="rzipcode" size="6"
-							maxlength="6" readonly type="text"> <button type="button"
-							class="btn btn-dark" onclick="openDaumZipAddress('r');">우편번호</button><br> <input id="raddr"
-							name="raddr" size="40" readonly type="text"
-							style="margin-top: 10px"> <span>기본주소</span><br> <input
-							id="raddrdetail" name="raddrdetail" size="40" type="text"
-							style="margin-top: 10px"> <span>나머지주소</span><span>(선택입력가능)</span></td>
-					</tr>
-					<tr>
-						<th scope="row">연락처</th>
-						<td><select id="rtel1" name="rtel1">
-								<option value="02">02</option>
-								<option value="031">031</option>
-								<option value="032">032</option>
-								<option value="033">033</option>
-								<option value="041">041</option>
-								<option value="042">042</option>
-								<option value="043">043</option>
-								<option value="044">044</option>
-								<option value="051">051</option>
-								<option value="052">052</option>
-								<option value="053">053</option>
-								<option value="054">054</option>
-								<option value="055">055</option>
-								<option value="061">061</option>
-								<option value="062">062</option>
-								<option value="063">063</option>
-								<option value="064">064</option>
-								<option value="0502">0502</option>
-								<option value="0503">0503</option>
-								<option value="0504">0504</option>
-								<option value="0505">0505</option>
-								<option value="0506">0506</option>
-								<option value="0507">0507</option>
-								<option value="070">070</option>
-								<option value="010">010</option>
-								<option value="011">011</option>
-								<option value="016">016</option>
-								<option value="017">017</option>
-								<option value="018">018</option>
-								<option value="019">019</option>
-								<option value="0508">0508</option>
-						</select>-<input id="rtel2" name="rtel2" maxlength="4" size="4"
-							type="text">-<input id="rtel3" name="rtel3"
-							maxlength="4" size="4" type="text"></td>
-					</tr>
-					<tr>
-						<th scope="row">배송메시지</th>
-						<td><textarea id="rcommnet" name="rcommnet" rows="5"
-								cols="90"></textarea></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+
+
+
+
+	<tbody id="cartTable-other">
+    <tr>
+        <td colspan="5" class="cart-bundle-title"><h2 class="title bundle">판매자배송 상품</h2></td>
+    </tr>
+    
+        
+            
+            
+                <tr class="cart-deal-item count0 cart-sc-items " data-item-status="CHECKED" data-adult="false" data-index="0" data-count="1" data-bundle-id="12178078944" data-bundle-type="PRODUCT" data-app="" data-group-type="partner">
+                    <td class="product-select-event">
+                        
+                            
+                                <input type="checkbox" title="로지텍 멀티 디바이스 블루투스 무선 키보드 상품을 결제상품으로 설정" value="12178078944" class="dealSelectChk">
+                            
+                        
+                    </td>
+                    <td>
+                        
+                            <a href="//www.coupang.com/vp/products/37610722?vendorItemId=70402053741" class="moveProduct">
+                                <img src="//thumbnail10.coupangcdn.com/thumbnails/remote/120x120ex/image/vendor_inventory/images/2017/05/24/17/6/36b04e65-6745-4a3d-8a4b-5ec647d5a13a.jpg" width="78" height="78" class="product-img img" alt="로지텍 멀티 디바이스 블루투스 무선 키보드" data-bundle-id="12178078944">
+                            </a>
+                        
+                    </td>
+                    <td class="product-box">
+                        <div class="product-name-part">
+                            
+                            <a href="//www.coupang.com/vp/products/37610722?vendorItemId=70402053741" class="product-name moveProduct modify-color">로지텍 멀티 디바이스 블루투스 무선 키보드, K380, 블루</a>
+                            
+                                
+                            
+                        </div>
+                        
+                            <div id="70402053741" class="option-item modify-float" data-quantity="1" data-vendor-id="C00256440" data-vi="70402053741" data-vip="" data-pid="37610722" data-itemid="138555806" data-bundle-id="12178078944" data-shipping-place-id="2258451" data-delivery-fee="0">
+                                <div class="option-item-info" data-restock-notification-state="false">
+                                    <div class="option-name">
+                                        <span class="option-item-name" style="display:none;">로지텍 멀티 디바이스 블루투스 무선 키보드, K380, 블루</span>
+                                        
+                                            
+                                            
+                                        
+                                    </div>
+                                    
+                                        
+                                            
+                                                <div class="delivery-date partner modify-padding" style="visibility: visible;">
+                                                    <span class="arrive-date" style="display: inline-block;"><span class="arrive-date-txt"></span><span class="arrive-date-day"></span><span class="arrive-date-date">6/29</span> 도착 예정</span><span class="delivery-message"></span>
+                                                </div>
+                                                <p class="delivery-enterprise" style="display: none"><img src="//img1a.coupangcdn.com/image/cart/generalCart/warning_ic.png" alt="">이 상품은 <strong>로켓배송</strong>이 아닌 <strong>협력택배사</strong>가 배송하는 상품입니다.</p>
+                                            
+                                        
+                                    
+                                </div>
+                                <div class="option-price-part" data-sale-price="32900">
+                                    
+	
+		<span class="unit-cost" data-sale-price="32900"><span class="sr-only">제품가격</span>32,900원</span>
+		<span class="select-select">
+			<select class="quantity-select" data-url="/memberCartItem/quantity/12178078944/" data-quantity="1" data-all="false" title="로지텍 멀티 디바이스 블루투스 무선 키보드, K380, 블루 수량변경">
+				
+					
+						<option value="1" selected="selected">1</option>
+					
+						<option value="2">2</option>
+					
+						<option value="3">3</option>
+					
+						<option value="4">4</option>
+					
+						<option value="5">5</option>
+					
+						<option value="6">6</option>
+					
+						<option value="7">7</option>
+					
+						<option value="8">8</option>
+					
+						<option value="9">9</option>
+					
+					<option value="10">10+</option>
+				
+			</select>
+		</span>
+		<span class="select-text">
+			<input type="text" class="quantity-text" title="로지텍 멀티 디바이스 블루투스 무선 키보드, K380, 블루 수량변경" maxlength="4" value="1" data-url="/memberCartItem/quantity/12178078944/" data-all="false">
+			<input type="button" class="quantity-chg none" value="수량변경">
+		</span>
+		<span class="unit-price-area"><span class="unit-price"><span class="sr-only">구매가격</span>32,900원</span></span>
+	
+
+                                    <a href="/memberCartItem/deleteItems?cartItemIds[]=12178078944&amp;itemStatus=CHECKED" data-url="/memberCartItem/deleteItems?cartItemIds[]=12178078944&amp;itemStatus=CHECKED" data-all="false" class="delete-option"><span class="sr-only">로지텍 멀티 디바이스 블루투스 무선 키보드, K380, 블루 상품삭제</span></a>
+                                    
+                                        
+                                    
+                                </div>
+                            </div>
+                            <div class="badge-list">
+                                
+
+                                
+                                    
+	
+        <div class="badge-item option-benefit">
+            
+            
+                 <span class="promo-cash-benefit ">
+                    <i class="promo-cash-benefit__icon"></i><em class="promo-cash-benefit__text">최대 1,645원 적립</em>
+                 </span>
+            
+        </div>
+	
+
+
+                                
+                            </div>
+                        
+                        
+                    </td>
+                    <td class="unit-total-price" headers="th-unit-total-price">
+                        
+	
+		
+			
+				<div class="unit-total-sale-price">32,900원</div>
+			
+		
+	
+
+
+                        
+                            
+                        
+                    </td>
+                    
+                        <td class="delivery-fee" rowspan="1" headers="th-delivery-fee">
+                            
+                                
+                                    
+                                        
+                                            
+                                                -
+                                            
+                                        
+                                    
+                                
+                            
+                            
+                        </td>
+                    
+                </tr>
+            
+        
+            
+            
+                <tr class="cart-deal-item count1 cart-sc-items last-cart-sc-items" data-item-status="CHECKED" data-adult="false" data-index="1" data-count="1" data-bundle-id="12178076502" data-bundle-type="PRODUCT" data-app="" data-group-type="partner">
+                    <td class="product-select-event">
+                        
+                            
+                                <input type="checkbox" title="Logitech 로지텍 키즈투고 키보드 아이폰 아이패드,4종 상품을 결제상품으로 설정" value="12178076502" class="dealSelectChk">
+                            
+                        
+                    </td>
+                    <td>
+                        
+                            <a href="//www.coupang.com/vp/products/303466070?vendorItemId=70415745447" class="moveProduct">
+                                <img src="//thumbnail8.coupangcdn.com/thumbnails/remote/120x120ex/image/vendor_inventory/b950/4aeacbfa325e4d4b15410eda32ddb611ce71867927381e45845a1164ec99.jpg" width="78" height="78" class="product-img img" alt="Logitech 로지텍 키즈투고 키보드 아이폰 아이패드,4종" data-bundle-id="12178076502">
+                            </a>
+                        
+                    </td>
+                    <td class="product-box">
+                        <div class="product-name-part">
+                            
+                            <a href="//www.coupang.com/vp/products/303466070?vendorItemId=70415745447" class="product-name moveProduct modify-color">Logitech 로지텍 키즈투고 키보드 아이폰 아이패드 4종, 3.Stone</a>
+                            
+                                
+                            
+                        </div>
+                        
+                            <div id="70415745447" class="option-item modify-float" data-quantity="1" data-vendor-id="C00214641" data-vi="70415745447" data-vip="" data-pid="303466070" data-itemid="954494061" data-bundle-id="12178076502" data-shipping-place-id="1218234" data-delivery-fee="0">
+                                <div class="option-item-info" data-restock-notification-state="false">
+                                    <div class="option-name">
+                                        <span class="option-item-name" style="display:none;">Logitech 로지텍 키즈투고 키보드 아이폰 아이패드 4종, 3.Stone</span>
+                                        
+                                            
+                                            
+                                        
+                                    </div>
+                                    
+                                        
+                                            
+                                                <div class="delivery-date partner modify-padding" style="visibility: visible;">
+                                                    <span class="arrive-date" style="display: inline-block;"><span class="arrive-date-txt"></span><span class="arrive-date-day"></span><span class="arrive-date-date">6/29</span> 도착 예정</span><span class="delivery-message"></span>
+                                                </div>
+                                                <p class="delivery-enterprise" style="display: none"><img src="//img1a.coupangcdn.com/image/cart/generalCart/warning_ic.png" alt="">이 상품은 <strong>로켓배송</strong>이 아닌 <strong>협력택배사</strong>가 배송하는 상품입니다.</p>
+                                            
+                                        
+                                    
+                                </div>
+                                <div class="option-price-part" data-sale-price="48000">
+                                    
+	
+		<span class="unit-cost" data-sale-price="48000"><span class="sr-only">제품가격</span>48,000원</span>
+		<span class="select-select">
+			<select class="quantity-select" data-url="/memberCartItem/quantity/12178076502/" data-quantity="1" data-all="false" title="Logitech 로지텍 키즈투고 키보드 아이폰 아이패드 4종, 3.Stone 수량변경">
+				
+					
+						<option value="1" selected="selected">1</option>
+			</select>
+		</span>
+		<span class="select-text">
+			<input type="text" class="quantity-text" title="Logitech 로지텍 키즈투고 키보드 아이폰 아이패드 4종, 3.Stone 수량변경" maxlength="4" value="1" data-url="/memberCartItem/quantity/12178076502/" data-all="false">
+			<input type="button" class="quantity-chg none" value="수량변경">
+		</span>
+		<span class="unit-price-area"><span class="unit-price"><span class="sr-only">구매가격</span>48,000원</span></span>
+                                    <a href="/memberCartItem/deleteItems?cartItemIds[]=12178076502&amp;itemStatus=CHECKED" data-url="/memberCartItem/deleteItems?cartItemIds[]=12178076502&amp;itemStatus=CHECKED" data-all="false" class="delete-option"><span class="sr-only">Logitech 로지텍 키즈투고 키보드 아이폰 아이패드 4종, 3.Stone 상품삭제</span></a>
+                                    
+                                </div>
+                            </div>
+                            <div class="badge-list">
+        <div class="badge-item option-benefit">
+                 <span class="promo-cash-benefit ">
+                    <i class="promo-cash-benefit__icon"></i><em class="promo-cash-benefit__text">최대 2,400원 적립</em>
+                 </span>
+        </div>
+                            </div>
+                    </td>
+                    <td class="unit-total-price" headers="th-unit-total-price">
+				<div class="unit-total-sale-price">48,000원</div>
+                    </td>
+                        <td class="delivery-fee" rowspan="1" headers="th-delivery-fee">
+                                                -
+                        </td>
+                </tr>
+		        <tr class="bundle-price-total">
+		            <td colspan="5">
+		                <h3 class="sr-only">업체상품 주문금액 정보</h3>
+		                상품가격 <span class="total-product-price number">0</span>원<span class="coupon-area">
+		                
+		                <span class="symbol symbol-plus"><span class="sr-only">더하기</span></span>
+		                배송비 <span class="delivery-charge number">0</span>원
+		                <span class="symbol symbol-equal"><span class="sr-only">결과는</span></span>
+		                주문금액 <span class="total-order-price number">0</span>원
+		            </span></td>
+		        </tr>
+		    
+		    </tbody>
+
+
 
 
 

@@ -80,7 +80,7 @@
 				<hr>
 			<!-- 옵션 선택 -->
 				<div class="optionChoice" onchange="optionChoice()">
-<!-- <form method="post" action="/bitcamp/order" id="productWriteForm">폼 시작 -->
+<form method="post" action="/bitcamp/order" id="productWriteForm">
 					<ul>
 						<li><span class="spanWidth150 col-4">상품명</span>${product.p_name}</li>
 						<li><span class="spanWidth150 col-4">배송방법</span>택배</li>
@@ -158,9 +158,9 @@
 						</div>
 						<div class="row quantity_wrap">
 							<span class="quantity_span">수량</span>
-							<button class="btn minus productQty" ><i class="icon-minus"></i></button>
+							<button class="btn minus productQty" type="button" ><i class="icon-minus"></i></button>
 							<input type="text" id="currentQty" name="currentQty" class="currentQty input_noclick transparent" value="1"  readonly >
-							<button class="btn plus productQty" ><i class="icon-plus" ></i></button>
+							<button class="btn plus productQty" type="button" ><i class="icon-plus" ></i></button>
 						</div>
 						<div class="quantity_msg">
 							<span>9개까지 구매 가능 합니다.</span>
@@ -171,7 +171,7 @@
 						<a class="cartAndInterest"style="margin-right:2%" >장바구니 담기</a>
 						<a class="cartAndInterest">관심상품 등록</a>
 					</div>
-<!-- </form>폼 끝 -->
+</form>
 				</div>
 			</div>
 		</div>
@@ -188,75 +188,133 @@
 		  </div> <!-- 탭메뉴 컨테이너 끝-->
 		</div> <!--탭 끝 -->
 	
-			<!-- 	///////////// -->
+		<!-- 상품 설명란 -->
   		<div>
 		<p id="product_information"><span><h1>상세정보</h1></span></p>
 			상품설명:${product.p_commnet }<hr>
 		</div>
 		
-			<p id="product_review"><span><h1>REVIEW</h1></span> </p>
-			<div>
-				<div>
-					<ul class = "reviewList">
-						<li class="ListTop list1">작성일</li>
-						<li class="ListTop list2">제목</li>
-						<li class="ListTop list3">작성자</li>
-						<li class="ListTop list4">조회수</li>
-						<li class="ListTop list5">추천</li>
-						<li class="ListTop list6">평점</li>
-					</ul>
-					<ul class="reviewList"><!-- 반복문 돌릴부분 -->
-						<li class="list1">2020-06-10</li>
-						<li class="list2" onclick="showMoreText(this)">
-							<a href="javascript:;" role="button" >제목1</a>
-						</li>
-						<li class="list3">작성자1</li>
-						<li class="list4">조회수1</li>
-						<li class="list5">추천1</li>
-						<li class="list6">평점1</li>
-						<div class="moreText">
-							<span class="text_info">leez****/</span>
-				            <span class="text_info">20.05.15~20.05.20/</span>
-				            <p class="moreTextStatus">옵션 : 모델명: hd10 / 컬러: 화이트 / 용량: 32GB</p>
-				            <div class="moreTextContents">제품 참 좋네요~~</div>
-						</div>
-					</ul><!-- 반복문 돌릴부분 -->
+		<!-- 리뷰란 -->
+		<p id="product_review"><span><h1>REVIEW</h1></span> </p>
+		<div class="ReviewWrap">
+			<ul class = "reviewList" style="margin:0;padding:0">
+				<li class="ListTop list1">작성일</li>
+				<li class="ListTop list2">제목</li>
+				<li class="ListTop list3">작성자</li>
+				<li class="ListTop list4">조회수</li>
+				<li class="ListTop list5">추천</li>
+				<li class="ListTop list6">평점</li>
+			</ul>
+			<ul class="reviewList" style="margin:0;padding:0"><!-- 반복문 돌릴부분 -->
+				<li class="list1">2020-06-10</li>
+				<li class="list2" onclick="showMoreText(this)">
+					<a href="javascript:;" role="button" >제목1</a>
+				</li>
+				<li class="list3">작성자1</li>
+				<li class="list4">조회수1</li>
+				<li class="list5">추천1</li>
+				<li class="list6">평점1</li>
+				<div class="moreText">
+					<span class="text_info">leez****/</span>
+		            <span class="text_info">20.05.15~20.05.20/</span>
+		            <p class="moreTextStatus">옵션 : 모델명: hd10 / 컬러: 화이트 / 용량: 32GB</p>
+		            <div class="moreTextContents">제품 참 좋네요~~</div>
 				</div>
-			</div>
-		
-		
-		
-		
+			</ul><!-- 반복문 돌릴부분 -->
+		</div>
+		<div>
+			<ul class="pagination justify-content-center">
+			    <li class="page-item"><a class="page-link bg-dark text-white" href="javascript:void(0);">&lt;</a></li>
+			    <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+			    <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+			    <li class="page-item"><a class="page-link bg-dark text-white" href="javascript:void(0);">&gt;</a></li>
+			</ul>
+		</div>
+	
+		<!-- 질문란 -->
 		<p id="product_QA"><span><h1>Q&A</h1></span> </p>
-			<div>
-				<div>
-					<ul class = "QAList">
-						<li class="ListTop list1">작성일</li>
-						<li class="ListTop list2">제목</li>
-						<li class="ListTop list3">작성자</li>
-						<li class="ListTop list4">조회수</li>
-						<li class="ListTop list5">추천</li>
-						<li class="ListTop list6">평점</li>
-					</ul>
-					<ul class="QAList"><!-- 반복문 돌릴부분 -->
-						<li class="list1">2020-06-10</li>
-						<li class="list2" onclick="showMoreText(this)">
-							<a href="javascript:;" role="button" >제목1</a>
-						</li>
-						<li class="list3">작성자1</li>
-						<li class="list4">조회수1</li>
-						<li class="list5">추천1</li>
-						<li class="list6">평점1</li>
-						<div class="moreText">
-							<span class="text_info">leez****/</span>
-				            <span class="text_info">20.05.15~20.05.20/</span>
-				            <p class="moreTextStatus">옵션 : 모델명: hd10 / 컬러: 화이트 / 용량: 32GB</p>
-				            <div class="moreTextContents">이거 내구도 좋은가요</div>
-						</div>
-					</ul><!-- 반복문 돌릴부분 -->
+		<div class="QAWrap">
+			<ul class = "QAList" style="margin:0;padding:0">
+				<li class="ListTop list1">작성일</li>
+				<li class="ListTop list2">제목</li>
+				<li class="ListTop list3">작성자</li>
+				<li class="ListTop list4">조회수</li>
+				<li class="ListTop list5">추천</li>
+				<li class="ListTop list6">평점</li>
+			</ul>
+			<ul class="QAList" style="margin:0;padding:0"><!-- 반복문 돌릴부분 -->
+				<li class="list1">2020-06-10</li>
+				<li class="list2" onclick="showMoreText(this)">
+					<a href="javascript:;" role="button" >제목1</a>
+				</li>
+				<li class="list3">작성자1</li>
+				<li class="list4">조회수1</li>
+				<li class="list5">추천1</li>
+				<li class="list6">평점1</li>
+				<div class="moreText"><!-- 상세보기창 -->
+					<span class="text_info">leez****/</span>
+		            <span class="text_info">20.05.15~20.05.20/</span>
+		            <p class="moreTextStatus">옵션 : 모델명: hd10 / 컬러: 화이트 / 용량: 32GB</p>
+		            <div class="moreTextContents">이거 내구도 좋은가요</div>
 				</div>
-			</div>
-		
+			</ul><!-- 반복문 돌릴부분 -->
+				<ul class="QAList" style="margin:0;padding:0"><!-- 반복문 돌릴부분 -->
+				<li class="list1">2020-06-10</li>
+				<li class="list2" onclick="showMoreText(this)">
+					<a href="javascript:;" role="button" >제목1</a>
+				</li>
+				<li class="list3">작성자1</li>
+				<li class="list4">조회수1</li>
+				<li class="list5">추천1</li>
+				<li class="list6">평점1</li>
+				<div class="moreText"><!-- 상세보기창 -->
+					<span class="text_info">leez****/</span>
+		            <span class="text_info">20.05.15~20.05.20/</span>
+		            <p class="moreTextStatus">옵션 : 모델명: hd10 / 컬러: 화이트 / 용량: 32GB</p>
+		            <div class="moreTextContents">이거 내구도 좋은가요</div>
+				</div>
+			</ul><!-- 반복문 돌릴부분 -->
+				<ul class="QAList" style="margin:0;padding:0"><!-- 반복문 돌릴부분 -->
+				<li class="list1">2020-06-10</li>
+				<li class="list2" onclick="showMoreText(this)">
+					<a href="javascript:;" role="button" >제목1</a>
+				</li>
+				<li class="list3">작성자1</li>
+				<li class="list4">조회수1</li>
+				<li class="list5">추천1</li>
+				<li class="list6">평점1</li>
+				<div class="moreText"><!-- 상세보기창 -->
+					<span class="text_info">leez****/</span>
+		            <span class="text_info">20.05.15~20.05.20/</span>
+		            <p class="moreTextStatus">옵션 : 모델명: hd10 / 컬러: 화이트 / 용량: 32GB</p>
+		            <div class="moreTextContents">이거 내구도 좋은가요</div>
+				</div>
+			</ul><!-- 반복문 돌릴부분 -->
+				<ul class="QAList" style="margin:0;padding:0"><!-- 반복문 돌릴부분 -->
+				<li class="list1">2020-06-10</li>
+				<li class="list2" onclick="showMoreText(this)">
+					<a href="javascript:;" role="button" >제목1</a>
+				</li>
+				<li class="list3">작성자1</li>
+				<li class="list4">조회수1</li>
+				<li class="list5">추천1</li>
+				<li class="list6">평점1</li>
+				<div class="moreText"><!-- 상세보기창 -->
+					<span class="text_info">leez****/</span>
+		            <span class="text_info">20.05.15~20.05.20/</span>
+		            <p class="moreTextStatus">옵션 : 모델명: hd10 / 컬러: 화이트 / 용량: 32GB</p>
+		            <div class="moreTextContents">이거 내구도 좋은가요</div>
+				</div>
+			</ul><!-- 반복문 돌릴부분 -->
+		</div>
+		<div>
+			<ul class="pagination justify-content-center">
+			    <li class="page-item"><a class="page-link bg-dark text-white" href="javascript:void(0);">&lt;</a></li>
+			    <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+			    <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+			    <li class="page-item"><a class="page-link bg-dark text-white" href="javascript:void(0);">&gt;</a></li>
+			</ul>
+		</div>
 		
 		
         <p id="product_returnExchange"><span><h1>반품/교환정보</h1></span></p>	

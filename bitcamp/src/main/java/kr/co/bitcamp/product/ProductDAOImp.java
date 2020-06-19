@@ -13,5 +13,7 @@ public interface ProductDAOImp {
 	public ProductVO productView(int p_no);
 	//전체 레코드 선택
 	public List<ProductVO> allSelectRecord();
+	//관심상품 보기
+	public List<ProductVO> selectInterest();
 	
 }

@@ -10,6 +10,10 @@
 <link rel="stylesheet" href="/bitcamp/css/bootstrap.min.css" type="text/css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/bitcamp/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js"
+	type="text/javascript"></script>
+<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css"
+	rel="stylesheet" type="text/css" />
 <style>
 .wrap{
 	margin:170px 100px 0 100px;
@@ -73,6 +77,57 @@ a:link, a:visited{
 	text-decoration:none;
 	color:#BDBDBD;
 }
+
+/*관심상품*/
+.layerWish {
+    position: fixed;
+    top: 41%;
+    left: 47%;
+    z-index: 1000;
+    width: 440px;
+    max-width: 440px;
+    height: 320px;
+    margin: -72px 0 0 -150px;
+    border: 1px solid #000;
+    border-radius:6px;
+    background: #fff;
+    text-align: center;
+    display:none;
+}
+.layerWish h1 {
+    font-size: 21px;
+    text-align: center;
+    color: #000;
+    font-weight: bold;
+    margin: 60px auto 30px;
+}
+.layerWish .content p {
+    color: #000;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 40px;
+    line-height: 22px;
+}
+.layerWish .btnArea a {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #000;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    margin: 0 5px;
+    font-size: 15px;
+    font-weight: 500;
+}
+.layerWish .btnArea a.wishlist-confirm {
+    background: #000;
+    color: #fff;
+}
+.layerWish .close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
 
 /*product-list*/
 .product-list>div:first-child{
@@ -177,7 +232,9 @@ select:focus {
 	visibility:hidden;
 }
 .add-cart a{
-	color:#fff; 
+	color:#fff;
+	display:block;
+	width:100%; 
 }
 .product-item-name{
 	font-size:20px;
@@ -215,11 +272,11 @@ select:focus {
 	left:50%;
 	margin-left:-200px;
 	padding:30px; 
+	float:left;
+	text-align:left;
 }
 .layer_name{
-	float:left;
     font-size:24px;
-    padding-bottom:30px;
 }
 .btn_close{
     float:right;
@@ -229,15 +286,23 @@ select:focus {
     outline:none;
     background: url(${ctx}/resources/category/close_btn.png) no-repeat 50% 50%;
 }
+.inner_option, .group_btn{
+	width:100%;
+	padding-top:12px;
+}
 .tit_cart{
-	float:left;
 	width:100%;
 	font-size:16px;
 	text-align:left;
     padding-bottom:12px;
     border-bottom:2px solid #333;
     line-height:24px;
+    display:inline-block;
 }
+.inner_option>div:first-of-type{
+	  padding-top:12px;
+}
+#delivery-charge, #rental-period{float:right;}
 .group_btn button{
 	width:49%;
 	height:54px;
@@ -245,8 +310,18 @@ select:focus {
 	border-radius:3px;
 	outline:none;
 }
+.total{
+	width:100%;
+	font-size:16px;
+	line-height:24px;
+}
+.sum{
+	float:right;
+}
+.num{
+	font-size:24px;
+}
 .btn_cancel{
-	float:left;
     border:1px solid #5D5D5D;;
     background-color:#fff;
     color:#5D5D5D;
@@ -256,21 +331,6 @@ select:focus {
     border:1px solid #DB163A;
     background-color:#DB163A;
     color:#fff;
-}
-.total{
-	float:left;
-	width:100%;
-	font-size:16px;
-	line-height:24px;
-}
-.price>strong{
-	float:left;
-}
-.sum{
-	float:right;
-}
-.num{
-	font-size:24px;
 }
 </style>
 <script>
@@ -307,8 +367,18 @@ $(function(){
 	//btn-heart toggle
 	$(".btn_heart").click(function(){
 		$(this).toggleClass("btn_toggle");
-	});
-
+		//관심상품 창
+		$(".btn_heart[class*=btn_toggle]").parents(".product-list").prev(".layerWish").css("display","block");
+		
+		/*
+		//관심상품 창
+		var idx = $(this).css("background-image").indexOf("color_heart_icon.png");
+		if(idx<0){
+			$(".layerWish").css("display","block");
+		} 
+		*/
+	});	
+	
 	//장바구니 fadeToggle
 	$(".product-list>ul li").hover(function(){
 		//마우스 오버일때
@@ -331,7 +401,7 @@ $(function(){
 		$(".badge").html(cnt++);
 	});	
 	
-	//팝업창
+	//장바구니 팝업창
 	$('.add-cart a').click(function(){
 		$('.modal').css('display','block');
 	});
@@ -339,7 +409,126 @@ $(function(){
 	$('.modal .btn_close, .btn_cancel').click(function(){
 		$('.modal').css('display','none');
 	});
+	
+	//배송비 결제 
+	var optionTag=["- 결제 방식 선택 -", "방문 수령", "주문시 결제", "착불"];    
+	var tag="";
+	for(i=0; i<optionTag.length; i++){
+		tag += "<option>"+optionTag[i]+"</option>";
+	}
+	document.getElementById("delivery-charge").innerHTML = tag;
+	
+	//대여 기간 
+	/*
+	var tagOption=["- 대여 기간 선택 -", "2박3일", "3박4일(+15,000원)", "4박5일(+30,000원)", "5박6일(+45,000원)"];    
+	var tag="";
+	for(i=0; i<tagOption.length; i++){
+		tag += "<option>"+tagOption[i]+"</option>";
+	}
+	document.getElementById("rental-period").innerHTML = tag;
+	*/
+	
+	var tagOption=["- 대여 기간 선택 -", "2박3일", "3박4일(+15,000원)", "4박5일(+30,000원)", "5박6일(+45,000원)"];    
+	var tag="";
+	for(i=0; i<tagOption.length; i++){
+		tag += "<option value='"+(i+2)+"'>"+tagOption[i]+"</option>";  //value="2" 부터
+	}
+	document.getElementById("rental-period").innerHTML = tag;
+	
+
+	//대여 시작일
+	var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+	$('#rental_start').datepicker({
+		uiLibrary : 'bootstrap4.4.1',
+		format : "yyyy-mm-dd",
+		minDate : function() {
+            var date = new Date();
+            date.setDate(date.getDate()+7);
+            return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        }
+	});
+	
+	//대여 종료일
+	var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+	$('#rental_end').datepicker({
+		uiLibrary : 'bootstrap4.4.1',
+		format : "yyyy-mm-dd",
+		minDate : function() {
+			var date = new Date(rental_start.value);
+            date.setDate(date.getDate()+parseInt($("#rental-period").val()));
+            return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+		},
+		maxDate : function() {
+            var date = new Date(rental_start.value);
+            date.setDate(date.getDate()+parseInt($("#rental-period").val()));
+            return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+		}
+	});
+	
+	
+	
 });
+function period_change(period){
+	if(period!=null||period!=''){
+		$("#rental-period-container").css("display","flex")
+	}
+	var date = new Date(rental_start.value);// 주문 시작일을 받음.
+	var period = parseInt(period);// 대여기간
+	date.setDate(date.getDate()+period);// 주문 시작일 + 대여기간
+	
+	
+	var year = date.getFullYear();// yyyy
+	var month = (1 + date.getMonth());// mm
+    month = month >= 10 ? month : '0' + month;// month 두자리로 저장
+    var day = date.getDate();// dd
+    day = day >= 10 ? day : '0' + day;// day 두자리로 저장
+    var yyyymmdd = year + '-' + month + '-' + day;// '-' 추가하여 yyyy-mm-dd 형태 생성
+	$("#rental_end").datepicker('value', yyyymmdd)
+	
+}
+//주문 날짜 선택시 마감날짜도 자동 값적용
+function changeEndDay(startDay){
+	// 주문 시작일이 설정되면,마감날짜가 보이게 된다.
+	if(rental_start.value!=null||rental_start.value!=''){
+		$("#rental_end_wrap").css("display","flex")
+		$("#orderDetail_wrap").css("display","flex")
+	}
+	console.log($("#rental-period"))	
+	var date = new Date(startDay);// 주문 시작일을 받음.
+	var period = parseInt($("#rental-period").val());// 대여기간
+	console.log("주문날짜 선택===>"+period)
+	
+	date.setDate(date.getDate()+period);// 주문 시작일 + 대여기간
+//	$("#rental_period").html(startDay+"~")//시작일
+	var year = date.getFullYear();// yyyy
+	var month = (1 + date.getMonth());// mm
+    month = month >= 10 ? month : '0' + month;// month 두자리로 저장
+    var day = date.getDate();// dd
+    day = day >= 10 ? day : '0' + day;// day 두자리로 저장
+    var yyyymmdd = year + '-' + month + '-' + day;// '-' 추가하여 yyyy-mm-dd 형태 생성
+	$("#rental_end").datepicker('value', yyyymmdd)
+//	$("#borrow_period").append(yyyymmdd)//종료일
+	
+}
+
+
+// 대여종료일은 못바꾸게 해야함
+function defaultday(){
+	var date = new Date($("#rental_start").val());// 주문 시작일을 받음.
+	var period = parseInt($("#rental-period").val());// 대여기간
+	date.setDate(date.getDate()+period);// 주문 시작일 + 대여기간
+	var year = date.getFullYear();// yyyy
+	var month = (1 + date.getMonth());// mm
+    month = month >= 10 ? month : '0' + month;// month 두자리로 저장
+    var day = date.getDate();// dd
+    day = day >= 10 ? day : '0' + day;// day 두자리로 저장
+    var yyyymmdd = year + '-' + month + '-' + day;// '-' 추가하여 yyyy-mm-dd 형태 생성
+	$("#rental_end").datepicker('value', yyyymmdd)
+}
+//키보드 입력 못하게 하기
+function donotusekeyboard(event){
+	event.preventDefault();
+}
 </script>
 </head>
 
@@ -366,6 +555,18 @@ $(function(){
 				</li>  <!-- .dep1 -->
 			</ul>
 		</nav>
+	</div>
+	
+	<div class="layerWish">
+	  <h1>관심상품 담기</h1>
+	  <div class="content">
+	    <p>선택하신 상품을 관심상품에 담았습니다. <br>지금 관심상품을 확인하시겠습니까?</p>
+	  </div>
+	  <div class="btnArea">
+	    <a href="#" onclick="$('.layerWish').hide();">쇼핑계속하기</a>
+	    <a href="#" class="wishlist-confirm">관심상품확인</a>
+	  </div>
+	  <div class="close"><a onclick="$('.layerWish').hide();"><img src="<%=request.getContextPath()%>/resources/category/close_btn.png" alt="닫기 버튼"></a></div>
 	</div>
 
 	<div class="product-list"> 
@@ -502,8 +703,35 @@ $(function(){
 		<div class="modal_container">
         	<strong class="layer_name">상품 선택</strong>
         	<button type="button" class="btn_close"></button>
+        	
         	<div class="inner_option">
 		    	<strong class="tit_cart">코베아 문리버2 4인 캠핑세트</strong>
+		    	
+		    	<div class="delivery-charge-container">
+		    		<label>배송비 결제</label>
+		    		<select id="delivery-charge" name="delivery-chare"></select>
+		    	</div>
+		    	
+		    	<div class="rental-period-container">
+		    		<label>대여 기간</label>
+		    		<select id="rental-period" name="rental-period" onchange="period_change(this.value)">
+		    		</select>
+		    		
+		    		
+		    		
+		    		
+		    	</div>
+		    	
+		    	<div>
+		    		<label>대여 시작일</label>
+		    		<input id="rental_start" name="rental_start" onkeydown="donotusekeyboard(event)" onchange="changeEndDay(this.value);"/>
+		    	</div>
+		    	
+		    	<div>
+		    		<label>대여 종료일</label>
+		    		<input id="rental_end" name="rental_end"  onkeyup="defaultday()"/>
+		    	</div>
+		    	
 		    	<div class="total">
 		    		<div class="price">
 		    			<strong>합계</strong>
@@ -514,10 +742,12 @@ $(function(){
 		    		</div>
 		    	</div>
         	</div>
+        	
         	<div class="group_btn">
         		<button type="button" class="btn_cancel">취소</button>
         		<button type="button" class="btn_cart">장바구니 담기</button>
 	        </div>
+	        
 	    </div>
 	</div>
 </div>  <!-- wrap -->

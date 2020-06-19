@@ -1,5 +1,7 @@
 package kr.co.bitcamp.product;
 
+import java.util.ArrayList;
+
 public class ProductVO {
 	private int c_no;//카테고리 번호
 	private String c_name;//카테고리 이름
@@ -7,6 +9,7 @@ public class ProductVO {
 	private String p_name;//상품명
 	private int price;//가격	
 	private int delivery_fee;//배송비
+	private int delivery_fee_direct;//배송비 직접 입력
 	private String p_commnet;//상품설명
 	private String p_filename1;//상품사진1
 	private String p_filename2;//상품사진2
@@ -15,6 +18,8 @@ public class ProductVO {
 	private String p_filename5;//상품사진5
 	private String orderStart;//주문 시작일
 	private String orderEnd;//주문 마감일
+	private int productCount;//관심상품 갯수
+	private ArrayList<Integer> s_noList;//상세 재고들
 	
 	public int getC_no() {
 		return c_no;
@@ -51,6 +56,12 @@ public class ProductVO {
 	}
 	public void setDelivery_fee(int delivery_fee) {
 		this.delivery_fee = delivery_fee;
+	}
+	public int getDelivery_fee_direct() {
+		return delivery_fee_direct;
+	}
+	public void setDelivery_fee_direct(int delivery_fee_direct) {
+		this.delivery_fee_direct = delivery_fee_direct;
 	}
 	public String getP_commnet() {
 		return p_commnet;
@@ -99,6 +110,18 @@ public class ProductVO {
 	}
 	public void setOrderEnd(String orderEnd) {
 		this.orderEnd = orderEnd;
+	}
+	public int getProductCount() {
+		return productCount;
+	}
+	public void setProductCount(int productCount) {
+		this.productCount = productCount;
+	}
+	public ArrayList<Integer> getS_noList() {
+		return s_noList;
+	}
+	public void setS_noList(ArrayList<Integer> s_noList) {
+		this.s_noList = s_noList;
 	}
 	
 }
