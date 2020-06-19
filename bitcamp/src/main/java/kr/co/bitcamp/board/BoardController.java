@@ -1,14 +1,14 @@
 package kr.co.bitcamp.board;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,30 +25,6 @@ public class BoardController {
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
-	
-	@RequestMapping("/boardEnquiry")
-	public String boardEnquiry() {return "board/enquiry";}
-	
-	@RequestMapping("/boardReview")
-	public String boardReview() {return "board/review";}
-	
-	@RequestMapping("/enquiry_listForm")
-	public String enquiry_listForm() {return "board/enquiry_listForm";}
-	
-	@RequestMapping("/review_listForm")
-	public String review_listForm() {return "board/review_listForm";}
-	
-	@RequestMapping("/enquiry_writeForm")
-	public String enquiry_writeForm() {return "board/enquiry_writeForm";}
-	
-	@RequestMapping("/review_writeForm")
-	public String review_writeForm() {return "board/review_writeForm";}
-	
-	@RequestMapping("/enquiry_editForm")
-	public String enquiry_editForm() {return "/board/enquiry_editForm";}
-	
-	@RequestMapping("/review_editForm")
-	public String review_editForm() {return "/board/review_editForm";}
 	
 	// notice
 	// 전체 리스트로
@@ -77,17 +53,17 @@ public class BoardController {
 		
 		return mv;
 	}
-	// 삽입폼으로
+	// 글 쓰기폼으로
 	@RequestMapping("/notice_writeForm")
 	public String notice_writeForm() {return "board/notice_writeForm";}
-	// 삽입
+	// 글 쓰기
 	@RequestMapping(value = "/notice_writeOk", method = RequestMethod.POST)
 	public ModelAndView notice_writeOk(NoticeVO vo) {
 		ModelAndView mv = new ModelAndView();
 		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
 		int cnt = dao.noticeInsert(vo);
 		if(cnt > 0) {
-			mv.addObject("str", "writeForm");
+			mv.addObject("str", "notice_writeForm");
 			mv.setViewName("board/alters");
 		}else {
 			mv.setViewName("redirect:notice_writeForm");
@@ -97,11 +73,22 @@ public class BoardController {
 	}
 	// 한개 리스트로
 	@RequestMapping("/notice_listForm")
-	public ModelAndView notice_listForm(int no) {
+	public ModelAndView notice_listForm(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
+		int no = Integer.parseInt(request.getParameter("no"));
+		
+		PagingVO pagevo = new PagingVO();
+		pagevo.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
+		pagevo.setSearchKey(request.getParameter("searchKey"));
+		pagevo.setSearchWord(request.getParameter("searchWord"));
+		pagevo.setNotice_no(no);
+		LeadLagVO pnvo = dao.getLeadLagSelect(pagevo);
+		
 		dao.noticeHit(no);
 		mv.addObject("list", dao.list(no));
+		mv.addObject("pagevo", pagevo);
+		mv.addObject("pnvo", pnvo);
 		mv.setViewName("board/notice_listForm");
 		
 		return mv;
@@ -144,22 +131,166 @@ public class BoardController {
 		
 		return mv;
 	}
-	// 검색
-	/*@RequestMapping("/notice_Search")
-	@ResponseBody
-	public ModelAndView notice_search(@RequestParam("search") String search, @RequestParam("str")String str) {
-		ModelAndView mv = new ModelAndView();
-		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
-		mv.addObject("list", dao.noticeSearch(search, str));
-		mv.setViewName("board/notice");
-		
-		return mv;
-	}*/
 	
 	// enquiry
-	@RequestMapping("/enquiry_writeOk")
-	public String enquiry_writeOk() {
-		return "";
+	// 전체 리스트로
+	@RequestMapping("/boardEnquiry")
+	public ModelAndView boardEnquiry(HttpServletRequest request) {
+		// 페이지 번호 구하기
+		String pageNumStr = request.getParameter("pageNum");
+		PagingVO pagevo = new PagingVO();
+		
+		// 페이지 번호 전송된 경우 페이지 번호를 변경한다
+		if(pageNumStr != null) {
+			pagevo.setPageNum(Integer.parseInt(pageNumStr));
+		}
+		
+		// 검색키, 검색어 request
+		pagevo.setSearchKey(request.getParameter("searchKey"));
+		pagevo.setSearchWord(request.getParameter("searchWord"));
+		
+		ModelAndView mv = new ModelAndView();
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		pagevo.setTotalRecord(dao.getTotalRecord(pagevo));
+
+		mv.addObject("pagevo", pagevo);
+		mv.addObject("list", dao.allList(pagevo));
+		mv.setViewName("board/enquiry");
+		
+		return mv;
+	}
+	// 글 쓰기폼으로
+	@RequestMapping("/enquiry_writeForm")
+	public ModelAndView enquiry_writeForm() {
+		ModelAndView mv = new ModelAndView();
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		mv.addObject("cateList", dao.enquiryCategory());
+		mv.setViewName("board/enquiry_writeForm");
+		
+		return mv;
+	}
+	// 상품 가져오기
+	@RequestMapping("/requiry_goods")
+	@ResponseBody
+	public List<GoodsVO> requiry_goods(String cate){
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		
+		return dao.enquiryGoods(cate);
+	}
+	// 글 쓰기
+	@RequestMapping(value = "/enquiry_writeOk", method = RequestMethod.POST)
+	public ModelAndView enquiry_writeOk(EnquiryVO vo, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		vo.setUserno(1);	// 바꿔
+		//request.getSession().getAttribute("userno");
+		vo.setEnquiry_ip(getClientIpAddr(request));
+		int cnt = dao.enquiryInsert(vo);
+		if(cnt > 0) {
+			mv.addObject("str", "enquiry_writeForm");
+			mv.setViewName("board/alters");
+		}else {
+			mv.setViewName("redirect:enquiry_writeForm");
+		}
+		
+		return mv;
+	}
+	// 한개 리스트로
+	@RequestMapping("/enquiry_listForm")
+	public ModelAndView enquiry_listForm(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		int no = Integer.parseInt(request.getParameter("no"));
+		
+		PagingVO pagevo = new PagingVO();
+		pagevo.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
+		pagevo.setSearchKey(request.getParameter("searchKey"));
+		pagevo.setSearchWord(request.getParameter("searchWord"));
+		pagevo.setEnquiry_no(no);
+		LeadLagVO pnvo = dao.getLeadLagSelect(pagevo);
+		dao.enquiryHit(no);
+		
+		mv.addObject("list", dao.list(no));
+		mv.addObject("pagevo", pagevo);
+		mv.addObject("pnvo", pnvo);
+		mv.setViewName("board/enquiry_listForm");
+		
+		return mv;
+	}
+	// 글 수정폼으로
+	@RequestMapping("/enquiry_editForm")
+	public ModelAndView enquiry_editForm(int no) {
+		ModelAndView mv = new ModelAndView();
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		mv.addObject("vo", dao.list(no));
+		mv.setViewName("/board/enquiry_editForm");
+		
+		return mv;
+	}
+	// 글 수정
+	@RequestMapping("/enquiry_editOk")
+	public ModelAndView enquiry_editOk(EnquiryVO vo) {
+		ModelAndView mv = new ModelAndView();
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		int cnt = dao.enquiryUpdate(vo);
+		if(cnt > 0) {
+			mv.setViewName("redirect:boardEnquiry");
+		}else {
+			mv.setViewName("redirect:enquiry_editForm");
+		}
+		
+		return mv;
+	}
+	// 글 삭제
+	@RequestMapping("/enquiry_delForm")
+	public ModelAndView enquiry_delForm(int no) {
+		ModelAndView mv = new ModelAndView();
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		int cnt = dao.enquiryDelete(no);
+		if(cnt > 0) {
+			mv.setViewName("redirect:boardEnquiry");
+		}else {
+			mv.setViewName("redirect:enquiry_listForm");
+		}
+		
+		return mv;
 	}
 	
+	// review
+	
+	@RequestMapping("/boardReview")
+	public String boardReview() {return "board/review";}
+	
+	@RequestMapping("/review_listForm")
+	public String review_listForm() {return "board/review_listForm";}
+	
+	@RequestMapping("/review_writeForm")
+	public String review_writeForm() {return "board/review_writeForm";}
+	
+	@RequestMapping("/review_editForm")
+	public String review_editForm() {return "/board/review_editForm";}
+	
+	
+	// 정확한 ip주소 구하기
+	public static String getClientIpAddr(HttpServletRequest request) {
+	    String ip = request.getHeader("X-Forwarded-For");
+	 
+	    if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getHeader("Proxy-Client-IP");
+	    }
+	    if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getHeader("WL-Proxy-Client-IP");
+	    }
+	    if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getHeader("HTTP_CLIENT_IP");
+	    }
+	    if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+	    }
+	    if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getRemoteAddr();
+	    }
+	 
+	    return ip;
+	}
 }

@@ -21,15 +21,15 @@
 			location.href = "/bitcamp/boardNotice?searchKey=" + $("#searchList").val() + "&searchWord=" + $("#searchText").val();
 		}
 		
-		/*$(".pages").hover(function(){
-			//if($(this).val() != "${pagevo.pageNum}"){
-				$(this).css("background", "black").css("color", "white");
-			//}
+		$(".pages").hover(function(){
+			if($(this).text() != "${pagevo.pageNum}"){
+				$(this).css("color", "white");
+			}
 		}, function(){
-			//if($(this).val() != "${pagevo.pageNum}"){
-				$(this).css("background", "white").css("color", "black");
-			//}
-		});*/
+			if($(this).text() != "${pagevo.pageNum}"){
+				$(this).css("color", "black");
+			}
+		});
 	});
 </script>
 <div class = "container" id = "noticeBody">
@@ -49,12 +49,12 @@
 		<c:if test = "${list != null && list != ''}">
 			<c:forEach var = "vo" items = "${list}">
 				<li>${vo.notice_no}</li>
-				<li><a href = "/bitcamp/notice_listForm?no=${vo.notice_no}">${vo.notice_subject}</a></li>
+				<li class = "wordCut pointer" onclick = "location.href = '/bitcamp/notice_listForm?no=${vo.notice_no}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">${vo.notice_subject}</li>
 				<li>관리자</li>
 				<li>${vo.notice_hit}</li>
 			</c:forEach>
 		</c:if>
-		<c:if test = "${list == null || list == '[]'}">
+		<c:if test = "${list == null || list == '[]' || list == ''}">
 			<li style = "width : 1400px; height : 200px; line-height : 200px; border-right : 1px solid black;">공지사항이 없습니다.</li>
 		</c:if>
 	</ul>
@@ -90,10 +90,10 @@
 		    		</li>
 		    	</c:if>
 			</c:forEach>
-			<c:if test = "${pagevo.pageNum == pagevo.totalPage}">
+			<c:if test = "${pagevo.pageNum == pagevo.totalPage || pagevo.totalPage == ''}">
 		    	<li class="page-item disabled"><a class="page-link">&gt;</a></li>
 			</c:if>
-			<c:if test = "${pagevo.pageNum != pagevo. totalPage}">
+			<c:if test = "${pagevo.pageNum != pagevo.totalPage && pagevo.totalPage != ''}">
 				<li class="page-item">
 					<a class="page-link text-white black" href="/bitcamp/boardNotice?pageNum=${pagevo.pageNum + 1}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>">&gt;</a>
 				</li>

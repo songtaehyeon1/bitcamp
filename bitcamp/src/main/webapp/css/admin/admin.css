@@ -1,0 +1,602 @@
+@charset "UTF-8";
+
+.login-table {
+	width: 100%;
+	height: 700px;
+}
+
+.login-layout {
+	margin: 0 auto;
+	width: 453px;
+	color: #999999;
+}
+
+.login-layout h1 {
+	text-align: left;
+	padding: 0 0 0 0;
+	margin-bottom: 25px;
+}
+
+.login-form {
+	position: relative;
+	margin-bottom: 12px;
+	padding: 0px;
+	height: 100px;
+}
+
+.login-form .login-input {
+	position: absolute;
+	top: 0;
+}
+
+.login-form .login-input div {
+	height: 55px;
+	padding: 0;
+}
+
+.login-form .login-input input {
+	width: 296px;
+	height: 45px;
+	font-size: 13px;
+	color: #BBBBBB;
+	letter-spacing: 0px;
+	background-color: #F6F6F6;
+	border: 1px solid #E3E3E3;
+	border-radius: 0px;
+}
+
+.login-form .login-input input:focus {
+	font-size: 16px;
+	color: #333333;
+	font-weight: bold;
+	letter-spacing: 0px;
+	background-color: #FFFFFF;
+	border: 1px solid #888888;
+	border-radius: 0px;
+}
+
+.login-form .login-btn {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0px;
+	padding: 0;
+}
+
+.login-form .login-btn input {
+	padding: 0px;
+	width: 142px;
+	height: 100px;
+	font-size: 18px;
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+footer, header {
+	display: none;
+}
+
+ul, li, ol {
+	list-style-type: none;
+}
+
+dd {
+	margin: 0
+}
+
+#admin_top_menu_box {
+	width: 100%;
+	height: 52px;
+	background-color: #333;
+	position: relative;
+	float: left;
+}
+
+#admin_top_menu_box ul {
+	margin-left: 20px;
+	overflow: hidden;
+}
+
+#admin_top_menu_box ul li {
+	color: #FFF;
+	padding: 14px 17px 14px 17px;
+	width: 100px;
+	font-weight: bold;
+	cursor: pointer;
+	text-align: center;
+	float: left
+}
+
+#admin_top_menu_box ul li:hover {
+	background-color: #ff5757;
+}
+
+#admin_top_menu_box ul li.over {
+	background-color: #ff5757;
+}
+
+#admin_top_menu_under {
+	width: 100%;
+	height: 3px;
+	background-color: #d1215f;
+	border-bottom: 1px #a61448 solid;
+	position: relative;
+	float: left;
+	margin-bottom: 25px;
+}
+
+#admin_left_menu {
+	width: 170px;
+	padding: 0 10px 0 10px;
+	height: 100%;
+	position: relative;
+	float: left
+}
+
+#admin_left_menu h2 {
+	font-size: 14px;
+	font-weight: bold;
+	color: #000;
+	padding: 18px 10px 6px;
+}
+
+#admin_left_menu dl {
+	border-top: solid 2px #6e6e6e;
+	border-bottom: solid 2px #6e6e6e;
+	padding: 4px 5px 15px;
+	font-size: 11px;
+}
+
+#admin_left_menu dl dt {
+	letter-spacing: -0.1em;
+	background: 5px 16px no-repeat;
+	padding: 12px 0 4px 18px;
+}
+
+#admin_left_menu dl dd {
+	background: #eee;
+	line-height: 16px;
+	letter-spacing: -0.1em;
+	padding: 5px 0 5px 18px;
+}
+
+#admin_left_menu a:link, a:visited, a:active, a:hover {
+	text-decoration: none;
+	color: #666
+}
+
+#admin_contents {
+	width: 80%;
+	margin: 0;
+	border: 0;
+	padding: 0 0 20px 20px;
+	min-height: 600px;
+	position: relative;
+	float: left;
+	border-left: 1px #eeeeee solid;
+}
+
+#admin_contents h3 {
+	background: url(/images/title_icon.gif) 2px 8px no-repeat;
+	padding: 3px 0 0 20px;
+	height: 31px;
+	font-size: 16px;
+	color: #000;
+	float: left;
+}
+
+#admin_contents h4 {
+	text-align: left;
+	height: 25px;
+	background: url(/images/point.gif) 2px 7px no-repeat;
+	padding-left: 17px;
+	margin: 0 0 7px;
+	line-height: 25px;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+#admin_contents button {
+	width: 100px;
+	height: 30px;
+	margin: 0 3px;
+	text-align: center;
+	border: 1px #CCC solid;
+	font-weight: bold;
+	background-color: #222;
+	color: #FFF;
+	cursor: pointer;
+	line-height: 1;
+}
+
+#admin_contents button:hover {
+	color: #d1215f
+}
+
+#admin_contents ul.helpbox {
+	overflow: hidden;
+	border: solid 3px #dde0e5;
+	padding: 12px 14px 10px;
+	margin-bottom: 20px;
+	clear: both;
+	font-size: 12px;
+	line-height: 1.6;
+}
+
+#admin_contents ul.yak {
+	width: 100%;
+	float: left;
+	display: block;
+	background-color: #333;
+	text-align: center
+}
+
+#admin_contents ul.yak li {
+	width: 11%;
+	float: left;
+	display: block;
+	font-size: 11px;
+	min-height: 30px;
+	padding: 5px 0 5px 0;
+	color: #FFF
+}
+
+#admin_contents ul.yak li:hover {
+	background-color: #CCC;
+	color: #000
+}
+
+tr {
+	display: table-row;
+	vertical-align: inherit;
+	border-color: inherit;
+	height: 40px;
+}
+
+table.tb01 {
+	border-collapse: collapse;
+	border: 1px solid #c2c2c2;
+	line-height: 150%;
+}
+
+table.tb01 td, th {
+	border: 1px solid #c2c2c2;
+	color: #333333;
+	line-height: 1.2px;
+	word-break: break-all;
+	font-size: 12px;
+	line-height: 150%;
+}
+
+.goodslist {
+	width: 100%;
+	border-collapse: collapse;
+	box-sizing: border-box;
+	border-spacing: 0;
+}
+
+.goodslist tr th {
+	border: 1px solid #e6e6e6;
+	border-left: 0;
+	border-right: 0;
+	background: #f6f6f6;
+	line-height: 1.3;
+	padding: 5px 0;
+	text-align: center;
+}
+
+.goodslist tr td {
+	text-align: center;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+.goodslist tr .goodsname {
+	text-align: left;
+	overflow: hidden;
+	padding: 10px 0;
+}
+
+.goodslist tr .goodsname div {
+	float: left;
+}
+
+.goodslist tr .goodsname .imgwrap {
+	width: 60px;
+	height: 60px;
+	border: 1px solid #e6e6e6;
+	box-sizing: border-box;
+	overflow: hidden;
+	margin: 0 10px 0 0;
+}
+
+.goodslist tr .goodsname .imgwrap img {
+	width: 100%;
+	height: 100%;
+}
+
+.goodslist tr .goodsname div p {
+	margin: 0 0 3px;
+}
+
+.goodslist tr .goodsname div .gdname a {
+	font-weight: bold;
+	color: #333;
+}
+
+.goodslist tr .goodsname div .gdcate {
+	font-size: 12px;
+}
+
+.goodslist tr .goodsname div .gdup {
+	font-size: 12px;
+}
+
+.goodslist tr .goodsname div .gdup span {
+	font-weight: bold;
+	color: #151a5f;
+}
+
+.goodslist tr .pricewrap {
+	font-size: 12px;
+	line-height: 1.8;
+}
+
+.goodslist tr .pricewrap input {
+	width: 100px;
+	margin: 0 3px 0 7px;
+	box-sizing: border-box;
+	border: 1px solid #e6e6e6;
+	background: #f7f7f7;
+}
+
+.goodslist tr .width100 button {
+	background: none !important;
+	width: 100% !important;
+	height: 14px !important;
+	border: 0 !important;
+	color: #444 !important;
+	font-size: 12px !important;
+	font-weight: normal !important;
+}
+
+.adminform {
+	width: 100%;
+	border-collapse: collapse;
+	box-sizing: border-box;
+}
+
+.adminform tr * {
+	font-size: 12px;
+}
+
+.adminform tr th {
+	border: 1px solid #e6e6e6;
+	text-align: left;
+	background: #f6f6f6;
+	width: 130px;
+	padding: 0 0 0 15px;
+	height: 30px;
+	color: #333;
+}
+
+.adminform tr td {
+	border: 1px solid #e6e6e6;
+	text-align: left;
+	line-height: 1.6;
+	vertical-align: middle;
+	padding: 5px 0 5px 15px;
+	min-height: 30px;
+}
+
+.adminform tr .paddingnone {
+	padding: 0;
+}
+
+.adminform tr td select {
+	border: 1px solid #ccc;
+	min-width: 90px;
+	padding: 2px 0;
+	margin: 0 5px 0 0;
+}
+
+.adminform tr td label {
+	margin: 0 10px 0 0;
+}
+
+.adminform tr td label input {
+	vertical-align: middle;
+	margin: 0 5px 0 0;
+}
+
+.adminform tr td input[type="text"] {
+	width: 130px;
+	border: 1px solid #e6e6e6;
+	padding: 4px;
+	margin: 0 2px 0 0;
+}
+
+.adminform tr td input[type="password"] {
+	width: 130px;
+	border: 1px solid #e6e6e6;
+	padding: 4px;
+	margin: 0 2px 0 0;
+}
+
+.adminform tr td .textsearch {
+	width: 70px !important;
+	padding: 0;
+	text-align: center;
+	background: 0;
+	border: 0;
+}
+
+.searchbtn {
+	text-align: center;
+	margin: 20px 0 40px;
+}
+
+.searchbtn .textsearch {
+	text-align: center;
+	background: 0;
+	border: 0;
+}
+
+.marginR0 {
+	margin-right: 0 !important;
+}
+
+.width50 {
+	width: 50px;
+}
+
+.width70 {
+	width: 70px;
+}
+
+.width100 {
+	width: 100px;
+}
+
+.width150 {
+	width: 150px;
+}
+
+.width200 {
+	width: 200px;
+}
+
+.width250 {
+	width: 250px;
+}
+
+.txtalleft {
+	text-align: left !important;
+}
+
+.allgoodsnum {
+	width: 100%;
+	height: 30px !important;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.allgoodsnum div {
+	float: right;
+}
+
+.allgoodsnum div select {
+	border: 1px solid #ccc;
+	min-width: 90px;
+	padding: 2px 0;
+	margin: 0 5px 0 0;
+}
+
+.marginB50 {
+	margin-bottom: 50px;
+}
+
+table.admin_table {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px #e6e6e6 solid;
+	font-size: 12px;
+	margin-top: 5px;
+	margin-bottom: 30px
+}
+
+tr {
+	display: table-row;
+	vertical-align: inherit;
+	border-color: inherit;
+	height: 40px;
+}
+
+table.admin_table tbody th {
+	background: #f6f6f6;
+	text-align: left;
+	padding-left: 15px;
+	width: 130px;
+	height: 30px;
+	border: 1px #e6e6e6 solid
+}
+
+table.admin_table tbody td {
+	background: #fff;
+	vertical-align: middle;
+	line-height: 2.5em;
+	padding-left: 15px;
+	height: 30px;
+	border: 1px #e6e6e6 solid
+}
+
+table.admin_table input.text {
+	font-size: 12px;
+	color: #333;
+	width: 200px;
+	height: 25px;
+	border: 1px #CCC solid;
+	padding-left: 10px
+}
+
+table.admin_table input.radio {
+	font-size: 12px;
+	color: #333;
+	border: 1px #CCC solid;
+	padding: 0;
+	vertical-align: middle;
+	margin-right: 5px
+}
+
+table.admin_table input.w50 {
+	width: 50px;
+}
+
+table.admin_table input.w400 {
+	width: 400px;
+}
+
+.btn {
+	text-align: center;
+	overflow: hidden;
+	margin: 20px auto 0;
+	clear: both;
+}
+
+.btmbtnwrap {
+	width: 100%;
+	text-align: left;
+	margin: 0 0 50px;
+}
+
+.btmbtnwrap button {
+	min-width: 120px;
+	padding: 5px 0 7px !important;
+	margin: 0 2px !important;
+}
+
+.btmbtnwrap .right {
+	float: right;
+}
+
+.priceallwrap {
+	margin-bottom: 50px;
+}
+
+.priceallwrap tr td {
+	padding: 15px;
+}
+
+.priceallwrap tr td select {
+	border: 1px solid #ccc;
+	min-width: 90px;
+	padding: 2px 0;
+	margin: 0 5px 0 0;
+}
+
+.priceallwrap tr td div {
+	margin: 0 0 5px;
+}
+
+.priceallwrap tr td div input {
+	vertical-align: middle;
+}

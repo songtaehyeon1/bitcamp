@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.bitcamp.board.EnquiryDAO">
+	<!-- 전체 리스트(검색, 페이징) -->
+	<select id = "allList" resultType="kr.co.bitcamp.board.EnquiryVO">
+		select * from (
+			select * from (
+				select enquiry_no, enquiry_subject, enquiry_hit, to_char(enquiry_writedate, 'YYYY-MM-DD') enquiry_writedate 
+				from board_enquiry 
+				<if test = "searchKey != null and searchWord != null">
+					where ${searchKey} like '%'||#{searchWord}||'%' 
+				</if>
+				order by enquiry_no desc) 
+			where rownum <![CDATA[<=]]> #{pageNum} * #{onePageRecord} 
+			order by enquiry_no asc) 
+		where rownum <![CDATA[<=]]> <if test = "pageNum == totalPage">#{lastPageRecord}</if><if test = "pageNum != totalPage">#{onePageRecord}</if> 
+		order by enquiry_no desc
+	</select>
+	<!-- 한개 리스트 -->
+	<select id = "list" resultType="kr.co.bitcamp.board.EnquiryVO">
+		select enquiry_no, userno, p_no, enquiry_subject, enquiry_content, enquiry_hit, to_char(enquiry_writedate, 'YYYY-MM-DD') enquiry_writedate, enquiry_secret from board_enquiry where enquiry_no = #{param1}
+	</select>
+	<!-- 카테고리 가져오기 -->
+	<select id = "enquiryCategory" resultType = "kr.co.bitcamp.board.GoodsVO">
+		select c_no, c_name from category
+	</select>
+	<!-- 상품 가져오기 -->
+	<select id = "enquiryGoods" resultType = "kr.co.bitcamp.board.GoodsVO">
+		select p_no, p_name from product where c_no = #{cate}
+	</select>
+	<!-- 글 쓰기 -->
+	<insert id = "enquiryInsert" parameterType="kr.co.bitcamp.board.EnquiryVO">
+		insert into board_enquiry(enquiry_no, userno, p_no, enquiry_subject, enquiry_content, enquiry_hit, enquiry_writedate, enquiry_ip, enquiry_secret) 
+		values(enquiry_sq.nextval, #{userno}, #{p_no}, #{enquiry_subject}, #{enquiry_content}, 0, sysdate, #{enquiry_ip}, #{enquiry_secret})
+	</insert>
+	<!-- 글 수정 -->
+	<update id = "enquiryUpdate" parameterType="kr.co.bitcamp.board.EnquiryVO">
+		update board_enquiry set enquiry_subject = #{enquiry_subject}, enquiry_content = #{enquiry_content} where enquiry_no = #{enquiry_no}
+	</update>
+	<!-- 글 삭제 -->
+	<delete id = "enquiryDelete">
+		delete from board_enquiry where enquiry_no = #{no}
+	</delete>
+	<!-- 조회수 올리기 -->
+	<update id = "enquiryHit">
+		update board_enquiry set enquiry_hit = enquiry_hit + 1 where enquiry_no = #{param1}
+	</update>
+	<!-- 전체 페이지 구하기(검색) -->
+	<select id = "getTotalRecord" resultType = "int">
+		select count(enquiry_no) from board_enquiry
+		<if test = "searchKey != null and searchWord != null">
+				where ${searchKey} like '%'||#{searchWord}||'%'
+		</if>
+	</select>
+	<!-- 이전글 다음글 -->
+	<select id = "getLeadLagSelect" resultType = "kr.co.bitcamp.board.LeadLagVO">
+		select * from(select enquiry_no, lead(enquiry_no, 1) over(order by enquiry_no desc) leadNo, 
+					lead(enquiry_subject, 1, '이전글') over(order by enquiry_no desc) leadSubject, 
+					lag(enquiry_no, 1) over(order by enquiry_no desc) lagNo, 
+					lag(enquiry_subject, 1, '다음글') over(order by enquiry_no desc) lagSubject from board_enquiry 
+					<if test = "searchKey != null and searchWord != null">
+						where ${searchKey} like '%'||#{searchWord}||'%' 
+					</if>
+				) where enquiry_no = #{enquiry_no}
+	</select>
+</mapper>

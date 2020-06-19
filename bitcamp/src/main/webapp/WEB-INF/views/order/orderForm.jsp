@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <style>
 table {
@@ -253,7 +254,48 @@ $(function() {
 		$("#cash-form").css("display","block");
 		$("#current_pay_name").html("무통장 입금");
 	});
+	
+	$("#sameaddr0").click(function() {
+		$("#rname").attr("value",$("#oname").val());
+		$("#rzipcode").attr("value",$("#ozipcode").val());
+		$("#raddr").attr("value",$("#oaddr").val());
+		$("#raddrdetail").attr("value",$("#oaddrdetail").val());
+		$("#rtel1").val($("#otel1").val()).prop("selected",true);
+		$("#rtel2").attr("value",$("#otel2").val());
+		$("#rtel3").attr("value",$("#otel3").val());
+	})
+	
+	$("#sameaddr1").click(function() {
+		$("#rname").attr("value","");
+		$("#rzipcode").attr("value","");
+		$("#raddr").attr("value","");
+		$("#raddrdetail").attr("value","");
+		$("#rtel1").val("02").prop("selected",true);
+		$("#rtel2").attr("value","");
+		$("#rtel3").attr("value","");
+	});
 })
+
+function openDaumZipAddress(type) {
+	if(type =='o'){
+		new daum.Postcode({
+			oncomplete:function(data) {
+				jQuery("#ozipcode").val(data.zonecode);
+				jQuery("#oaddr").val(data.address);
+				jQuery("#oaddrdetail").focus();
+			}
+		}).open();
+	}else if(type=='r'){
+		new daum.Postcode({
+			oncomplete:function(data) {
+				jQuery("#rzipcode").val(data.zonecode);
+				jQuery("#raddr").val(data.address);
+				jQuery("#raddrdetail").focus();
+			}
+		}).open();
+		
+	}
+}
 
 </script>
 <c:forEach var="vo" items="${productList }">
@@ -338,7 +380,7 @@ $(function() {
 
 	<div id="order_info">
 		<div style="margin-top: 20px">
-			<h5>주문 정보</h5>
+			<h5>주문 정보 </h5>
 		</div>
 		<div>
 			<table border="1">
@@ -355,8 +397,8 @@ $(function() {
 					<tr>
 						<th scope="row">주소</th>
 						<td><input id="ozipcode" name="ozipcode" size="6"
-							maxlength="6" readonly type="text"> <a href="#"
-							class="btn btn-dark">우편번호</a><br> <input id="oaddr"
+							maxlength="6" readonly type="text"> <button type="button"
+							class="btn btn-dark" onclick="openDaumZipAddress('o');">우편번호</button><br> <input id="oaddr"
 							name="oaddr" size="40" readonly type="text"
 							style="margin-top: 10px"> <span>기본주소</span><br> <input
 							id="oaddrdetail" name="oaddrdetail" size="40" type="text"
@@ -475,14 +517,14 @@ $(function() {
 					<tr>
 						<th scope="row">주소</th>
 						<td><input id="rzipcode" name="rzipcode" size="6"
-							maxlength="6" readonly type="text"> <a href="#"
-							class="btn btn-dark">우편번호</a><br> <input id="raddr1"
-							name="raddr1" size="40" readonly type="text"
+							maxlength="6" readonly type="text"> <button type="button"
+							class="btn btn-dark" onclick="openDaumZipAddress('r');">우편번호</button><br> <input id="raddr"
+							name="raddr" size="40" readonly type="text"
 							style="margin-top: 10px"> <span>기본주소</span><br> <input
-							id="raddr2" name="raddr2" size="40" type="text"
+							id="raddrdetail" name="raddrdetail" size="40" type="text"
 							style="margin-top: 10px"> <span>나머지주소</span><span>(선택입력가능)</span></td>
 					</tr>
-					<tr class="">
+					<tr>
 						<th scope="row">연락처</th>
 						<td><select id="rtel1" name="rtel1">
 								<option value="02">02</option>
