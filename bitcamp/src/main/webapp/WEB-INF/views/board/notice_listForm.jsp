@@ -33,10 +33,30 @@
 	</div>
 	<div id = "listMove">
 		<ul>
-			<li>▲&emsp;이전글</li>
-			<li>이전글이다</li>
-			<li>▼&emsp;다음글</li>
-			<li>다음글이다</li>
+			<c:if test = "${pnvo.lagSubject != '다음글'}">
+				<li class = "pointer" onclick = "location.href = '/bitcamp/notice_listForm?no=${pnvo.lagNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">▲&emsp;다음글</li>
+			</c:if>
+			<c:if test = "${pnvo.lagSubject == '다음글'}">
+				<li>▲&emsp;다음글</li>
+			</c:if>
+			<c:if test = "${pnvo.lagSubject != '다음글'}">
+				<li class = "pointer" onclick = "location.href = '/bitcamp/notice_listForm?no=${pnvo.lagNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">${pnvo.lagSubject}</li>
+			</c:if>
+			<c:if test = "${pnvo.lagSubject == '다음글'}">
+				<li>다음글이 없습니다.</li>
+			</c:if>
+			<c:if test = "${pnvo.leadSubject != '이전글'}">
+				<li class = "pointer" onclick = "location.href = '/bitcamp/notice_listForm?no=${pnvo.leadNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">▼&emsp;이전글</li>
+			</c:if>
+			<c:if test = "${pnvo.leadSubject == '이전글'}">
+				<li>▲&emsp;이전글</li>
+			</c:if>
+			<c:if test = "${pnvo.leadSubject != '이전글'}">
+				<li class = "pointer" onclick = "location.href = '/bitcamp/notice_listForm?no=${pnvo.leadNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">${pnvo.leadSubject}</li>
+			</c:if>
+			<c:if test = "${pnvo.leadSubject == '이전글'}">
+				<li>이전글이 없습니다.</li>
+			</c:if>
 		</ul>
 	</div>
 </div>

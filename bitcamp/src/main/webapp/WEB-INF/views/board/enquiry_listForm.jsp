@@ -52,10 +52,10 @@
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<ul id = "listForm">
 		<li>제목</li>
-		<li>title</li>
+		<li>${list.enquiry_subject}</li>
 		<li>작성자</li>
 		<li>id</li>
-		<li>asdasd</li>
+		<li>${list.enquiry_content}</li>
 	</ul>
 	<div id = "boardGo">
 		<button onclick = "location.href = '/bitcamp/boardEnquiry';">목록</button>
