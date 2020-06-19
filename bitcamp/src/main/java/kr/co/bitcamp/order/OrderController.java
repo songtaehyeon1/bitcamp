@@ -9,8 +9,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import kr.co.bitcamp.product.ProductDAOImp;
 import kr.co.bitcamp.product.ProductVO;
 
 @Controller
@@ -26,10 +28,17 @@ public class OrderController {
 		this.sqlSession = sqlSession;
 	}
 	
-	@RequestMapping("/order")
-	public String order(HttpServletRequest req) {
-		//test
-		HttpSession ses = req.getSession();
+	@RequestMapping(value="/orderDirect" , method = RequestMethod.POST)
+	public ModelAndView order(HttpServletRequest req,int p_no,ProductVO vo) {
+		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
+
+		ModelAndView mav = new ModelAndView();
+		
+		mav.addObject("day",vo);
+		mav.addObject("product",dao.productView(p_no));
+		mav.setViewName("order/orderForm");
+		return mav;
+		/*		HttpSession ses = req.getSession();
 		ProductVO vo = new ProductVO();
 		ProductVO vo2 = new ProductVO();
 		vo.setP_no(1);
@@ -41,10 +50,10 @@ public class OrderController {
 		vo2.setOrderStart("20200701");
 		vo2.setOrderEnd("20200703");
 		list.add(vo2);
-		ses.setAttribute("productList", list);
-		//test
-		return "order/orderForm";
+		ses.setAttribute("productList", list);	*/
 	}
+	
+	
 	
 	@RequestMapping("/orderOk")
 	public ModelAndView orderOk(HttpServletRequest req) {
