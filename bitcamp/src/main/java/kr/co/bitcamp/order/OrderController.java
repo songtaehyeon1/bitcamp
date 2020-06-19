@@ -52,7 +52,9 @@ public class OrderController {
 		OrderDAOImp dao = sqlSession.getMapper(OrderDAOImp.class);
 		HttpSession ses = req.getSession();
 		ArrayList<ProductVO> pvolist =(ArrayList)ses.getAttribute("productList"); //장바구니에 담긴 품목 리스트
+		ArrayList<ProductVO> pvolist2 =(ArrayList)ses.getAttribute("productList"); //장바구니에 담긴 품목 리스트
 		
+		//재고 확인
 		for (int i = 0; i < pvolist.size(); i++) { // 품목 리스트의 갯수만큼 반복
 			 ProductVO pvo = pvolist.get(i); // 품목 리스트의 i 번째
 			 int orderStart = Integer.parseInt(pvo.getOrderStart()); //i번째 상품의 오더 시작 날짜
@@ -74,17 +76,24 @@ public class OrderController {
 				 }
 				 resultCnt =0;
 			}
-			pvo.setProductCount(s_noList.size());
-			pvo.setS_noList(s_noList);
+			pvo.setProductCount(s_noList.size()); // 갯수 
+			pvo.setS_noList(s_noList); // 가능한 재고코드 리스트
 		}		
 		
-		
+		boolean compareResult = true;
 		for (int i = 0; i < pvolist.size(); i++) {
 			ProductVO pvo = pvolist.get(i);
-			System.out.println(pvo.getP_no()+"="+pvo.getProductCount());
-			for (int j = 0; j < pvo.getS_noList().size(); j++) {
-				System.out.print(pvo.getS_noList().get(j)+",");
-			}
+			ProductVO pvo2 = pvolist2.get(i);
+			if(pvo.getProductCount() != pvo2.getProductCount()) {
+				compareResult = false;
+			}			
+		}
+		
+		if(compareResult == true) {
+			mav.setViewName("order/orderSuccess");
+			
+		}else {
+			mav.setViewName("order/orderFail");
 		}
 		
 		
@@ -92,7 +101,7 @@ public class OrderController {
 
 
 		
-		mav.setViewName("order/orderSuccess");
+		
 		return mav;
 	}
 	
