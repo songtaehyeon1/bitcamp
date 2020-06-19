@@ -37,7 +37,7 @@ public class OrderController {
 		vo.setOrderEnd("20200703");
 		ArrayList<ProductVO> list = new ArrayList<ProductVO>();
 		list.add(vo);
-		vo2.setP_no(5);
+		vo2.setP_no(2);
 		vo2.setOrderStart("20200701");
 		vo2.setOrderEnd("20200703");
 		list.add(vo2);
@@ -51,21 +51,44 @@ public class OrderController {
 		ModelAndView mav = new ModelAndView();
 		OrderDAOImp dao = sqlSession.getMapper(OrderDAOImp.class);
 		HttpSession ses = req.getSession();
-		ArrayList<ProductVO> pvolist =(ArrayList)ses.getAttribute("productList");
-		ProductVO pvo =pvolist.get(1);
-		ArrayList<Integer> a = (ArrayList<Integer>) dao.allSelectProduct(pvo.getP_no());
-		for (Integer integer : a) {
-			System.out.println(integer);
+		ArrayList<ProductVO> pvolist =(ArrayList)ses.getAttribute("productList"); //장바구니에 담긴 품목 리스트
+		
+		for (int i = 0; i < pvolist.size(); i++) { // 품목 리스트의 갯수만큼 반복
+			 ProductVO pvo = pvolist.get(i); // 품목 리스트의 i 번째
+			 int orderStart = Integer.parseInt(pvo.getOrderStart()); //i번째 상품의 오더 시작 날짜
+			 int orderEnd = Integer.parseInt(pvo.getOrderEnd()); //i번째 상품의 오더 끝 날짜
+			 ArrayList<Integer> s_noList = (ArrayList<Integer>) dao.allSelectProduct(pvo.getP_no()); //i번째 상품의 재고 코드 리스트
+			 for (int j = 0; j < s_noList.size(); j++) { // i번째 상품의 재고 코드 리스트 만큼 반복
+				 ArrayList<String> dateList = (ArrayList<String>) dao.allSelectDate(s_noList.get(j));// i번째 상품의 재고 코드 리스트의 j번째 재고코드의 예약날짜 리스트 얻어옴
+				 int resultCnt = 0;
+				 for(int k = 0 ; k < dateList.size() ; k++) {
+					 for (int l = orderStart; l <= orderEnd; l++) {
+						if(Integer.parseInt(dateList.get(k)) == l) {
+							resultCnt++;
+						}
+					 }
+				 }
+				 
+				 if(resultCnt>0){
+					 s_noList.remove(j);
+				 }
+				 resultCnt =0;
+			}
+			pvo.setProductCount(s_noList.size());
+			pvo.setS_noList(s_noList);
+		}		
+		
+		
+		for (int i = 0; i < pvolist.size(); i++) {
+			ProductVO pvo = pvolist.get(i);
+			System.out.println(pvo.getP_no()+"="+pvo.getProductCount());
+			for (int j = 0; j < pvo.getS_noList().size(); j++) {
+				System.out.print(pvo.getS_noList().get(j)+",");
+			}
 		}
 		
 		
-//		System.out.println(pvo.getP_no());
-//		System.out.println(pvo.getOrderStart());
-//		System.out.println(pvo.getOrderEnd());
-//		pvo = pvolist.get(1);
-//		System.out.println(pvo.getP_no());
-//		System.out.println(pvo.getOrderStart());
-//		System.out.println(pvo.getOrderEnd());
+
 
 
 		
