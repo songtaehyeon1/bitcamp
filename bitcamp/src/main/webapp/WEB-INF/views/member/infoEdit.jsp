@@ -1,14 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <title>회원정보 수정</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/bitcamp/css/bootstrap.min.css" type="text/css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="/bitcamp/js/bootstrap.min.js"></script>
+
 <style>
 	.wrap{margin-top:150px;}
 	.container{
@@ -44,22 +38,6 @@
 </style>
 
 <script>
-
-//생년월일_월
-function monthOption(){
-	var optionTag="<option>"+"월"+"</option>";             
-	for(i=1; i<=12; i++){
-		if(i<10){
-			optionTag += "<option value='0"+i+"'>0" +i +"</option>";
-		}else{
-			optionTag += "<option value='"+i+"'>" +i +"</option>";
-		}
-		
-	}
-	document.getElementById("month").innerHTML = optionTag;
-	//월 선택된 값 가져오기            //※jq06_select_attribute.html
-	$("#month").children("option[value*='${vo.month}']").prop("selected",true);
-}
 /*
 //휴대전화_이동통신사
 function codeOption(){
@@ -80,21 +58,6 @@ function cursorMove3(str) {
 	}
 }
 */
-//생년월일_자동 커서 이동1+
-function cursorMove1(){
-		var inputYear = document.getElementById("year").value;
-		if(inputYear.length==4){  //year에 4글자가 입력되면
-			//(자동)커서 이동 : year  → month 
-			document.getElementById("month").focus();  //focus() 함수
-		}
-}
-//생년월일_자동 커서 이동2
-function cursorMove2(month) {
-	if(month!="월"){
-		document.getElementById("day").focus();
-	}
-}
-
 $(function(){
 	$(document).on("submit","#personInf	oFrm",function(){
 		//비밀번호 검사
@@ -118,31 +81,23 @@ $(function(){
 			return false;  
 		}
 		
-		//생년월일 검사
-		var reg = /^(19|20)[0-9]{2}$/;  //년도 정규식
-		var regExp = /^[1-9]|[1-2][0-9]|3[0-1]$/;  //일 정규식
-		if($("#year").val()=="" &&  $("#month").val()=="월" && $("#day").val()==""){
-			alert("생년월일을 입력해주세요.");
-			return false;  
+		//이름 검사	
+		if($("#username").val()==""){
+			alert("이름을 입력해주세요.");
+			return false; 
 		}
-		
-		if($("#year").val()==""){
-			alert("년도(4자리)를 입력해주세요.");
-			return false;   
-		}else if(!reg.test($("#year").val())){
-			alert("년도 4자를 다시 입력해주세요.");
-			return false;
-		}else if($("#month").val()=="월"){
-			alert("월을 선택해주세요.");
-			return false;  
-		}else if($("#day").val()==""){
-			alert("일을 입력해주세요.");
-			return false;  
-		}else if(!regExp.test($("#day").val())){
-			alert("일을 다시 입력해주세요.");
+		var reg = /^[가-힣]{2,7}$/;
+		if(!reg.test($("#username").val())){
+			alert("한글 이름 2~7자를 입력해주세요.");
 			return false;
 		}
 		
+		//이메일 검사	
+		if($("#useremail").val()==""){
+			alert("이메일을 입력해주세요.");
+			return false; 
+		}
+	
 		//휴대전화 검사
 		var reg = /^01[0|1|6|7|8|9][0-9]{7,8}$/;
 		//var reg = /^(010|011|016|017|018|019)[1][0-9]{9,10}$/;
@@ -163,14 +118,32 @@ $(function(){
 		}
 		*/
 		
+		//주소 검사	
+		if($("#zipcode").val()=="" &&  $("#addr").val()=="월" && $("#addrdetail").val()==""){
+			alert("주소를 입력해주세요.");
+			return false; 
+		}
+		if($("#zipcode").val()==""){
+			alert("우편번호 검색을 진행해주세요.");
+			return false;   
+		}
+		
 		return true;
-	});	
+	});  //infoFrm 유효성 검사
 });
-</script>
-</head>
 
-<body>
-<body onload="monthOption();">
+//우편번호 서비스
+function openDaumZipAddress() {
+	new daum.Postcode({
+		oncomplete:function(data) {
+			jQuery("#zipcode").val(data.zonecode);
+			jQuery("#addr").val(data.address);
+			jQuery("#addrdetail").focus();
+		}
+	}).open();
+}
+</script>
+
 <div class="wrap">
 	<div class="container p-3 my-3 bg-dark text-white title">
   	<h1>회원정보 수정</h1>
@@ -196,53 +169,50 @@ $(function(){
 		
 				<div class="form-group">
 					<label for="text">이름</label> 
-					<div><strong>${vo.name}</strong></div>
+					<div><strong>${vo.username}</strong></div>
 				</div>
 		
-				<div class="form-group row">
-					<label for="text" class="lbl_Birth">생년월일</label> 
-					<input type="text" class="form-control col-sm-4" id="year" placeholder="년(4자)" name="year" maxlength="4" onkeyup="cursorMove1()" value="${vo.year}"> 
-					<select class="form-control col-sm-4" id="month" name="monthlist" onchange="cursorMove2(this.value)">
-					</select> 
-					<input type="text" class="form-control col-sm-4" id="day" placeholder="일" name="day" maxlength="2" value="${vo.day}">
+				<div class="form-group">
+					<label for="eamil" class="lbl_email">이메일</label> 
+					<input type="email" class="form-control" id="useremail" placeholder="이메일 주소" name="useremail"> 
 				</div>
-				
-				<div class="form-group gender">
-					<label for="gender">성별</label> 
-					<br>
-					<div class="btn-group btn-group-toggle" data-toggle="buttons">
-						<label class="btn btn-light">
-							<input type="radio" class="form-check-input" id="gender" name="optradio" <c:if test="${vo.gender=='M'}">checked</c:if>> 남자
-						</label>
-						<label class="btn btn-light">
-							<input type="radio" class="form-check-input" id="gender" name="optradio" <c:if test="${vo.gender=='F'}">checked</c:if>> 여자
-						</label>
-					</div>
-				</div>		
 				
 				
 				<div class="form-group input-group">
-					<label for="tel" class="lbl_tel">휴대전화</label>
-					<!-- 
+				<label for="tel" class="lbl_tel">휴대전화</label>
+					<!--
 					<select class="form-control col-sm-4" id="code" name="code" onchange="cursorMove3(this.value)">
 					</select>
 					 -->
-					<input type="tel" class="form-control" id="tel" placeholder="'-'없이 숫자만 입력" name="tel" maxlength="11" value="${vo.tel}">
+					<input type="tel" class="form-control" id="usertel" placeholder="'-'없이 숫자만 입력" name="usertel" maxlength="13">
+					<!-- 
 					<div class="input-group-append">
-						<button class="btn btn-secondary" type="인증번호 전송">인증번호 전송</button>
+						<button class="btn btn-secondary" type="button">인증번호 전송</button>
 					</div>
+					 -->
 				</div>
 				
-				<!-- 
-				
+				<!--
 				<div class="form-group input-group">
 					<input type="text" class="form-control" id="num" placeholder="인증번호" name="num">
 					<div class="input-group-append">
-						<button class="btn btn-outline-secondary" type="인증번호 전송">확인</button>
+						<button class="btn btn-outline-secondary" type="button">확인</button>
+					</div>
+				</div> 
+				 -->
+				 
+				<div class="form-group input-group">
+					<label for="addr" class="lbl_addr">주소</label> 
+					<input type="text" class="form-control" id="zipcode" placeholder="우편번호" name="zipcode" readonly>
+					<div>
+						<button class="btn btn-secondary searchAddr" type="button" onclick="openDaumZipAddress();">우편번호 검색</button>
 					</div>
 				</div>
-			
-				 -->
+				
+				<div class="form-group">
+					<input type="text" class="form-control" id="addr" placeholder="주소" name="addr" readonly>
+					<input type="text" class="form-control" id="addrdetail" placeholder="상세주소" name="addrdetail">
+				</div>
 				
 				<span>
 					<button type="submit" class="btn btn-secondary btn-lg btnModify">수정하기</button>
@@ -252,5 +222,3 @@ $(function(){
 		</div>
 	</div>
 </div>
-</body>
-</html>

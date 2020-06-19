@@ -1,5 +1,8 @@
 package kr.co.bitcamp.member;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +29,36 @@ public class MemberController {
 		return "member/login";
 	}
 	
+	//로그인
+	@RequestMapping(value="/loginOk", method=RequestMethod.POST)
+	public ModelAndView loginOk(MemberVO vo, HttpServletRequest req) {
+		MemberDAOImp dao = sqlSession.getMapper(MemberDAOImp.class);
+		ModelAndView mav = new ModelAndView();
+		
+		MemberVO memVo = dao.loginCheck(vo);
+		
+		if(memVo==null) {  //로그인 실패
+			mav.setViewName("redirect:loginFrm");
+		}else {  //로그인 성공
+			HttpSession ses = req.getSession();
+			ses.setAttribute("userno", memVo.getUserno());
+			ses.setAttribute("userid", memVo.getUserid());
+			ses.setAttribute("username", memVo.getUsername());
+			ses.setAttribute("logStatus", "Y");
+			
+			mav.setViewName("redirect:/");
+		}
+		return mav;
+	}
+	
+	//로그아웃
+	@RequestMapping("logout")
+	public String logout(HttpServletRequest req) {
+		req.getSession().invalidate();
+		
+		return "home";
+	}
+	
 	//회원가입폼
 	@RequestMapping("/joinFrm")
 	public String joinFrm() {
@@ -45,6 +78,20 @@ public class MemberController {
 			return "Y";
 		}
 	}	
+	
+	//회원가입 완료
+	@RequestMapping(value="/joinOk", method=RequestMethod.POST)
+	public ModelAndView joinOk(MemberVO vo) {
+		MemberDAOImp dao = sqlSession.getMapper(MemberDAOImp.class);
+		int cnt = dao.memberInsert(vo);
+		ModelAndView mav = new ModelAndView();
+		if(cnt>0) {  //회원가입 성공
+			mav.setViewName("member/joinOk");
+		}else {  //회원가입 실패
+			mav.setViewName("redirect:joinFrm");
+		}
+		return mav;
+	}
 	
 	//회원정보 수정폼
 	@RequestMapping("/infoEditFrm")

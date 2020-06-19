@@ -3,7 +3,16 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.bitcamp.member.MemberDAOImp">
-	<select id="idCheck" resultType="int">
-		select count(userid) from membership where userid=#{userid}
+	<select id="loginCheck" parameterType="kr.co.bitcamp.member.MemberVO" resultType="kr.co.bitcamp.member.MemberVO">
+		select userid, userpwd, username from member where userid=#{userid} and userpwd=#{userpwd}
 	</select>
-</mapper>
+
+	<select id="idCheck" resultType="int">
+		select count(userid) from member where userid=#{userid}
+	</select>
+	
+	<insert id="memberInsert" parameterType="kr.co.bitcamp.member.MemberVO">
+		insert into member(userno, userid, userpwd, username, useremail, usertel, userzipcode, useraddr, useraddrdetail, regdate) values(userno_sq.nextval, #{userid}, #{userpwd}, #{username}, #{useremail}, #{usertel}, #{zipcode}, #{addr}, #{addrdetail}, sysdate)
+	</insert>
+</mapper>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+
