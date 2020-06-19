@@ -1,5 +1,7 @@
 package kr.co.bitcamp.product;
 
+import java.util.ArrayList;
+
 public class ProductVO {
 	private int c_no;//카테고리 번호
 	private String c_name;//카테고리 이름
@@ -17,6 +19,7 @@ public class ProductVO {
 	private String orderStart;//주문 시작일
 	private String orderEnd;//주문 마감일
 	private int productCount;//관심상품 갯수
+	private ArrayList<Integer> s_noList;//상세 재고들
 	
 	public int getC_no() {
 		return c_no;
@@ -113,6 +116,12 @@ public class ProductVO {
 	}
 	public void setProductCount(int productCount) {
 		this.productCount = productCount;
+	}
+	public ArrayList<Integer> getS_noList() {
+		return s_noList;
+	}
+	public void setS_noList(ArrayList<Integer> s_noList) {
+		this.s_noList = s_noList;
 	}
 	
 }
