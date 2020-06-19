@@ -18,6 +18,8 @@ public class ProductVO {
 	private String p_filename5;//상품사진5
 	private String orderStart;//주문 시작일
 	private String orderEnd;//주문 마감일
+	private String product_borrow_period;//대여기간
+	private int currentQty;//바로구매할때 선택하는 상품 갯수
 	private int productCount;//관심상품 갯수
 	private ArrayList<Integer> s_noList;//상세 재고들
 	
@@ -122,6 +124,18 @@ public class ProductVO {
 	}
 	public void setS_noList(ArrayList<Integer> s_noList) {
 		this.s_noList = s_noList;
+	}
+	public String getProduct_borrow_period() {
+		return product_borrow_period;
+	}
+	public void setProduct_borrow_period(String product_borrow_period) {
+		this.product_borrow_period = product_borrow_period;
+	}
+	public int getCurrentQty() {
+		return currentQty;
+	}
+	public void setCurrentQty(int currentQty) {
+		this.currentQty = currentQty;
 	}
 	
 }

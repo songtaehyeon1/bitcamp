@@ -19,7 +19,16 @@
 		from product,category where product.c_no=category.c_no
 		order by p_no desc
 	</select>
-	
+	<select id="selectInterest" parameterType="kr.co.bitcamp.product.ProductVO" resultType="kr.co.bitcamp.product.ProductVO">
+		select p_no,c_name,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5
+		from product,category where product.c_no=category.c_no
+		order by p_no desc
+	</select>
+	<select id="selectCart" parameterType="kr.co.bitcamp.product.ProductVO" resultType="kr.co.bitcamp.product.ProductVO">
+		select p_no,c_name,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5
+		from product,category where product.c_no=category.c_no
+		order by p_no desc
+	</select>
 	
 	
 	

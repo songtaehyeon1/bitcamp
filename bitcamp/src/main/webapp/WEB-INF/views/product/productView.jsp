@@ -21,7 +21,7 @@
 	href="<%=request.getContextPath()%>/css/product/product_view.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/product/review_in_productPage.css" />
-<script src="<%=request.getContextPath()%>/js/product/product.js"></script>
+<script src="<%=request.getContextPath()%>/js/product/product_view.js"></script>
 </head>
 <body >
 
@@ -80,7 +80,9 @@
 				<hr>
 			<!-- 옵션 선택 -->
 				<div class="optionChoice" onchange="optionChoice()">
-<form method="post" action="/bitcamp/order" id="productWriteForm">
+<form method="post" action="/bitcamp/orderDirect?p_no=${product.p_no }">
+
+
 					<ul>
 						<li><span class="spanWidth150 col-4">상품명</span>${product.p_name}</li>
 						<li><span class="spanWidth150 col-4">배송방법</span>택배</li>
@@ -111,7 +113,7 @@
 						<!-- 대여 시작일 -->
 						<li class="row" id="borrow_start_wrap" style="margin:0;display:none">
 							<span class="spanWidth150" style="padding-left:15px;padding-right:15px">대여 시작일</span>
-							<input id="borrow_start" name="borrow_start" onkeydown="donotusekeyboard(event)" onchange="changeEndDay(this.value);optionChoice()"/>
+							<input id="borrow_start" name="orderStart" onkeydown="donotusekeyboard(event)" onchange="changeEndDay(this.value);optionChoice()"/>
 							<script>
 								var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 								$('#borrow_start').datepicker({
@@ -128,7 +130,7 @@
 						<!-- 대여 마지막날 -->
 						<li class="row" id="borrow_end_wrap" style="margin:0;display:none">
 							<span class="spanWidth150" style="padding-left:15px;padding-right:15px">대여 종료일</span>
-							<input id="borrow_end" name="borrow_end"  onkeyup="defaultday()"/>
+							<input id="borrow_end" name="orderEnd"  onkeyup="defaultday()"/>
 							<script>
 								var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 								$('#borrow_end').datepicker({
@@ -167,7 +169,9 @@
 						</div>
 					</div>
 					<div class="container"><!-- 구매,장바구니,관심상품 버튼들 -->
-						<a href="javascript:productWriteForm.submit()" class="buyRightNow" style="color:#fff" >바로 구매하기</a>
+					<!-- 대여시작일,대여종료일,수량,가격,배송료 -->
+						<input type="submit" id="buySubmit" style="display:none;">
+						<a class="buyRightNow" style="color:#fff"><label for="buySubmit" style="width: 100%;cursor: pointer;">바로 구매하기</label></a>
 						<a class="cartAndInterest"style="margin-right:2%" >장바구니 담기</a>
 						<a class="cartAndInterest">관심상품 등록</a>
 					</div>
