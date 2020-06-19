@@ -125,7 +125,7 @@ header {
 }
 
 #center-nav ul {
-	background-color: black;
+	background-color: #000;
 	opacity: 0.8;
 	height: 370px;
 }
@@ -162,14 +162,11 @@ header {
 
 #footerWrap .fmenu {
 	width: 100%;
-	height: 50px;
 }
 
 #footerWrap .fmenu .utilMenu {
 	width: 1240px;
 	overflow: hidden;
-	height: 42px;
-	line-height: 50px;
 	margin: 0 auto;
 	*zoom: 1;
 }
@@ -190,12 +187,12 @@ header {
 }
 
 #footerWrap .f_cs {
-	position: relative;
 	width: 1240px;
 	padding: 50px 0;
 	margin: 0 auto;
 	background-color: #fff;
-	overflow: hidden;
+	opacity:0.5;
+	overflow: auto;
 }
 
 #footerWrap .f_cs li {
