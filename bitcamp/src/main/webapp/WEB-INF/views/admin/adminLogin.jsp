@@ -11,7 +11,6 @@
 					<div class="login-form">
 						<form method="post" action="/adminLoginOk">
 							<div class="login-input">
-
 								<div>
 									<input type="text" id="userid" name="adminId"
 										maxlength="20" placeholder="관리자 아이디"
@@ -24,7 +23,7 @@
 								</div>
 							</div>
 							<div class="login-btn">
-								<input type="submit" value="로그인" id="submit"
+								<input type="submit" value="로그인"
 									class="btn btn-dark">
 							</div>
 						</form>

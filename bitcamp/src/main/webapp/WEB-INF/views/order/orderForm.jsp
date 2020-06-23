@@ -230,6 +230,18 @@ table {
 </style>
 <script>
 $(function() {
+	var start = "${day.orderStart}";
+	var end = "${day.orderEnd}";
+	console.log(start+end)
+		
+	var period = ${day.product_borrow_period}-1+"박"+${day.product_borrow_period}+"일";
+	
+	$("#period").html(start+"~")
+	$("#period").append(end)
+	$("#period").append("("+period+")")
+	
+	
+	
 	$("#addr_paymethod0").click(function() {
 		$("#card-form").css("display","block");
 		$("#card-agree").css("display","block");
@@ -293,6 +305,7 @@ function openDaumZipAddress(type) {
 <div id="orderForm" class="container">
 	<div style="height: 130px"></div>
 	<div class="titleArea">
+	
 		<h2>주문서작성</h2>
 	</div>
 	<div id="benefit_info">
@@ -331,16 +344,16 @@ function openDaumZipAddress(type) {
 			<tbody>
 				<tr>
 					<td><input type="checkbox"></td>
-					<td><a href="#"><img
-							src="//starcamp.co.kr/web/product/tiny/201903/086a059f7f360633d5944227ac744221.jpg"></a></td>
-					<td><strong><a href="#">코베아 문리버2 4인 캠핑세트(10%할인)</a></strong>
-						<div>[옵션: 4박5일/2021/7/9 (+50,000)]</div>
+					<td><a href="/bitcamp/productView?p_no=${product.p_no }"><img
+							src="/bitcamp/upload/${product.p_filename1 }" style="width:100px;height:100px"></a></td>
+					<td><strong><a href="/bitcamp/productView?p_no=${product.p_no }">${product.p_name }</a></strong>
+						<div><label id="period"></label></div>
 					<td>
 						<div>
-							<strong>208,850원</strong>
+							<strong>${product.price }</strong>
 						</div>
 					</td>
-					<td>1</td>
+					<td>${day.currentQty}</td>
 					<td><span><img
 							src="//img.echosting.cafe24.com/design/common/icon_cash.gif">
 							4,700원</span></td>
@@ -351,8 +364,8 @@ function openDaumZipAddress(type) {
 			<tfoot>
 				<tr>
 					<td></td>
-					<td colspan="7">상품구매금액 <strong>208,850<span>
-								(+50,000)</span></strong> + 배송비 50,000 = 합계: <strong class="txtEm gIndent10">258,850원</strong>
+					<td colspan="7">상품구매금액 <strong>${product.price }<span>
+								(+50,000)</span></strong> + 배송비 ${product.delivery_fee } = 합계: <strong class="txtEm gIndent10">258,850원</strong>
 					</td>
 				</tr>
 			</tfoot>

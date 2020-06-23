@@ -26,10 +26,9 @@
 	<ul>
 		<a href="<%=request.getContextPath()%>/admin/home"><li>관리자홈</li></a>
 		<a href="#"><li>기본설정</li></a>
-		<a href="<%=request.getContextPath()%>/admin/member"><li
-			class="over">회원관리</li></a>
-		<a href="#"><li>상품관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/orderList"><li>주문관리</li></a>
+		<a href="<%=request.getContextPath()%>/admin/member"><li>회원관리</li></a>
+		<a href="<%=request.getContextPath()%>/admin/product"><li>상품관리</li></a>
+		<a href="<%=request.getContextPath()%>/admin/orderList"><li class="over">주문관리</li></a>
 		<a href="#"><li>매출관리</li></a>
 	</ul>
 </div>
@@ -39,38 +38,35 @@
 	<dl>
 		<dt>주문관리</dt>
 		<dd>
-			<a href="./order_list.php">- 주문통합리스트</a>
+			<a href="">- 주문통합리스트</a>
 		</dd>
 		<dd>
-			<a href="./misu_list.php">- 입금대기리스트</a>
+			<a href="">- 입금대기리스트</a>
 		</dd>
 		<dd>
-			<a href="./list_step1.php">- 결제완료리스트</a>
+			<a href="">- 결제완료리스트</a>
 		</dd>
 		<dd>
-			<a href="./list_step2.php">- 배송준비중리스트</a>
+			<a href="">- 배송준비중리스트</a>
 		</dd>
 		<dd>
-			<a href="./list_step3.php">- 배송중리스트</a>
+			<a href="">- 배송중리스트</a>
 		</dd>
 		<dd>
-			<a href="./list_step4.php">- 배송완료리스트</a>
+			<a href="">- 배송완료리스트</a>
 		</dd>
 		<dd>
-			<a href="./list_step5.php">- 구매확정리스트</a>
-		</dd>
-		<dd>
-			<a href="./order_invoice.php">- 송장일괄등록</a>
+			<a href="">- 송장등록</a>
 		</dd>
 		<dt>취소/교환/반품/환불</dt>
 		<dd>
-			<a href="./list.cancel.php">- 취소리스트</a>
+			<a href="">- 취소리스트</a>
 		</dd>
 		<dd>
-			<a href="./list.claim.php">- 교환/반품리스트</a>
+			<a href="">- 교환/반품리스트</a>
 		</dd>
 		<dd>
-			<a href="./list.repay.php">- 환불리스트</a>
+			<a href="">- 환불리스트</a>
 		</dd>
 	</dl>
 </div>
@@ -103,12 +99,7 @@
 					<td><label for=""><input type="radio"
 							name="od_settle_case" value="0" checked=""> 전체</label>&nbsp;&nbsp;&nbsp;&nbsp;
 						<label for=""><input type="radio" name="od_settle_case"
-							value="1"> 신용카드</label>&nbsp;&nbsp;&nbsp;&nbsp; <label for=""><input
-							type="radio" name="od_settle_case" value="2"> 가상계좌</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<label for=""><input type="radio" name="od_settle_case"
-							value="3"> 휴대폰</label>&nbsp;&nbsp;&nbsp;&nbsp; <label for=""><input
-							type="radio" name="od_settle_case" value="4"> 계좌이체</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<label for=""><input type="radio" name="od_settle_case"
+							value="1"> 신용카드</label>&nbsp;&nbsp;&nbsp;&nbsp;<label for=""><input type="radio" name="od_settle_case"
 							value="5"> 무통장</label></td>
 				</tr>
 				<tr>
@@ -143,7 +134,6 @@
 					<th>직접검색</th>
 					<td><select name="column">
 							<option value="" selected="">전체</option>
-							<option value="mb_1">업체명</option>
 							<option value="od_id">주문번호</option>
 							<option value="mb_id">주문자ID</option>
 							<option value="od_name">주문자명</option>
@@ -193,16 +183,9 @@
 			</tbody>
 		</table>
 
-		<div class="pagewrap" style="margin-bottom: 0;">
-			<center></center>
-		</div>
 		<div class="btmbtnwrap" style="position: relative; top: 0px;">
-			<button type="button" onclick="del_();">선택삭제</button>
-			<button>인쇄하기</button>
-			<button type="button" class="right" style="width: 130px;"
-				onclick="exceldown('order_goods_excel.php');">상품별엑셀저장</button>
-			<button type="button" class="right" style="width: 140px;"
-				onclick="exceldown('order_excel.php');">주문서별엑셀저장</button>
+			<button type="button" onclick="del_();">선택삭제</button>			
+			
 		</div>
 		<table class="adminform priceallwrap">
 			<tbody>

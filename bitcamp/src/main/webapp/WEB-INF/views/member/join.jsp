@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<title>회원가입</title>
+
 <style>
 *{
 	font-family:'Nanum Gothic';
@@ -59,7 +62,7 @@ $(function(){
 	//회원가입 유효성 검사
 	$(document).on("submit", "#joinFrm", function(){
 		//아이디 검사		
-		 var reg = /^[a-zA-Z]{1}[a-zA-Z0-9]{3,19}$/; 
+		var reg = /^[a-zA-Z]{1}[a-zA-Z0-9]{3,19}$/; 
 		if($("#userid").val()==""){
 			alert("아이디를 입력해주세요.");
 			return false;   
@@ -106,7 +109,7 @@ $(function(){
 		}
 		
 		//이메일 검사	
-		if($("#usermail").val()==""){
+		if($("#useremail").val()==""){
 			alert("이메일을 입력해주세요.");
 			return false; 
 		}
@@ -147,7 +150,7 @@ $(function(){
 			alert("약관동의 전체동의 체크는 필수입니다.");
 			return false;
 		}
-
+		
 		return true;
 	});//////////#joinFrm 유효성검사
 
@@ -170,7 +173,7 @@ $(function(){
 					alert("사용할 수 있는 아이디입니다.");
 				}else if(result=='N'){
 					$("#idStatus").val("N");
-					alert("사용할 수 있는 아이디입니다.");
+					alert("사용할 수 없는 아이디입니다.");
 				}
 			},
 			error : function(e){
@@ -182,9 +185,15 @@ $(function(){
 
 	});
 	
-	//아이디 중복확인 버튼 활성화
-	$(document).on("keyup", "#userid", function(){		
-		$("#idChk").attr("disabled",false);
+	//아이디 중복확인 버튼 비활성화  → 활성화
+	$(document).on("keyup", "#userid", function(){	
+		var reg = /^[a-zA-Z]{1}[a-zA-Z0-9]{3,19}$/;
+		if(reg.test($("#userid").val())){
+			$("#idChk").attr("disabled",false);	
+		}else if(!reg.test($("#userid").val())){
+			$("#idChk").attr("disabled",true);	
+			//alert("아이디의 첫번째 문자는 반드시 영문자이며, 4~20자의 숫자, 영문 대소문자만 입력해주세요.");
+		}
 	});
 
 	//전체동의 체크박스
@@ -228,6 +237,7 @@ function openDaumZipAddress() {
 	}).open();
 }
 </script>
+
 <div id="resultData"></div>
 <div class="wrap">
 	<div class="container p-3 my-3 bg-dark text-white title">
@@ -263,7 +273,7 @@ function openDaumZipAddress() {
 			
 			<div class="form-group">
 				<label for="eamil" class="lbl_email">이메일</label> 
-				<input type="email" class="form-control" id="usermail" placeholder="이메일 주소" name="usermail"> 
+				<input type="email" class="form-control" id="useremail" placeholder="이메일 주소" name="useremail"> 
 			</div>
 			
 			<div class="form-group input-group">

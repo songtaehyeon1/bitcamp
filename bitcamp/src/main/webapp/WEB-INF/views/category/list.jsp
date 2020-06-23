@@ -1,22 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="ctx" value="<%=request.getContextPath() %>"/>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>리스트</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/bitcamp/css/bootstrap.min.css" type="text/css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="/bitcamp/js/bootstrap.min.js"></script>
 <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js"
 	type="text/javascript"></script>
 <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css"
 	rel="stylesheet" type="text/css" />
+
+<title>리스트</title>
+	
 <style>
 .wrap{
 	margin:170px 100px 0 100px;
+	overflow:auto;
 }
 .hr-sect {
 	display: flex;
@@ -128,14 +123,22 @@ a:link, a:visited{
     top: 10px;
 }
 
-
 /*product-list*/
-.product-list>div:first-child{
+.sort-container{
 	width:200px; 
 	height:34px; 
 	position:relative;
 	left:1220px;
 }
+/*
+.sort-container{
+	width:200px; 
+	height:34px; 
+	float:right;
+	margin-top:80px;
+	margin-right:40px; 
+}
+*/
 #sort{
 	width:100%;
 	height:100%; 
@@ -302,7 +305,20 @@ select:focus {
 .inner_option>div:first-of-type{
 	  padding-top:12px;
 }
-#delivery-charge, #rental-period{float:right;}
+#delivery-charge, #rental-period{
+	float:right;
+	width:230px;
+	padding:0 10px;	
+}
+#rental_start-container, #rental_end-container{
+	height:20px;
+}
+#rental_start-container>label, #rental_end-container>label{
+}
+#rental_start, #rental_end{
+	/* float:right; */
+	width:230px;
+}
 .group_btn button{
 	width:49%;
 	height:54px;
@@ -312,6 +328,7 @@ select:focus {
 }
 .total{
 	width:100%;
+	float:left;
 	font-size:16px;
 	line-height:24px;
 }
@@ -356,16 +373,17 @@ $(function(){
 		$(".minus-icon").show();
 	});
 	
-	//selectbox option
-	var tagOption=["Sort by", "Newest", "Name A-Z", "Price(low to high)", "Price(high to low)"];    
+	//상품 정렬 
+	var sortOption=["Sort by", "Newest", "Name A-Z", "Price(low to high)", "Price(high to low)"];    
 	var tag="";
-	for(i=0; i<tagOption.length; i++){
-		tag += "<option>"+tagOption[i]+"</option>";
+	for(i=0; i<sortOption.length; i++){
+		tag += "<option>"+sortOption[i]+"</option>";
 	}
 	document.getElementById("sort").innerHTML = tag;	
 	
 	//btn-heart toggle
 	$(".btn_heart").click(function(){
+		
 		$(this).toggleClass("btn_toggle");
 		//관심상품 창
 		$(".btn_heart[class*=btn_toggle]").parents(".product-list").prev(".layerWish").css("display","block");
@@ -411,27 +429,18 @@ $(function(){
 	});
 	
 	//배송비 결제 
-	var optionTag=["- 결제 방식 선택 -", "방문 수령", "주문시 결제", "착불"];    
+	var chargeOption=["- 결제 방식 선택 -", "방문 수령", "주문시 결제", "착불"];    
 	var tag="";
-	for(i=0; i<optionTag.length; i++){
-		tag += "<option>"+optionTag[i]+"</option>";
+	for(i=0; i<chargeOption.length; i++){
+		tag += "<option>"+chargeOption[i]+"</option>";
 	}
 	document.getElementById("delivery-charge").innerHTML = tag;
 	
-	//대여 기간 
-	/*
-	var tagOption=["- 대여 기간 선택 -", "2박3일", "3박4일(+15,000원)", "4박5일(+30,000원)", "5박6일(+45,000원)"];    
+	//대여 기간 	
+	var periodOption=["- 대여 기간 선택 -", "2박3일", "3박4일(+15,000원)", "4박5일(+30,000원)", "5박6일(+45,000원)"];    
 	var tag="";
-	for(i=0; i<tagOption.length; i++){
-		tag += "<option>"+tagOption[i]+"</option>";
-	}
-	document.getElementById("rental-period").innerHTML = tag;
-	*/
-	
-	var tagOption=["- 대여 기간 선택 -", "2박3일", "3박4일(+15,000원)", "4박5일(+30,000원)", "5박6일(+45,000원)"];    
-	var tag="";
-	for(i=0; i<tagOption.length; i++){
-		tag += "<option value='"+(i+2)+"'>"+tagOption[i]+"</option>";  //value="2" 부터
+	for(i=0; i<periodOption.length; i++){
+		tag += "<option value='"+(i+2)+"'>"+periodOption[i]+"</option>";  //value="2" 부터
 	}
 	document.getElementById("rental-period").innerHTML = tag;
 	
@@ -464,10 +473,8 @@ $(function(){
             return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 		}
 	});
-	
-	
-	
 });
+
 function period_change(period){
 	if(period!=null||period!=''){
 		$("#rental-period-container").css("display","flex")
@@ -486,6 +493,7 @@ function period_change(period){
 	$("#rental_end").datepicker('value', yyyymmdd)
 	
 }
+
 //주문 날짜 선택시 마감날짜도 자동 값적용
 function changeEndDay(startDay){
 	// 주문 시작일이 설정되면,마감날짜가 보이게 된다.
@@ -511,7 +519,6 @@ function changeEndDay(startDay){
 	
 }
 
-
 // 대여종료일은 못바꾸게 해야함
 function defaultday(){
 	var date = new Date($("#rental_start").val());// 주문 시작일을 받음.
@@ -525,14 +532,10 @@ function defaultday(){
     var yyyymmdd = year + '-' + month + '-' + day;// '-' 추가하여 yyyy-mm-dd 형태 생성
 	$("#rental_end").datepicker('value', yyyymmdd)
 }
-//키보드 입력 못하게 하기
-function donotusekeyboard(event){
-	event.preventDefault();
-}
 </script>
-</head>
 
-<body>
+
+
 <div class="wrap">
 	<div class="hr-sect">SHOP</div>
 
@@ -568,13 +571,13 @@ function donotusekeyboard(event){
 	  </div>
 	  <div class="close"><a onclick="$('.layerWish').hide();"><img src="<%=request.getContextPath()%>/resources/category/close_btn.png" alt="닫기 버튼"></a></div>
 	</div>
-
+	
 	<div class="product-list"> 
-		<div>
+		<div class="sort-container">
 			<select id="sort" name="sort">
 			</select>
 		</div>
-		
+	
 		<ul>
 			<li>
 				<div class="product-img">		
@@ -704,32 +707,28 @@ function donotusekeyboard(event){
         	<strong class="layer_name">상품 선택</strong>
         	<button type="button" class="btn_close"></button>
         	
-        	<div class="inner_option">
+        	<div class="inner_option" style="clear:left">
 		    	<strong class="tit_cart">코베아 문리버2 4인 캠핑세트</strong>
 		    	
-		    	<div class="delivery-charge-container">
+		    	<div class="delivery-charge-container" style="overflow:auto" >
 		    		<label>배송비 결제</label>
 		    		<select id="delivery-charge" name="delivery-chare"></select>
 		    	</div>
 		    	
-		    	<div class="rental-period-container">
+		    	<div class="rental-period-container" style="overflow:auto">
 		    		<label>대여 기간</label>
 		    		<select id="rental-period" name="rental-period" onchange="period_change(this.value)">
 		    		</select>
-		    		
-		    		
-		    		
-		    		
 		    	</div>
 		    	
-		    	<div>
-		    		<label>대여 시작일</label>
-		    		<input id="rental_start" name="rental_start" onkeydown="donotusekeyboard(event)" onchange="changeEndDay(this.value);"/>
+		    	<div class="rental_start-container"  style="overflow:auto;">
+		    		<label style="float:left">대여 시작일</label>
+		    		<input style="float:right" id="rental_start" name="rental_start" readonly onchange="changeEndDay(this.value);"/>
 		    	</div>
 		    	
-		    	<div>
-		    		<label>대여 종료일</label>
-		    		<input id="rental_end" name="rental_end"  onkeyup="defaultday()"/>
+		    	<div class="rental_end-container" style="overflow:auto">
+		    		<label style="clear:left; float:left">대여 종료일</label>
+		    		<input style="float:right" id="rental_end" name="rental_end" readonly onkeyup="defaultday()"/>
 		    	</div>
 		    	
 		    	<div class="total">
@@ -751,5 +750,3 @@ function donotusekeyboard(event){
 	    </div>
 	</div>
 </div>  <!-- wrap -->
-</body>
-</html>

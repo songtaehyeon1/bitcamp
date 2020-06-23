@@ -1,6 +1,5 @@
 package kr.co.bitcamp.product;
 
-import kr.co.bitcamp.board.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,13 +35,9 @@ public class ProductController {
 		this.sqlSession = sqlSession;
 	}
 ////////////////////////장바구니
-	@RequestMapping("/productInterest")
-	public ModelAndView productInterest() {
-		ModelAndView mav = new ModelAndView();
-		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
-		mav.addObject("interests",dao.selectInterest());
-		mav.setViewName("product/productInterest");
-		return mav;
+	@RequestMapping(value = "/productCart")
+	public String productInterest() {
+		return "product/productCart";
 	}
 	
 	

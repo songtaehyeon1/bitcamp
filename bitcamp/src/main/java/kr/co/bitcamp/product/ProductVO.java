@@ -7,7 +7,7 @@ public class ProductVO {
 	private String c_name;//카테고리 이름
 	private int p_no;//상품코드
 	private String p_name;//상품명
-	private int price;//가격	
+	private int price;//가격
 	private int delivery_fee;//배송비
 	private int delivery_fee_direct;//배송비 직접 입력
 	private String p_commnet;//상품설명
@@ -18,9 +18,26 @@ public class ProductVO {
 	private String p_filename5;//상품사진5
 	private String orderStart;//주문 시작일
 	private String orderEnd;//주문 마감일
+	private String product_borrow_period;//대여기간
+	private int currentQty;//바로구매할때 선택하는 상품 갯수
 	private int productCount;//관심상품 갯수
 	private ArrayList<Integer> s_noList;//상세 재고들
+	private String p_date;
+	private int rownum;
 	
+	
+	public int getRownum() {
+		return rownum;
+	}
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
+	}
+	public String getP_date() {
+		return p_date;
+	}
+	public void setP_date(String p_date) {
+		this.p_date = p_date;
+	}
 	public int getC_no() {
 		return c_no;
 	}
@@ -122,6 +139,18 @@ public class ProductVO {
 	}
 	public void setS_noList(ArrayList<Integer> s_noList) {
 		this.s_noList = s_noList;
+	}
+	public String getProduct_borrow_period() {
+		return product_borrow_period;
+	}
+	public void setProduct_borrow_period(String product_borrow_period) {
+		this.product_borrow_period = product_borrow_period;
+	}
+	public int getCurrentQty() {
+		return currentQty;
+	}
+	public void setCurrentQty(int currentQty) {
+		this.currentQty = currentQty;
 	}
 	
 }

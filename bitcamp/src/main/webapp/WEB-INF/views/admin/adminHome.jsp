@@ -13,7 +13,7 @@
 		<a href="<%=request.getContextPath()%>/admin/home"><li class="over">관리자홈</li></a>
 		<a href="#"><li>기본설정</li></a>
 		<a href="<%=request.getContextPath()%>/admin/member"><li>회원관리</li></a>
-		<a href="#"><li>상품관리</li></a>
+		<a href="<%=request.getContextPath()%>/admin/product"><li>상품관리</li></a>
 		<a href="<%=request.getContextPath()%>/admin/orderList"><li>주문관리</li></a>
 		<a href="#"><li>매출관리</li></a>
 	</ul>

@@ -56,7 +56,7 @@
 					<option value="25000">25,000원(특대형)</option>
 					<option value="-1">직접 입력</option>
 				</select>
-				<input type="text" name="delivery_fee_direct" id="delivery_fee_direct" name="delivery_fee_direct" style="display:none" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+				<input type="text" id="delivery_fee_direct" name="delivery_fee_direct" style="display:none" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
 			</li>
 			<li style="width : 100%;border-bottom : 1px solid black;">
 				<textarea id ="p_commnet" name="p_commnet"></textarea>

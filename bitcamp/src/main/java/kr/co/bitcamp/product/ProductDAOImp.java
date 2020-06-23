@@ -15,5 +15,7 @@ public interface ProductDAOImp {
 	public List<ProductVO> allSelectRecord();
 	//관심상품 보기
 	public List<ProductVO> selectInterest();
+	//장바구니 보기
+	public List<ProductVO> selectCart();
 	
 }
