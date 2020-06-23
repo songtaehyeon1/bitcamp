@@ -135,6 +135,19 @@
 						</c:if>
 					</div>
 				</li>
+				<li id="my-menu">
+					<a href="#">
+						<p class="main-menu-p">My</p>
+					</a>
+					<!-- 
+					<div id="my-menu-content">
+						<a href="/bitcamp/pwdChkFrm">회원정보 수정</a> 
+						<a href="#">비밀번호 변경</a> 
+						<a href="/bitcamp/contFindFrm">아이디/비밀번호 찾기</a> 
+						<a href="#">회원 탈퇴</a> 
+					</div>
+					 -->
+				</li>
 				<li>
 					<div id="cart-box">
 						<a href="#"><i class="fas fa-shopping-cart"></i> Cart</a>
@@ -147,7 +160,7 @@
 					<li data-toggle="tooltip" title="맨위로"><a href="javascript:$(document).scrollTop(0)"><i class="fas fa-angle-up fa-2x"></i></a></li>
 					<li data-toggle="tooltip" data-placement="left" title="맨밑으로"><a href="javascript:$(document).scrollTop($(document).height())"><i class="fas fa-angle-down fa-2x"></i></a></li>
 					<li data-toggle="tooltip" data-placement="left" title="홈"><a href="#"><i class="fas fa-home fa-2x"></i></a></li>
-					<li data-toggle="tooltip" data-placement="left" title="마이홈"><a href="#"><i class="fas fa-user fa-2x"></i></a></li>
+					<li data-toggle="tooltip" data-placement="left" title="마이홈"><a href="/bitcamp/pwdChkFrm"><i class="fas fa-user fa-2x"></i></a></li>
 					<li data-toggle="tooltip" data-placement="left" title="장바구니"><a href="#"><i class="fas fa-shopping-cart fa-2x"></i></a></li>
 				</ul>
 			</div>

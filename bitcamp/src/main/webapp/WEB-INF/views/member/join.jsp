@@ -136,11 +136,11 @@ $(function(){
 		*/
 		
 		//주소 검사	
-		if($("#zipcode").val()=="" &&  $("#addr").val()=="월" && $("#addrdetail").val()==""){
+		if($("#userzipcode").val()=="" &&  $("#useraddr").val()=="월" && $("#useraddrdetail").val()==""){
 			alert("주소를 입력해주세요.");
 			return false; 
 		}
-		if($("#zipcode").val()==""){
+		if($("#userzipcode").val()==""){
 			alert("우편번호 검색을 진행해주세요.");
 			return false;   
 		}
@@ -230,9 +230,9 @@ function cursorMove3(str) {
 function openDaumZipAddress() {
 	new daum.Postcode({
 		oncomplete:function(data) {
-			jQuery("#zipcode").val(data.zonecode);
-			jQuery("#addr").val(data.address);
-			jQuery("#addrdetail").focus();
+			jQuery("#userzipcode").val(data.zonecode);
+			jQuery("#useraddr").val(data.address);
+			jQuery("#useraddrdetail").focus();
 		}
 	}).open();
 }
@@ -249,7 +249,7 @@ function openDaumZipAddress() {
 		<form method="post" id="joinFrm" name="joinFrm" action="/bitcamp/joinOk">
 			<div class="form-group input-group">
 				<label for="userid" class="lbl_userid">아이디</label> 
-				<input type="text" class="form-control" id="userid" placeholder="첫번째 문자는 반드시 영문자이며, 4~20자의 숫자, 영문 대소문자만 허용" name="userid" maxlength="20"> 
+				<input type="text" class="form-control" id="userid" placeholder="첫번째 문자는 반드시 영문자이며, 4~20자의 숫자, 영문 대소문자만 허용" name="userid" maxlength="20" autofocus> 
 				<div class="input-group-append">
 					<button type="button" id="idChk" class="btn btn-secondary" disabled>중복확인</button> 
 				</div>
@@ -301,15 +301,15 @@ function openDaumZipAddress() {
 			 
 			 <div class="form-group input-group">
 				<label for="addr" class="lbl_addr">주소</label> 
-				<input type="text" class="form-control" id="zipcode" placeholder="우편번호" name="zipcode" readonly>
+				<input type="text" class="form-control" id="userzipcode" placeholder="우편번호" name="userzipcode" readonly>
 				<div>
 					<button class="btn btn-secondary searchAddr" type="button" onclick="openDaumZipAddress();">우편번호 검색</button>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<input type="text" class="form-control" id="addr" placeholder="주소" name="addr" readonly>
-				<input type="text" class="form-control" id="addrdetail" placeholder="상세주소" name="addrdetail">
+				<input type="text" class="form-control" id="useraddr" placeholder="주소" name="useraddr" readonly>
+				<input type="text" class="form-control" id="useraddrdetail" placeholder="상세주소" name="useraddrdetail">
 			</div>
 			
 			<div class="agree_tit"><strong>약관동의</strong></div>
@@ -321,7 +321,7 @@ function openDaumZipAddress() {
 			    </div>
 			    <div class="form-check">
 		        	<label class="form-check-label" for="check1">
-		        		<input type="checkbox" class="form-check-input" id="check1" name="option2" value="개인회원 약관에 동의">개인회원 약관에 동의
+		        		<input type="checkbox" class="form-check-input" id="check1" name="option2" value="[필수] 이용약관 동의">[필수] 이용약관 동의
 		      		</label>
 		      		<a href="#" class="view_indetail" target="_blank">상세보기</a>
 		      		<div class="agree_txt">
@@ -330,13 +330,13 @@ function openDaumZipAddress() {
 			    </div>
 			    <div class="form-check">
 		        	<label class="form-check-label" for="check2">
-		        		<input type="checkbox" class="form-check-input" id="check2" name="option3" value="개인정보 수집 및 이용에 동의">개인정보 수집 및 이용에 동의
+		        		<input type="checkbox" class="form-check-input" id="check2" name="option3" value="[필수] 개인정보 수집 및 이용 동의">[필수] 개인정보 수집 및 이용 동의
 		      		</label>
 		      		<a href="#" class="view_indetail" target="_blank">상세보기</a>
 			    </div>
 				<div class="form-check">
 		        	<label class="form-check-label" for="check3">
-		        		<input type="checkbox" class="form-check-input" id="check3" name="option4" value="개인정보 제 3자 제공 및 위탁사항 이용약관">개인정보 제 3자 제공 및 위탁사항 이용약관
+		        		<input type="checkbox" class="form-check-input" id="check3" name="option4" value="[선택] 쇼핑정보 수신 동의">[선택] 쇼핑정보 수신 동의
 		      		</label>
 		      		<a href="#" class="view_indetail" target="_blank">상세보기</a>
 			    </div>
