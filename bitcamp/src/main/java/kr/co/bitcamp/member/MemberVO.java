@@ -7,9 +7,9 @@ public class MemberVO {
 	private String username;
 	private String useremail;
 	private String usertel;
-	private String zipcode;
-	private String addr;
-	private String addrdetail;
+	private String userzipcode;
+	private String useraddr;
+	private String useraddrdetail;
 	private String regdate;
 	
 	private String logStatus="N";
@@ -17,17 +17,17 @@ public class MemberVO {
 	public MemberVO() {
 		
 	}
-	
-	public MemberVO(int userno, String userid, String userpwd, String username, String useremail, String usertel, String zipcode, String addr, String addrdetail, String regdate) {
+
+	public MemberVO(int userno, String userid, String userpwd, String username, String useremail, String usertel, String userzipcode, String useraddr, String useraddrdetail, String regdate) {
 		this.userno = userno;
 		this.userid = userid;
 		this.userpwd = userpwd;
 		this.username = username;
 		this.useremail = useremail;
 		this.usertel = usertel;
-		this.zipcode = zipcode;
-		this.addr = addr;
-		this.addrdetail = addrdetail;
+		this.userzipcode = userzipcode;
+		this.useraddr = useraddr;
+		this.useraddrdetail = useraddrdetail;
 		this.regdate = regdate;
 	}
 	
@@ -79,28 +79,28 @@ public class MemberVO {
 		this.usertel = usertel;
 	}
 
-	public String getZipcode() {
-		return zipcode;
+	public String getUserzipcode() {
+		return userzipcode;
 	}
 
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
+	public void setUserzipcode(String userzipcode) {
+		this.userzipcode = userzipcode;
 	}
 
-	public String getAddr() {
-		return addr;
+	public String getUseraddr() {
+		return useraddr;
 	}
 
-	public void setAddr(String addr) {
-		this.addr = addr;
+	public void setUseraddr(String useraddr) {
+		this.useraddr = useraddr;
 	}
 
-	public String getAddrdetail() {
-		return addrdetail;
+	public String getUseraddrdetail() {
+		return useraddrdetail;
 	}
 
-	public void setAddrdetail(String addrdetail) {
-		this.addrdetail = addrdetail;
+	public void setUseraddrdetail(String useraddrdetail) {
+		this.useraddrdetail = useraddrdetail;
 	}
 
 	public String getRegdate() {

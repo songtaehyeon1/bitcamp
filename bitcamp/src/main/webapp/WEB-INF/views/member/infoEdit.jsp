@@ -29,7 +29,7 @@
 		width:100px;
 		height:50px;
 		position:relative;
-		left:200px;
+		left:260px;
 	}
 	.btnModify, .btnCancel{
 		font-size:1em;
@@ -59,14 +59,14 @@ function cursorMove3(str) {
 }
 */
 $(function(){
-	$(document).on("submit","#personInf	oFrm",function(){
+	$(document).on("submit","#infoFrm",function(){
 		//비밀번호 검사
 		var reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/;
-		if($("#pwd").val()==""){
+		if($("#userpwd").val()==""){
 			alert("비밀번호를 입력해주세요.");
 			return false; 
 		}
-		if(!reg.test($("#pwd").val())){
+		if(!reg.test($("#userpwd").val())){
 			alert("비밀번호는 8~20자의 최소 하나의 숫자, 영문 대소문자, 특수문자 조합으로 입력해주세요.");
 			return false;
 		}
@@ -76,20 +76,9 @@ $(function(){
 			alert("비밀번호 재확인을 입력해주세요.");
 			return false; 
 		}
-		if($("#pwdChk").val()!=$("#pwd").val()){
+		if($("#pwdChk").val()!=$("#userpwd").val()){
 			alert("비밀번호가 일치하지않습니다. 다시 입력해주세요.");
 			return false;  
-		}
-		
-		//이름 검사	
-		if($("#username").val()==""){
-			alert("이름을 입력해주세요.");
-			return false; 
-		}
-		var reg = /^[가-힣]{2,7}$/;
-		if(!reg.test($("#username").val())){
-			alert("한글 이름 2~7자를 입력해주세요.");
-			return false;
 		}
 		
 		//이메일 검사	
@@ -104,10 +93,10 @@ $(function(){
 		/*if($("#code").val()=="이동통신사"){
 			alert("이동통신사를 선택해주세요.");
 			return false;  
-		}else*/ if($("#tel").val()==""){
+		}else*/ if($("#usertel").val()==""){
 			alert("휴대전화번호를 입력해주세요.");
 			return false;  
-		}else if(!reg.test($("#tel").val())){			
+		}else if(!reg.test($("#usertel").val())){			
 			alert("휴대전화번호는 '-'없이 10~11자의 숫자만 입력해주세요.");
 			return false;		
 		}
@@ -119,15 +108,16 @@ $(function(){
 		*/
 		
 		//주소 검사	
-		if($("#zipcode").val()=="" &&  $("#addr").val()=="월" && $("#addrdetail").val()==""){
+		if($("#userzipcode").val()=="" &&  $("#useraddr").val()=="월" && $("#useraddrdetail").val()==""){
 			alert("주소를 입력해주세요.");
 			return false; 
 		}
-		if($("#zipcode").val()==""){
+		if($("#userzipcode").val()==""){
 			alert("우편번호 검색을 진행해주세요.");
 			return false;   
 		}
 		
+		alert("회원정보 수정이 완료되었습니다.");
 		return true;
 	});  //infoFrm 유효성 검사
 });
@@ -136,9 +126,9 @@ $(function(){
 function openDaumZipAddress() {
 	new daum.Postcode({
 		oncomplete:function(data) {
-			jQuery("#zipcode").val(data.zonecode);
-			jQuery("#addr").val(data.address);
-			jQuery("#addrdetail").focus();
+			jQuery("#userzipcode").val(data.zonecode);
+			jQuery("#useraddr").val(data.address);
+			jQuery("#useraddrdetail").focus();
 		}
 	}).open();
 }
@@ -152,18 +142,18 @@ function openDaumZipAddress() {
 
 	<div class="container">
 		<div class="content">
-			<form method="post" id="infoFrm" action="/bitcamp/infoEditOk">
+			<form method="post" id="infoFrm" name="infoFrm" action="/bitcamp/infoEditOk">
 				<div class="form-group">
 					<label for="userid" class="lbl_userid">아이디</label> 
 					<div><strong>${vo.userid}</strong></div>
 				</div>
 	
 				<div class="form-group">
-					<label for="userpwd">비밀번호</label> 
-					<input type="password" class="form-control" id="userpwd" placeholder="6~16자의 영문 대소문자, 숫자, 특수문자 중 2가지 이상 조합" name="userpswd" maxlength="20">
+					<label for="userpwd">신규 비밀번호</label> 
+					<input type="password" class="form-control" id="userpwd" placeholder="6~16자의 영문 대소문자, 숫자, 특수문자 중 2가지 이상 조합" name="userpwd" maxlength="20" autofocus>
 				</div>
 				<div class="form-group">
-					<label for="pwdChk">비밀번호 재확인</label> 
+					<label for="pwdChk">신규 비밀번호 재확인</label> 
 					<input type="password" class="form-control" id="pwdChk" placeholder="비밀번호 확인" name="pwdChk" maxlength="20">
 				</div>
 		
@@ -174,7 +164,7 @@ function openDaumZipAddress() {
 		
 				<div class="form-group">
 					<label for="eamil" class="lbl_email">이메일</label> 
-					<input type="email" class="form-control" id="useremail" placeholder="이메일 주소" name="useremail"> 
+					<input type="email" class="form-control" id="useremail" placeholder="이메일 주소" name="useremail" value="${vo.useremail}" > 
 				</div>
 				
 				
@@ -184,7 +174,7 @@ function openDaumZipAddress() {
 					<select class="form-control col-sm-4" id="code" name="code" onchange="cursorMove3(this.value)">
 					</select>
 					 -->
-					<input type="tel" class="form-control" id="usertel" placeholder="'-'없이 숫자만 입력" name="usertel" maxlength="13">
+					<input type="tel" class="form-control" id="usertel" placeholder="'-'없이 숫자만 입력" name="usertel" maxlength="13" value="${vo.usertel}">
 					<!-- 
 					<div class="input-group-append">
 						<button class="btn btn-secondary" type="button">인증번호 전송</button>
@@ -203,20 +193,20 @@ function openDaumZipAddress() {
 				 
 				<div class="form-group input-group">
 					<label for="addr" class="lbl_addr">주소</label> 
-					<input type="text" class="form-control" id="zipcode" placeholder="우편번호" name="zipcode" readonly>
+					<input type="text" class="form-control" id="userzipcode" placeholder="우편번호" name="userzipcode" readonly value="${vo.userzipcode}">
 					<div>
 						<button class="btn btn-secondary searchAddr" type="button" onclick="openDaumZipAddress();">우편번호 검색</button>
 					</div>
 				</div>
 				
 				<div class="form-group">
-					<input type="text" class="form-control" id="addr" placeholder="주소" name="addr" readonly>
-					<input type="text" class="form-control" id="addrdetail" placeholder="상세주소" name="addrdetail">
+					<input type="text" class="form-control" id="useraddr" placeholder="주소" name="useraddr" readonly value="${vo.useraddr}">
+					<input type="text" class="form-control" id="useraddrdetail" placeholder="상세주소" name="useraddrdetail" value="${vo.useraddrdetail}">
 				</div>
 				
 				<span>
 					<button type="submit" class="btn btn-secondary btn-lg btnModify">수정하기</button>
-					<button type="button" class="btn btn-outline-secondary btn-lg btnCancel">취소</button>
+					<button type="button" class="btn btn-outline-secondary btn-lg btnCancel"  onclick="location.href='/bitcamp'">취소</button>
 				</span>
 			</form>
 		</div>
