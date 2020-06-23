@@ -106,10 +106,10 @@
 				</p>
 			</div>
 			<ul id="main-menu">
-				<li><a href="#">
+				<li><a href="/bitcamp">
 						<p class="main-menu-p">HOME</p>
 				</a></li>
-				<li id="shop-menu"><a href="#">
+				<li id="shop-menu"><a href="/bitcamp/list">
 						<p class="main-menu-p">SHOP</p>
 				</a>
 					<div id="shop-menu-content">
@@ -126,12 +126,12 @@
 				</a></li>
 				<li>
 					<div id="login-box">
-						<c:if test="${logStatus==null||logStatus==''}">
-							<a href="#"><i class="fas fa-user"></i> login</a>
+						<c:if test="${logStatus==null||logStatus==''||logStatus=='N'}">
+							<a href="/bitcamp/loginFrm"><i class="fas fa-user"></i> login</a>
 						</c:if>
 						<c:if test="${logStatus!=null&&logStatus=='Y'}">
-						${username } 님 
-							<a href="#"><i class="fas fa-user"></i> logout</a>
+							<span style="color:#D8D8D8"><b>${username}</b> 님</span> <br/>
+							<a href="/bitcamp/logout"><i class="fas fa-user"></i> logout</a>
 						</c:if>
 					</div>
 				</li>

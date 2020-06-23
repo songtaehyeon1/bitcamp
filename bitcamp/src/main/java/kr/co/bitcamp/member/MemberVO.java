@@ -5,7 +5,7 @@ public class MemberVO {
 	private String userid;
 	private String userpwd;
 	private String username;
-	private String usermail;
+	private String useremail;
 	private String usertel;
 	private String zipcode;
 	private String addr;
@@ -18,12 +18,12 @@ public class MemberVO {
 		
 	}
 	
-	public MemberVO(int userno, String userid, String userpwd, String username, String usermail, String usertel, String zipcode, String addr, String addrdetail, String regdate) {
+	public MemberVO(int userno, String userid, String userpwd, String username, String useremail, String usertel, String zipcode, String addr, String addrdetail, String regdate) {
 		this.userno = userno;
 		this.userid = userid;
 		this.userpwd = userpwd;
 		this.username = username;
-		this.usermail = usermail;
+		this.useremail = useremail;
 		this.usertel = usertel;
 		this.zipcode = zipcode;
 		this.addr = addr;
@@ -63,12 +63,12 @@ public class MemberVO {
 		this.username = username;
 	}
 
-	public String getUsermail() {
-		return usermail;
+	public String getUseremail() {
+		return useremail;
 	}
 
-	public void setUsermail(String usermail) {
-		this.usermail = usermail;
+	public void setUseremail(String useremail) {
+		this.useremail = useremail;
 	}
 
 	public String getUsertel() {
