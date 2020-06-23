@@ -51,7 +51,7 @@
 			<c:forEach var = "vo" items = "${list}">
 				<li>${vo.enquiry_no}</li>
 				<li class = "wordCut pointer" onclick = "location.href = '/bitcamp/enquiry_listForm?no=${vo.enquiry_no}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">${vo.enquiry_subject}</li>
-				<li>${userid}</li>
+				<li>${vo.userid}</li>
 				<li>${vo.enquiry_writedate}</li>
 				<li>${vo.enquiry_hit}</li>
 			</c:forEach>

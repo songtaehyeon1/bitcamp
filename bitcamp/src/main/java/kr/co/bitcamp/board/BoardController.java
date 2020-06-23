@@ -3,12 +3,14 @@ package kr.co.bitcamp.board;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -110,7 +112,8 @@ public class BoardController {
 		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
 		int cnt = dao.noticeUpdate(vo);
 		if(cnt > 0) {
-			mv.setViewName("redirect:boardNotice");
+			mv.addObject("str", "notice_editOk");
+			mv.setViewName("board/alters");
 		}else {
 			mv.setViewName("redirect:notice_editForm");
 		}
@@ -170,9 +173,9 @@ public class BoardController {
 		return mv;
 	}
 	// 상품 가져오기
-	@RequestMapping("/requiry_goods")
+	@RequestMapping("/enquiry_goods")
 	@ResponseBody
-	public List<GoodsVO> requiry_goods(String cate){
+	public List<GoodsVO> enquiry_goods(String cate){
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		
 		return dao.enquiryGoods(cate);
@@ -207,22 +210,76 @@ public class BoardController {
 		pagevo.setSearchKey(request.getParameter("searchKey"));
 		pagevo.setSearchWord(request.getParameter("searchWord"));
 		pagevo.setEnquiry_no(no);
-		LeadLagVO pnvo = dao.getLeadLagSelect(pagevo);
 		dao.enquiryHit(no);
 		
-		mv.addObject("list", dao.list(no));
+		EnquiryVO list = dao.list(no);
+		EnquiryVO list1 = dao.listGoods(list.getP_no(), list.getC_no());
+		list.setP_name(list1.getP_name());
+		list.setP_filename1(list1.getP_filename1());
+		list.setPrice(list1.getPrice());
+		
+		mv.addObject("list", list);
 		mv.addObject("pagevo", pagevo);
-		mv.addObject("pnvo", pnvo);
 		mv.setViewName("board/enquiry_listForm");
 		
 		return mv;
+	}
+	// 글 한개 댓글
+	@RequestMapping(value = "/enquiry_reply", method = RequestMethod.POST)
+	@ResponseBody
+	public List<ReplyVO> enquiry_reply(@RequestParam("enquiry_no") int no){
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		
+		List<ReplyVO> list = dao.replyAll(no);
+		
+		return list;
+	}
+	// 댓글 달기
+	@RequestMapping("/replyWrite")
+	@ResponseBody
+	public String replyWrite(ReplyVO vo) {
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		int cnt = dao.replyWrite(1, vo.getEnquiry_no(), vo.getE_reply_content());
+		if(cnt > 0) {
+			return "댓글이 등록되었습니다.";
+		}else{
+			return "댓글 등록 실패하였습니다.";
+		}
+	}
+	// 댓글 삭제
+	@RequestMapping("/replyDel")
+	@ResponseBody
+	public void replyDel(int e_reply_no) {
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		dao.replyDel(e_reply_no);
+	}
+	// 댓글 하나 가져오기
+	@RequestMapping("/replyEdit")
+	@ResponseBody
+	public ReplyVO replyEdit(int e_reply_no) {
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		
+		return dao.replyOne(e_reply_no);
+	}
+	// 댓글 수정
+	@RequestMapping("/replyEditOk")
+	@ResponseBody
+	public void replyEditOk(int e_reply_no, String e_reply_content) {
+		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		dao.replyUpdate(e_reply_no, e_reply_content);
 	}
 	// 글 수정폼으로
 	@RequestMapping("/enquiry_editForm")
 	public ModelAndView enquiry_editForm(int no) {
 		ModelAndView mv = new ModelAndView();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
-		mv.addObject("vo", dao.list(no));
+		EnquiryVO vo = dao.list(no);
+		vo.setC_no(dao.enquiryUpdateCate(vo.getP_no()));
+		
+		EnquiryVO goods = dao.listGoods(vo.getP_no(), vo.getC_no());
+		mv.addObject("cateList", dao.enquiryCategory());
+		mv.addObject("goods", goods);
+		mv.addObject("vo", vo);
 		mv.setViewName("/board/enquiry_editForm");
 		
 		return mv;

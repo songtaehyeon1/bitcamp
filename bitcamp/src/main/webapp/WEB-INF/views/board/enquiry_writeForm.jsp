@@ -5,7 +5,7 @@
 	$(function(){
 		// 상품리스트 가져오기
 		$("#goodsSelect1").change(function(){
-			var url = "/bitcamp/requiry_goods";
+			var url = "/bitcamp/enquiry_goods";
 			var data = "cate=" + $("#goodsSelect1 option:selected").val();
 			$.ajax({
 				url : url,
@@ -79,7 +79,7 @@
 		<ul id = "writeForm">
 			<li>상품</li>
 			<li id = "goodsSelect">
-				<select id = "goodsSelect1">
+				<select id = "goodsSelect1" name = "c_no">
 					<option selected>-</option>
 					<c:forEach var = "list" items = "${cateList}">
 						<option value = "${list.c_no}">${list.c_name}</option>

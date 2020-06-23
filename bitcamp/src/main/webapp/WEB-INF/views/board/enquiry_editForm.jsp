@@ -4,8 +4,7 @@
 <script src = "/bitcamp/editor/ckeditor/ckeditor.js"></script>
 <script>
 	$(function(){
-		CKEDITOR.replace("content", {uiColor : "#ffffff", height : "400px"});
-		CKEDITOR.config.resize_enabled = false;
+		$("#enquiry_subject option[value='${vo.enquiry_subject}']").attr("selected", "selected");
 	});
 	
 	function goboard(){
@@ -28,30 +27,41 @@
 			<li>상품</li>
 			<li id = "goodsSelect">
 				<select id = "goodsSelect1">
-					<option>-</option>
-					<option>2</option>
-					<option>3</option>
+					<option selected>-</option>
+					<c:forEach var = "list" items = "${cateList}">
+						<c:if test = "${list.c_no == vo.c_no}">
+							<option value = "${list.c_no}" selected>${list.c_name}</option>
+						</c:if>
+						<c:if test = "${list.c_no != vo.c_no}">
+							<option value = "${list.c_no}">${list.c_name}</option>
+						</c:if>
+					</c:forEach>
 				</select>
 				<select id = "goodsSelect2">
-					<option>-</option>
-					<option>2</option>
-					<option>3</option>
+					<c:forEach var = "list" items = "${cateList}">
+						<c:if test = "${goods.p_no eq vo.p_no}">
+							<option value = "${list.p_no}" selected>${list.p_name}</option>
+						</c:if>
+						<c:if test = "${goods.p_no ne vo.p_no}">
+							<option value = "${list.p_no}">${list.p_name}</option>
+						</c:if>
+					</c:forEach>
 				</select>
 			</li>
 			<li>제목</li>
 			<li id = "titleSelect">
-				<select id = "titleSelect1">
-					<option>궁금합니다</option>
-					<option>반납관련 문의</option>
-					<option>배송관련 문의</option>
-					<option>장비관련 문의</option>
-					<option>예약취소 관련 문의</option>
-					<option>단체대여 관련 문의</option>
-					<option>기타 문의</option>
+				<select id = "enquiry_subject" name = "enquiry_subject">
+					<option value = "궁금합니다">궁금합니다</option>
+					<option value = "반납관련 문의">반납관련 문의</option>
+					<option value = "배송관련 문의">배송관련 문의</option>
+					<option value = "장비관련 문의">장비관련 문의</option>
+					<option value = "예약취소 관련 문의">예약취소 관련 문의</option>
+					<option value = "단체대여 관련 문의">단체대여 관련 문의</option>
+					<option value = "기타 문의">기타 문의</option>
 				</select>
 			</li>
 			<li>
-				<textarea name = "content" id = "content"></textarea>
+				<textarea name = "content" id = "content">${vo.enquiry_content}</textarea>
 			</li>
 			<li>비밀글설정</li>
 			<li>

@@ -3,36 +3,143 @@
 <link rel = "stylesheet" href = "/bitcamp/css/board/enquiry_listForm.css" type = "text/css">
 <script>
 	$(function(){
-		$('.content').on("keydown keyup", function (e){
+		// 글자 제한
+		$('.content, #e_reply_content').on("keydown keyup", function (e){
 			var content = $(this).val();
-			if(content.length > 3000){
-				var str = $(this).val().substring(0, 3000);
+			if(content.length > 300){
+				var str = $(this).val().substring(0, 300);
 				$(this).val(str);
-				alert("3000글자 제한");
-				$('.count').html('3000/3000');
+				alert("300글자 제한");
+				$('.count, #count').html('300/300');
 				return false;
 			}
 			$(this).height(1).height($(this).prop('scrollHeight') + 12);
-			$('.count').html(content.length + '/3000');
+			$('.count, #count').html(content.length + '/300');
 		});
 		
-		$(".reply_edit").click(function(){
-			$(this).parent().parent().parent().parent().append("<div id = 'replyForm'>" +
-															"<div id = 'replyForm_above'>" +
-																"<span>아이디</span>" +
-																"<span class = 'count'>0/3000</span>" +
-															"</div>" +
-															"<div>" +
-																"<textarea class = 'autoHeight content'></textarea>" +
-															"</div>" +
-															"<div>" +
-																"<button id = 'replyBtn'>확인</button>" +
-															"</div>" +
-														"</div>" +
-														"<hr style = 'border : 1px solid #EAEAEA; width : 1400px; float : left;'>");
-			$(this).parent().parent().parent().remove();
-		});
+		replyAll();
 	});
+	
+	// 댓글 가져오기
+	function replyAll(){
+		var url = "/bitcamp/enquiry_reply";
+		var data = "enquiry_no=" + ${list.enquiry_no};
+		$.ajax({
+			url : url,
+			data : data,
+			type : "post",
+			success : function(result){
+				var $result = $(result);
+				var tag = "";
+				$result.each(function(i, list){
+					tag += "<div class = 'reply'>";
+					tag += "	<div>";
+					tag += "		<span class = 'reply_span1'>" + list.userid + "</span>";
+					tag += "		<span>작성날짜 : " + list.e_reply_writedate + "</span>";
+					tag += "	</div>";
+					tag += "	<div>";
+					tag += "		<div class = 'reply_content'>";
+					tag += list.e_reply_content;
+					tag += "		</div>";
+					//if(list.userid == '${userid}'){
+						tag += "	<div class = 'reply_right'>";
+						tag += "		<button class = 'reply_edit' onclick = 'reply_edit(this);'>수정</button>";
+						tag += "		<button class = 'reply_del' onclick = 'reply_del(this);'>삭제</button>";
+						tag += "		<input type = 'hidden' name = 'e_reply_no' value = '" + list.e_reply_no + "'>";
+						tag += "	</div>";
+					//}
+					tag += "	</div>";
+					tag += "<hr style = 'border : 1px solid #EAEAEA; width : 1400px;'>";
+					tag += "</div>";
+				});
+				$("#replyAll").html(tag);
+			}, error : function(e){
+				console.log(e.responseText);
+			}
+		});
+	}
+	
+	// 댓글 작성
+	function replyWrite(){
+		var content_val = $("#e_reply_content").val();
+		if(content_val == null || content_val.trim() == ""){
+			alert("댓글을 작성해 주세요.");
+			return false;
+		}
+		var data = "userno=1&enquiry_no=" + ${list.enquiry_no} + "&e_reply_content=" + content_val;
+		$.ajax({
+			url : "/bitcamp/replyWrite",
+			data : data,
+			success : function(result){
+				$(".count").text("0/300");
+				alert("댓글이 작성되었습니다.");
+				replyAll();
+			}, error : function(e){
+				console.log(e.responseText);
+			}
+		});
+		$("#e_reply_content").val("");
+	}
+	
+	// 댓글 삭제
+	function reply_del(btn){
+		if(confirm("삭제하시겠습니까?")){
+			$.ajax({
+				url : "/bitcamp/replyDel",
+				data : "e_reply_no=" + $(btn).parent().children("input[name=e_reply_no]").val(),
+				success : function(){
+					replyAll();
+				}, error : function(e){
+					console.log(e.responseText);
+				}
+			});
+		}
+	}
+	
+	// 댓글 수정폼
+	function reply_edit(btn){
+		$.ajax({
+			url : "/bitcamp/replyEdit",
+			data : "e_reply_no=" + $(btn).parent().children("input[name=e_reply_no]").val(),
+			success : function(result){
+				$(btn).parent().parent().parent().html(
+						"<div class = 'replyForm'>" +
+							"<div class = 'replyForm_above'>" +
+								"<span>" + result.userid + "</span>" +
+								"<span class = 'count'>0/300</span>" +
+							"</div>" +
+							"<div class = 'contentDiv'>" +
+								"<textarea class = 'content'>" + result.e_reply_content + "</textarea>" +
+							"</div>" +
+							"<div>" +
+								"<button class = 'replyBtn' onclick = 'reply_editOk(this);'>확인</button>" +
+								"<input type = 'hidden' name = 'e_reply_no' value = '" + result.e_reply_no + "'>" +
+							"</div>" +
+						"</div>" +
+						"<hr style = 'border : 1px solid #EAEAEA; width : 1400px; float : left;'>");
+			}, error : function(e){
+				console.log(e.responseText);
+			}
+		});
+	}
+	
+	// 댓글 수정
+	function reply_editOk(btn){
+		var content_val = $(btn).parent().parent().children(".contentDiv").children("textarea").val();
+		if(content_val == null || content_val.trim() == ""){
+			alert("댓글 수정란을 작성해 주세요.");
+			return false;
+		}
+		$.ajax({
+			url : "/bitcamp/replyEditOk",
+			data : "e_reply_no=" + $(btn).parent().children("input").val() + "&e_reply_content=" + content_val,
+			success : function(result){
+				replyAll();
+			}, error : function(e){
+				console.log(e.responseText);
+			}
+		});
+	}
 </script>
 <div class = "container" id = "enquiry_listFormBody">
 	<div id = "nLink"><a href = "/bitcamp/">홈</a>&nbsp;>&nbsp;<span>고객문의</span></div>
@@ -44,9 +151,9 @@
 	</ul>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<div id = "goods">
-		<img src = "/bitcamp/img/상품1.png">
-		<span>상품명</span>
-		<span>20,000원</span>
+		<img src = "/bitcamp/resources/${list.p_filename1}">
+		<span>${list.p_name}</span>
+		<span>${list.price}원</span>
 		<!-- <button onclick = "location.href = '#'">상품상세보기</button> -->
 	</div>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
@@ -54,61 +161,30 @@
 		<li>제목</li>
 		<li>${list.enquiry_subject}</li>
 		<li>작성자</li>
-		<li>id</li>
+		<li>${list.userid}</li>
 		<li>${list.enquiry_content}</li>
 	</ul>
 	<div id = "boardGo">
-		<button onclick = "location.href = '/bitcamp/boardEnquiry';">목록</button>
+		<button onclick = "location.href = '/bitcamp/boardEnquiry?pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>';">목록</button>
 		<div class = "boardGo_right">
-			<button class = "boardList_edit" onclick = "location.href = '/bitcamp/enquiry_editForm';">수정</button>
-			<button class = "boardList_del">삭제</button>
+			<button class = "boardList_edit" onclick = "location.href = '/bitcamp/enquiry_editForm?no=${list.enquiry_no}';">수정</button>
+			<button class = "boardList_del" onclick = "alert(123);">삭제</button>
 		</div>
 	</div>
 	<div id = "replyForm">
 		<div id = "replyForm_above">
-			<span>아이디</span>
-			<span class = "count">0/3000</span>
+			<span>${userid}</span>
+			<span id = "count">0/300</span>
 		</div>
 		<div>
-			<textarea class = "autoHeight content"></textarea>
+			<textarea class = "content" id = "e_reply_content" name = "e_reply_content"></textarea>
 		</div>
 		<div>
-			<button id = "replyBtn">확인</button>
+			<button id = "replyBtn" onclick = "replyWrite();">확인</button>
 		</div>
+		<input type = "hidden" name = "enquiry_no" value = "${list.enquiry_no}">
 	</div>
 	<hr style = "border : 1px solid #EAEAEA; width : 1400px; float : left;">
-	<div>
-		<div id = "reply">
-			<div>
-				<span class = "reply_span1">아이디1</span>
-				<span>작성날짜</span>
-			</div>
-			<div class = "reply_content">
-				글내용
-				<div class = "reply_right">
-					<button class = "reply_edit">수정</button>
-					<button class = "reply_del">삭제</button>
-				</div>
-			</div>
-			<div>
-			</div>
-			<hr style = "border : 1px solid #EAEAEA; width : 1400px;">
-		</div>
-		<div id = "reply">
-			<div>
-				<span class = "reply_span1">아이디2</span>
-				<span>작성날짜</span>
-			</div>
-			<div class = "reply_content">
-				글내용
-				<div class = "reply_right">
-					<button class = "reply_edit">수정</button>
-					<button class = "reply_del">삭제</button>
-				</div>
-			</div>
-			<div>
-			</div>
-			<hr style = "border : 1px solid #EAEAEA; width : 1400px;">
-		</div>
+	<div id = "replyAll">
 	</div>
 </div>
