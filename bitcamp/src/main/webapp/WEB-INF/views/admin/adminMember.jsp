@@ -124,7 +124,7 @@
 					<td>2</td>
 					<td><span style="color: blue">2000</span></td>
 					<td>hello815</td>
-					<td><a href="./member_view.php?mb_id=hello815"
+					<td><a href=""
 						style="color: blue;">윤준호</a></td>
 					<td>02-2644-7382</td>
 					<td>010-9145-8966</td>
@@ -138,7 +138,7 @@
 					<td>1</td>
 					<td>3000</td>
 					<td>hello105</td>
-					<td><a href="./member_view.php?mb_id=hello105"
+					<td><a href=""
 						style="color: blue;">윤준호</a></td>
 					<td>02-2644-7382</td>
 					<td>010-9145-8966</td>
