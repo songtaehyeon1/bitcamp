@@ -5,7 +5,7 @@
 	$(function(){
 		// 상품리스트 가져오기
 		$("#goodsSelect1").change(function(){
-			var url = "/bitcamp/requiry_goods";
+			var url = "/bitcamp/enquiry_goods";
 			var data = "cate=" + $("#goodsSelect1 option:selected").val();
 			$.ajax({
 				url : url,
@@ -28,6 +28,7 @@
 		$("#goodsSelect2 option:nth-of-type(1)").prop("selected", true);
 		$("#enquiry_subject option:nth-of-type(1)").prop("selected", true);
 		$("#secret").prop("checked", true);
+		$("#content").val("");
 
 		// submit되면
 		$("#write").submit(function(){
@@ -79,7 +80,7 @@
 		<ul id = "writeForm">
 			<li>상품</li>
 			<li id = "goodsSelect">
-				<select id = "goodsSelect1">
+				<select id = "goodsSelect1" name = "c_no">
 					<option selected>-</option>
 					<c:forEach var = "list" items = "${cateList}">
 						<option value = "${list.c_no}">${list.c_name}</option>
@@ -107,7 +108,7 @@
 			<li>비밀글설정</li>
 			<li>
 				<input type = "radio" name = "enquiry_secret" value = "Y">공개글&nbsp;
-				<input type = "radio" id = "secret" name = "enquiry_secret" value = "N" checked>비밀글
+				<input type = "radio" name = "enquiry_secret" value = "N" id = "secret" checked>비밀글
 			</li>
 		</ul>
 		<div id = "goBtn">

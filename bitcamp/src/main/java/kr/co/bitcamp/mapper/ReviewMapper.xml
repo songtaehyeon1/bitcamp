@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.bitcamp.board.ReviewDAO">
+	<!-- 전체 리스트(검색, 페이징) -->
+	<select id = "allList" resultType="kr.co.bitcamp.board.ReviewVO">
+		select * from (
+			select * from (
+				select review_no, userno, c_no, p_no, review_subject, review_content, review_hit, review_recommend, 
+				to_char(review_writedate, 'YYYY-MM-DD') review_writedate, review_ip, review_file1, review_file2, review_file3, review_file4, 
+				review_file5 
+				from board_review b, member m 
+				where b.userno = m.userno 
+				<if test = "searchKey != null and searchWord != null">
+					and ${searchKey} like '%'||#{searchWord}||'%' 
+				</if>
+				order by review_no desc) 
+			where rownum <![CDATA[<=]]> #{pageNum} * #{onePageRecord} 
+			order by review_no asc) 
+		where rownum <![CDATA[<=]]> <if test = "pageNum == totalPage">#{lastPageRecord}</if><if test = "pageNum != totalPage">#{onePageRecord}</if> 
+		order by review_no desc
+	</select>
+	<!-- 전체 페이지 구하기(검색) -->
+	<select id = "getTotalRecord" resultType = "int">
+		select count(review_no) from board_review
+		<if test = "searchKey != null and searchWord != null">
+				where ${searchKey} like '%'||#{searchWord}||'%'
+		</if>
+	</select>
+</mapper>
