@@ -41,13 +41,13 @@
 					tag += "		<div class = 'reply_content'>";
 					tag += list.e_reply_content;
 					tag += "		</div>";
-					//if(list.userid == '${userid}'){
+					if(list.userid == '${userid}'){
 						tag += "	<div class = 'reply_right'>";
 						tag += "		<button class = 'reply_edit' onclick = 'reply_edit(this);'>수정</button>";
 						tag += "		<button class = 'reply_del' onclick = 'reply_del(this);'>삭제</button>";
 						tag += "		<input type = 'hidden' name = 'e_reply_no' value = '" + list.e_reply_no + "'>";
 						tag += "	</div>";
-					//}
+					}
 					tag += "	</div>";
 					tag += "<hr style = 'border : 1px solid #EAEAEA; width : 1400px;'>";
 					tag += "</div>";
@@ -71,7 +71,7 @@
 			url : "/bitcamp/replyWrite",
 			data : data,
 			success : function(result){
-				$(".count").text("0/300");
+				$("#count").text("0/300");
 				alert("댓글이 작성되었습니다.");
 				replyAll();
 			}, error : function(e){
@@ -140,6 +140,10 @@
 			}
 		});
 	}
+	
+	function listDel(){
+		
+	}
 </script>
 <div class = "container" id = "enquiry_listFormBody">
 	<div id = "nLink"><a href = "/bitcamp/">홈</a>&nbsp;>&nbsp;<span>고객문의</span></div>
@@ -151,10 +155,9 @@
 	</ul>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<div id = "goods">
-		<img src = "/bitcamp/resources/${list.p_filename1}">
+		<img src = "/bitcamp/resources/products/${list.p_filename1}">
 		<span>${list.p_name}</span>
 		<span>${list.price}원</span>
-		<!-- <button onclick = "location.href = '#'">상품상세보기</button> -->
 	</div>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<ul id = "listForm">
@@ -166,24 +169,35 @@
 	</ul>
 	<div id = "boardGo">
 		<button onclick = "location.href = '/bitcamp/boardEnquiry?pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>';">목록</button>
-		<div class = "boardGo_right">
-			<button class = "boardList_edit" onclick = "location.href = '/bitcamp/enquiry_editForm?no=${list.enquiry_no}';">수정</button>
-			<button class = "boardList_del" onclick = "alert(123);">삭제</button>
-		</div>
+		<c:if test = "${list.userid == userid || adminStatus == 'Y'}">
+			<div class = "boardGo_right">
+				<button class = "boardList_edit" onclick = "location.href = '/bitcamp/enquiry_editForm?no=${list.enquiry_no}';">수정</button>
+				<button class = "boardList_del" onclick = "if(confirm('진짜로 삭제하시겠습니까?')){location.href = '/bitcamp/enquiry_delForm?no=${list.enquiry_no}';};">삭제</button>
+			</div>
+		</c:if>
 	</div>
-	<div id = "replyForm">
-		<div id = "replyForm_above">
-			<span>${userid}</span>
-			<span id = "count">0/300</span>
+	<c:if test = "${userid != null && userid != ''}">
+		<div id = "replyForm">
+			<div id = "replyForm_above">
+				<span>${userid}</span>
+				<span id = "count">0/300</span>
+			</div>
+			<div>
+				<textarea class = "content" id = "e_reply_content" name = "e_reply_content"></textarea>
+			</div>
+			<div>
+				<button id = "replyBtn" onclick = "replyWrite();">확인</button>
+			</div>
+			<input type = "hidden" name = "enquiry_no" value = "${list.enquiry_no}">
 		</div>
-		<div>
-			<textarea class = "content" id = "e_reply_content" name = "e_reply_content"></textarea>
+	</c:if>
+	<c:if test = "${userid == null || userid == ''}">
+		<div id = "replyForm" style = "height : 100px; line-height : 85px;">
+			<div style = "text-align : center;">
+				로그인 후 댓글 작성이 가능합니다.
+			</div>
 		</div>
-		<div>
-			<button id = "replyBtn" onclick = "replyWrite();">확인</button>
-		</div>
-		<input type = "hidden" name = "enquiry_no" value = "${list.enquiry_no}">
-	</div>
+	</c:if>
 	<hr style = "border : 1px solid #EAEAEA; width : 1400px; float : left;">
 	<div id = "replyAll">
 	</div>

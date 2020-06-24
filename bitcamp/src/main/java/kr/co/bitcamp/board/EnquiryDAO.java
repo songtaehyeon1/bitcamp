@@ -38,8 +38,11 @@ public interface EnquiryDAO {
 	// enquiry 글 수정
 	public int enquiryUpdate(EnquiryVO vo);
 	
-	// enquiry 글 수정 상품 가져오기
+	// enquiry 글 수정 카테고리 가져오기
 	public String enquiryUpdateCate(int no);
+	
+	// enquiry 글 수정 상품 가져오기
+	public List<GoodsVO> enquiryUpdateGoods(String c_no);
 	
 	// enquiry 글 삭제
 	public int enquiryDelete(int no);
@@ -47,7 +50,7 @@ public interface EnquiryDAO {
 	// enquiry 조회수
 	public void enquiryHit(int no);
 	
-	// enquiry 전체 페이지 구하기(검색)
+	// enquiry 전체 페이지 수(검색)
 	public int getTotalRecord(PagingVO pagevo);
 	
 	// enquiry 이전글 다음글

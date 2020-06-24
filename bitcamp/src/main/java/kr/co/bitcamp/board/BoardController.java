@@ -155,7 +155,6 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		pagevo.setTotalRecord(dao.getTotalRecord(pagevo));
-
 		mv.addObject("pagevo", pagevo);
 		mv.addObject("list", dao.allList(pagevo));
 		mv.setViewName("board/enquiry");
@@ -185,8 +184,8 @@ public class BoardController {
 	public ModelAndView enquiry_writeOk(EnquiryVO vo, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
-		vo.setUserno(1);	// 바꿔
-		//request.getSession().getAttribute("userno");
+		HttpSession session = request.getSession();
+		vo.setUserno((Integer)session.getAttribute("userno"));
 		vo.setEnquiry_ip(getClientIpAddr(request));
 		int cnt = dao.enquiryInsert(vo);
 		if(cnt > 0) {
@@ -202,6 +201,19 @@ public class BoardController {
 	@RequestMapping("/enquiry_listForm")
 	public ModelAndView enquiry_listForm(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		HttpSession session = request.getSession();
+		String adminStatus = (String)session.getAttribute("adminStatus");
+		String sUserid = (String)session.getAttribute("userid");
+		String enquiry_secret = request.getParameter("enquiry_secret");
+		String userid = request.getParameter("userid");
+		if(enquiry_secret.equals("N")) {
+			if(adminStatus != "Y" && (!userid.equals(sUserid) || userid == null)) {
+				mv.addObject("str", "secret");
+				mv.setViewName("board/alters");
+				
+				return mv;
+			}
+		}
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		int no = Integer.parseInt(request.getParameter("no"));
 		
@@ -237,9 +249,11 @@ public class BoardController {
 	// 댓글 달기
 	@RequestMapping("/replyWrite")
 	@ResponseBody
-	public String replyWrite(ReplyVO vo) {
+	public String replyWrite(ReplyVO vo, HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
-		int cnt = dao.replyWrite(1, vo.getEnquiry_no(), vo.getE_reply_content());
+		int userno = (Integer)session.getAttribute("userno");
+		int cnt = dao.replyWrite(userno, vo.getEnquiry_no(), vo.getE_reply_content());
 		if(cnt > 0) {
 			return "댓글이 등록되었습니다.";
 		}else{
@@ -276,9 +290,8 @@ public class BoardController {
 		EnquiryVO vo = dao.list(no);
 		vo.setC_no(dao.enquiryUpdateCate(vo.getP_no()));
 		
-		EnquiryVO goods = dao.listGoods(vo.getP_no(), vo.getC_no());
 		mv.addObject("cateList", dao.enquiryCategory());
-		mv.addObject("goods", goods);
+		mv.addObject("goods", dao.enquiryUpdateGoods(vo.getC_no()));
 		mv.addObject("vo", vo);
 		mv.setViewName("/board/enquiry_editForm");
 		
@@ -314,9 +327,32 @@ public class BoardController {
 	}
 	
 	// review
-	
+	// 전체 리스트로
 	@RequestMapping("/boardReview")
-	public String boardReview() {return "board/review";}
+	public ModelAndView boardReview(HttpServletRequest request) {
+		// 페이지 번호 구하기
+		String pageNumStr = request.getParameter("pageNum");
+		PagingVO pagevo = new PagingVO();
+		
+		// 페이지 번호 전송된 경우 페이지 번호를 변경한다
+		if(pageNumStr != null) {
+			pagevo.setPageNum(Integer.parseInt(pageNumStr));
+		}
+		
+		// 검색키, 검색어 request
+		pagevo.setSearchKey(request.getParameter("searchKey"));
+		pagevo.setSearchWord(request.getParameter("searchWord"));
+		
+		ModelAndView mv = new ModelAndView();
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		pagevo.setTotalRecord(dao.getTotalRecord(pagevo));
+		mv.addObject("pagevo", pagevo);
+		mv.addObject("list", dao.allList(pagevo));
+		mv.addObject("goods", );
+		mv.setViewName("board/review");
+		
+		return mv;
+	}
 	
 	@RequestMapping("/review_listForm")
 	public String review_listForm() {return "board/review_listForm";}

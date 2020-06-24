@@ -28,6 +28,7 @@
 		$("#goodsSelect2 option:nth-of-type(1)").prop("selected", true);
 		$("#enquiry_subject option:nth-of-type(1)").prop("selected", true);
 		$("#secret").prop("checked", true);
+		$("#content").val("");
 
 		// submit되면
 		$("#write").submit(function(){
@@ -107,7 +108,7 @@
 			<li>비밀글설정</li>
 			<li>
 				<input type = "radio" name = "enquiry_secret" value = "Y">공개글&nbsp;
-				<input type = "radio" id = "secret" name = "enquiry_secret" value = "N" checked>비밀글
+				<input type = "radio" name = "enquiry_secret" value = "N" id = "secret" checked>비밀글
 			</li>
 		</ul>
 		<div id = "goBtn">

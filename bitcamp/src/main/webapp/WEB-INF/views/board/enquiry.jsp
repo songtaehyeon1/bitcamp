@@ -30,6 +30,16 @@
 				$(this).css("color", "black");
 			}
 		});
+		
+		$("#enquiry_write").submit(function(){
+			var userid = "${userid}";
+			var adminStatus = "${adminStatus}";
+			if(adminStatus != "Y" && (userid == null || userid == "")){
+				alert("로그인 후 글 작성이 가능합니다.");
+				location.href = "/bitcamp/loginFrm";
+				return false;
+			}
+		});
 	});
 </script>
 <div class = "container" id = "enquiryBody">
@@ -50,14 +60,14 @@
 		<c:if test = "${list != null && list != ''}">
 			<c:forEach var = "vo" items = "${list}">
 				<li>${vo.enquiry_no}</li>
-				<li class = "wordCut pointer" onclick = "location.href = '/bitcamp/enquiry_listForm?no=${vo.enquiry_no}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">${vo.enquiry_subject}</li>
+				<li class = "wordCut pointer" onclick = "location.href = '/bitcamp/enquiry_listForm?no=${vo.enquiry_no}&pageNum=${pagevo.pageNum}<c:if test = '${pagevo.searchKey != null && pagevo.searchWord != null}'>&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>&enquiry_secret=${vo.enquiry_secret}&userid=${vo.userid}'">${vo.enquiry_subject}<c:if test = "${vo.enquiry_secret == 'N'}">&nbsp;<img src = "/bitcamp/resources/board/lock.png"></c:if></li>
 				<li>${vo.userid}</li>
 				<li>${vo.enquiry_writedate}</li>
 				<li>${vo.enquiry_hit}</li>
 			</c:forEach>
 		</c:if>
 		<c:if test = "${list == null || list == '[]' || list == ''}">
-			<li style = "width : 1400px; height : 200px; line-height : 200px; border-right : 1px solid black;">공지사항이 없습니다.</li>
+			<li style = "width : 1400px; height : 200px; line-height : 200px; border-right : 1px solid black;">고객문의가 없습니다.</li>
 		</c:if>
 	</ul>
 	<div id = "wsDiv">
@@ -69,7 +79,7 @@
 			<input type = "text" id = "searchText" name = "searchText">
 			<input type = "submit" id = "searchBtn" value = "찾기">
 		</div>
-		<form method = "post" action = "/bitcamp/enquiry_writeForm">
+		<form method = "post" action = "/bitcamp/enquiry_writeForm" id = "enquiry_write">
 			<div id = "write">
 				<input type = "submit" id = "writingBtn" value = "글 쓰기">
 			</div>

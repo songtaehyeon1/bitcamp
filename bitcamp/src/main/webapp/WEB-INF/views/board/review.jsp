@@ -20,37 +20,23 @@
 		<li>추천</li>
 		<li>평점</li>
 		<li>3</li>
-		<li><img src = "/bitcamp/resources/footer/bottom_mark01.gif">상품정보</li>
+		<li><img src = "/bitcamp/resources/footer/bottom_mark01.gif"><span>상품정보상품정보상품정보상품정보상품정보</span></li>
 		<li><a href = "/bitcamp/review_listForm">상</a></li>
 		<li>ㅎ1</li>
 		<li>2020-06-10</li>
 		<li>123</li>
 		<li>3</li>
 		<li>3</li>
-		<li>2</li>
-		<li>상품정보</li>
-		<li>품</li>
-		<li>ㅎ2</li>
-		<li>2020-06-10</li>
-		<li>234</li>
-		<li>3</li>
-		<li>3</li>
-		<li>1</li>
-		<li>상품정보</li>
-		<li>후</li>
-		<li>ㅎ3</li>
-		<li>2020-06-10</li>
-		<li>345</li>
-		<li>3</li>
-		<li>3</li>
-		<li>1</li>
-		<li>상품정보</li>
-		<li>기</li>
-		<li>ㅎ3</li>
-		<li>2020-06-10</li>
-		<li>345</li>
-		<li>1</li>
-		<li>1</li>
+		<c:forEach var = "list" items = "${list}">
+			<li>${list.review_no}</li>
+			<li><img src = "/bitcamp/resources/board/${list.file1}"><span>상품정보상품정보상품정보상품정보상품정보</span></li>
+			<li><a href = "/bitcamp/review_listForm">상</a></li>
+			<li>ㅎ1</li>
+			<li>2020-06-10</li>
+			<li>123</li>
+			<li>3</li>
+			<li>3</li>
+		</c:forEach>
 	</ul>
 	<div id = "wsDiv">
 		<form method = "post">

@@ -11,5 +11,8 @@
 	}else if(str == "enquiry_writeForm"){
 		alert("고객문의가 작성되었습니다.");
 		location.href = "/bitcamp/boardEnquiry";
+	}else if(str == "secret"){
+		alert("글이 잠겨있습니다.");
+		location.href = "/bitcamp/boardEnquiry";
 	}
 </script>

@@ -7,7 +7,7 @@
 	<select id = "allList" resultType="kr.co.bitcamp.board.EnquiryVO">
 		select * from (
 			select * from (
-				select enquiry_no, enquiry_subject, enquiry_hit, to_char(enquiry_writedate, 'YYYY-MM-DD') enquiry_writedate, userid 
+				select enquiry_no, enquiry_subject, enquiry_hit, to_char(enquiry_writedate, 'YYYY-MM-DD') enquiry_writedate, userid, enquiry_secret, c_no 
 				from board_enquiry b, member m 
 				where b.userno = m.userno 
 				<if test = "searchKey != null and searchWord != null">
@@ -70,11 +70,17 @@
 	</insert>
 	<!-- 글 수정 -->
 	<update id = "enquiryUpdate" parameterType="kr.co.bitcamp.board.EnquiryVO">
-		update board_enquiry set enquiry_subject = #{enquiry_subject}, enquiry_content = #{enquiry_content} where enquiry_no = #{enquiry_no}
+		update board_enquiry 
+		set c_no = #{c_no} , p_no = #{p_no}, enquiry_subject = #{enquiry_subject}, enquiry_content = #{enquiry_content}, enquiry_secret = #{enquiry_secret} 
+		where enquiry_no = #{enquiry_no}
 	</update>
 	<!-- 글 수정 카테고리 -->
 	<select id = "enquiryUpdateCate" resultType = "String">
 		select c_no from product where p_no = #{param1}
+	</select>
+	<!-- 글 수정 상품 -->
+	<select id = "enquiryUpdateGoods" resultType = "kr.co.bitcamp.board.GoodsVO">
+		select p_no, c_no, p_name from product where c_no = #{param1}
 	</select>
 	<!-- 글 삭제 -->
 	<delete id = "enquiryDelete">
