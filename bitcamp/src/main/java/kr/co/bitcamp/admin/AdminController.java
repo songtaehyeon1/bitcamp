@@ -1,9 +1,17 @@
 package kr.co.bitcamp.admin;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import kr.co.bitcamp.category.CategoryVO;
+import kr.co.bitcamp.order.OrderDAOImp;
 
 @Controller
 public class AdminController {
@@ -59,4 +67,29 @@ public class AdminController {
 
 		return "admin/adminOrderList";
 	}
+	@RequestMapping("/admin/product")
+	public String goAdminProduct() {
+
+		return "admin/adminProductList";
+	}
+	
+	@RequestMapping("/admin/productCategory")
+	public ModelAndView goAdminProductCategory() {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		List<CategoryVO> list = dao.allCategorySelect();
+		mav.addObject("list", list);
+		mav.setViewName("admin/adminCategory");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/admin/selectCategory", method = RequestMethod.GET)
+	@ResponseBody
+	public CategoryVO ajaxCategorySelect(int c_no){
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		CategoryVO vo = dao.selectCategory(c_no);		
+		vo.setCnt(dao.cntCategoryProduct(c_no));		
+		return vo;
+	}
+	
 }
