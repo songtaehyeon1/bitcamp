@@ -32,7 +32,7 @@
 
 		// submit되면
 		$("#write").submit(function(){
-			if($("#goodsSelect1 option:selected").val() != "-" && $("#goodsSelect2 option:selected").val() == "-"){
+			if($("#goodsSelect1 option:selected").val() != "" && $("#goodsSelect2 option:selected").val() == "-"){
 				alert("상품을 선택해 주세요.");
 				return false;
 			}
@@ -40,6 +40,10 @@
 				alert("내용을 입력해 주세요.");
 				return false;
 			}
+			/*if($("#goodsSelect1 option:selected").val() == "-"){
+				$("#goodsSelect1").val("");
+				$("#goodsSelect2").val("");
+			}*/
 			if($("#write input[name=enquiry_secret]:checked").val() == "Y"){
 				if(confirm("공개글 등록을 하시겠습니까?")){
 					return true;
@@ -81,7 +85,7 @@
 			<li>상품</li>
 			<li id = "goodsSelect">
 				<select id = "goodsSelect1" name = "c_no">
-					<option selected>-</option>
+					<option selected value = "">-</option>
 					<c:forEach var = "list" items = "${cateList}">
 						<option value = "${list.c_no}">${list.c_name}</option>
 					</c:forEach>

@@ -1,5 +1,6 @@
 package kr.co.bitcamp.board;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -48,6 +51,9 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView();
 		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
 		pagevo.setTotalRecord(dao.getTotalRecord(pagevo));
+		
+		/*HttpSession session = request.getSession();
+		session.setAttribute("adminStatus", "N");*/
 
 		mv.addObject("pagevo", pagevo);
 		mv.addObject("list", dao.allList(pagevo));
@@ -226,10 +232,16 @@ public class BoardController {
 		
 		EnquiryVO list = dao.list(no);
 		EnquiryVO list1 = dao.listGoods(list.getP_no(), list.getC_no());
-		list.setP_name(list1.getP_name());
-		list.setP_filename1(list1.getP_filename1());
-		list.setPrice(list1.getPrice());
+		String str = "";
+		try {
+			list.setP_name(list1.getP_name());
+			list.setP_filename1(list1.getP_filename1());
+			list.setPrice(list1.getPrice());
+		}catch (Exception e) {
+			str = "상품을 선택하지 않았습니다.";
+		}
 		
+		mv.addObject("str", str);
 		mv.addObject("list", list);
 		mv.addObject("pagevo", pagevo);
 		mv.setViewName("board/enquiry_listForm");
@@ -346,19 +358,111 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView();
 		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
 		pagevo.setTotalRecord(dao.getTotalRecord(pagevo));
+		
 		mv.addObject("pagevo", pagevo);
 		mv.addObject("list", dao.allList(pagevo));
-		mv.addObject("goods", );
 		mv.setViewName("board/review");
 		
 		return mv;
 	}
-	
-	@RequestMapping("/review_listForm")
-	public String review_listForm() {return "board/review_listForm";}
-	
+	// 글 쓰기 폼
 	@RequestMapping("/review_writeForm")
-	public String review_writeForm() {return "board/review_writeForm";}
+	public ModelAndView review_writeForm() {
+		ModelAndView mv = new ModelAndView();
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		mv.addObject("cate", dao.reviewCate());
+		mv.setViewName("board/review_writeForm");
+		
+		return mv;
+	}
+	// 글 쓰기 폼 상품 가져오기
+	@RequestMapping("/review_goods")
+	@ResponseBody
+	public List<GoodsVO> review_goods(int cate){
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		
+		return dao.reviewGoods(cate);
+	}
+	// 글 쓰기
+	@RequestMapping("/review_writeOk")
+	public ModelAndView review_writeOk(HttpServletRequest request, ReviewVO vo) {
+		String path = request.getSession().getServletContext().getRealPath("/resources/review");
+
+		// request객체로 > MultipartHttpServletRequest생성하여 파일업로드 처리를 한다
+		MultipartHttpServletRequest mr = (MultipartHttpServletRequest)request;
+		
+		// mr에서 MultipartFile객체를 얻어와야 된다
+		List<MultipartFile> files = mr.getFiles("filename");
+		String fileNames[] = new String[5];
+		int idx = 0;
+		if(files != null) {
+			// 업로드할 파일의 수만큼 반복
+			for(int i = 0; i < files.size(); i++) {
+				MultipartFile mf = files.get(i);
+				String fname = mf.getOriginalFilename();	// 업로드한 파일명
+				if(fname != null && !fname.equals("")) {
+					// 파일명 변경
+					File f = new File(path, fname);
+					if(f.exists()) {
+						for(int j = 0;; j++) {
+							String orgFilename = fname.substring(0, fname.lastIndexOf("."));	// 파일명
+							String orgExt = fname.substring(fname.lastIndexOf(".") + 1);	// 확장자명
+							f = new File(path, orgFilename + j + "." + orgExt);
+							if(!f.exists()) {
+								fname = orgFilename + j + "." + orgExt;
+								break;
+							}
+						}
+					}
+					try {
+						mf.transferTo(new File(path, fname));
+					}catch(Exception e) {
+						e.printStackTrace();
+					}
+					fileNames[idx++] = fname;
+				}
+			}
+			vo.setReview_file1(fileNames[0]);
+			vo.setReview_file2(fileNames[1]);
+			vo.setReview_file3(fileNames[2]);
+			vo.setReview_file4(fileNames[3]);
+			vo.setReview_file5(fileNames[4]);
+		}
+		vo.setUserno((Integer)request.getSession().getAttribute("userno"));
+		vo.setReview_ip(getClientIpAddr(request));
+		
+		ModelAndView mv = new ModelAndView();
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		int result = dao.reviewInsert(vo);
+		if(result > 0) {
+			mv.addObject("str", "review_writeForm");
+			mv.setViewName("board/alters");
+		}else {
+			// 레코드 추가 실패 시 파일 삭제
+			for(int i = 0; i < fileNames.length; i++) {
+				if(fileNames[i] != null) {
+					deleteFile(path, fileNames[i]);
+				}
+			}
+			mv.setViewName("redirect:review_writeForm");
+		}
+		
+		return mv;
+	}
+	// 파일 삭제
+	public void deleteFile(String path, String file) {
+		File f = new File(path, file);
+		f.delete();
+	}
+	@RequestMapping("/review_listForm")
+	public ModelAndView review_listForm(int no) {
+		ModelAndView mv = new ModelAndView();
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		mv.addObject("vo", dao.list(no));
+		mv.setViewName("board/review_listForm");
+		
+		return mv;
+	}
 	
 	@RequestMapping("/review_editForm")
 	public String review_editForm() {return "/board/review_editForm";}

@@ -140,10 +140,6 @@
 			}
 		});
 	}
-	
-	function listDel(){
-		
-	}
 </script>
 <div class = "container" id = "enquiry_listFormBody">
 	<div id = "nLink"><a href = "/bitcamp/">홈</a>&nbsp;>&nbsp;<span>고객문의</span></div>
@@ -155,9 +151,14 @@
 	</ul>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<div id = "goods">
-		<img src = "/bitcamp/resources/products/${list.p_filename1}">
-		<span>${list.p_name}</span>
-		<span>${list.price}원</span>
+		<c:if test = "${str == ''}">
+			<img src = "/bitcamp/resources/products/${list.p_filename1}" alt="">
+			<span>${list.p_name}</span>
+			<span>${list.price}원</span>
+		</c:if>
+		<c:if test = "${str != ''}">
+			<span style = "height : 110px; line-height : 110px;">${str}</span>
+		</c:if>
 	</div>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<ul id = "listForm">

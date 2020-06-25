@@ -179,6 +179,20 @@
 	white-space:nowrap;
 }
 
+.wordCut{
+	white-space : nowrap;
+	overflow : hidden;
+	text-overflow : ellipsis;
+}
+
+.pointer{
+	cursor : pointer;
+}
+
+.pointer:hover{
+	color : #B4B4B4;
+}
+
 /* 검색 */
 #wsDiv{
 	width : 1400px;

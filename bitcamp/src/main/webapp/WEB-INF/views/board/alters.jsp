@@ -14,5 +14,8 @@
 	}else if(str == "secret"){
 		alert("글이 잠겨있습니다.");
 		location.href = "/bitcamp/boardEnquiry";
+	}else if(str == "review_writeForm"){
+		alert("상품후기가 작성되었습니다.");
+		location.href = "/bitcamp/boardReview";
 	}
 </script>

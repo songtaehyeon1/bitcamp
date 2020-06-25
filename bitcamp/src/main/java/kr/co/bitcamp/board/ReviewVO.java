@@ -4,19 +4,24 @@ public class ReviewVO {
 
 	private int review_no;
 	private int userno;
-	private int c_no;
+	private String c_no;
 	private int p_no;
 	private String review_subject;
 	private String review_content;
 	private int review_hit;
 	private int review_recommend;
+	private int review_rating;
 	private String review_writedate;
-	private String ip;
+	private String review_ip;
 	private String review_file1;
 	private String review_file2;
 	private String review_file3;
 	private String review_file4;
 	private String review_file5;
+	private String userid;
+	private String p_name;
+	private String p_filename1;
+	private int price;
 	public int getReview_no() {
 		return review_no;
 	}
@@ -29,10 +34,10 @@ public class ReviewVO {
 	public void setUserno(int userno) {
 		this.userno = userno;
 	}
-	public int getC_no() {
+	public String getC_no() {
 		return c_no;
 	}
-	public void setC_no(int c_no) {
+	public void setC_no(String c_no) {
 		this.c_no = c_no;
 	}
 	public int getP_no() {
@@ -65,17 +70,23 @@ public class ReviewVO {
 	public void setReview_recommend(int review_recommend) {
 		this.review_recommend = review_recommend;
 	}
+	public int getReview_rating() {
+		return review_rating;
+	}
+	public void setReview_rating(int review_rating) {
+		this.review_rating = review_rating;
+	}
 	public String getReview_writedate() {
 		return review_writedate;
 	}
 	public void setReview_writedate(String review_writedate) {
 		this.review_writedate = review_writedate;
 	}
-	public String getIp() {
-		return ip;
+	public String getReview_ip() {
+		return review_ip;
 	}
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setReview_ip(String review_ip) {
+		this.review_ip = review_ip;
 	}
 	public String getReview_file1() {
 		return review_file1;
@@ -106,6 +117,30 @@ public class ReviewVO {
 	}
 	public void setReview_file5(String review_file5) {
 		this.review_file5 = review_file5;
+	}
+	public String getUserid() {
+		return userid;
+	}
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+	public String getP_name() {
+		return p_name;
+	}
+	public void setP_name(String p_name) {
+		this.p_name = p_name;
+	}
+	public String getP_filename1() {
+		return p_filename1;
+	}
+	public void setP_filename1(String p_filename1) {
+		this.p_filename1 = p_filename1;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
 	}
 	
 }
