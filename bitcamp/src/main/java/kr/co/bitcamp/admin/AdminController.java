@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,13 @@ public class AdminController {
 		return "admin/adminLogin";
 	}
 
+	@RequestMapping("/admin/home")
+	public String goAdminHome() {
+
+		return "admin/adminHome";
+	}
+
+/////////////////////////관리자 로그인
 	@RequestMapping("/adminLoginOk")
 	public ModelAndView goAdminLoginOk(HttpServletRequest req, AdminLoginVO vo) {
 		HttpSession ses = req.getSession();
@@ -64,37 +72,79 @@ public class AdminController {
 		}
 		return mav;
 	}
+/////////////////////////회원
 
-	@RequestMapping("/admin/home")
-	public String goAdminHome() {
-
-		return "admin/adminHome";
-	}
-
+	// 회원리스트
 	@RequestMapping("/admin/member")
-	public String goAdminMember() {
+	public ModelAndView goAdminMember(HttpServletRequest request) {
+		String pageNumStr = request.getParameter("pageNum");
+		PagingVO pagevo = new PagingVO();
 
-		return "admin/adminMember";
+		if (pageNumStr != null) {
+			pagevo.setPageNum(Integer.parseInt(pageNumStr));
+		}
+
+		// 검색키, 검색어 request
+		pagevo.setSearchKey(request.getParameter("searchKey"));
+		pagevo.setSearchWord(request.getParameter("searchWord"));
+		if (request.getParameter("userno") != null && request.getParameter("userno") != "") {
+			pagevo.setUserno(Integer.parseInt(request.getParameter("userno")));
+		}
+		pagevo.setS_date(request.getParameter("s_date"));
+		pagevo.setE_date(request.getParameter("e_date"));
+
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		pagevo.setTotalRecord(dao.getTotalMemberRecord(pagevo));
+		mav.addObject("pagevo", pagevo);
+		mav.addObject("list", dao.allMemberList(pagevo));
+		mav.setViewName("admin/adminMember");
+		return mav;
 	}
 
+	// 회원가입
 	@RequestMapping("/admin/memberJoin")
 	public String goAdminJoin() {
 
 		return "admin/adminJoin";
 	}
 
+	// 회원삭제 리스트
 	@RequestMapping("/admin/memberdellist")
-	public String goAdminMemberDellist() {
+	public ModelAndView goAdminMemberDellist(HttpServletRequest request) {
+		String pageNumStr = request.getParameter("pageNum");
+		PagingVO pagevo = new PagingVO();
+		if (pageNumStr != null) {
+			pagevo.setPageNum(Integer.parseInt(pageNumStr));
+		}
 
-		return "admin/adminMemberDellist";
+		// 검색키, 검색어 request
+		pagevo.setSearchKey(request.getParameter("searchKey"));
+		pagevo.setSearchWord(request.getParameter("searchWord"));
+		if (request.getParameter("userno") != null && request.getParameter("userno") != "") {
+			pagevo.setUserno(Integer.parseInt(request.getParameter("userno")));
+		}
+		pagevo.setS_date(request.getParameter("s_date"));
+		pagevo.setE_date(request.getParameter("e_date"));
+
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		pagevo.setTotalRecord(dao.getTotalWithdrawalRecord(pagevo));
+		mav.addObject("pagevo", pagevo);
+		mav.addObject("list", dao.allWithdrawalList(pagevo));
+		mav.setViewName("admin/adminMemberDellist");
+		return mav;
 	}
 
+///////////////////////////주문
 	@RequestMapping("/admin/orderList")
 	public String goAdminOrderlist() {
 
 		return "admin/adminOrderList";
 	}
 
+//////////////////////상품	
+	// 상품 리스트
 	@RequestMapping("/admin/product")
 	public ModelAndView goAdminProduct(HttpServletRequest request) {
 		// 페이지 번호 구하기
@@ -126,6 +176,57 @@ public class AdminController {
 		mav.addObject("list", dao.allList(pagevo));
 		mav.addObject("clist", clist);
 		mav.setViewName("admin/adminProductList");
+		return mav;
+	}
+
+	@RequestMapping("/admin/insertStock")
+	public ModelAndView goInsertStock(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+		String pageNumStr = request.getParameter("pageNum");
+		PagingVO pagevo = new PagingVO();
+		// 페이지 번호 전송된 경우 페이지 번호를 변경한다
+		if (pageNumStr != null) {
+			pagevo.setPageNum(Integer.parseInt(pageNumStr));
+		}		
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		
+		pagevo.setP_no(Integer.parseInt(request.getParameter("p_no")));
+		pagevo.setTotalRecord(dao.getTotalStockRecord(pagevo));
+		List<CategoryVO> clist = dao.allCategorySelect();
+		List<StockVO> list = dao.allStockList(pagevo);
+		ProductVO pvo = dao.productSelect(Integer.parseInt(request.getParameter("p_no")));
+
+		if (request.getParameter("s_date") != null && request.getParameter("e_date") != null && request.getParameter("s_date") != "" && request.getParameter("e_date") != "") {
+			int orderStart = Integer.parseInt(request.getParameter("s_date").replaceAll("-", "")); // i번째 상품의 오더 시작 날짜
+			int orderEnd = Integer.parseInt(request.getParameter("e_date").replaceAll("-", "")); // i번째 상품의 오더 끝 날짜
+			ArrayList<Integer> s_noList = (ArrayList<Integer>) dao.allSelectProduct(pvo.getP_no()); // i번째 상품의 재고 코드 리스트
+			for (int j = 0; j < s_noList.size(); j++) { // i번째 상품의 재고 코드 리스트 만큼 반복
+				ArrayList<String> dateList = (ArrayList<String>) dao.allSelectDate(s_noList.get(j));// i번째 상품의 재고 코드
+																									// 리스트의 j번째 재고코드의
+																									// 예약날짜 리스트 얻어옴
+				int resultCnt = 0;
+				for (int k = 0; k < dateList.size(); k++) {
+					for (int l = orderStart; l <= orderEnd; l++) {
+						if (Integer.parseInt(dateList.get(k)) == l) {
+							resultCnt++;
+						}
+					}
+				}
+				if (resultCnt > 0) {
+					s_noList.remove(j);
+				}
+				resultCnt = 0;
+			}
+			pvo.setProductCount(s_noList.size()); // 갯수
+			pvo.setS_noList(s_noList); // 가능한 재고코드 리스트			
+			
+		}
+
+		mav.addObject("pagevo", pagevo);
+		mav.addObject("list", list);
+		mav.addObject("pvo", pvo);
+		mav.addObject("clist", clist);
+		mav.setViewName("admin/adminProductStock");
 		return mav;
 	}
 
@@ -384,7 +485,7 @@ public class AdminController {
 				p_filenames[0] = fname;
 			}
 		}
-		
+
 		MultipartFile filename2 = mr.getFile("filename2");
 		if (filename2 != null) {
 			String fname = filename2.getOriginalFilename();
@@ -414,7 +515,7 @@ public class AdminController {
 				p_filenames[1] = fname;
 			}
 		}
-		
+
 		MultipartFile filename3 = mr.getFile("filename3");
 		if (filename3 != null) {
 			String fname = filename3.getOriginalFilename();
@@ -444,7 +545,7 @@ public class AdminController {
 				p_filenames[2] = fname;
 			}
 		}
-		
+
 		MultipartFile filename4 = mr.getFile("filename4");
 		if (filename4 != null) {
 			String fname = filename4.getOriginalFilename();
@@ -474,7 +575,7 @@ public class AdminController {
 				p_filenames[3] = fname;
 			}
 		}
-		
+
 		MultipartFile filename5 = mr.getFile("filename5");
 		if (filename5 != null) {
 			String fname = filename5.getOriginalFilename();
@@ -503,19 +604,17 @@ public class AdminController {
 				vo.setP_filename5(fname);
 				p_filenames[4] = fname;
 			}
-		}			
-		
+		}
+
 		if ((vo.getDelivery_fee()) == -1) {
 			System.out.println("배송비 직접 입력");
 			vo.setDelivery_fee(vo.getDelivery_fee_direct());
 			System.out.println(vo.getDelivery_fee());
 		}
-		
 
 		ModelAndView mav = new ModelAndView();
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
 		int result = dao.productEdit(vo);
-	
 
 		if (result > 0) {
 			mav.setViewName("redirect:admin/product");

@@ -50,11 +50,15 @@
 		</dd>
 		<dt>상품관리</dt>
 		<dd>
+			<a href="<%=request.getContextPath()%>/admin/product">- 상품리스트</a>
+		</dd>
+		<dd>
 			<a href="<%=request.getContextPath()%>/admin/insertProduct">- 상품등록</a>
 		</dd>
 		<dd>
-			<a href="<%=request.getContextPath()%>/admin/product">- 상품리스트</a>
-		</dd>		
+			<a href="<%=request.getContextPath()%>/admin/insertStock">- 상품재고등록</a>
+		</dd>
+				
 		
 
 	</dl>
@@ -84,9 +88,9 @@
 							<option value="" selected="">전체분류</option>
 							<c:forEach var="cvo" items="${clist }">
 								<option value="${cvo.c_no }">${cvo.c_name }</option>
-							</c:forEach>
-						
+							</c:forEach>						
 					</select>
+					</td>
 				</tr>
 				<tr>
 					<th>등록일</th>
@@ -138,8 +142,7 @@
 	<table class="goodslist">
 		<tbody>
 			<tr>
-				<th width="5%">번호</th>
-				<th width="10%">상품코드</th>
+				<th width="7%">상품코드</th>
 				<th width="25%">상품명
 				</th>
 				<th width="15%">카테고리</th>
@@ -150,10 +153,10 @@
 				<th width="6%">배송료</th>
 				<th width="10%">등록일</th>
 				<th width="8%">수정</th>
+				<th width="8%">재고</th>
 			</tr>
 			<c:forEach var="vo" items="${list }">
 			<tr>
-				<td>${vo.rownum }</td>
 				<td>${vo.p_no }</td>
 				<td class="goodsname">
 					<div class="imgwrap">
@@ -176,6 +179,7 @@
 				<td>${vo.delivery_fee }원</td>
 				<td>${vo.p_date }</td>
 				<td><a class="btn btn-dark" type="button" style="width: 70px;color: white" href="<%=request.getContextPath()%>/updateProduct?p_no=${vo.p_no}">수정</a></td>
+				<td><a class="btn btn-dark" type="button" style="width: 70px;color: white" href="<%=request.getContextPath()%>/admin/insertStock?p_no=${vo.p_no}">재고</a></td>
 			</tr>
 			</c:forEach>			
 			

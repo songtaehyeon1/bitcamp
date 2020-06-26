@@ -3,7 +3,7 @@ package kr.co.bitcamp.admin;
 public class PagingVO {
 
 	private int pageNum = 1;	// 현재 페이지
-	private int onePageRecord = 7;	// 한 페이지에 출력할 레코드 수
+	private int onePageRecord = 10;	// 한 페이지에 출력할 레코드 수
 	private int totalRecord;	// 총 레코드 수
 	private int totalPage;	// 총 페이지 수
 	private int startPage = 1;	// 시작 페이지 번호
@@ -14,11 +14,30 @@ public class PagingVO {
 	private String searchKey;
 	private String searchWord;
 	private int c_no =0;
+	private int p_no =0;
 	private String s_date;
 	private String e_date;
+	private int userno=0;
 	
 	
 	
+	
+	public int getP_no() {
+		return p_no;
+	}
+
+	public void setP_no(int p_no) {
+		this.p_no = p_no;
+	}
+
+	public int getUserno() {
+		return userno;
+	}
+
+	public void setUserno(int userno) {
+		this.userno = userno;
+	}
+
 	public String getS_date() {
 		return s_date;
 	}

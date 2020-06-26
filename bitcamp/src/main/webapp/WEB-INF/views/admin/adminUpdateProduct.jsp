@@ -206,7 +206,7 @@
 			<tbody>
 				<tr>
 					<th>상품상세설명</th>
-					<td><textarea id="p_commnet" name="p_commnet"></textarea></td>
+					<td><textarea id="p_commnet" name="p_commnet">${vo.p_commnet }</textarea></td>
 				</tr>
 			</tbody>
 		</table>
@@ -214,7 +214,7 @@
 			<a href="/bitcamp/admin/product" class="btn btn-dark"
 				style="color: white;">목록</a>
 			<div id="regiDiv" style="float: right">
-				<input type="submit" class="btn btn-dark" name="submit" value="등록">
+				<input type="submit" class="btn btn-dark" name="submit" value="수정">
 				<a href="/bitcamp/admin/product" class="btn btn-secondary"
 					style="color: white;">취소</a>
 			</div>

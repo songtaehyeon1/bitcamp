@@ -89,7 +89,7 @@
 							<option value="20000">20,000원(대형)</option>
 							<option value="25000">25,000원(특대형)</option>
 							<option value="-1">직접 입력</option>
-					</select> <input type="text" class="text" name="delivery_fee_direct" 
+					</select> <input type="text" class="text" name="delivery_fee_direct" value="0"
 						id="delivery_fee_direct" style="display: none"
 						oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"></td>
 				</tr>
