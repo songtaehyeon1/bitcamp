@@ -37,6 +37,18 @@
 	}
 </style>
 
+<c:if test="${result>0}">
+	<script>
+		alert("회원정보 수정이 완료되었습니다.");   
+	</script>
+</c:if>
+
+<c:if test="${result<=0}">
+	<script>
+		alert("회원정보 수정 실패하였습니다. 다시 시도해주세요.");   
+	</script>
+</c:if>
+
 <script>
 /*
 //휴대전화_이동통신사

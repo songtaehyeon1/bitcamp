@@ -78,8 +78,8 @@ $(function(){
 	
 	//아이디 저장
 	//저장된 쿠기값을 가져와서 ID 입력 칸에 넣어준다.
-    var userInputId = getCookie("id_cookie");  
-    $("#userid").val(userInputId); 
+  	// var userInputId = getCookie("id_cookie");  
+    $("#userid").val(getCookie("id_cookie")); 
      
     if($("#userid").val() != ""){  //이전에 이미 ID 저장하기를 해서 처음 페이지 로딩 시, ID 입력 칸에 출력된 ID가 있는 상태라면
     	$("#saveId").attr("checked", true);  //ID 저장하기를 체크 상태로 두기
@@ -87,8 +87,8 @@ $(function(){
      
     $("#saveId").change(function(){  // 체크박스에 변화가 발생시
         if($("#saveId").is(":checked")){  // ID 저장하기 체크했을 때,
-            var userInputId = $("#userid").val();
-            setCookie("id_cookie", userInputId, 7);  // 7일 동안 쿠키 보관
+            // var userInputId = $("#userid").val();
+            setCookie("id_cookie", $("#userid").val(), 7);  // 7일 동안 쿠키 보관
         }else{  // ID 저장하기 체크 해제 시,
             deleteCookie("id_cookie");
         }
@@ -124,9 +124,6 @@ $(function(){
   			<a href="/bitcamp/joinFrm">회원가입</a>
   		</span>
   	</div>
-  	
-  	<hr/>
-  	<a href="/bitcamp/pwdChkFrm">회원정보 수정</a>
 </div>
 
 

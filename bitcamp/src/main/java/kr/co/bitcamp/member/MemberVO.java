@@ -11,26 +11,13 @@ public class MemberVO {
 	private String useraddr;
 	private String useraddrdetail;
 	private String regdate;
+	private int usermile;
+	
+	private String userlogdate;
+	private String userjointype;
 	
 	private String logStatus="N";
 
-	public MemberVO() {
-		
-	}
-
-	public MemberVO(int userno, String userid, String userpwd, String username, String useremail, String usertel, String userzipcode, String useraddr, String useraddrdetail, String regdate) {
-		this.userno = userno;
-		this.userid = userid;
-		this.userpwd = userpwd;
-		this.username = username;
-		this.useremail = useremail;
-		this.usertel = usertel;
-		this.userzipcode = userzipcode;
-		this.useraddr = useraddr;
-		this.useraddrdetail = useraddrdetail;
-		this.regdate = regdate;
-	}
-	
 	public int getUserno() {
 		return userno;
 	}
@@ -111,6 +98,30 @@ public class MemberVO {
 		this.regdate = regdate;
 	}
 
+	public int getUsermile() {
+		return usermile;
+	}
+
+	public void setUsermile(int usermile) {
+		this.usermile = usermile;
+	}
+
+	public String getUserlogdate() {
+		return userlogdate;
+	}
+
+	public void setUserlogdate(String userlogdate) {
+		this.userlogdate = userlogdate;
+	}
+
+	public String getUserjointype() {
+		return userjointype;
+	}
+
+	public void setUserjointype(String userjointype) {
+		this.userjointype = userjointype;
+	}
+	
 	public String getLogStatus() {
 		return logStatus;
 	}
