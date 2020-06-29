@@ -124,6 +124,38 @@
 	font-size : 13px;
 }
 
+/* 평점 */
+#star{
+	padding : 0 0 0 20px;
+}
+
+.star-box{
+	height : 20px;
+	line-height : 20px;
+}
+
+.star{
+	display:inline-block;
+	width: 20px;
+	height: 20px;
+}
+
+.star_left{
+	background: url(http://gahyun.wooga.kr/main/img/testImg/star.png) no-repeat 0 0;
+	background-size: 20px;
+	margin-right: -3px;
+}
+
+.star_right{
+	background: url(http://gahyun.wooga.kr/main/img/testImg/star.png) no-repeat -20px 0;
+	background-size: 20px;
+	margin-left: -20px;
+}
+
+.star.on{
+	background-image: url(http://gahyun.wooga.kr/main/img/testImg/star_on.png);
+}
+
 /* 글 */
 #listForm{
 	margin-top : 20px;

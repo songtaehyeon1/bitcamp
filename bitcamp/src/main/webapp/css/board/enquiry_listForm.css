@@ -193,15 +193,15 @@
 }
 
 /* 댓글 폼 */
-#replyForm *{
+#replyForm *, .replyForm *{
 	font-size : 13px;
 }
 
-#replyForm>div{
+#replyForm>div, .replyForm>div{
 	width : 1370px;
 }
 
-#replyForm{
+#replyForm, .replyForm{
 	width : 1400px;
 	border : 1px solid #EAEAEA;
 	background : #FCFCFC;
@@ -209,7 +209,7 @@
 	padding : 10px;
 }
 
-#replyForm_above>span:nth-of-type(1){
+#replyForm_above>span:nth-of-type(1), .replyForm_above>span:nth-of-type(1){
 	font-weight : bold;
 	font-size : 1.1em;
 }
@@ -223,7 +223,7 @@
 	max-height : 200px;
 }
 
-#replyBtn{
+#replyBtn, .replyBtn{
 	float : right;
 	border : none;
 	width : 60px;
@@ -234,22 +234,22 @@
 	margin-top : 5px;
 }
 
-.count{
+.count, #count{
 	float : right;
 }
 
 /* 댓글 */
-#reply>div, #reply>hr{
+#reply>div, #reply>hr, .reply>div, .reply>hr{
 	float : left;
 	width : 1400px;
 }
 
-#reply>div{
+#reply>div, .reply>div{
 	padding-left : 20px;
 	font-size : 13px;
 }
 
-#reply{
+#reply, .reply{
 	height : 70px;
 }
 
