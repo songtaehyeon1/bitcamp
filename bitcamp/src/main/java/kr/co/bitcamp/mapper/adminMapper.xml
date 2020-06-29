@@ -4,13 +4,17 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.bitcamp.admin.AdminDAOImp">
 	<!-- 상품 추가 -->
-	<insert id="productWrite" parameterType="kr.co.bitcamp.product.ProductVO" >
-		insert into product(c_no,p_no,p_name,price,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5,delivery_fee)
+	<insert id="productWrite"
+		parameterType="kr.co.bitcamp.product.ProductVO">
+		insert into
+		product(c_no,p_no,p_name,price,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5,delivery_fee)
 		values(#{c_no},pno_sq.nextval,#{p_name},#{price},#{p_commnet,},#{p_filename1},#{p_filename2},#{p_filename3},#{p_filename4},#{p_filename5},#{delivery_fee})
 	</insert>
 	<!-- 상품 수정 -->
-	<update id="productEdit" parameterType="kr.co.bitcamp.product.ProductVO">
-		update product set c_no=#{c_no},p_name=#{p_name},price=${price},p_commnet=#{p_commnet},
+	<update id="productEdit"
+		parameterType="kr.co.bitcamp.product.ProductVO">
+		update product set
+		c_no=#{c_no},p_name=#{p_name},price=${price},p_commnet=#{p_commnet},p_deltype =#{p_deltype},
 		<if test="p_filename1 != null">p_filename1=#{p_filename1},</if>
 		<if test="p_filename2 != null">p_filename2=#{p_filename2},</if>
 		<if test="p_filename3 != null">p_filename3=#{p_filename3},</if>
@@ -19,16 +23,31 @@
 		delivery_fee=${delivery_fee} where p_no = ${p_no}
 	</update>
 	<!-- 상품 1개선택 -->
-	<select id="productSelect" parameterType="kr.co.bitcamp.product.ProductVO" resultType="kr.co.bitcamp.product.ProductVO">
-		select p_no,c_no,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5
-		from product where p_no=#{param1}
+	<select id="productSelect"
+		parameterType="kr.co.bitcamp.product.ProductVO"
+		resultType="kr.co.bitcamp.product.ProductVO">
+		select
+		p_no,c_no,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5,c_name,p_deltype 
+		from product left join category using(c_no) where p_no=${param1}
 	</select>
+	<!-- sno_sq의 nextval 반환 -->
+	<select id="getsno_sq" resultType="int">
+		select last_number from user_sequences where sequence_name ='SNO_SQ'
+	</select>
+	<!-- 재고등록 -->
+	<insert id="addStock">
+		insert into product_stock(s_no,p_no,note) values (sno_sq.nextval,${param1},#{param2})
+	</insert>
 	<update id="delimg">
-		update product set ${param2} = null where p_no = ${param1} 
+		update product set ${param2} = null where p_no =
+		${param1}
 	</update>
-	<!-- 관리자 로그인 -->	
-	<select id="adminLogin" resultType="kr.co.bitcamp.admin.AdminLoginVO" parameterType="kr.co.bitcamp.admin.AdminLoginVO">
-		select * from adminlogin where adminId = #{adminId} and adminpwd = #{adminpwd}
+	<!-- 관리자 로그인 -->
+	<select id="adminLogin"
+		resultType="kr.co.bitcamp.admin.AdminLoginVO"
+		parameterType="kr.co.bitcamp.admin.AdminLoginVO">
+		select * from adminlogin where adminId = #{adminId} and
+		adminpwd = #{adminpwd}
 	</select>
 	<!-- 모든 카테고리를 반환 -->
 	<select id="allCategorySelect"
@@ -38,43 +57,124 @@
 	<!-- 카테고리안의 상품수를 반환 -->
 	<select id="cntCategoryProduct" resultType="int">
 		select count(p_no)
-		cnt from (select * from product right join category using(c_no)) where
+		cnt from (select * from product right join category using(c_no) where p_deltype='Y') where
 		c_no=#{param1} GROUP by c_no, c_name
 	</select>
+	<!-- 카테고리 선택 -->
 	<select id="selectCategory"
 		resultType="kr.co.bitcamp.category.CategoryVO">
 		select c_no,c_name from category where c_no =#{param1}
 	</select>
+	<!-- 카테고리 수정 -->
 	<update id="updateCategory"
 		parameterType="kr.co.bitcamp.category.CategoryVO">
 		update category set c_name=#{c_name} where c_no=#{c_no}
 	</update>
-
+	<!-- 모든 상품 리스트 -->
 	<select id="allProductSelect"
 		resultType="kr.co.bitcamp.product.ProductVO">
 		select
 		ROWNUM,p_no,c_no,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5,p_date,c_name
-		from product left join category using(c_no) order by p_no desc
+		from product left join category using(c_no) where p_deltype='Y' order by p_no desc
 	</select>
-
+	<!-- 모든 멤버 리스트 -->
+	<select id="allMemberList"
+		parameterType="kr.co.bitcamp.admin.PagingVO"
+		resultType="kr.co.bitcamp.member.MemberVO">
+		select * from (
+		select * from (
+		select
+		userno,userid,userpwd,username,useremail,usertel,regdate,usermile,userzipcode,useraddr,useraddrdetail,userlogdate
+		from member
+		<where>
+			userjointype = 'Y'
+			<if test="searchKey != null and searchWord != null">
+				AND ${searchKey} like '%'||#{searchWord}||'%'
+			</if>
+			<if test="userno != 0">
+				AND userno = ${userno}
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
+				AND to_char(regdate,'YYYY-MM-DD') <![CDATA[>]]>TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_char(regdate,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>
+		</where>
+		order by userno desc)
+		where rownum <![CDATA[<=]]>
+		#{pageNum} * #{onePageRecord}
+		order by userno asc)
+		where rownum <![CDATA[<=]]>
+		<if test="pageNum == totalPage">#{lastPageRecord}</if>
+		<if test="pageNum != totalPage">#{onePageRecord}</if>
+		order by userno desc
+	</select>
+	<!-- 회원 한명 선택 -->
+	<select id="selectMember" parameterType="int" resultType="kr.co.bitcamp.member.MemberVO">
+		select * from member where userno = ${param1}	
+	</select>
+	<!-- 모든 탈퇴 회원 리스트 -->
+	<select id="allWithdrawalList"
+		parameterType="kr.co.bitcamp.admin.PagingVO"
+		resultType="kr.co.bitcamp.member.WithdrawalVO">
+		select * from (
+		select * from (
+		select
+		userno,userid,username,reason,withdrawaldate from m_withdrawal
+		<where>
+			<if test="searchKey != null and searchWord != null">
+				AND ${searchKey} like '%'||#{searchWord}||'%'
+			</if>
+			<if test="userno != 0">
+				AND userno = ${userno}
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
+				AND to_char(withdrawaldate,'YYYY-MM-DD') <![CDATA[>]]>
+				TO_DATE('${s_date}','YYYY-MM-DD') and
+				to_char(withdrawaldate,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>
+		</where>
+		order by withdrawaldate desc)
+		where rownum <![CDATA[<=]]>
+		#{pageNum} * #{onePageRecord}
+		order by withdrawaldate asc)
+		where rownum <![CDATA[<=]]>
+		<if test="pageNum == totalPage">#{lastPageRecord}</if>
+		<if test="pageNum != totalPage">#{onePageRecord}</if>
+		order by withdrawaldate desc
+	</select>
+	
+	
+	<!-- 모든품목리스트 & 페이징 -->
 	<select id="allList"
 		parameterType="kr.co.bitcamp.admin.PagingVO"
 		resultType="kr.co.bitcamp.product.ProductVO">
 		select * from (
 		select * from (
-		select rownum,p_no,c_no,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5,p_date,c_name
-		from product left join category using(c_no) 
-			<where>
+		select 
+		p_no,c_no,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5,to_char(p_date,'YYYY-MM-DD')
+		p_date,c_name,p_deltype
+		from product left join category using(c_no)
+		<where>
+			<if test="p_deltype!= null and p_deltype !='' and p_deltype !='All'">
+				AND p_deltype = #{p_deltype}
+			</if>
 			<if test="searchKey != null and searchWord != null">
-				AND ${searchKey} like '%'||#{searchWord}||'%' 
+				AND ${searchKey} like '%'||#{searchWord}||'%'
 			</if>
 			<if test="c_no != 0">
-				AND c_no = ${c_no} 
+				AND c_no = ${c_no}
 			</if>
-			<if test="s_date != null and e_date != null">
-				AND to_char(p_date,'YYYY-MM-DD') <![CDATA[>]]>TO_DATE('${s_date}','YYYY-MM-DD') and to_char(p_date,'YYYY-MM-DD') <![CDATA[<=]]> to_date('${e_date}','YYYY-MM-DD') 
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
+				AND to_char(p_date,'YYYY-MM-DD') <![CDATA[>]]>TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_char(p_date,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
 			</if>
-			</where>
+		</where>
 		order by p_no desc)
 		where rownum <![CDATA[<=]]>
 		#{pageNum} * #{onePageRecord}
@@ -84,23 +184,147 @@
 		<if test="pageNum != totalPage">#{onePageRecord}</if>
 		order by p_no desc
 	</select>
-	<!-- 전체 페이지 구하기(검색) -->
-	<select id="getTotalRecord" parameterType="kr.co.bitcamp.admin.PagingVO" resultType="int">
-		select count(p_no) from product left join category using(c_no) 
-			<where>
+	
+	<!-- 모든 품목의 재고 리스트 -->
+	<select id="allStockList"
+		parameterType="kr.co.bitcamp.admin.PagingVO"
+		resultType="kr.co.bitcamp.admin.StockVO">
+		select * from (
+		select * from (
+		select rownum,s_no,p_no,p_name,
+		to_char(s_regdate,'YYYY-MM-DD') s_regdate,s_deltype,note 
+		from product_stock left join
+		product using(p_no)
+		<where>
+			p_no = ${p_no}
+			<if test="s_deltype!= null and s_deltype !='' and s_deltype !='All'">
+				AND s_deltype = #{s_deltype}
+			</if>		
+		</where>		
+		order by p_no desc)
+		where
+		rownum <![CDATA[<=]]>
+		#{pageNum} * #{onePageRecord}
+		order by s_no asc)
+		where rownum <![CDATA[<=]]>
+		<if test="pageNum == totalPage">#{lastPageRecord}</if>
+		<if test="pageNum != totalPage">#{onePageRecord}</if>
+		order by s_no desc
+	</select>
+	
+	
+	<!-- 전체 품목 페이지 수 구하기(검색) -->
+	<select id="getTotalRecord"
+		parameterType="kr.co.bitcamp.admin.PagingVO" resultType="int">
+		select count(p_no) from product left join category using(c_no)
+		<where>
+			<if test="p_deltype!= null and p_deltype !='' and p_deltype !='All'">
+				AND p_deltype = #{p_deltype}
+			</if>
 			<if test="searchKey != null and searchWord != null">
-				AND ${searchKey} like '%'||#{searchWord}||'%' 
+				AND ${searchKey} like '%'||#{searchWord}||'%'
 			</if>
 			<if test="c_no != 0">
-				AND c_no = ${c_no} 
+				AND c_no = ${c_no}
 			</if>
-			<if test="s_date != null and e_date != null">
-				AND to_char(p_date,'YYYY-MM-DD') <![CDATA[>]]>to_date('${s_date}','YYYY-MM-DD') and to_char(p_date,'YYYY-MM-DD') <![CDATA[<=]]> to_date('${e_date}','YYYY-MM-DD') 
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !='' ">
+				AND to_char(p_date,'YYYY-MM-DD') <![CDATA[>]]>to_date('${s_date}','YYYY-MM-DD')
+				and to_char(p_date,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
 			</if>
-			</where>
+		</where>
+
+
+	</select>
+	<!-- 전체 회원 페이지 수 구하기(검색) -->
+	<select id="getTotalMemberRecord"
+		parameterType="kr.co.bitcamp.admin.PagingVO" resultType="int">
+		select count(userno) from member
+		<where>
+			userjointype ='Y'
+			<if test="searchKey != null and searchWord != null">
+				AND ${searchKey} like '%'||#{searchWord}||'%'
+			</if>
+			<if test="userno != 0">
+				AND userno = ${userno}
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
+				AND to_char(regdate,'YYYY-MM-DD') <![CDATA[>]]>to_date('${s_date}','YYYY-MM-DD')
+				and to_char(regdate,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>
+		</where>
 
 
 	</select>
 
+	<!-- 전체 탈퇴회원 페이지 구하기(검색) -->
+	<select id="getTotalWithdrawalRecord"
+		parameterType="kr.co.bitcamp.admin.PagingVO" resultType="int">
+		select count(userno) from m_withdrawal
+		<where>
+			<if test="searchKey != null and searchWord != null">
+				AND ${searchKey} like '%'||#{searchWord}||'%'
+			</if>
+			<if test="userno != 0">
+				AND userno = ${userno}
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
+				AND to_char(withdrawaldate,'YYYY-MM-DD') <![CDATA[>]]>to_date('${s_date}','YYYY-MM-DD')
+				and to_char(withdrawaldate,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>
+		</where>
+
+
+	</select>
+	<!--해당 품목의 재고 페이지 수 구하기  -->
+	<select id="getTotalStockRecord"
+		parameterType="kr.co.bitcamp.admin.PagingVO" resultType="int">
+		select
+		count(p_no) from product_stock
+		<where>
+			p_no = ${p_no}
+			<if test="s_deltype!= null and s_deltype !='' and s_deltype !='All'">
+				AND s_deltype = #{s_deltype}
+			</if>		
+		</where>
+	</select>
+
+
+	<!-- 재고의 예약 확인용 -->
+	<select id="allSelectProduct" parameterType="int"
+		resultType="Integer">
+		select s_no from product_stock where p_no = #{param1} and s_deltype='Y'
+	</select>
+
+	<select id="allSelectDate" parameterType="int"
+		resultType="String">
+		select to_char(stock_date,'YYYYMMDD') from reservate where
+		s_no = #{param1}
+	</select>
+	<!-- 재고의 예약 확인용 -->
+	
+	
+	<!-- 재고 삭제 추가 -->
+	<update id="delstock" parameterType="int">
+		update product_stock set s_deltype='N' where s_no = ${param1}
+	</update>
+	<update id="restoreStock" parameterType="int">
+		update product_stock set s_deltype='Y' where s_no = ${param1}
+	</update>
+	
+	<!-- 회원 탈퇴처리 복구처리 -->
+	<insert id="insertMemberDel" parameterType="kr.co.bitcamp.member.MemberVO">
+		insert into m_withdrawal(userno,userid,username,reason,withdrawaldate) values(${userno},#{userid},#{username},#{reason},sysdate)
+	</insert>
+	<update id="delMember" parameterType="int">
+		update member set userjointype='N' where userno = ${param1}
+	</update>
+	
+	
 
 </mapper>
