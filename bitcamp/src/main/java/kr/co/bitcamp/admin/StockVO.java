@@ -5,9 +5,23 @@ public class StockVO {
 	private int s_no;
 	private int p_no;
 	private String s_regdate;
+	private String note;
 	private String p_name;
+	private String s_deltype;
 		
 	
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
+	public String getS_deltype() {
+		return s_deltype;
+	}
+	public void setS_deltype(String s_deltype) {
+		this.s_deltype = s_deltype;
+	}
 	public int getRownum() {
 		return rownum;
 	}
