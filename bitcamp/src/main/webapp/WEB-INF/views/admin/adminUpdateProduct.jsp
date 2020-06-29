@@ -57,14 +57,12 @@
 		</dd>
 		<dt>상품관리</dt>
 		<dd>
+			<a href="<%=request.getContextPath()%>/admin/product">- 상품리스트</a>
+		</dd>
+		<dd>
 			<a href="<%=request.getContextPath()%>/admin/insertProduct">-
 				상품등록</a>
 		</dd>
-		<dd>
-			<a href="<%=request.getContextPath()%>/admin/product">- 상품리스트</a>
-		</dd>
-
-
 	</dl>
 </div>
 
@@ -120,7 +118,7 @@
 						</p> <c:if test="${vo.p_filename1 != null && vo.p_filename1 != ''}">
 							<div>
 								<img
-									src="<%=request.getContextPath()%>/upload/${vo.p_filename1}" /><br />
+									src="<%=request.getContextPath()%>/upload/${vo.p_filename1}" alt=""/><br />
 								<p>대표</p>
 							</div>
 						</c:if> <c:if test="${vo.p_filename2 != null && vo.p_filename2 != ''}">
@@ -194,6 +192,16 @@
 						id="delivery_fee_direct"
 						<c:if test="${vo.delivery_fee ==5000 || vo.delivery_fee ==10000 || vo.delivery_fee ==20000 ||vo.delivery_fee ==25000}">style="display: none"</c:if> value="${vo.delivery_fee }"
 						oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+					</td>
+				</tr>
+				<tr>
+					<th>제품상태</th>
+					<td colspan="3"><select id="p_deltype" name="p_deltype">
+							<option value="Y"
+								<c:if test="${vo.p_deltype =='Y' }"> selected="selected"</c:if>>판매중</option>
+							<option value="N"
+								<c:if test="${vo.p_deltype =='N' }"> selected="selected"</c:if>>품절</option>							
+					</select> 
 					</td>
 				</tr>
 

@@ -55,12 +55,6 @@
 		<dd>
 			<a href="<%=request.getContextPath()%>/admin/insertProduct">- 상품등록</a>
 		</dd>
-		<dd>
-			<a href="<%=request.getContextPath()%>/admin/insertStock">- 상품재고등록</a>
-		</dd>
-				
-		
-
 	</dl>
 
 </div>
@@ -89,8 +83,9 @@
 							<c:forEach var="cvo" items="${clist }">
 								<option value="${cvo.c_no }">${cvo.c_name }</option>
 							</c:forEach>						
-					</select>
+					</select>	
 					</td>
+
 				</tr>
 				<tr>
 					<th>등록일</th>
@@ -108,17 +103,10 @@
 				</tr>
 				<tr>
 					<th>재고여부</th>
-					<td><label for=""><input type="radio" value="" checked="">전체상품</label> <label
-						for=""><input type="radio" value="1">판매</label>
-						<label for=""><input type="radio" value="0">품절</label></td>
-				</tr>
-				<tr>
-					<th>게시여부</th>
-					<td><label for=""><input type="radio" value="" checked="">전체상품</label> <label for=""><input
-							type="radio" value="1">게시함</label> <label for=""><input
-							type="radio" value="0">게시안함</label></td>
-				</tr>
-				
+					<td><label for="p_deltype"><input type="radio" name="p_deltype" value="All" <c:if test="${pagevo.p_deltype =='All'  || pagevo.p_deltype ==null || pagevo.p_deltype ==''}">checked="checked"</c:if>>전체상품</label> <label
+						for="p_deltype"><input type="radio" name="p_deltype" value="Y"<c:if test="${pagevo.p_deltype =='Y' &&pagevo.p_deltype != null &&pagevo.p_deltype != ''}">checked="checked"</c:if>>판매</label>
+						<label for="p_deltype"><input type="radio" name="p_deltype" value="N" <c:if test="${pagevo.p_deltype =='N' &&pagevo.p_deltype != null &&pagevo.p_deltype != ''}">checked="checked"</c:if>>품절</label></td>
+				</tr>				
 				<tr>
 					<th>직접검색</th>
 					<td><select name="searchKey">
@@ -147,9 +135,8 @@
 				</th>
 				<th width="15%">카테고리</th>
 				<th width="5%">개수</th>
-				<th width="15%">가격
-				</th>
-				<th width="6%">게시여부</th>
+				<th width="15%">가격</th>
+				<th width="6%">판매여부</th>
 				<th width="6%">배송료</th>
 				<th width="10%">등록일</th>
 				<th width="8%">수정</th>
@@ -175,17 +162,19 @@
 				<td>1 개</td>
 				<td><span style="display: inline-block; width: 80px; text-align: right;">${vo.price }원
 				</span></td>
-				<td>게시함</td>
+				<td><c:if test="${vo.p_deltype =='Y'}"><span style="color:blue">판매중</span></c:if>
+				<c:if test="${vo.p_deltype =='N'}"><span style="color:red">품절</span></c:if>
+					</td>
 				<td>${vo.delivery_fee }원</td>
 				<td>${vo.p_date }</td>
 				<td><a class="btn btn-dark" type="button" style="width: 70px;color: white" href="<%=request.getContextPath()%>/updateProduct?p_no=${vo.p_no}">수정</a></td>
-				<td><a class="btn btn-dark" type="button" style="width: 70px;color: white" href="<%=request.getContextPath()%>/admin/insertStock?p_no=${vo.p_no}">재고</a></td>
+				<td><a class="btn btn-dark" type="button" style="width: 70px;color: white" href="<%=request.getContextPath()%>/admin/stocklist?p_no=${vo.p_no}">재고</a></td>
 			</tr>
 			</c:forEach>			
 			
 		</tbody>
 	</table>
-	<div style="width : 1400px; clear : left">
+	<div style="width : 100%; clear : left">
 		<ul class="pagination justify-content-center">
 			<c:if test = "${pagevo.pageNum == 1}">
 		    	<li class="page-item disabled"><a class="page-link">&lt;</a></li>

@@ -18,10 +18,36 @@ public class PagingVO {
 	private String s_date;
 	private String e_date;
 	private int userno=0;
+	private String userjointype;
+	private String p_deltype;
+	private String s_deltype;	
 	
 	
 	
-	
+	public String getUserjointype() {
+		return userjointype;
+	}
+
+	public void setUserjointype(String userjointype) {
+		this.userjointype = userjointype;
+	}
+
+	public String getP_deltype() {
+		return p_deltype;
+	}
+
+	public void setP_deltype(String p_deltype) {
+		this.p_deltype = p_deltype;
+	}
+
+	public String getS_deltype() {
+		return s_deltype;
+	}
+
+	public void setS_deltype(String s_deltype) {
+		this.s_deltype = s_deltype;
+	}
+
 	public int getP_no() {
 		return p_no;
 	}
