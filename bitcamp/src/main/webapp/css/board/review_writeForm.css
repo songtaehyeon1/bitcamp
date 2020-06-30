@@ -83,8 +83,9 @@
 
 #writeForm{
 	width : 1400px;
-	height : 581px;
+	height : 863px;
 	border : 1px solid black;
+	/*margin-top : 20px;*/
 }
 
 #writeForm>li:nth-of-type(1), #writeForm>li:nth-of-type(3), #writeForm>li:nth-of-type(5), #writeForm>li:nth-of-type(8), #writeForm>li:nth-of-type(10), #writeForm>li:nth-of-type(12), #writeForm>li:nth-of-type(14), #writeForm>li:nth-of-type(16){
@@ -111,7 +112,6 @@
 
 #writeForm>li:nth-of-type(7){
 	width : 100%;
-	height : 259px;
 	border-bottom : 1px solid black;
 }
 
@@ -123,18 +123,10 @@
 	width : 230px;
 }
 
-#content{
-	width : 1398px;
-	height : 258px;
-	resize : none;
+#titleSelect>select{
+	width : 400px;
 }
 
-#subject{
-	width : 500px;
-	height : 20px;
-}
-
-/* 평점 */
 #star{
 	padding : 0 0 0 20px;
 }

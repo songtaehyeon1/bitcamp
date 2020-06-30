@@ -7,11 +7,10 @@
 	<select id = "allList" resultType="kr.co.bitcamp.board.EnquiryVO">
 		select * from (
 			select * from (
-				select enquiry_no, enquiry_subject, enquiry_hit, to_char(enquiry_writedate, 'YYYY-MM-DD') enquiry_writedate, userid, enquiry_secret, c_no 
-				from board_enquiry b, member m 
-				where b.userno = m.userno 
+				select enquiry_no, enquiry_subject, enquiry_hit, to_char(enquiry_writedate, 'YYYY-MM-DD') enquiry_writedate 
+				from board_enquiry 
 				<if test = "searchKey != null and searchWord != null">
-					and ${searchKey} like '%'||#{searchWord}||'%' 
+					where ${searchKey} like '%'||#{searchWord}||'%' 
 				</if>
 				order by enquiry_no desc) 
 			where rownum <![CDATA[<=]]> #{pageNum} * #{onePageRecord} 
@@ -21,40 +20,8 @@
 	</select>
 	<!-- 한개 리스트 -->
 	<select id = "list" resultType="kr.co.bitcamp.board.EnquiryVO">
-		select e.enquiry_no enquiry_no, e.userno userno, e.p_no p_no, e.c_no c_no, e.enquiry_subject enquiry_subject, e.enquiry_content enquiry_content, 
-		e.enquiry_hit enquiry_hit, to_char(e.enquiry_writedate, 'YYYY-MM-DD') enquiry_writedate, e.enquiry_secret enquiry_secret, m.userid userid 
-		from board_enquiry e, member m 
-		where e.userno = m.userno and enquiry_no = #{param1}
+		select enquiry_no, userno, p_no, enquiry_subject, enquiry_content, enquiry_hit, to_char(enquiry_writedate, 'YYYY-MM-DD') enquiry_writedate, enquiry_secret from board_enquiry where enquiry_no = #{param1}
 	</select>
-	<!-- 한개 리스트 상품(상품이름, 사진, 가격) -->
-	<select id = "listGoods" resultType = "kr.co.bitcamp.board.EnquiryVO">
-		select p_name, p_filename1, price from product where p_no = #{param1} and c_no = #{param2}
-	</select>
-	<!-- 한개 리스트의 댓글 -->
-	<select id = "replyAll" resultType = "kr.co.bitcamp.board.ReplyVO">
-		select e.e_reply_no e_reply_no, e.enquiry_no enquiry_no, e.e_reply_content e_reply_content, 
-		to_char(e.e_reply_writedate, 'YYYY-MM-DD') e_reply_writedate, e.userno userno, m.userid 
-		from enquiry_reply e, member m 
-		where e.userno = m.userno and enquiry_no = #{param1}
-		order by e_reply_no desc
-	</select>
-	<!-- 댓글 한개 가져오기 -->
-	<select id = "replyOne" resultType = "kr.co.bitcamp.board.ReplyVO">
-		select e_reply_no, e_reply_content, userid from enquiry_reply e, member m where e.userno = m.userno and e_reply_no = #{param1}
-	</select>
-	<!-- 댓글 달기 -->
-	<insert id = "replyWrite">
-		insert into enquiry_reply(e_reply_no, enquiry_no, e_reply_content, e_reply_writedate, userno) 
-		values(enquiry_reply_sq.nextval, #{param2}, #{param3}, sysdate, #{param1})
-	</insert>
-	<!-- 댓글 삭제 -->
-	<delete id = "replyDel">
-		delete from enquiry_reply where e_reply_no = #{param}
-	</delete>
-	<!-- 댓글 수정 -->
-	<update id = "replyUpdate">
-		update enquiry_reply set e_reply_content = #{param2} where e_reply_no = #{param1}
-	</update>
 	<!-- 카테고리 가져오기 -->
 	<select id = "enquiryCategory" resultType = "kr.co.bitcamp.board.GoodsVO">
 		select c_no, c_name from category
@@ -65,23 +32,13 @@
 	</select>
 	<!-- 글 쓰기 -->
 	<insert id = "enquiryInsert" parameterType="kr.co.bitcamp.board.EnquiryVO">
-		insert into board_enquiry(enquiry_no, userno, p_no, c_no, enquiry_subject, enquiry_content, enquiry_hit, enquiry_writedate, enquiry_ip, enquiry_secret) 
-		values(enquiry_sq.nextval, #{userno}, #{p_no}, #{c_no}, #{enquiry_subject}, #{enquiry_content}, 0, sysdate, #{enquiry_ip}, #{enquiry_secret})
+		insert into board_enquiry(enquiry_no, userno, p_no, enquiry_subject, enquiry_content, enquiry_hit, enquiry_writedate, enquiry_ip, enquiry_secret) 
+		values(enquiry_sq.nextval, #{userno}, #{p_no}, #{enquiry_subject}, #{enquiry_content}, 0, sysdate, #{enquiry_ip}, #{enquiry_secret})
 	</insert>
 	<!-- 글 수정 -->
 	<update id = "enquiryUpdate" parameterType="kr.co.bitcamp.board.EnquiryVO">
-		update board_enquiry 
-		set c_no = #{c_no} , p_no = #{p_no}, enquiry_subject = #{enquiry_subject}, enquiry_content = #{enquiry_content}, enquiry_secret = #{enquiry_secret} 
-		where enquiry_no = #{enquiry_no}
+		update board_enquiry set enquiry_subject = #{enquiry_subject}, enquiry_content = #{enquiry_content} where enquiry_no = #{enquiry_no}
 	</update>
-	<!-- 글 수정 카테고리 -->
-	<select id = "enquiryUpdateCate" resultType = "String">
-		select c_no from product where p_no = #{param1}
-	</select>
-	<!-- 글 수정 상품 -->
-	<select id = "enquiryUpdateGoods" resultType = "kr.co.bitcamp.board.GoodsVO">
-		select p_no, c_no, p_name from product where c_no = #{param1}
-	</select>
 	<!-- 글 삭제 -->
 	<delete id = "enquiryDelete">
 		delete from board_enquiry where enquiry_no = #{no}

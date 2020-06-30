@@ -121,8 +121,8 @@
 				<li><a href="#">
 						<p class="main-menu-p">ABOUT</p>
 				</a></li>
-				<li><a href="/bitcamp/boardNotice">
-						<p class="main-menu-p">COMMUNITY</p>
+				<li><a href="#">
+						<p class="main-menu-p">CONTACT</p>
 				</a></li>
 				<li>
 					<div id="login-box">

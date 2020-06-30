@@ -24,18 +24,17 @@
 		$("#categorys a").click(function() {
 			var url = "<%=request.getContextPath()%>/admin/selectCategory";
 			var params = "c_no="+$(this).attr('value');
+			console.log(params);
 			$.ajax({
 				type : "GET",
 				url : url,
 				data : params,
 				success : function(result) {
 					if(result.c_no !=null){
-					$("#c_name").attr("value",result.c_name);
-					$("#c_no").attr("value",result.c_no);
-					$("#c_cnt").attr("value",result.cnt);
-					$("#c_noView").html(result.c_no)
-					$("#c_name1").html(result.c_name)
-					$("#c_cntView").html(result.cnt+"개가 등록되어있습니다.")
+					$("#ca_name").attr("value",result.c_name);
+					$("#c_no").html(result.c_no)
+					$("#c_name").html(result.c_name)
+					$("#c_cnt").html(result.cnt+"개가 등록되어있습니다.")
 					}
 				},
 				error : function(e) {
@@ -73,7 +72,7 @@
 		</dd>
 		<dt>상품관리</dt>
 		<dd>
-			<a href="<%=request.getContextPath()%>/admin/insertProduct">- 상품등록</a>
+			<a href="">- 상품등록</a>
 		</dd>
 		<dd>
 			<a href="<%=request.getContextPath()%>/admin/product">- 상품리스트</a>
@@ -88,7 +87,7 @@
 <div id="admin_contents">
 	<h3>카테고리 관리</h3>
 
-	<form method="get" action="<%=request.getContextPath()%>/admin/updateCategory">
+	<form name="f" method="get">
 		<table border="0" width="100%" cellpadding="0" cellspacing="0">
 			<tbody>
 				<tr>
@@ -133,21 +132,19 @@
 													<!-- 카테고리 수정 -->
 													<tr>
 														<th width="15%">현재 카테고리</th>
-														<td id="c_name1"></td>
+														<td id="c_name"></td>
 													</tr>
 													<tr>
 														<th>등록 상품수</th>
-														<td id="c_cntView"></td>
-														<input type="hidden" id="c_cnt" name="cnt" value=""/>
+														<td id="c_cnt"></td>
 													</tr>
 													<tr>
 														<th>분류코드</th>
-														<td id="c_noView"></td>
-														<input type="hidden" id="c_no" name="c_no" value=""/>
+														<td id="c_no"></td>
 													</tr>
 													<tr>
 														<th>카테고리명</th>
-														<td><input type="text" id="c_name" name="c_name"
+														<td><input type="text" id="ca_name" name="ca_name"
 															class="text"></td>
 													</tr>
 

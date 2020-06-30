@@ -25,13 +25,11 @@
 		<li>작성날짜 : ${list.notice_writedate}&emsp;&emsp;&emsp;조회수 : ${list.notice_hit}<hr>${list.notice_content}</li>
 	</ul>
 	<div id = "boardGo">
-		<button onclick = "location.href = '/bitcamp/boardNotice?pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>';">목록</button>
-		<c:if test = "${adminStatus == 'Y'}">
-			<div class = "boardGo_right">
-				<button class = "boardList_edit" onclick = "location.href = '/bitcamp/notice_editForm?no=${list.notice_no}';">수정</button>
-				<button class = "boardList_del" onclick = "formDelete();">삭제</button>
-			</div>
-		</c:if>
+		<button onclick = "location.href = '/bitcamp/boardNotice';">목록</button>
+		<div class = "boardGo_right">
+			<button class = "boardList_edit" onclick = "location.href = '/bitcamp/notice_editForm?no=${list.notice_no}';">수정</button>
+			<button class = "boardList_del" onclick = "formDelete();">삭제</button>
+		</div>
 	</div>
 	<div id = "listMove">
 		<ul>
@@ -51,7 +49,7 @@
 				<li class = "pointer" onclick = "location.href = '/bitcamp/notice_listForm?no=${pnvo.leadNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">▼&emsp;이전글</li>
 			</c:if>
 			<c:if test = "${pnvo.leadSubject == '이전글'}">
-				<li>▼&emsp;이전글</li>
+				<li>▲&emsp;이전글</li>
 			</c:if>
 			<c:if test = "${pnvo.leadSubject != '이전글'}">
 				<li class = "pointer" onclick = "location.href = '/bitcamp/notice_listForm?no=${pnvo.leadNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">${pnvo.leadSubject}</li>
@@ -61,5 +59,4 @@
 			</c:if>
 		</ul>
 	</div>
-	<div style = "width : 1400px; height : 100px; float : left;"></div>
 </div>

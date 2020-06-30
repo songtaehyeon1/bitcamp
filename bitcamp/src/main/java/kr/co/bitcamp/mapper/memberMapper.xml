@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.bitcamp.member.MemberDAOImp">
 	<select id="loginCheck" parameterType="kr.co.bitcamp.member.MemberVO" resultType="kr.co.bitcamp.member.MemberVO">
-		select userid, userpwd, username, userno from member where userid=#{userid} and userpwd=#{userpwd}
+		select userid, userpwd, username from member where userid=#{userid} and userpwd=#{userpwd}
 	</select>
 
 	<select id="idFind" resultType="kr.co.bitcamp.member.MemberVO">

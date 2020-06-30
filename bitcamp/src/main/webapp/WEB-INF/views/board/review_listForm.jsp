@@ -15,12 +15,6 @@
 			$(this).height(1).height($(this).prop('scrollHeight') + 12);
 			$('.count').html(content.length + '/3000');
 		});
-		
-		var rating = "${vo.review_rating}";
-		alert(rating);
-		for(var i=0; i<rating * 2; i++){
-	    	$(".star").eq(i).addClass("on");
-		}
 	});
 </script>
 <div class = "container" id = "review_listFormBody">
@@ -33,36 +27,18 @@
 	</ul>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<div id = "goods">
-		<img src = "/bitcamp/resources/product/${vo.p_filename1}">
-		<span>${vo.p_name}</span>
-		<span>${vo.price}원</span>
+		<img src = "/bitcamp/img/상품1.png">
+		<span>상품명</span>
+		<span>20,000원</span>
 		<button onclick = "location.href = '#'">상품상세보기</button>
 	</div>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<ul id = "listForm">
 		<li>제목</li>
-		<li>${vo.review_subject}</li>
+		<li>title</li>
 		<li>작성자</li>
-		<li>${vo.userid}</li>
-		<li>
-			평점 <div class="star-box">
-					<span class="star star_left"></span>
-					<span class="star star_right"></span>
-					
-					<span class="star star_left"></span>
-					<span class="star star_right"></span>
-					
-					<span class="star star_left"></span>
-					<span class="star star_right"></span>
-					
-					<span class="star star_left"></span>
-					<span class="star star_right"></span>
-					
-					<span class="star star_left"></span>
-					<span class="star star_right"></span>
-				</div>&emsp;&emsp;&emsp;작성일 ${vo.review_writedate}&emsp;&emsp;&emsp;추천 ${vo.review_recommend}&emsp;&emsp;&emsp;
-			조회수 ${vo.review_hit}<hr>${vo.review_content}
-		</li>
+		<li>id</li>
+		<li>평점&emsp;&emsp;&emsp;작성일&emsp;&emsp;&emsp;추천&emsp;&emsp;&emsp;조회수<hr>내용</li>
 		<li>첨부파일</li>
 		<li><span>asdasd.jpg</span><span>awewgewg.png</span><span>wkjgbwekew.jpg</span><span>ajsdnajdaldnsa.jpg</span><span>akjdsnsaljdnsadasd.png</span></li>
 	</ul>
