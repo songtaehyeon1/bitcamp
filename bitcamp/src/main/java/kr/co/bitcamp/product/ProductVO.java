@@ -10,6 +10,7 @@ public class ProductVO {
 	private String p_name;//상품명
 	private int price;//가격	
 	private int delivery_fee;//배송비
+	private int delivery_fee_direct;//배송비 직접입력
 	private String p_commnet;//상품설명
 	private String p_filename1;//상품사진1
 	private String p_filename2;//상품사진2
@@ -191,6 +192,12 @@ public class ProductVO {
 	}
 	public void setLimitQuantity(int limitQuantity) {
 		this.limitQuantity = limitQuantity;
+	}
+	public int getDelivery_fee_direct() {
+		return delivery_fee_direct;
+	}
+	public void setDelivery_fee_direct(int delivery_fee_direct) {
+		this.delivery_fee_direct = delivery_fee_direct;
 	}
 	
 }
