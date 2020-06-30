@@ -102,7 +102,7 @@
 
 
 
-	<form method="get" id="form" action="/admin/memberDel">
+	<form method="get" id="form" action="/bitcamp/admin/memberDel">
 		<h4 class="allgoodsnum">
 			총 <span style="color: #d1215f; font-weight: bold;">${fn:length(list) }</span>명의 회원이
 			있습니다.
@@ -137,7 +137,12 @@
 						<td>${vo.userlogdate }</td>
 						<td>${vo.regdate }</td>
 					</tr>
-				</c:forEach>				
+				</c:forEach>
+				<c:if test="${fn:length(list)==0 }">
+					<tr>
+						<th colspan="15" style="background: #fff;">등록된 데이터가 없습니다.</th>
+					</tr>
+				</c:if>				
 			</tbody>
 		</table>
 
