@@ -195,7 +195,6 @@ public class MemberController {
 		
 		MemberDAOImp dao = sqlSession.getMapper(MemberDAOImp.class);
 		int result = dao.pwdChange(userid, userpwd);
-		System.out.println(result);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("result", result);
