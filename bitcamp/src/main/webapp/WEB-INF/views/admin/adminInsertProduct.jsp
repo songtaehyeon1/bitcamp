@@ -28,13 +28,11 @@
 		</dd>
 		<dt>상품관리</dt>
 		<dd>
+			<a href="<%=request.getContextPath()%>/admin/product">- 상품리스트</a>
+		</dd>	
+		<dd>
 			<a href="<%=request.getContextPath()%>/admin/insertProduct">- 상품등록</a>
 		</dd>
-		<dd>
-			<a href="<%=request.getContextPath()%>/admin/product">- 상품리스트</a>
-		</dd>		
-		
-
 	</dl>
 </div>
 

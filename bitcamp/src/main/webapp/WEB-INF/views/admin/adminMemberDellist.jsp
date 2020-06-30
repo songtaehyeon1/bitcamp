@@ -126,7 +126,7 @@
 		</div>
 	</form>
 	<!-- 페이징 -->
-	<div style="width: 1400px; clear: left">
+	<div style="width: 100%; clear: left">
 			<ul class="pagination justify-content-center">
 				<c:if test="${pagevo.pageNum == 1}">
 					<li class="page-item disabled"><a class="page-link">&lt;</a></li>
