@@ -25,14 +25,14 @@
 </head>
 <body >
 
-
+<label id="p_no_label" style="display:none">${product.p_no }</label>
 	<div class="container" id="productWrap" style="margin-top:100px">
 	
 		<!-- 제품 사진,옵션 -->
 		<div class="row">
 			<!-- 왼쪽 제품 사진  -->
 			<div class="col-6" id="productImage" class="productImage" style="text-align:center">
-				<img class="bigImage" src="/bitcamp/upload/${product.p_filename1 }">
+				<img class="bigImage" src="/bitcamp/upload/${product.p_filename1 }" onerror="this.src='/bitcamp/resources/products/tent1.png'">
 				<div class="listImage_wrap" id="listImage_wrap" >
 						<button type="button" class="prevBtn" >이전</button>
 						<button type="button" class="nextBtn" >다음</button>
@@ -40,19 +40,19 @@
 					<div class="listImage" >
 						<ul style="width:1100px;position:absolute;left:10px;top:0px;">
 							<li class="image_li"><c:if test="${product.p_filename1!=null }">
-								<img class="thumbImage" src="/bitcamp/upload/${product.p_filename1 }"><br>
+								<img class="thumbImage" src="/bitcamp/upload/${product.p_filename1 }" onerror="this.src='/bitcamp/resources/products/tent1.png'"><br>
 							</c:if></li>
 							<li class="image_li"><c:if test="${product.p_filename2!=null }">
-								<img class="thumbImage" src="/bitcamp/upload/${product.p_filename2 }"><br>
+								<img class="thumbImage" src="/bitcamp/upload/${product.p_filename2 }" onerror="this.src='/bitcamp/resources/products/tent1.png'"><br>
 							</c:if></li>
 							<li class="image_li"><c:if test="${product.p_filename3!=null }">
-								<img class="thumbImage" src="/bitcamp/upload/${product.p_filename3 }"><br>
+								<img class="thumbImage" src="/bitcamp/upload/${product.p_filename3 }" onerror="this.src='/bitcamp/resources/products/tent1.png'"><br>
 							</c:if></li>
 							<li class="image_li"><c:if test="${product.p_filename4!=null }">
-								<img class="thumbImage" src="/bitcamp/upload/${product.p_filename4 }"><br>
+								<img class="thumbImage" src="/bitcamp/upload/${product.p_filename4 }" onerror="this.src='/bitcamp/resources/products/tent1.png'"><br>
 							</c:if></li>
 							<li class="image_li"><c:if test="${product.p_filename5!=null }">
-								<img class="thumbImage" src="/bitcamp/upload/${product.p_filename5 }"><br>
+								<img class="thumbImage" src="/bitcamp/upload/${product.p_filename5 }" onerror="this.src='/bitcamp/resources/products/tent1.png'"><br>
 							</c:if></li>
 						</ul>
 					</div>
@@ -80,19 +80,19 @@
 				<hr>
 			<!-- 옵션 선택 -->
 				<div class="optionChoice" onchange="optionChoice()">
-<form method="post" action="/bitcamp/orderDirect?p_no=${product.p_no }">
+<form method="post">
 
 
 					<ul>
 						<li><span class="spanWidth150 col-4">상품명</span>${product.p_name}</li>
+						
 						<li><span class="spanWidth150 col-4">배송방법</span>택배</li>
 						<li><span class="spanWidth150 col-4">배송비</span>${product.delivery_fee }원</li>
 						<li><span class="spanWidth150 col-4">배송비결제</span>
 						<select class="col-8" id="product_payment" name="product_payment">
 								<option value disabled selected class="optionvaluedisabled">결제 방법을 선택해주세요</option>
-								<option value="방문 수령">방문 수령</option>
-								<option value="주문시 결제">주문시 결제</option>
-								<option value="착불">착불</option>
+								<option value="0">방문 수령</option>
+								<option value="1">주문시 결제</option>
 						</select></li>
 						<li>
 							<span class="spanWidth150 col-4">대여기간</span>
@@ -113,7 +113,7 @@
 						<!-- 대여 시작일 -->
 						<li class="row" id="borrow_start_wrap" style="margin:0;display:none">
 							<span class="spanWidth150" style="padding-left:15px;padding-right:15px">대여 시작일</span>
-							<input id="borrow_start" name="orderStart" onkeydown="donotusekeyboard(event)" onchange="changeEndDay(this.value);optionChoice()"/>
+							<input id="borrow_start" name="orderStart" onkeydown="donotusekeyboard(event)" onchange="changeEndDay(this.value);optionChoice();availableChk()"/>
 							<script>
 								var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 								$('#borrow_start').datepicker({
@@ -165,21 +165,32 @@
 							<button class="btn plus productQty" type="button" ><i class="icon-plus" ></i></button>
 						</div>
 						<div class="quantity_msg">
-							<span>9개까지 구매 가능 합니다.</span>
+							<span><label id="limitQuantity">(최대수량)</label>개까지 구매 가능 합니다.</span>
+							<input type="hidden" name="limitQuantity" value="">
 						</div>
 					</div>
 					<div class="container"><!-- 구매,장바구니,관심상품 버튼들 -->
 					<!-- 대여시작일,대여종료일,수량,가격,배송료 -->
-						<input type="submit" id="buySubmit" style="display:none;">
+					<input type="hidden" name="p_filename1" value="${product.p_filename1 }">
+					<input type="hidden" name="delivery_fee" value="${product.delivery_fee }">
+					<input type="hidden" name="p_name" value= "${product.p_name}" >
+					<input type="hidden" name="price" value= "${product.price}" >
+						<input type="submit" id="buySubmit" style="display:none;"  formaction="/bitcamp/orderDirect?p_no=${product.p_no }">
 						<a class="buyRightNow" style="color:#fff"><label for="buySubmit" style="width: 100%;cursor: pointer;">바로 구매하기</label></a>
-						<a class="cartAndInterest"style="margin-right:2%" >장바구니 담기</a>
-						<a class="cartAndInterest">관심상품 등록</a>
+					
+						<input type="submit" id="putCart" style="display:none;"  formaction="/bitcamp/productCart?p_no=${product.p_no }">
+						<a class="cartAndInterest buyRightNow"style="margin-right:2%" ><label for="putCart" style="width: 100%;cursor: pointer;">장바구니 담기</label></a>
+						
+						<input type="submit" id="putInterest" style="display:none;"  formaction="/bitcamp/productInterest?p_no=${product.p_no }">
+						<a class="cartAndInterest" ><label for="putInterest" style="width: 100%;cursor: pointer;">관심상품 등록</label></a>
 					</div>
 </form>
 				</div>
 			</div>
 		</div>
 	</div><!-- 제품 사진,옵션 끝 -->
+	
+	
 	
 	<!-- 탭메뉴들 시작 -->
 	<div class="container" id="tab_wrap_parent" style="margin:0 auto;text-align:center;padding-left: 0px; padding-right: 0px;">

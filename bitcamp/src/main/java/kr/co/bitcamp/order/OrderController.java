@@ -27,92 +27,141 @@ public class OrderController {
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
+	//ì¥ë°”êµ¬ë‹ˆì—ì„œ êµ¬ë§¤í•˜ê¸°
+	@RequestMapping(value="/cartOrder" , method = RequestMethod.POST)
+	public ModelAndView cartOrder(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		ArrayList<ProductVO> pvolist = new ArrayList<ProductVO>();
+		String[] p_noList = req.getParameterValues("p_no");
+		String[] p_name = req.getParameterValues("p_name");
+		String[] orderStart = req.getParameterValues("orderStart");
+		String[] orderEnd = req.getParameterValues("orderEnd");
+		String[] borrowPeriod = req.getParameterValues("borrowPeriod");
+		String[] filename = req.getParameterValues("filename");
+		String[] price = req.getParameterValues("price");
+		String[] quantity = req.getParameterValues("quantity");
+		String[] delivery_fee = req.getParameterValues("delivery_fee");
+		for(int i =0;i<p_noList.length;i++) {
+			ProductVO vo = new ProductVO();
+			vo.setP_no(Integer.parseInt(p_noList[i]));
+			vo.setP_name(p_name[i]);
+			vo.setOrderStart(orderStart[i]);
+			vo.setOrderEnd(orderEnd[i]);
+			vo.setProduct_borrow_period(borrowPeriod[i]);
+			vo.setP_filename1(filename[i]);
+			vo.setPrice(Integer.parseInt(price[i]));
+			vo.setDelivery_fee(Integer.parseInt(delivery_fee[i]));
+			vo.setCurrentQty(Integer.parseInt(quantity[i]));
+			pvolist.add(i, vo);
+		}
+		for(int i =0;i<p_noList.length;i++) {
+			System.out.println(pvolist.get(i).getP_no());
+			System.out.println(pvolist.get(i).getCurrentQty());
+		}
+		
+		
+		mav.addObject("cart",pvolist);
+		mav.setViewName("order/orderForm_cart");
+		return mav;
+	}
 	
+	//ë°”ë¡œ êµ¬ë§¤í•˜ê¸°
 	@RequestMapping(value="/orderDirect" , method = RequestMethod.POST)
 	public ModelAndView order(HttpServletRequest req,int p_no,ProductVO vo) {
 		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
-
 		ModelAndView mav = new ModelAndView();
+		//íŒŒë¼ë¯¸í„°ê°’ì„ ë°›ì•„ì™€ì„œ voì— ì €ì¥í•¨.
+		int delivery_fee = Integer.parseInt(req.getParameter("delivery_fee")); //ë°°ì†¡ë¹„
+		String orderStart = req.getParameter("orderStart");//ëŒ€ì—¬ê¸°ê°„ ì‹œì‘ë‚ 
+		String orderEnd = req.getParameter("orderEnd");//ëŒ€ì—¬ê¸°ê°„ ë§ˆì§€ë§‰ë‚ 
+		String borrowPeriod = req.getParameter("product_borrow_period");//ëŒ€ì—¬ê¸°ê°„
+		String filename = req.getParameter("p_filename1");//ì‚¬ì§„íŒŒì¼1
+		int limitQuantity = Integer.parseInt(req.getParameter("limitQuantity"));//ì œí’ˆ ìµœëŒ€ ëŒ€ì—¬ ê°€ëŠ¥ ê°¯ìˆ˜
+		int price = Integer.parseInt(req.getParameter("price"));//ëŒ€ì—¬ê°€ê²©
+		vo.setDelivery_fee(delivery_fee);
+		vo.setOrderStart(orderStart);
+		vo.setOrderEnd(orderEnd);
+		vo.setProduct_borrow_period(borrowPeriod);
+		vo.setP_filename1(filename);
+		vo.setPrice(price);
+		vo.setLimitQuantity(limitQuantity);
+
+		int zero = 0;
+		System.out.println(req.getParameter("product_payment"));
+		if(Integer.parseInt(req.getParameter("product_payment"))==0) {
+			vo.setDelivery_fee(zero);
+		}else {
+			vo.setDelivery_fee(delivery_fee);
+		}
+		vo.setTotal_price(vo.getDelivery_fee(), price);//ì „ì²´ ê°€ê²©
+		vo.setPeriod(orderStart, orderEnd, borrowPeriod);//ê¸°ê°„ yyyy-mm-dd~yyyy-mm-dd(xë°•xì¼)
 		
-		mav.addObject("day",vo);
+		mav.addObject("vo",vo);
 		mav.addObject("product",dao.productView(p_no));
 		mav.setViewName("order/orderForm");
 		return mav;
-		/*		HttpSession ses = req.getSession();
-		ProductVO vo = new ProductVO();
-		ProductVO vo2 = new ProductVO();
-		vo.setP_no(1);
-		vo.setOrderStart("20200701");
-		vo.setOrderEnd("20200703");
-		ArrayList<ProductVO> list = new ArrayList<ProductVO>();
-		list.add(vo);
-		vo2.setP_no(2);
-		vo2.setOrderStart("20200701");
-		vo2.setOrderEnd("20200703");
-		list.add(vo2);
-		ses.setAttribute("productList", list);	*/
 	}
 	
 	
 	
-	@RequestMapping("/orderOk")
-	public ModelAndView orderOk(HttpServletRequest req) {
-		ModelAndView mav = new ModelAndView();
-		OrderDAOImp dao = sqlSession.getMapper(OrderDAOImp.class);
-		HttpSession ses = req.getSession();
-		ArrayList<ProductVO> pvolist =(ArrayList)ses.getAttribute("productList"); //Àå¹Ù±¸´Ï¿¡ ´ã±ä Ç°¸ñ ¸®½ºÆ®
-		ArrayList<ProductVO> pvolist2 =(ArrayList)ses.getAttribute("productList"); //Àå¹Ù±¸´Ï¿¡ ´ã±ä Ç°¸ñ ¸®½ºÆ®
-		
-		//Àç°í È®ÀÎ
-		for (int i = 0; i < pvolist.size(); i++) { // Ç°¸ñ ¸®½ºÆ®ÀÇ °¹¼ö¸¸Å­ ¹İº¹
-			 ProductVO pvo = pvolist.get(i); // Ç°¸ñ ¸®½ºÆ®ÀÇ i ¹øÂ°
-			 int orderStart = Integer.parseInt(pvo.getOrderStart()); //i¹øÂ° »óÇ°ÀÇ ¿À´õ ½ÃÀÛ ³¯Â¥
-			 int orderEnd = Integer.parseInt(pvo.getOrderEnd()); //i¹øÂ° »óÇ°ÀÇ ¿À´õ ³¡ ³¯Â¥
-			 ArrayList<Integer> s_noList = (ArrayList<Integer>) dao.allSelectProduct(pvo.getP_no()); //i¹øÂ° »óÇ°ÀÇ Àç°í ÄÚµå ¸®½ºÆ®
-			 for (int j = 0; j < s_noList.size(); j++) { // i¹øÂ° »óÇ°ÀÇ Àç°í ÄÚµå ¸®½ºÆ® ¸¸Å­ ¹İº¹
-				 ArrayList<String> dateList = (ArrayList<String>) dao.allSelectDate(s_noList.get(j));// i¹øÂ° »óÇ°ÀÇ Àç°í ÄÚµå ¸®½ºÆ®ÀÇ j¹øÂ° Àç°íÄÚµåÀÇ ¿¹¾à³¯Â¥ ¸®½ºÆ® ¾ò¾î¿È
-				 int resultCnt = 0;
-				 for(int k = 0 ; k < dateList.size() ; k++) {
-					 for (int l = orderStart; l <= orderEnd; l++) {
-						if(Integer.parseInt(dateList.get(k)) == l) {
-							resultCnt++;
-						}
-					 }
-				 }
-				 
-				 if(resultCnt>0){
-					 s_noList.remove(j);
-				 }
-				 resultCnt =0;
-			}
-			pvo.setProductCount(s_noList.size()); // °¹¼ö 
-			pvo.setS_noList(s_noList); // °¡´ÉÇÑ Àç°íÄÚµå ¸®½ºÆ®
-		}		
-		
-		boolean compareResult = true;
-		for (int i = 0; i < pvolist.size(); i++) {
-			ProductVO pvo = pvolist.get(i);
-			ProductVO pvo2 = pvolist2.get(i);
-			if(pvo.getProductCount() != pvo2.getProductCount()) {
-				compareResult = false;
-			}			
-		}
-		
-		if(compareResult == true) {
-			mav.setViewName("order/orderSuccess");
-			
-		}else {
-			mav.setViewName("order/orderFail");
-		}
-		
-		
+	   @RequestMapping("/orderOk")
+	   public ModelAndView orderOk(HttpServletRequest req) {
+	      ModelAndView mav = new ModelAndView();
+	      OrderDAOImp dao = sqlSession.getMapper(OrderDAOImp.class);
+	      HttpSession ses = req.getSession();
+	      ArrayList<ProductVO> pvolist =(ArrayList)ses.getAttribute("productList"); //ì¥ë°”êµ¬ë‹ˆì— ë‹´ê¸´ í’ˆëª© ë¦¬ìŠ¤íŠ¸
+	      ArrayList<ProductVO> pvolist2 =(ArrayList)ses.getAttribute("productList"); //ì¥ë°”êµ¬ë‹ˆì— ë‹´ê¸´ í’ˆëª© ë¦¬ìŠ¤íŠ¸
+	      
+	      //ì¬ê³  í™•ì¸
+	      for (int i = 0; i < pvolist.size(); i++) { // í’ˆëª© ë¦¬ìŠ¤íŠ¸ì˜ ê°¯ìˆ˜ë§Œí¼ ë°˜ë³µ
+	          ProductVO pvo = pvolist.get(i); // í’ˆëª© ë¦¬ìŠ¤íŠ¸ì˜ i ë²ˆì§¸
+	          int orderStart = Integer.parseInt(pvo.getOrderStart()); //ië²ˆì§¸ ìƒí’ˆì˜ ì˜¤ë” ì‹œì‘ ë‚ ì§œ
+	          int orderEnd = Integer.parseInt(pvo.getOrderEnd()); //ië²ˆì§¸ ìƒí’ˆì˜ ì˜¤ë” ë ë‚ ì§œ
+	          ArrayList<Integer> s_noList = (ArrayList<Integer>) dao.allSelectProduct(pvo.getP_no()); //ië²ˆì§¸ ìƒí’ˆì˜ ì¬ê³  ì½”ë“œ ë¦¬ìŠ¤íŠ¸
+	          for (int j = 0; j < s_noList.size(); j++) { // ië²ˆì§¸ ìƒí’ˆì˜ ì¬ê³  ì½”ë“œ ë¦¬ìŠ¤íŠ¸ ë§Œí¼ ë°˜ë³µ
+	             ArrayList<String> dateList = (ArrayList<String>) dao.allSelectDate(s_noList.get(j));// ië²ˆì§¸ ìƒí’ˆì˜ ì¬ê³  ì½”ë“œ ë¦¬ìŠ¤íŠ¸ì˜ jë²ˆì§¸ ì¬ê³ ì½”ë“œì˜ ì˜ˆì•½ë‚ ì§œ ë¦¬ìŠ¤íŠ¸ ì–»ì–´ì˜´
+	             int resultCnt = 0;
+	             for(int k = 0 ; k < dateList.size() ; k++) {
+	                for (int l = orderStart; l <= orderEnd; l++) {
+	                  if(Integer.parseInt(dateList.get(k)) == l) {
+	                     resultCnt++;
+	                  }
+	                }
+	             }
+	             
+	             if(resultCnt>0){
+	                s_noList.remove(j);
+	             }
+	             resultCnt =0;
+	         }
+	         pvo.setProductCount(s_noList.size()); // ê°¯ìˆ˜ 
+	         pvo.setS_noList(s_noList); // ê°€ëŠ¥í•œ ì¬ê³ ì½”ë“œ ë¦¬ìŠ¤íŠ¸
+	      }      
+	      
+	      boolean compareResult = true;
+	      for (int i = 0; i < pvolist.size(); i++) {
+	         ProductVO pvo = pvolist.get(i);
+	         ProductVO pvo2 = pvolist2.get(i);
+	         if(pvo.getProductCount() != pvo2.getProductCount()) {
+	            compareResult = false;
+	         }         
+	      }
+	      
+	      if(compareResult == true) {
+	         mav.setViewName("order/orderSuccess");
+	         
+	      }else {
+	         mav.setViewName("order/orderFail");
+	      }
+	      
+	      
 
 
 
-		
-		
-		return mav;
+	      
+	      
+	      return mav;
+	   }
+	   
+	   
 	}
-	
-	
-}

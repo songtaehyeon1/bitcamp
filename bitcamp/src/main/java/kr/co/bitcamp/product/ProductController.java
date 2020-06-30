@@ -1,26 +1,20 @@
 package kr.co.bitcamp.product;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.JsonObject;
+import kr.co.bitcamp.order.OrderDAOImp;
 
 @Controller
 public class ProductController {
@@ -34,14 +28,87 @@ public class ProductController {
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
-////////////////////////장바구니
+
+	// 장바구니 추가
 	@RequestMapping(value = "/productCart")
-	public String productInterest() {
+	public ModelAndView productCart(ProductVO vo, HttpSession session, HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+		ArrayList<ProductVO> productList = (ArrayList<ProductVO>) (session.getAttribute("productList"));
+		// productList가 없을경우 새로 만들어줌
+		if (productList == null) {
+			productList = new ArrayList<ProductVO>();
+			session.setAttribute("productList", productList);
+		}
+		// 파라미터값을 받아와서 vo에 저장함.
+		int p_no = Integer.parseInt(request.getParameter("p_no")); // 제품번호
+		String p_name = request.getParameter("p_name"); // 제품명
+		int delivery_fee = Integer.parseInt(request.getParameter("delivery_fee")); // 배송비
+		String orderStart = request.getParameter("orderStart");// 대여기간 시작날
+		String orderEnd = request.getParameter("orderEnd");// 대여기간 마지막날
+		String borrowPeriod = request.getParameter("product_borrow_period");// 대여기간
+		String filename = request.getParameter("p_filename1");// 사진파일1
+		int price = Integer.parseInt(request.getParameter("price"));// 대여가격
+		int Qty = Integer.parseInt(request.getParameter("currentQty"));// 대여 갯수
+		int limitQuantity = Integer.parseInt(request.getParameter("limitQuantity"));//제품 최대 대여 가능 갯수
+		vo.setP_no(p_no);
+		vo.setP_name(p_name);
+		vo.setOrderStart(orderStart);
+		vo.setOrderEnd(orderEnd);
+		vo.setProduct_borrow_period(borrowPeriod);
+		vo.setP_filename1(filename);
+		vo.setPrice(price);
+		vo.setCurrentQty(Qty);
+		vo.setLimitQuantity(limitQuantity);
+		int zero = 0;
+		if (Integer.parseInt(request.getParameter("product_payment")) == 0) {
+			vo.setDelivery_fee(zero);
+		} else {
+			vo.setDelivery_fee(delivery_fee);
+		}
+
+		vo.setTotal_price(vo.getDelivery_fee(), price);// 전체 가격
+		vo.setPeriod(orderStart, orderEnd, borrowPeriod);// 기간 yyyy-mm-dd~yyyy-mm-dd(x박x일)
+
+		// 장바구니에 기존 상품이 있는지 없는지 검사
+		for (int i = 0; i < productList.size(); i++) {
+			if (p_no == productList.get(i).getP_no()) {
+				productList.remove(i);
+			}
+		}
+		// 세션값 추가
+		productList.add(vo);
+		session.setAttribute("productList", productList);
+
+		// mav 설정
+		mav.setViewName("redirect:productCartList");
+		return mav;
+	}
+
+	// 장바구니 리스트 이동
+	@RequestMapping(value = "/productCartList")
+	public String productCartList() {
 		return "product/productCart";
 	}
-	
-	
-	
+
+	// 장바구니 삭제
+	@RequestMapping(value = "/deleteCart")
+	public String deleteCart(HttpSession session, HttpServletRequest request) {
+		int p_no = Integer.parseInt(request.getParameter("p_no"));
+		ArrayList<ProductVO> productList = (ArrayList<ProductVO>) (session.getAttribute("productList"));
+		for (int i = 0; i < productList.size(); i++) {
+			if (p_no == productList.get(i).getP_no()) {
+				productList.remove(i);
+			}
+		}
+		return "product/productCart";
+	}
+
+////////////////////////관심상품
+	@RequestMapping(value = "/productInterest")
+	public String productInterest() {
+		return "product/productInterest";
+	}
+
 ////////////////////////상품 상세글
 	@RequestMapping("/productView")
 	public ModelAndView productView(int p_no) {
@@ -51,6 +118,7 @@ public class ProductController {
 		mav.setViewName("product/productView");
 		return mav;
 	}
+
 /////////////////////////상품 리스트
 	@RequestMapping("/productList")
 	public ModelAndView productList() {
@@ -61,162 +129,7 @@ public class ProductController {
 		return mav;
 	}
 
-	@RequestMapping("/productOrder")
-	public String productOrder() {
-		return "product/productOrderForm";
-	}
 
-	@RequestMapping(value = "/productWrite")
-	public String productWrite() {
-		return "product/productWrite";
-	}
-/////////////////////////////////////// 상품글 쓰기
-	@RequestMapping(value = "/productWirteOk", method = RequestMethod.POST)
-	public ModelAndView productWriteOk(ProductVO vo, HttpServletRequest req) {
-		// request객체로 --> MultipartHttpServletRequest생성하여 파일 업로드 처리를 한다.
-		MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
-		List<MultipartFile> fileList = mr.getFiles("p_filename");
-		String p_filenames[] = new String[5];
-		String path = req.getSession().getServletContext().getRealPath("/upload");
-		File folder = new File(path);
-		if (!folder.exists()) {
-			try {
-				folder.mkdir();// 폴더 안만들었을시 폴더 생성
-			} catch (Exception e) {
-				System.out.println("파일 저장 폴더를 생성하는데 실패함." + e.getMessage());
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println("폴더가 이미 존재해서 따로 안만들어도 됨.");
-		}
-		int idx = 0;
-		if (fileList != null) {
-			for (int i = 0; i < fileList.size(); i++) {// 업로드할 파일의 수만큼 반복처리
-				MultipartFile mf = fileList.get(i);
-				// 업로드한 파일명
-				String fname = mf.getOriginalFilename();
-				if (fname != null && !fname.equals("")) {
-					// 파일명 변경하기
-					File f = new File(path, fname);
-
-					if (f.exists()) {// 파일이 존재함
-						for (int renameNum = 1;; renameNum++) {
-							String orgFilename = fname.substring(0, fname.lastIndexOf("."));// 파일명 (확장자 뺀)
-							String orgExt = fname.substring(fname.lastIndexOf(".") + 1);// 확장자명
-							f = new File(path, orgFilename + "(" + renameNum + ")" + "." + orgExt);
-
-							if (!f.exists()) {// 파일이 존재 안하면
-								fname = orgFilename + "(" + renameNum + ")" + "." + orgExt;
-								break;
-							}
-						}
-					}
-					try {
-						mf.transferTo(new File(path, fname));
-					} catch (Exception e) {
-						e.printStackTrace();
-						System.out.println("파일 업로드 에러" + e.getMessage());
-					}
-					p_filenames[idx++] = fname;
-				}
-			}
-			// vo에 파일명 저장
-
-			vo.setP_filename1(p_filenames[0]);
-			vo.setP_filename2(p_filenames[1]);
-			vo.setP_filename3(p_filenames[2]);
-			vo.setP_filename4(p_filenames[3]);
-			vo.setP_filename5(p_filenames[4]);
-			if((vo.getDelivery_fee())==-1) {
-				System.out.println("배송비 직접 입력");
-				vo.setDelivery_fee(vo.getDelivery_fee_direct());
-				System.out.println(vo.getDelivery_fee());
-			}
-		}
-		
-		
-		ModelAndView mav = new ModelAndView();
-		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
-		int result = dao.productWrite(vo);
-		if (result > 0) {
-			mav.setViewName("redirect:productList");
-		} else {
-			for (int i = 0; i < p_filenames.length; i++) {
-				if (p_filenames[i] != null) {
-					deleteFile(path, p_filenames[i]);
-				}
-			}
-			mav.setViewName("redirect:productWrite");
-		}
-		return mav;
-	}
-
-	public void deleteFile(String p, String f) {// 파일삭제
-		File fn = new File(p, f);
-		fn.delete();
-	}
-	
-//////////////////////////////////////////////////ckeditor
-	   @RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
-	    public void communityImageUpload(HttpServletRequest request, HttpServletResponse response, @RequestParam MultipartFile upload) {
-	 
-	        OutputStream out = null;
-	        PrintWriter printWriter = null;
-	        response.setCharacterEncoding("utf-8");
-	        response.setContentType("text/html;charset=utf-8");
-	        String path = request.getSession().getServletContext().getRealPath("/ckupload/");
-	        
-	        
-			File folder = new File(path);
-	        if (!folder.exists()) {
-				try {
-					folder.mkdir();// 폴더 안만들었을시 폴더 생성
-				} catch (Exception e) {
-					System.out.println("파일 저장 폴더를 생성하는데 실패함." + e.getMessage());
-					e.printStackTrace();
-				}
-			} else {
-				System.out.println("폴더가 이미 존재해서 따로 안만들어도 됨.");
-			}
-	        
-	        
-	        
-	        try{
-	 
-	            String fileName = upload.getOriginalFilename();
-	            byte[] bytes = upload.getBytes();
-	            String uploadPath = path + fileName;//저장경로
-	            System.out.println(uploadPath);
-	            out = new FileOutputStream(new File(uploadPath));
-	            out.write(bytes);
-	 
-	            printWriter = response.getWriter();
-	            String fileUrl = "/bitcamp/ckupload/" + fileName;//url경로
-	            
-	            JsonObject json = new JsonObject();
-	            json.addProperty("uploaded", 1);
-	            json.addProperty("fileName", fileName);
-	            json.addProperty("url", fileUrl);
-	            printWriter.println(json);
-	            
-	 
-	        }catch(IOException e){
-	            e.printStackTrace();
-	        } finally {
-	            try {
-	                if (out != null) {
-	                    out.close();
-	                }
-	                if (printWriter != null) {
-	                    printWriter.close();
-	                }
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	 
-	        return;
-	    }
 
 //////////////////////////// review 글 땡겨오기
 //	   @RequestMapping("/productReview")/////////////////////나중에 태현이거 긁어오기
@@ -227,7 +140,7 @@ public class ProductController {
 //			mav.setViewName("product/productList");
 //			return mav;
 //		}
-	   
+
 //////////////////////////// enquiry 글 땡겨오기
 //	   @RequestMapping("/productEnquiry")/////////////////////나중에 태현이거 긁어오기
 //		public ModelAndView productEnquiry() {
@@ -237,30 +150,43 @@ public class ProductController {
 //			mav.setViewName("product/productList");
 //			return mav;
 //		}
-	   
-	   
+
+	@RequestMapping("/availableChk")
+	@ResponseBody
+	public ProductVO availableChk(HttpServletRequest req) {
+        System.out.println(req.getParameter("p_no"));
+        System.out.println(req.getParameter("s_date").replaceAll("-", ""));
+        System.out.println(req.getParameter("e_date").replaceAll("-", ""));
+        int p_no = Integer.parseInt(req.getParameter("p_no"));
+        
+        ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
+        ProductVO pvo = dao.productSelect(p_no);
+
+		if (req.getParameter("s_date") != null && req.getParameter("e_date") != null && req.getParameter("s_date") != "" && req.getParameter("e_date") != "") {
+			int orderStart = Integer.parseInt(req.getParameter("s_date").replaceAll("-", "")); 
+			int orderEnd = Integer.parseInt(req.getParameter("e_date").replaceAll("-", "")); 
+			ArrayList<Integer> s_noList = (ArrayList<Integer>) dao.productAllSelectProduct(pvo.getP_no()); 
+			for (int j = 0; j < s_noList.size(); j++) { 
+				ArrayList<String> dateList = (ArrayList<String>) dao.productAllSelectDate(s_noList.get(j));
+				int resultCnt = 0;
+				for (int k = 0; k < dateList.size(); k++) {
+					for (int l = orderStart; l <= orderEnd; l++) {
+						if (Integer.parseInt(dateList.get(k)) == l) {
+							resultCnt++;
+						}
+					}
+				}
+				if (resultCnt > 0) {
+					s_noList.remove(j);
+				}
+				resultCnt = 0;
+			}
+			pvo.setProductCount(s_noList.size()); 
+			pvo.setS_noList(s_noList);		
+			
+		}
+        
+        return pvo;
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

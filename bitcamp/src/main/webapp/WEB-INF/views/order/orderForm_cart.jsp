@@ -7,18 +7,6 @@
 	href="<%=request.getContextPath()%>/css/order/orderForm.css" />
 <script>
 $(function() {
-	var start = "${day.orderStart}";
-	var end = "${day.orderEnd}";
-	console.log(start+end)
-		
-	var period = ${day.product_borrow_period}-1+"박"+${day.product_borrow_period}+"일";
-	
-	$("#period").html(start+"~")
-	$("#period").append(end)
-	$("#period").append("("+period+")")
-	
-	
-	
 	$("#addr_paymethod0").click(function() {
 		$("#card-form").css("display","block");
 		$("#card-agree").css("display","block");
@@ -52,7 +40,6 @@ $(function() {
 		$("#rtel3").attr("value","");
 	});
 })
-
 function openDaumZipAddress(type) {
 	if(type =='o'){
 		new daum.Postcode({
@@ -73,11 +60,8 @@ function openDaumZipAddress(type) {
 		
 	}
 }
-
 </script>
-<%-- <c:forEach var="vo" items="${productList }"> --%>
-<%-- 	${vo.p_no },${vo.orderStart },${vo.orderEnd } --%>
-<%-- </c:forEach> --%>
+
 <form method="post" action="/bitcamp/orderOk">
 <div id="orderForm" class="container">
 	<div style="height: 130px"></div>
@@ -118,34 +102,41 @@ function openDaumZipAddress(type) {
 					<th scope="col">합계</th>
 				</tr>
 			</thead>
+			
 			<tbody>
+			<c:forEach var="cart" items="${cart}">
 				<tr>
 					<td><input type="checkbox"></td>
-					<td><a href="/bitcamp/productView?p_no=${product.p_no }"><img
-							src="/bitcamp/upload/${product.p_filename1 }" style="width:100px;height:100px"></a></td>
-					<td><strong><a href="/bitcamp/productView?p_no=${product.p_no }">${product.p_name }</a></strong>
-						<div><label id="period"></label></div>
+					<td><a href="/bitcamp/productView?p_no=${cart.p_no }">
+						<img src="/bitcamp/upload/${cart.p_filename1 }" style="width:100px;height:100px" onerror="this.src='/bitcamp/resources/products/tent1.png'"></a>
+					</td>
+					<td><strong><a href="/bitcamp/productView?p_no=${cart.p_no }">${cart.p_name }</a></strong>
+						<div><label id="period">${cart.orderStart }~${cart.orderEnd }</label></div>
 					<td>
 						<div>
-							<strong>${product.price }</strong>
+							<strong>${cart.price*cart.currentQty }</strong>
 						</div>
 					</td>
-					<td>${day.currentQty}</td>
-					<td><span><img
-							src="//img.echosting.cafe24.com/design/common/icon_cash.gif">
-							4,700원</span></td>
-					<td rowspan="1">[비례]</td>
-					<td><strong>208,850원</strong></td>
+					<td>${cart.currentQty}</td>
+					<td>
+						<span><img src="//img.echosting.cafe24.com/design/common/icon_cash.gif">
+							4,700원
+						</span>
+					</td>
+					<td rowspan="1"><label>${cart.delivery_fee*cart.currentQty }</label>원</td>
+					<td><strong><label>${cart.price*cart.currentQty+cart.delivery_fee*cart.currentQty }</label>원</strong></td>
 				</tr>
+				</c:forEach>
 			</tbody>
 			<tfoot>
 				<tr>
 					<td></td>
-					<td colspan="7">상품구매금액 <strong>${product.price }<span>
-								(+50,000)</span></strong> + 배송비 ${product.delivery_fee } = 합계: <strong class="txtEm gIndent10">258,850원</strong>
+					<td colspan="7">상품구매금액 <strong><label>0</label>
+								원(+<label>0</label>)</strong> + 배송비 ${product.delivery_fee } = 합계: <strong class="txtEm gIndent10"><label>0</label>원</strong>
 					</td>
 				</tr>
 			</tfoot>
+			
 		</table>
 	</div>
 

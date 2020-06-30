@@ -1,0 +1,223 @@
+@charset "UTF-8";
+
+table {
+	width: 100%
+}
+
+#orderForm {
+	font-family: Nanum Gothic, "나눔고딕"
+}
+
+.titleArea {
+	color: #353535;
+	padding: 0;
+	min-height: 30px;
+	margin: 10px 0 20px;
+	border-bottom: 1px solid #e8e8e8;
+}
+
+#titleArea>h2 {
+	margin: 0;
+	display: inline-block;
+	padding: 20px 0;
+	color: #555;
+	font-size: 30px;
+	font-weight: 700;
+}
+
+#benefit_info {
+	margin: 20px 0;
+	line-height: 1.5;
+	margin-left: auto;
+	margin-right: auto;
+	border: 5px solid #e8e8e8;
+	color: #404040;
+	padding: 0;
+}
+
+#benefit_info ul {
+	color: #404040;
+	line-height: 1.5em;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	list-style-type: none;
+}
+
+#benefit_info li {
+	font-size: 1rem;
+	font-weight: 400;
+	color: #404040;
+	line-height: 1.5em;
+	box-sizing: border-box;
+	list-style-type: none;
+}
+
+#benefit_title {
+	line-height: 1.5;
+	color: #404040;
+	font-size: 12px;
+	margin: 40px 0 10px 10px;
+	display: table-cell;
+	padding: 0;
+	width: 70px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#benefit_info a {
+	text-decoration: none;
+	color: #A29C9C;
+	font-size: 13px
+}
+
+#benefit_info a:hover {
+	text-decoration: none;
+}
+
+#benifit_descript {
+	color: #404040;
+	margin: 0;
+	display: table-cell;
+	padding: 0 10px;
+	width: auto;
+	line-height: 1.5em;
+	border-left: 1px solid #e8e8e8;
+	vertical-align: middle;
+}
+
+#product_info thead th {
+	text-align: center;
+	padding: 10px 0 10px;
+	font-size: 13px;
+	font: 0.75em;
+	background-color: #3d3d4f;
+	color: white;
+}
+
+#product_info tbody td {
+	text-align: center;
+}
+
+#product_info tbody {
+	text-align: center;
+	height: 100px;
+	background-color: #fafafa;
+}
+
+#product_info tfoot {
+	text-align: right;
+	background-color: #fafafa;
+}
+
+#product_info a {
+	text-decoration: none;
+	color: black;
+	font-size: 17px;
+}
+
+#product_info a:hover {
+	text-decoration: none;
+}
+
+#order_info th, #recipient_info th {
+	text-align: center;
+	padding: 10px 0 10px;
+	font-size: 13px;
+	font: 0.75em;
+	background-color: #3d3d4f;
+	color: white;
+}
+
+#order_info ul, #recipient_info ul {
+	color: #404040;
+	line-height: 1.5em;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	list-style-type: none;
+}
+
+#order_info li, #recipient_info li {
+	font-size: 1rem;
+	font-weight: 400;
+	color: #404040;
+	line-height: 1.5em;
+	box-sizing: border-box;
+	list-style-type: none;
+}
+
+#order_info td, #recipient_info td {
+	padding: 10px;
+	background-color: #fafafa;
+}
+
+#total_price th, .payment th {
+	text-align: center;
+	padding: 10px 0 10px;
+	font-size: 13px;
+	font: 0.75em;
+	background-color: #3d3d4f;
+	color: white;
+}
+
+#total_price td {
+	text-align: center;
+	font-size: 23px;
+	padding: 8px 0px 8px;
+}
+
+#total_price td:last-child {
+	color: #d74f4b;
+	padding: 30px 0 30px;
+}
+
+#total_price_detail th {
+	text-align: center;
+	padding: 10px 0 10px;
+	font-size: 20px;
+	background-color: #3d3d4f;
+	color: white;
+}
+
+#total_price_detail td {
+	padding: 30px;
+	font-size: 30px;
+}
+
+#total_price_detail td:last-child {
+	font-size: 17px;
+}
+
+.payArea {
+	margin: 0;
+	overflow: hidden;
+	position: relative;
+	padding: 10px 241px 10px 10px;
+	border: 1px solid #777;
+	color: #353535;
+	line-height: 1.5;
+	background: #fbfafa;
+}
+
+#end_price {
+	color: #353535;
+	line-height: 1.5;
+	padding:;
+	float: right;
+	width: 240px;
+	margin: 0 -241px 0 0;
+	text-align: right;
+	background: #fbfafa;
+}
+
+.payment {
+	color: #353535;
+	line-height: 1.5;
+	margin: 0;
+	padding: 0;
+	float: left;
+	width: 100%;
+	background: white;
+	background: #fbfafa;
+}

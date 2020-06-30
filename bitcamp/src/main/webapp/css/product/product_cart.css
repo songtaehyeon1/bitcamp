@@ -1,9 +1,8 @@
 @charset "UTF-8";
+
 .visualNone{
 	display:none
 }
-
-
 .cartTable {
 	width: 100%
 }
@@ -22,19 +21,24 @@
 }
 
 .shopAndPurchaseBtn{
-	width: 150px;
-	height: 80px;
-	border: 1px solid #909090;
+	display:inline-block;
+	width: 200px;
+	height: 120px;
+	border: 2px solid #909090;
 	border-radius: 30px;
 	background-color: transparent;
 	text-align: center;
 	line-height: 75px;
 	color: #161616;
 	font-weight: bold;
-	font-size: 15px;
+	font-size: 20px;
 	cursor: pointer;
 	padding:25px;
 	margin-top:20px;
+}
+.shopAndPurchaseBtn:hover,.shopAndPurchaseBtn:link,.shopAndPurchaseBtn:active,.shopAndPurchaseBtn:visited{
+	text-decoration:none;
+	color: #161616;
 }
 .cartTable .summary{
 	border-top:1px solid #ddd;
@@ -50,10 +54,60 @@
 	font-weight:bold;
 }
 
+.total{
+	border:4px solid #c8c8c8;
+	height:70px;
+	text-align:center;
+	margin-top:100px;
+	line-height:17px;
+	font-size:14px;
+	padding:20px 15px 18px;
+}
+.TPrice, .deliFee, .TTFee{
+	font-weight:bold;
+	font-size:15px;
+}
+.TTFee{
+	color:#ea0000;
+	font-size:20px;
+}
 
-
-
-
-
-
-
+.quantity_wrap {
+	position:relative;
+	display:table;
+	border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+.quantity_span {
+	line-height: 40px;
+	padding: 0 15px;
+	font-weight: bold;
+}
+.btn {
+	width: 46px;
+    height: 40px;
+    padding: inherit;
+    cursor: pointer;
+    background-color: transparent;
+    margin-left: -1px;
+    font-size: 20px;
+}
+.icon-minus:before {
+	content: "-";
+	font-size: xxx-large;
+	line-height: 30px;
+}
+.icon-plus:before {
+	content: "+";
+	font-size: 35px;
+	line-height: 30px;
+}
+.currentQty {
+	width: 50px;
+	text-align: center;
+}
+.transparent {
+	clear: none;
+	border: 0px none;
+	float: none;
+	background-color: transparent;
+}

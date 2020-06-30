@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet"
@@ -11,7 +10,7 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<link rel = "stylesheet" href = "/bitcamp/css/product/product_writeForm.css" type = "text/css">
+<link rel = "stylesheet" href = "<%=request.getContextPath()%>/css/product/product_writeForm.css" type = "text/css">
 <script src="<%=request.getContextPath()%>/js/product/product_write.js"></script>
 <script src = "<%=request.getContextPath()%>/editor/ckeditor/ckeditor.js"></script>
 
