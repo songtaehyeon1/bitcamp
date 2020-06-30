@@ -26,6 +26,13 @@ td{
 	text-align:left;
 	padding:10px;
 }
+#reason{
+	width:400px;
+}
+#reason_etc{
+	display:none;
+	margin-top:5px;   
+}
 button{
 	margin-top:38px;
 	width:105px;
@@ -41,19 +48,48 @@ button{
 <script>
 $(function(){
 	//탈퇴 사유
-	var reasonOption=["탈퇴사유를 선택해 주세요.", "시스템 이용불편", "서비스 불만", "이용빈도 저조", "개인정보의 노출우려", "기타"];    
+	var reasonOption=["탈퇴 사유를 선택해 주세요.", "시스템 이용불편", "서비스 불만", "이용빈도 저조", "개인정보의 노출우려", "기타"];    
 	var tag="";
 	for(i=0; i<reasonOption.length; i++){
 		tag += "<option value='"+reasonOption[i]+"'+>"+reasonOption[i]+"</option>";
 	}
 	document.getElementById("reason").innerHTML = tag;
+	
+	//탈퇴 사유 :기타
+	$("#reason").change(function() {
+		//console.log($("#reason").val());
+		if($("#reason").val()=="기타"){
+			$("#reason_etc").css("display","block");	
+		}else{
+			$("#reason_etc").css("display","none");	
+		}
+	});
+	
+	//회원탈퇴 폼 
+	$("#wdFrm").submit(function(){
+		//탈퇴 사유 검사
+		if($("#reason").val()==reasonOption[0]){
+			alert("탈퇴 사유를 선택해 주세요.");
+			return false;
+		}
+		
+		if($("#reason").val()=="기타"){
+			if($("#reason_etc").val()==""){
+				alert("탈퇴 사유를 기재해주세요.");
+				return false;
+			}
+		}
+		
+		return true;
+	});
 });
 </script>
 
 <div id="container">
 		<h2>회원 탈퇴</h2>
 		<p><small>THEBITCAMP 회원 탈퇴 진행 시 회원님의 개인정보와 서비스 이용 내역은 모두 삭제되며 복구 불가능합니다.</small></p> 
-		<form method="post" action="/bitcamp/withdrawalOk">
+		
+		<form method="post" action="/bitcamp/withdrawalOk" id="wdFrm" name="wdFrm" >
 			<div>
 				<table>
 					<tbody>
@@ -82,8 +118,10 @@ $(function(){
 							<td>
 								<select id="reason" name="reason">
 		    					</select>
+		    					<textarea form="wdFrm" id="reason_etc" name="reason_etc" cols="54" rows="5" placeholder="탈퇴 사유를 기재해주세요. 소중한 의견으로 더 나은 서비스를 제공할 수 있도록 노력하겠습니다." autofocus></textarea>
 							</td>
 						</tr>
+					
 					</tbody>
 				</table>
 			</div>

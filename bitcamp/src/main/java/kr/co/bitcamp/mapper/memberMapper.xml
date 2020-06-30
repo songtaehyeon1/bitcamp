@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.bitcamp.member.MemberDAOImp">
 	<select id="loginCheck" parameterType="kr.co.bitcamp.member.MemberVO" resultType="kr.co.bitcamp.member.MemberVO">
-		select userno, userid, userpwd, username from member where userid=#{userid} and userpwd=#{userpwd}
+		select userno, userid, userpwd, username from member where userid=#{userid} and userpwd=#{userpwd} and userjointype='Y'
 	</select>
 
 	<update id="logdateUpdate">
@@ -18,6 +18,10 @@
 	<select id="pwdFind" resultType="kr.co.bitcamp.member.MemberVO">
 		select userpwd from member where username=#{param1} and userid=#{param2} and useremail=#{param3}
 	</select>
+
+	<update id="pwdChange" parameterType="string">
+		update member set userpwd=#{param2} where userid=#{param1}
+	</update>
 
 	<select id="idCheck" resultType="int">
 		select count(userid) from member where userid=#{userid}

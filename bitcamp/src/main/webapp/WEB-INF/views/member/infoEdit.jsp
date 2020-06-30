@@ -40,12 +40,14 @@
 <c:if test="${result>0}">
 	<script>
 		alert("회원정보 수정이 완료되었습니다.");   
+		location.href="/bitcamp/";
 	</script>
 </c:if>
 
 <c:if test="${result<=0}">
 	<script>
-		alert("회원정보 수정 실패하였습니다. 다시 시도해주세요.");   
+		alert("회원정보 수정에 실패하였습니다. 다시 시도해주세요.");   
+		location.href="/bitcamp/infoEditFrm";
 	</script>
 </c:if>
 
@@ -128,8 +130,7 @@ $(function(){
 			alert("우편번호 검색을 진행해주세요.");
 			return false;   
 		}
-		
-		alert("회원정보 수정이 완료되었습니다.");
+
 		return true;
 	});  //infoFrm 유효성 검사
 });

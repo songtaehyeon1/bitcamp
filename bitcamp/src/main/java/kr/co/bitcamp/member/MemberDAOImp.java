@@ -13,6 +13,9 @@ public interface MemberDAOImp {
 	//비밀번호 찾기
 	public MemberVO pwdFind(String username, String userid, String useremail);
 	
+	//비밀번호 변경
+	public int pwdChange(String userid, String userpwd);
+
 	//회원가입_아이디 중복확인
 	public int idCheck(String userid);
 	
@@ -31,7 +34,7 @@ public interface MemberDAOImp {
 	//탈퇴 전 해당 회원의 가입일, 마일리지 확인
 	public MemberVO withdrawalChk(String userid);
 	
-	//회원탈퇴
+	//회원탈퇴 시 저장해야 할 데이터
 	public MemberVO withdrawal(String userid);
 	
 	//탈퇴 회원 등록

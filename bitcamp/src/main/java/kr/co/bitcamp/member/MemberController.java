@@ -182,6 +182,38 @@ public class MemberController {
 		return "home";
 	}
 	
+	//비밀번호 변경 폼
+	@RequestMapping("/pwdChangeFrm")
+	public String pwdChangeFrm() {
+		return "member/pwdChange";
+	}
+	
+	//비밀번호 변경 완료
+	@RequestMapping(value="/pwdChangeOk", method=RequestMethod.POST)
+	public ModelAndView pwdChangeOk(HttpSession ses, String userpwd) {
+		String userid = (String)ses.getAttribute("userid");
+		
+		MemberDAOImp dao = sqlSession.getMapper(MemberDAOImp.class);
+		int result = dao.pwdChange(userid, userpwd);
+		System.out.println(result);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("result", result);
+		mav.setViewName("member/pwdChange");
+		return mav;
+		
+		/*
+		if(result>0) {
+			mav.addObject("result", result);
+			mav.setViewName("member/pwdChange");
+		}else {
+			mav.addObject("result", result);
+			mav.setViewName("redirect:pwdChangeFrm");
+		}
+		return mav;
+		*/
+	}
+	
 	//회원가입폼
 	@RequestMapping("/joinFrm")
 	public String joinFrm() {
@@ -283,15 +315,20 @@ public class MemberController {
 		int result = dao.memberUpdate(vo);
 		
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("result", result);
+		mav.setViewName("member/infoEdit");
+		return mav;
 		
+		/*
 		if(result>0) {
 			mav.addObject("result", result);
-			mav.setViewName("home");
+			mav.setViewName("member/infoEdit");
 		}else {
 			mav.addObject("result", result);
 			mav.setViewName("redirect:infoEditFrm");
 		}
 		return mav;
+		*/
 	}
 	
 	//회원탈퇴 폼
@@ -319,9 +356,14 @@ public class MemberController {
 		vo2.setUserno(vo.getUserno());
 		vo2.setUserid(vo.getUserid());
 		vo2.setUsername(vo.getUsername());
+		//'탈퇴 사유 :기타'일 경우
+		if(vo2.getReason().equals("기타")) {
+			vo2.setReason(vo2.getReason_etc());
+		}
+	    	
 		int result = dao.withdrawalInsert(vo2);
-		if(result>0) {
-			dao.joinTypeUpdate(userid);
+		if(result>0) {  //회원 탈퇴 성공
+			dao.joinTypeUpdate(userid);  //회원타입 변경 (상태 : 가입(Y) → 탈퇴(N) )
 			ses.invalidate();  //강제 로그아웃
 		}
 		
