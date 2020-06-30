@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.JsonObject;
 
 import kr.co.bitcamp.category.CategoryVO;
+import kr.co.bitcamp.member.MemberVO;
 import kr.co.bitcamp.product.ProductDAOImp;
 import kr.co.bitcamp.product.ProductVO;
 
@@ -108,7 +109,21 @@ public class AdminController {
 
 		return "admin/adminJoin";
 	}
-
+	//회원 탈퇴처리
+	@RequestMapping("/admin/memberDel")
+	public ModelAndView goMemberDel(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		String[] list = req.getParameterValues("chk");
+		for(int i=0;i<list.length;i++) {
+			int userno = Integer.parseInt(list[i]);
+			MemberVO vo = dao.selectMember(userno);
+			dao.insertMemberDel(vo);
+			dao.delMember(userno);
+		}
+		mav.setViewName("redirect:member");		
+		return mav;
+	}
 	// 회원삭제 리스트
 	@RequestMapping("/admin/memberdellist")
 	public ModelAndView goAdminMemberDellist(HttpServletRequest request) {
@@ -142,6 +157,12 @@ public class AdminController {
 
 		return "admin/adminOrderList";
 	}
+	@RequestMapping("/admin/orderView")
+	public String goAdminOrderView() {
+
+		return "admin/adminOrderView";
+	}
+	
 
 //////////////////////상품	
 	// 상품 리스트
@@ -165,7 +186,7 @@ public class AdminController {
 
 		pagevo.setS_date(request.getParameter("s_date"));
 		pagevo.setE_date(request.getParameter("e_date"));
-
+		pagevo.setP_deltype(request.getParameter("p_deltype"));		
 		ModelAndView mav = new ModelAndView();
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
 
@@ -178,8 +199,8 @@ public class AdminController {
 		mav.setViewName("admin/adminProductList");
 		return mav;
 	}
-
-	@RequestMapping("/admin/insertStock")
+	
+	@RequestMapping("/admin/stocklist")
 	public ModelAndView goInsertStock(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		String pageNumStr = request.getParameter("pageNum");
@@ -189,7 +210,7 @@ public class AdminController {
 			pagevo.setPageNum(Integer.parseInt(pageNumStr));
 		}		
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
-		
+		pagevo.setS_deltype(request.getParameter("s_deltype"));
 		pagevo.setP_no(Integer.parseInt(request.getParameter("p_no")));
 		pagevo.setTotalRecord(dao.getTotalStockRecord(pagevo));
 		List<CategoryVO> clist = dao.allCategorySelect();
@@ -227,6 +248,61 @@ public class AdminController {
 		mav.addObject("pvo", pvo);
 		mav.addObject("clist", clist);
 		mav.setViewName("admin/adminProductStock");
+		return mav;
+	}
+	@RequestMapping("/admin/addStock")
+	public ModelAndView goaddStock(HttpServletRequest req) {
+		int p_no = Integer.parseInt(req.getParameter("p_no"));
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		int sno_sq = dao.getsno_sq();
+		ProductVO pvo = dao.productSelect(p_no);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("pvo", pvo);
+		mav.addObject("sno_sq", sno_sq);
+		mav.setViewName("admin/adminAddStock");
+		return mav;
+	}
+	@RequestMapping("/admin/addStockOk")
+	public ModelAndView goAddStockOk(HttpServletRequest req) {
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		ModelAndView mav = new ModelAndView();
+		String note = req.getParameter("note");
+		int p_no = Integer.parseInt(req.getParameter("p_no"));
+		int cnt = dao.addStock(p_no, note);
+		mav.addObject("p_no", p_no);
+		if(cnt>0) {
+			mav.setViewName("redirect:stocklist");
+		}else {			
+			mav.setViewName("redirect:addStock");
+		}
+		return mav;
+	}
+	@RequestMapping("/admin/stockDel")
+	public ModelAndView goStockDel(HttpServletRequest req) {
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		ModelAndView mav = new ModelAndView();
+		
+		String[] list = req.getParameterValues("chk");
+		for(int i=0;i<list.length;i++) {
+			int s_no = Integer.parseInt(list[i]);
+			dao.delstock(s_no);
+		}
+		mav.addObject("p_no", req.getParameter("p_no"));
+		mav.setViewName("redirect:stocklist");
+		return mav;
+	}
+	@RequestMapping("/admin/stockRestore")
+	public ModelAndView goStockRestore(HttpServletRequest req) {
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		ModelAndView mav = new ModelAndView();
+		
+		String[] list = req.getParameterValues("chk");
+		for(int i=0;i<list.length;i++) {
+			int s_no = Integer.parseInt(list[i]);
+			dao.restoreStock(s_no);
+		}
+		mav.addObject("p_no", req.getParameter("p_no"));
+		mav.setViewName("redirect:stocklist");
 		return mav;
 	}
 

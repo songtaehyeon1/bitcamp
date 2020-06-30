@@ -47,6 +47,9 @@ public interface EnquiryDAO {
 	// enquiry 글 삭제
 	public int enquiryDelete(int no);
 	
+	// enquiry 글 삭제 시 댓글도 삭제
+	public void enquiryReplyDelete(int no);
+	
 	// enquiry 조회수
 	public void enquiryHit(int no);
 	

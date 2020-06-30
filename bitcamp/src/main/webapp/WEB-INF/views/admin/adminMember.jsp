@@ -18,6 +18,16 @@
 				$("input[type=checkbox]").prop("checked", false);
 			}
 		})
+		$("#form").submit(function(){
+			var chk = $("input:checkbox[name=chk]:checked").length
+			
+			if(chk==0){
+				alert("회원을 선택해셔야 합니다.");
+				return false;
+			}else{
+				return true;
+			}
+		})
 	});
 </script>
 <div
@@ -92,7 +102,7 @@
 
 
 
-	<form name="ff" method="post">
+	<form method="get" id="form" action="/bitcamp/admin/memberDel">
 		<h4 class="allgoodsnum">
 			총 <span style="color: #d1215f; font-weight: bold;">${fn:length(list) }</span>명의 회원이
 			있습니다.
@@ -115,8 +125,8 @@
 				</tr>
 				<c:forEach var="vo" items="${list }">
 					<tr>
-						<td class="width50"><input type="checkbox" name="chk[]"
-							value="hello815"></td>
+						<td class="width50"><input type="checkbox" name="chk"
+							value="${vo.userno }"></td>
 						<td>${vo.userno }</td>
 						<td><span style="color: blue">${vo.usermile }</span></td>
 						<td>${vo.userid }</td>
@@ -127,14 +137,19 @@
 						<td>${vo.userlogdate }</td>
 						<td>${vo.regdate }</td>
 					</tr>
-				</c:forEach>				
+				</c:forEach>
+				<c:if test="${fn:length(list)==0 }">
+					<tr>
+						<th colspan="15" style="background: #fff;">등록된 데이터가 없습니다.</th>
+					</tr>
+				</c:if>				
 			</tbody>
 		</table>
 
 		<div class="btmbtnwrap" style="position: relative; top: 10px;">
-			<button type="button" onclick="del_();">탈퇴처리</button>
+			<input type="submit" class="btn btn-dark" value="탈퇴처리"/>
 		</div>
-		<div style="width: 1400px; clear: left">
+		<div style="width: 100%; clear: left">
 			<ul class="pagination justify-content-center">
 				<c:if test="${pagevo.pageNum == 1}">
 					<li class="page-item disabled"><a class="page-link">&lt;</a></li>
@@ -165,7 +180,6 @@
 				</c:if>
 			</ul>
 		</div>
-
 	</form>
 </div>
 

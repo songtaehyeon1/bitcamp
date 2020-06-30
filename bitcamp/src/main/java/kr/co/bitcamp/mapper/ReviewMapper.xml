@@ -11,7 +11,7 @@
 				to_char(review_writedate, 'YYYY-MM-DD') review_writedate, review_ip, review_file1, review_file2, review_file3, review_file4, 
 				review_file5, userid, review_rating, p_name, p_filename1 
 				from board_review b, member m, product p 
-				where b.userno = m.userno and b.p_no = p.p_no 
+				where b.userno = m.userno and b.p_no = p.p_no(+) 
 				<if test = "searchKey != null and searchWord != null">
 					and ${searchKey} like '%'||#{searchWord}||'%' 
 				</if>
@@ -34,7 +34,7 @@
 	</select>
 	<!-- 글 쓰기 폼 상품 가져오기 -->
 	<select id = "reviewGoods" resultType = "kr.co.bitcamp.board.GoodsVO">
-		select p_no, p_name from product where c_no = #{param1}
+		select p_no, p_name from product where c_no = #{cate}
 	</select>
 	<!-- 글 쓰기 -->
 	<insert id = "reviewInsert">
@@ -46,7 +46,90 @@
 	<!-- 한개 리스트 -->
 	<select id = "list" resultType = "kr.co.bitcamp.board.ReviewVO">
 		select review_no, p_filename1, p_name, price, review_subject, userid, review_rating, to_char(review_writedate, 'YYYY-MM-DD') review_writedate, 
-		review_recommend, review_hit, review_file1, review_file2, review_file3, review_file4, review_file5, review_content 
-		from board_review b, product p, member m where b.p_no = p.p_no and b.userno = m.userno and b.review_no = #{param1}
+		review_recommend, review_hit, review_file1, review_file2, review_file3, review_file4, review_file5, review_content, b.c_no c_no, b.p_no p_no 
+		from board_review b, product p, member m where b.p_no = p.p_no(+) and b.userno = m.userno and b.review_no = #{param1}
+	</select>
+	<!-- 카테고리 가져오기 -->
+	<select id = "reviewCategory" resultType = "kr.co.bitcamp.board.GoodsVO">
+		select c_no, c_name from category
+	</select>
+	<!-- 글 수정폼에서 파일 삭제 -->
+	<update id = "reviewEditFileDel">
+		update board_review set ${param1} = '' where review_no = #{param2}
+	</update>
+	<!-- 글 수정 -->
+	<update id = "reviewUpdate" parameterType = "kr.co.bitcamp.board.ReviewVO">
+		update board_review set c_no = #{c_no}, p_no = #{p_no}, review_subject = #{review_subject}, review_content = #{review_content}, 
+		review_file1 = #{review_file1}, review_file2 = #{review_file2}, review_file3 = #{review_file3}, review_file4 = #{review_file4}, 
+		review_file5 = #{review_file5}, review_rating = #{review_rating} where review_no = #{review_no}
+	</update>
+	<!-- 조회수 -->
+	<update id = "reviewHit">
+		update board_review set review_hit = review_hit + 1 where review_no = #{param1}
+	</update>
+	<!-- 글 삭제 -->
+	<delete id = "listDelete">
+		delete from board_review where review_no = #{param1}
+	</delete>
+	<!-- 글 삭제 시 댓글 삭제 -->
+	<delete id = "reviewReplyDelete">
+		delete from review_reply where review_no = #{param1}
+	</delete>
+	<!-- 글 삭제 파일들 가져오기 -->
+	<select id = "listDelete_files" resultType = "kr.co.bitcamp.board.ReviewVO">
+		select review_no, review_file1, review_file2, review_file3, review_file4, review_file5 from board_review where review_no = #{param1}
+	</select>
+	<!-- 댓글 작성 -->
+	<insert id = "replyWrite">
+		insert into review_reply(r_reply_no, userno, review_no, r_reply_content, r_reply_writedate)
+		values(review_reply_sq.nextval, #{param1}, #{param2}, #{param3}, sysdate)
+	</insert>
+	<!-- 댓글 가져오기 -->
+	<select id = "replyAll" resultType = "kr.co.bitcamp.board.ReviewReplyVO">
+		select r.r_reply_no r_reply_no, r.review_no review_no, r.r_reply_content r_reply_content, 
+		to_char(r.r_reply_writedate, 'YYYY-MM-DD') r_reply_writedate, r.userno userno, m.userid userid 
+		from review_reply r, member m 
+		where r.userno = m.userno and review_no = #{param1}
+		order by r_reply_no desc
+	</select>
+	<!-- 댓글 삭제 -->
+	<delete id = "replyDel">
+		delete from review_reply where r_reply_no = #{param1}
+	</delete>
+	<!-- 댓글 수정 폼 -->
+	<select id = "replyOne" resultType = "kr.co.bitcamp.board.ReviewReplyVO">
+		select r_reply_no, r_reply_content, userid 
+		from review_reply r, member m where r.userno = m.userno and r_reply_no = #{param1}
+	</select>
+	<!-- 댓글 수정 -->
+	<update id = "replyUpdate">
+		update review_reply set r_reply_content = #{param2} where r_reply_no = #{param1}
+	</update>
+	<!-- 이전글 다음글 -->
+	<select id = "getLeadLagSelect" resultType = "kr.co.bitcamp.board.LeadLagVO">
+		select * from(select review_no, lead(review_no, 1) over(order by review_no desc) leadNo, 
+					lead(review_subject, 1, '이전글') over(order by review_no desc) leadSubject, 
+					lag(review_no, 1) over(order by review_no desc) lagNo, 
+					lag(review_subject, 1, '다음글') over(order by review_no desc) lagSubject from board_review 
+					<if test = "searchKey != null and searchWord != null">
+						where ${searchKey} like '%'||#{searchWord}||'%' 
+					</if>
+				) where review_no = #{review_no}
+	</select>
+	<!-- 추천 수 ip가져오기 -->
+	<select id = "reviewRecommendIp" resultType = "int">
+		select count(review_no) from review_recommend where review_no = #{param1} and recommend_ip = #{param2}
+	</select>
+	<!-- 추천 수 올리기 -->
+	<update id = "reviewRecommendUpdate">
+		update board_review set review_recommend = review_recommend + 1 where review_no = #{param1}
+	</update>
+	<!-- 추천 ip 저장 -->
+	<insert id = "reviewRecommendIpUpdate">
+		insert into review_recommend(review_no, recommend_ip) values(#{param1}, #{param2})
+	</insert>
+	<!-- 추천 수 가져오기 -->
+	<select id = "reviewRecommendSelect" resultType = "int">
+		select review_recommend from board_review where review_no = #{param1}
 	</select>
 </mapper>

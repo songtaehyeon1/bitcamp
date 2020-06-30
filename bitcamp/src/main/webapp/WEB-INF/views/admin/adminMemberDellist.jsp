@@ -118,6 +118,11 @@
 					<td></td>
 				</tr>
 				</c:forEach>
+				<c:if test="${fn:length(list)==0 }">
+					<tr>
+						<th colspan="15" style="background: #fff;">등록된 데이터가 없습니다.</th>
+					</tr>
+				</c:if>
 				
 			</tbody>
 		</table>
@@ -126,7 +131,7 @@
 		</div>
 	</form>
 	<!-- 페이징 -->
-	<div style="width: 1400px; clear: left">
+	<div style="width: 100%; clear: left">
 			<ul class="pagination justify-content-center">
 				<c:if test="${pagevo.pageNum == 1}">
 					<li class="page-item disabled"><a class="page-link">&lt;</a></li>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <style>
 #container{
 	width:960px;
@@ -81,5 +82,6 @@ $(function(){
 			
 			<button type="submit" class="btn btn-secondary btn-lg btnOK">확인</button>
 			<button type="button" class="btn btn-outline-secondary btn-lg btnCancel" onclick="location.href='/bitcamp'">취소</button>
+			<input type=hidden name="str" value="${str}">
 		</form>
 </div>

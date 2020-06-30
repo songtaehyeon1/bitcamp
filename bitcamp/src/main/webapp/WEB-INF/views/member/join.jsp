@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
 <title>회원가입</title>
 
 <style>
@@ -136,7 +135,7 @@ $(function(){
 		*/
 		
 		//주소 검사	
-		if($("#userzipcode").val()=="" &&  $("#useraddr").val()=="월" && $("#useraddrdetail").val()==""){
+		if($("#userzipcode").val()=="" &&  $("#useraddr").val()=="" && $("#useraddrdetail").val()==""){
 			alert("주소를 입력해주세요.");
 			return false; 
 		}
@@ -146,8 +145,8 @@ $(function(){
 		}
 		
 		//약관동의
-		if($("#checkAll").prop("checked")==false){
-			alert("약관동의 전체동의 체크는 필수입니다.");
+		if($("#check1").prop("checked")==false && $("#check2").prop("checked")==false || $("#check1").prop("checked")==false || $("#check2").prop("checked")==false){
+			alert("약관동의 필수 항목 체크를 확인해주세요.");
 			return false;
 		}
 		
@@ -171,6 +170,12 @@ $(function(){
 				if(result=="Y"){
 					$("#idStatus").val("Y");
 					alert("사용할 수 있는 아이디입니다.");
+					
+					//아이디 중복확인 후 아이디 수정 금지
+					$("#userid").on('keyup', function() {
+						$("#idStatus").val("N");
+						$("#idChk").attr('disabled', true);
+					});	
 				}else if(result=='N'){
 					$("#idStatus").val("N");
 					alert("사용할 수 없는 아이디입니다.");
@@ -189,18 +194,27 @@ $(function(){
 	$(document).on("keyup", "#userid", function(){	
 		var reg = /^[a-zA-Z]{1}[a-zA-Z0-9]{3,19}$/;
 		if(reg.test($("#userid").val())){
-			$("#idChk").attr("disabled",false);	
+			$("#warning").css("display","none");
+			$("#idChk").attr("disabled",false);  //버튼 활성화
 		}else if(!reg.test($("#userid").val())){
+			$("#warning").css("display","block");
 			$("#idChk").attr("disabled",true);	
-			//alert("아이디의 첫번째 문자는 반드시 영문자이며, 4~20자의 숫자, 영문 대소문자만 입력해주세요.");
 		}
 	});
 
-	//전체동의 체크박스
+	//전체동의 체크박스 선택 및 해제
 	$("#checkAll").change(function(){  
 		$(".agree_article .form-check-label >input").prop("checked",this.checked);
 	});
-		
+	
+	$("#check1, #check2, #check3").click(function(){
+		if($("#check1").is(":checked")==true && $("#check2").is(":checked")==true && $("#check3").is(":checked")==true){
+			$("#checkAll").prop("checked", true);  //전체동의 체크박스 선택
+		}else{
+			$("#checkAll").prop("checked", false);  //전체동의 체크박스 해제
+		}
+	});
+	
 	//약관동의 상세보기 //토글로 바꾸자
 	$(".view_indetail").on("click",function(){
 		$(".agree_txt").css("display","block");
@@ -249,6 +263,7 @@ function openDaumZipAddress() {
 		<form method="post" id="joinFrm" name="joinFrm" action="/bitcamp/joinOk">
 			<div class="form-group input-group">
 				<label for="userid" class="lbl_userid">아이디</label> 
+				<small><code id="warning">아이디의 첫번째 문자는 반드시 영문자이며, 4~20자의 숫자, 영문 대소문자만 입력해주세요.</code></small> 
 				<input type="text" class="form-control" id="userid" placeholder="첫번째 문자는 반드시 영문자이며, 4~20자의 숫자, 영문 대소문자만 허용" name="userid" maxlength="20" autofocus> 
 				<div class="input-group-append">
 					<button type="button" id="idChk" class="btn btn-secondary" disabled>중복확인</button> 

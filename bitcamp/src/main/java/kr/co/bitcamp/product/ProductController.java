@@ -130,6 +130,13 @@ public class ProductController {
 	}
 
 
+<<<<<<< HEAD
+=======
+	@RequestMapping(value = "/productWrite")
+	public String productWrite() {
+		return "product/productWrite";
+	}
+>>>>>>> master
 
 //////////////////////////// review 글 땡겨오기
 //	   @RequestMapping("/productReview")/////////////////////나중에 태현이거 긁어오기
