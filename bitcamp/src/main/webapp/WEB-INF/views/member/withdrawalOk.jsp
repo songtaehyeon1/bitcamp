@@ -30,26 +30,22 @@ a:hover{text-decoration:none;}
 .container .buttons a {
     display: inline-block;
     padding: 10px 20px;
-    color: #000;
+    background: #000;
+    color: #fff;
     border: 1px solid #000;
     box-sizing: border-box;
     margin: 0 5px;
     font-size: 15px;
     font-weight: 500;
 }
-.container .buttons a.log {
-    background: #000;
-    color: #fff;
-}
 </style>
 
 <div class="container">
-	<h1>회원가입 완료</h1>
+	<h1>회원탈퇴 완료</h1>
 	<div class="content">
-	  <p>회원가입이 완료되었습니다. <br><br>회원가입을 진심으로 환영합니다! <br>♡회원가입 2,000 마일리지 적립 혜택</p>
+	  <p>회원탈퇴가 완료되었습니다. <br>그동안 THEBITCAMP를 이용해 주셔서 감사합니다.</p>
 	</div>
 	<div class="buttons">
-	  <a href="/bitcamp">홈으로</a>
-	  <a href="/bitcamp/loginFrm" class="log">로그인</a>
+	  <a href="/bitcamp">홈 바로가기</a>
 	</div>
 </div>
