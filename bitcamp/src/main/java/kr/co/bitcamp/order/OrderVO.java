@@ -37,7 +37,42 @@ public class OrderVO {
 	private String rtel2;
 	private String rtel3;
 	private String rcommnet;
+	private String payment_type;//결제타입(card/cash)
+	private String bank;//은행명
+	private String depositor;//입금자성명
+	private String payment_time;//결제시간
+	private String card_corp;//카드사명
 	
+	public String getPayment_type() {
+		return payment_type;
+	}
+	public void setPayment_type(String payment_type) {
+		this.payment_type = payment_type;
+	}
+	public String getBank() {
+		return bank;
+	}
+	public void setBank(String bank) {
+		this.bank = bank;
+	}
+	public String getDepositor() {
+		return depositor;
+	}
+	public void setDepositor(String depositor) {
+		this.depositor = depositor;
+	}
+	public String getPayment_time() {
+		return payment_time;
+	}
+	public void setPayment_time(String payment_time) {
+		this.payment_time = payment_time;
+	}
+	public String getCard_corp() {
+		return card_corp;
+	}
+	public void setCard_corp(String card_corp) {
+		this.card_corp = card_corp;
+	}
 	public String getOtel1() {
 		return otel1;
 	}
