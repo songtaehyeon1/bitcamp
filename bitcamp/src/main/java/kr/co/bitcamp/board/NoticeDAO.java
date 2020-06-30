@@ -22,7 +22,7 @@ public interface NoticeDAO {
 	// notice 조회수
 	public void noticeHit(int no);
 	
-	// notice 전체 페이지 구하기(검색)
+	// notice 전체 페이지 수(검색)
 	public int getTotalRecord(PagingVO pagevo);
 	
 	// notice 이전글 다음글

@@ -9,7 +9,7 @@
 			<td>
 				<div class="login-layout">
 					<div class="login-form">
-						<form method="post" action="/adminLoginOk">
+						<form method="post" action="/bitcamp/adminLoginOk">
 							<div class="login-input">
 								<div>
 									<input type="text" id="userid" name="adminId"
@@ -17,7 +17,7 @@
 										class="form-control input-lg">
 								</div>
 								<div>
-									<input type="password" id="pwd" name="adminPwd"
+									<input type="password" id="pwd" name="adminpwd"
 										maxlength="20" placeholder="관리자 비밀번호"
 										class="form-control input-lg">
 								</div>

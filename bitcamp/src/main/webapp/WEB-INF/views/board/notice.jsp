@@ -67,11 +67,13 @@
 			<input type = "text" id = "searchText" name = "searchText">
 			<input type = "submit" id = "searchBtn" value = "찾기">
 		</div>
-		<form method = "post" action = "/bitcamp/notice_writeForm">
-			<div id = "write">
-				<input type = "submit" id = "writingBtn" value = "글 쓰기">
-			</div>
-		</form>
+		<c:if test = "${adminStatus == 'Y'}">
+			<form method = "post" action = "/bitcamp/notice_writeForm">
+				<div id = "write">
+					<input type = "submit" id = "writingBtn" value = "글 쓰기">
+				</div>
+			</form>
+		</c:if>
 	</div>
 	<div style="width : 1400px; clear : left">
 		<ul class="pagination justify-content-center">

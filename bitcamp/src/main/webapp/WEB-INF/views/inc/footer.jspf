@@ -3,7 +3,7 @@
 
 <footer>
 	<div id="footerWrap">
-		<div class="fmenu">
+		<div class="fmenu" style = "float : left;">
 			<ul class="f_cs">
 				<!----------------------------------------------------------- 하단 고객센터 --------------------------------------------------->
 				<li>

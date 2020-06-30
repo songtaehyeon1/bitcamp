@@ -5,12 +5,17 @@ public class EnquiryVO {
 	private int enquiry_no;
 	private int userno;
 	private int p_no;
+	private String c_no;
 	private String enquiry_subject;
 	private String enquiry_content;
 	private int enquiry_hit;
 	private String enquiry_writedate;
 	private String enquiry_ip;
 	private String enquiry_secret;
+	private String userid;
+	private String p_name;
+	private int price;
+	private String p_filename1;
 	public int getEnquiry_no() {
 		return enquiry_no;
 	}
@@ -28,6 +33,12 @@ public class EnquiryVO {
 	}
 	public void setP_no(int p_no) {
 		this.p_no = p_no;
+	}
+	public String getC_no() {
+		return c_no;
+	}
+	public void setC_no(String c_no) {
+		this.c_no = c_no;
 	}
 	public String getEnquiry_subject() {
 		return enquiry_subject;
@@ -64,6 +75,30 @@ public class EnquiryVO {
 	}
 	public void setEnquiry_secret(String enquiry_secret) {
 		this.enquiry_secret = enquiry_secret;
+	}
+	public String getUserid() {
+		return userid;
+	}
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+	public String getP_name() {
+		return p_name;
+	}
+	public void setP_name(String p_name) {
+		this.p_name = p_name;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public String getP_filename1() {
+		return p_filename1;
+	}
+	public void setP_filename1(String p_filename1) {
+		this.p_filename1 = p_filename1;
 	}
 	
 }

@@ -29,7 +29,7 @@
 		<a href="<%=request.getContextPath()%>/admin/member"><li>회원관리</li></a>
 		<a href="<%=request.getContextPath()%>/admin/product"><li>상품관리</li></a>
 		<a href="<%=request.getContextPath()%>/admin/orderList"><li class="over">주문관리</li></a>
-		<a href="#"><li>매출관리</li></a>
+		<a href="<%=request.getContextPath()%>/boardNotice"><li>매출관리</li></a>
 	</ul>
 </div>
 <div id="admin_top_menu_under">&nbsp;</div>
