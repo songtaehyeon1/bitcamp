@@ -43,6 +43,12 @@
 		}).mouseout(function() {
 			$("#shop-menu-content").css('display', 'none');
 		});
+		//마이메뉴 마우스 오버시 드롭다운
+		$("#my-menu").mouseover(function() {
+			$("#my-menu-content").css('display', 'block');
+		}).mouseout(function() {
+			$("#my-menu-content").css('display', 'none');
+		});
 		//오른쪽 센터메뉴 마우스오버시
 		$("#center-nav").children().children("li").mouseover(function() {
 			$(this).children("a").css('color', 'white');
@@ -100,7 +106,7 @@
 		<nav id="main-nav">
 			<div id="logo" style="z-index: 5000;">
 				<p>
-					<a href="#" style="z-index: 50;"><span
+					<a href="/bitcamp" style="z-index: 50;"><span
 						style="color: #A29C9C; font-size: 30px">THE</span><span
 						style="color: white; font-size: 30px">BITCAMP</span></a>
 				</p>
@@ -121,8 +127,8 @@
 				<li><a href="#">
 						<p class="main-menu-p">ABOUT</p>
 				</a></li>
-				<li><a href="/bitcamp/boardNotice">
-						<p class="main-menu-p">COMMUNITY</p>
+				<li><a href="#">
+						<p class="main-menu-p">CONTACT</p>
 				</a></li>
 				<li>
 					<div id="login-box">
@@ -139,19 +145,19 @@
 					<a href="#">
 						<p class="main-menu-p">My</p>
 					</a>
-					<!-- 
 					<div id="my-menu-content">
-						<a href="/bitcamp/pwdChkFrm">회원정보 수정</a> 
+						<a href="/bitcamp/pwdChkFrm?str=update">회원정보 수정</a> 
 						<a href="#">비밀번호 변경</a> 
 						<a href="/bitcamp/contFindFrm">아이디/비밀번호 찾기</a> 
-						<a href="#">회원 탈퇴</a> 
+						<a href="/bitcamp/pwdChkFrm?str=delete">회원 탈퇴</a> 
 					</div>
-					 -->
 				</li>
 				<li>
 					<div id="cart-box">
 						<a href="#"><i class="fas fa-shopping-cart"></i> Cart</a>
-						<span class="badge badge-pill badge-light blink bounce">0</span>
+						<c:if test="${logStatus!=null&&logStatus=='Y'}">
+							<span class="badge badge-pill badge-light blink bounce">0</span>
+						</c:if>
 					</div>
 				</li>
 			</ul>
