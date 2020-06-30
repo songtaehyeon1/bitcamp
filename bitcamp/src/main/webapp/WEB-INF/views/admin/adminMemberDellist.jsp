@@ -118,6 +118,11 @@
 					<td></td>
 				</tr>
 				</c:forEach>
+				<c:if test="${fn:length(list)==0 }">
+					<tr>
+						<th colspan="15" style="background: #fff;">등록된 데이터가 없습니다.</th>
+					</tr>
+				</c:if>
 				
 			</tbody>
 		</table>

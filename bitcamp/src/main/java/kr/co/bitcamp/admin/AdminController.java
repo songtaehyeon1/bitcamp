@@ -157,6 +157,12 @@ public class AdminController {
 
 		return "admin/adminOrderList";
 	}
+	@RequestMapping("/admin/orderView")
+	public String goAdminOrderView() {
+
+		return "admin/adminOrderView";
+	}
+	
 
 //////////////////////상품	
 	// 상품 리스트

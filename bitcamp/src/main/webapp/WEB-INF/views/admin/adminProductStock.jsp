@@ -18,13 +18,13 @@
 				$("input[type=checkbox]").prop("checked", false);
 			}
 		});
-		$("#form").submit(function(){
+		$("#form").submit(function() {
 			var chk = $("input:checkbox[name=chk]:checked").length
-			
-			if(chk==0){
+
+			if (chk == 0) {
 				alert("상품을 선택해셔야 합니다.");
 				return false;
-			}else{
+			} else {
 				return true;
 			}
 		})
@@ -71,9 +71,8 @@
 	<h3>상품재고리스트</h3>
 	<ul class="helpbox">
 		<li>해당 상품의 재고를 등록하거나 삭제합니다.</li>
-	</ul>	
-	<form method="get"
-		action="/bitcamp/admin/stocklist?p_no=${pvo.p_no }">
+	</ul>
+	<form method="get" action="/bitcamp/admin/stocklist?p_no=${pvo.p_no }">
 		<input type="hidden" name="p_no" value="${pvo.p_no }" />
 		<table class="goods_search adminform">
 			<tbody>
@@ -110,20 +109,25 @@
 			<button class="btn btn-dark">재고 확인</button>
 		</div>
 	</form>
-	<form method="get"
-		action="/bitcamp/admin/stocklist?p_no=${pvo.p_no }">
+	<form method="get" action="/bitcamp/admin/stocklist?p_no=${pvo.p_no }">
 		<input type="hidden" name="p_no" value="${pvo.p_no }" />
 		<table class="goods_search adminform">
 			<tbody>
 				<tr>
 					<th>상품명</th>
 					<td>${pvo.c_name}>${pvo.p_name }</td>
-				</tr>				
+				</tr>
 				<tr>
 					<th>재고여부</th>
-					<td><label for="s_deltype"><input type="radio" name="s_deltype" value="All" <c:if test="${pagevo.s_deltype =='All'  || pagevo.s_deltype ==null || pagevo.s_deltype ==''}">checked="checked"</c:if>>전체상품</label> <label
-						for="s_deltype"><input type="radio" name="s_deltype" value="Y"<c:if test="${pagevo.s_deltype =='Y' &&pagevo.s_deltype != null &&pagevo.s_deltype != ''}">checked="checked"</c:if>>재고있음</label>
-						<label for="s_deltype"><input type="radio" name="s_deltype" value="N" <c:if test="${pagevo.s_deltype =='N' &&pagevo.s_deltype != null &&pagevo.s_deltype != ''}">checked="checked"</c:if>>재고없음</label></td>
+					<td><label for="s_deltype"><input type="radio"
+							name="s_deltype" value="All"
+							<c:if test="${pagevo.s_deltype =='All'  || pagevo.s_deltype ==null || pagevo.s_deltype ==''}">checked="checked"</c:if>>전체상품</label>
+						<label for="s_deltype"><input type="radio"
+							name="s_deltype" value="Y"
+							<c:if test="${pagevo.s_deltype =='Y' &&pagevo.s_deltype != null &&pagevo.s_deltype != ''}">checked="checked"</c:if>>재고있음</label>
+						<label for="s_deltype"><input type="radio"
+							name="s_deltype" value="N"
+							<c:if test="${pagevo.s_deltype =='N' &&pagevo.s_deltype != null &&pagevo.s_deltype != ''}">checked="checked"</c:if>>재고없음</label></td>
 				</tr>
 			</tbody>
 		</table>
@@ -139,17 +143,24 @@
 
 	<!-- 상품 리스트 -->
 	<form method="get" name="form" id="form">
-	<input type="hidden" name="p_no" value="${pvo.p_no }"/>
-		<table class="goodslist" style="table-layout:fixed">
+		<input type="hidden" name="p_no" value="${pvo.p_no }" />
+		<table class="goodslist" style="table-layout: fixed">
 			<tbody>
 				<div style="position: relative; float: right; margin-bottom: 10px;">
-					<input type="submit" class="btn btn-dark" onclick="javascript:form.action='/bitcamp/admin/stockDel'" value="선택 삭제"/>
+					<input type="submit" class="btn btn-dark"
+						onclick="javascript:form.action='/bitcamp/admin/stockDel'"
+						value="선택 삭제" />
 				</div>
-				<div style="position: relative; float: right; margin-bottom: 10px; margin-right: 10px">
-					<input type="submit" class="btn btn-dark" onclick="javascript:form.action='/bitcamp/admin/stockRestore'" value="재고 복구"/>
+				<div
+					style="position: relative; float: right; margin-bottom: 10px; margin-right: 10px">
+					<input type="submit" class="btn btn-dark"
+						onclick="javascript:form.action='/bitcamp/admin/stockRestore'"
+						value="재고 복구" />
 				</div>
-				<div style="position: relative; float: right; margin-bottom: 10px; margin-right: 10px">
-					<a href="/bitcamp/admin/addStock?p_no=${pvo.p_no }" class="btn btn-dark">상품등록</a>
+				<div
+					style="position: relative; float: right; margin-bottom: 10px; margin-right: 10px">
+					<a href="/bitcamp/admin/addStock?p_no=${pvo.p_no }"
+						class="btn btn-dark">상품등록</a>
 				</div>
 				<tr>
 					<th width="5%"><input type="checkbox" id="allCheck"></th>
@@ -163,17 +174,26 @@
 				<c:forEach var="vo" items="${list }">
 					<tr>
 						<td><input type="checkbox" name="chk" class="chk"
-							value="${vo.s_no }"></td>	
+							value="${vo.s_no }"></td>
 						<td>${vo.p_no }</td>
 						<td>${vo.s_no }</td>
-						<td style="text-overflow:ellipsis; overflow:hidden" title="${vo.p_name }"><nobr>${vo.p_name }</nobr></td>
-						<td><c:if test="${vo.s_deltype =='Y'}"><span style="color:blue">재고있음</span></c:if>
-						<c:if test="${vo.s_deltype =='N'}"><span style="color:red">재고없음</span></c:if></td>
-						<td style="text-overflow:ellipsis; overflow:hidden" title="${vo.note }"><nobr>${vo.note }</nobr></td>
+						<td style="text-overflow: ellipsis; overflow: hidden"
+							title="${vo.p_name }"><nobr>${vo.p_name }</nobr></td>
+						<td><c:if test="${vo.s_deltype =='Y'}">
+								<span style="color: blue">재고있음</span>
+							</c:if> <c:if test="${vo.s_deltype =='N'}">
+								<span style="color: red">재고없음</span>
+							</c:if></td>
+						<td style="text-overflow: ellipsis; overflow: hidden"
+							title="${vo.note }"><nobr>${vo.note }</nobr></td>
 						<td>${vo.s_regdate}</td>
 					</tr>
 				</c:forEach>
-
+				<c:if test="${fn:length(list)==0 }">
+					<tr>
+						<th colspan="15" style="background: #fff;">등록된 데이터가 없습니다.</th>
+					</tr>
+				</c:if>
 			</tbody>
 		</table>
 	</form>
