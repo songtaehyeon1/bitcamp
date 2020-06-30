@@ -84,7 +84,7 @@ header {
 	font: normal normal normal 18px/1.4em sans-serif;
 }
 
-#shop-menu-content {
+#shop-menu-content, #my-menu-content {
 	display: none;
 	position: absolute;
 	margin-top: -20px;
@@ -93,7 +93,7 @@ header {
 	margin-top: -20px;
 }
 
-#shop-menu-content a {
+#shop-menu-content a, #my-menu-content a {
 	color: white;
 	opacity: 0.8;
 	background-color: black;
@@ -102,7 +102,7 @@ header {
 	display: block;
 }
 
-#shop-menu-content a:hover {
+#shop-menu-content a:hover, #my-menu-content a:hover {
 	opacity: 1;
 	font-weight: bold
 }
