@@ -14,11 +14,12 @@
 		});
 		
 		function listSearch(){
-			if($("#searchText").val() == "" || $("#searchText").val() == null || $("#searchText").val() == " "){
+			if($("#searchText").val().trim() == "" || $("#searchText").val() == null){
 				alert("검색어를 입력해 주세요.");
+				$("#searchText").val("");
 				return false;
 			}
-			location.href = "/bitcamp/boardNotice?searchKey=" + $("#searchList").val() + "&searchWord=" + $("#searchText").val();
+			location.href = "/bitcamp/boardNotice?searchKey=" + $("#searchList").val() + "&searchWord=" + $("#searchText").val().trim();
 		}
 		
 		$(".pages").hover(function(){

@@ -193,6 +193,38 @@
 	color : #B4B4B4;
 }
 
+/* 평점 */
+#star{
+	padding : 0 0 0 20px;
+}
+
+.star-box{
+	height : 72px;
+	line-height : 72px;
+}
+
+.star{
+	display:inline-block;
+	width: 20px;
+	height: 20px;
+}
+
+.star_left{
+	background: url(http://gahyun.wooga.kr/main/img/testImg/star.png) no-repeat 0 0;
+	background-size: 20px;
+	margin-right: -3px;
+}
+
+.star_right{
+	background: url(http://gahyun.wooga.kr/main/img/testImg/star.png) no-repeat -20px 0;
+	background-size: 20px;
+	margin-left: -25px;
+}
+
+.star.on{
+	background-image: url(http://gahyun.wooga.kr/main/img/testImg/star_on.png);
+}
+
 /* 검색 */
 #wsDiv{
 	width : 1400px;
@@ -248,6 +280,15 @@
 	background : black;
 	border : none;
 	border-radius : 1px;
+}
+
+/* 페이징 */
+.black, .black:hover, .black:link, .black:visited{
+	background : black;
+}
+
+.pages:hover{
+	background : black;
 }
 
 

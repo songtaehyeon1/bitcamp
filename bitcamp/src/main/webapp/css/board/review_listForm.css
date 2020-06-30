@@ -124,38 +124,6 @@
 	font-size : 13px;
 }
 
-/* 평점 */
-#star{
-	padding : 0 0 0 20px;
-}
-
-.star-box{
-	height : 20px;
-	line-height : 20px;
-}
-
-.star{
-	display:inline-block;
-	width: 20px;
-	height: 20px;
-}
-
-.star_left{
-	background: url(http://gahyun.wooga.kr/main/img/testImg/star.png) no-repeat 0 0;
-	background-size: 20px;
-	margin-right: -3px;
-}
-
-.star_right{
-	background: url(http://gahyun.wooga.kr/main/img/testImg/star.png) no-repeat -20px 0;
-	background-size: 20px;
-	margin-left: -20px;
-}
-
-.star.on{
-	background-image: url(http://gahyun.wooga.kr/main/img/testImg/star_on.png);
-}
-
 /* 글 */
 #listForm{
 	margin-top : 20px;
@@ -213,6 +181,66 @@
 
 #listForm>li:nth-of-type(7) *{
 	padding-right : 10px;
+}
+
+#list_kind>span:nth-of-type(n + 2){
+	margin-right : 20px;
+}
+
+#list_imgs{
+	width : 1358px;
+}
+
+#list_imgs img{
+	width : 700px;
+	margin-bottom : 20px;
+}
+
+#list_content{
+	width : 1358px;
+	white-space : pre-wrap;
+	overflow : hidden;
+	word-wrap : break-word;
+}
+
+/* 평점 */
+#star{
+	padding : 0 0 0 20px;
+}
+
+.star-box{
+	width : 100px;
+	height : 20px;
+	line-height : 20px;
+}
+
+.star{
+	display:inline-block;
+	width: 20px;
+	height: 20px;
+}
+
+.star_left{
+	background: url(http://gahyun.wooga.kr/main/img/testImg/star.png) no-repeat 0 0;
+	background-size: 20px;
+	margin-right: -3px;
+}
+
+.star_right{
+	background: url(http://gahyun.wooga.kr/main/img/testImg/star.png) no-repeat -20px 0;
+	background-size: 20px;
+	margin-left: -25px;
+}
+
+.star.on{
+	background-image: url(http://gahyun.wooga.kr/main/img/testImg/star_on.png);
+}
+
+/* 추천 */
+#recommendBtn{
+	border : none;
+	color : white;
+	background : black;
 }
 
 /* 목록으로, 수정, 삭제 */
@@ -295,15 +323,15 @@
 	margin-top : 20px;
 }
 
-#replyForm *{
+#replyForm *, .replyForm *{
 	font-size : 13px;
 }
 
-#replyForm>div{
+#replyForm>div, .replyForm>div{
 	width : 1370px;
 }
 
-#replyForm{
+#replyForm, .replyForm{
 	width : 1400px;
 	border : 1px solid #EAEAEA;
 	background : #FCFCFC;
@@ -311,7 +339,7 @@
 	padding : 10px;
 }
 
-#replyForm_above>span:nth-of-type(1){
+#replyForm_above>span:nth-of-type(1), .replyForm_above>span:nth-of-type(1){
 	font-weight : bold;
 	font-size : 1.1em;
 }
@@ -325,7 +353,7 @@
 	max-height : 200px;
 }
 
-#replyBtn{
+#replyBtn, .replyBtn{
 	float : right;
 	border : none;
 	width : 60px;
@@ -336,22 +364,22 @@
 	margin-top : 5px;
 }
 
-.count{
+.count, #count{
 	float : right;
 }
 
 /* 댓글 */
-#reply>div, #reply>hr{
+#reply>div, #reply>hr, .reply>div, .reply>hr{
 	float : left;
 	width : 1400px;
 }
 
-#reply>div{
+#reply>div, .reply>div{
 	padding-left : 20px;
 	font-size : 13px;
 }
 
-#reply{
+#reply, .reply{
 	height : 70px;
 }
 
@@ -377,13 +405,55 @@
 	float : right;
 }
 
+/* 이전 다음 */
+#listMove *{
+	font-size : 13px;
+}
 
+#listMove{
+	width : 1400px;
+	float : left;
+}
 
+#listMove>ul{
+	width : 1400px;
+	border : 1px solid black;
+}
 
+#listMove li{
+	padding-left : 10px;
+}
 
+#listMove li:nth-of-type(1){
+	border-bottom : 1px solid white;
+}
 
+#listMove li:nth-of-type(2){
+	border-bottom : 1px solid black;
+}
 
+#listMove li:nth-of-type(2n + 1){
+	width : 8%;
+	height : 40px;
+	line-height : 40px;
+	background : black;
+	color : white;
+	padding-left : 20px;
+}
 
+#listMove li:nth-of-type(2n){
+	width : 92%;
+	height : 40px;
+	line-height : 40px;
+}
+
+.pointer{
+	cursor : pointer;
+}
+
+.pointer:hover{
+	color : #B4B4B4;
+}
 
 
 

@@ -18,10 +18,15 @@ public class ReviewVO {
 	private String review_file3;
 	private String review_file4;
 	private String review_file5;
+	private String fileList[] = new String[5];
 	private String userid;
 	private String p_name;
 	private String p_filename1;
 	private int price;
+	public ReviewVO () {}
+	public void print() {
+		System.out.println(fileList.length);
+	}
 	public int getReview_no() {
 		return review_no;
 	}
@@ -93,30 +98,46 @@ public class ReviewVO {
 	}
 	public void setReview_file1(String review_file1) {
 		this.review_file1 = review_file1;
+		fileList[0] = review_file1;
 	}
 	public String getReview_file2() {
 		return review_file2;
 	}
 	public void setReview_file2(String review_file2) {
 		this.review_file2 = review_file2;
+		fileList[1] = review_file2;
 	}
 	public String getReview_file3() {
 		return review_file3;
 	}
 	public void setReview_file3(String review_file3) {
 		this.review_file3 = review_file3;
+		fileList[2] = review_file3;
 	}
 	public String getReview_file4() {
 		return review_file4;
 	}
 	public void setReview_file4(String review_file4) {
 		this.review_file4 = review_file4;
+		fileList[3] = review_file4;
 	}
 	public String getReview_file5() {
 		return review_file5;
 	}
 	public void setReview_file5(String review_file5) {
 		this.review_file5 = review_file5;
+		fileList[4] = review_file5;
+	}
+	public String[] getFileList() {
+		return fileList;
+	}
+	public void setFileList(String[] fileList) {
+		this.fileList = fileList;
+		review_file1 = fileList[0];
+		review_file2 = fileList[1];
+		review_file3 = fileList[2];
+		review_file4 = fileList[3];
+		review_file5 = fileList[4];
 	}
 	public String getUserid() {
 		return userid;

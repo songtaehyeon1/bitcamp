@@ -33,9 +33,9 @@
 	<!-- 한개 리스트의 댓글 -->
 	<select id = "replyAll" resultType = "kr.co.bitcamp.board.ReplyVO">
 		select e.e_reply_no e_reply_no, e.enquiry_no enquiry_no, e.e_reply_content e_reply_content, 
-		to_char(e.e_reply_writedate, 'YYYY-MM-DD') e_reply_writedate, e.userno userno, m.userid 
+		to_char(e.e_reply_writedate, 'YYYY-MM-DD') e_reply_writedate, e.userno userno, m.userid userid 
 		from enquiry_reply e, member m 
-		where e.userno = m.userno and enquiry_no = #{param1}
+		where e.userno = m.userno(+) and enquiry_no = #{param1} 
 		order by e_reply_no desc
 	</select>
 	<!-- 댓글 한개 가져오기 -->
@@ -43,9 +43,14 @@
 		select e_reply_no, e_reply_content, userid from enquiry_reply e, member m where e.userno = m.userno and e_reply_no = #{param1}
 	</select>
 	<!-- 댓글 달기 -->
-	<insert id = "replyWrite">
+	<insert id = "replyWrite" parameterType = "kr.co.bitcamp.board.ReplyVO">
 		insert into enquiry_reply(e_reply_no, enquiry_no, e_reply_content, e_reply_writedate, userno) 
-		values(enquiry_reply_sq.nextval, #{param2}, #{param3}, sysdate, #{param1})
+		<if test = "param1 == 0">
+			values(enquiry_reply_sq.nextval, #{param2}, #{param3}, sysdate, '')
+		</if> 
+		<if test = "param1 != 0">
+			values(enquiry_reply_sq.nextval, #{param2}, #{param3}, sysdate, #{param1})
+		</if>
 	</insert>
 	<!-- 댓글 삭제 -->
 	<delete id = "replyDel">
@@ -85,6 +90,10 @@
 	<!-- 글 삭제 -->
 	<delete id = "enquiryDelete">
 		delete from board_enquiry where enquiry_no = #{no}
+	</delete>
+	<!-- 글 삭세 시 댓글 삭제 -->
+	<delete id = "enquiryReplyDelete">
+		delete from enquiry_reply where enquiry_no = #{param1}
 	</delete>
 	<!-- 조회수 올리기 -->
 	<update id = "enquiryHit">

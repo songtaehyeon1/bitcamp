@@ -44,8 +44,9 @@
 			});
 		});
 		
+		// 글 작성 시
 		$("#write").submit(function(){
-			if($("#goodsSelect1 option:selected").val() != "" && $("#goodsSelect2 option:selected").val() == "-"){
+			if($("#goodsSelect1 option:selected").val() != "0" && $("#goodsSelect2 option:selected").val() == "-"){
 				alert("상품을 선택해 주세요.");
 				return false;
 			}
@@ -89,9 +90,9 @@
 			<li>상품</li>
 			<li id = "goodsSelect">
 				<select id = "goodsSelect1" name = "c_no">
-					<option selected value = "">-</option>
-					<c:forEach var = "goods" items = "${cate}">
-						<option value = "${goods.c_no}">${goods.c_name}</option>
+					<option selected value = "0">-</option>
+					<c:forEach var = "list" items = "${cate}">
+						<option value = "${list.c_no}">${list.c_name}</option>
 					</c:forEach>
 				</select>
 				<select id = "goodsSelect2" name = "p_no">

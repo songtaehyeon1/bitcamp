@@ -34,6 +34,9 @@
 				$result.each(function(i, list){
 					tag += "<div class = 'reply'>";
 					tag += "	<div>";
+					if(list.userid == null && "${adminStatus == 'Y'}"){
+						list.userid = "관리자";
+					}
 					tag += "		<span class = 'reply_span1'>" + list.userid + "</span>";
 					tag += "		<span>작성날짜 : " + list.e_reply_writedate + "</span>";
 					tag += "	</div>";
@@ -41,7 +44,7 @@
 					tag += "		<div class = 'reply_content'>";
 					tag += list.e_reply_content;
 					tag += "		</div>";
-					if(list.userid == '${userid}'){
+					if(list.userid == '${userid}' || "${adminStatus}" == 'Y'){
 						tag += "	<div class = 'reply_right'>";
 						tag += "		<button class = 'reply_edit' onclick = 'reply_edit(this);'>수정</button>";
 						tag += "		<button class = 'reply_del' onclick = 'reply_del(this);'>삭제</button>";
@@ -66,7 +69,7 @@
 			alert("댓글을 작성해 주세요.");
 			return false;
 		}
-		var data = "userno=1&enquiry_no=" + ${list.enquiry_no} + "&e_reply_content=" + content_val;
+		var data = "userno=" + ${list.userno} + "&enquiry_no=" + ${list.enquiry_no} + "&e_reply_content=" + content_val;
 		$.ajax({
 			url : "/bitcamp/replyWrite",
 			data : data,
@@ -177,10 +180,13 @@
 			</div>
 		</c:if>
 	</div>
-	<c:if test = "${userid != null && userid != ''}">
+	<c:if test = "${adminStatus == 'Y' || userid != null && userid != ''}">
 		<div id = "replyForm">
 			<div id = "replyForm_above">
-				<span>${userid}</span>
+				<span>
+					<c:if test = "${adminStatus != 'Y'}">${userid}</c:if>
+					<c:if test = "${adminStatus == 'Y'}">관리자</c:if>
+				</span>
 				<span id = "count">0/300</span>
 			</div>
 			<div>
@@ -192,7 +198,7 @@
 			<input type = "hidden" name = "enquiry_no" value = "${list.enquiry_no}">
 		</div>
 	</c:if>
-	<c:if test = "${userid == null || userid == ''}">
+	<c:if test = "${adminStatus != 'Y' && (userid == null || userid == '')}">
 		<div id = "replyForm" style = "height : 100px; line-height : 85px;">
 			<div style = "text-align : center;">
 				로그인 후 댓글 작성이 가능합니다.

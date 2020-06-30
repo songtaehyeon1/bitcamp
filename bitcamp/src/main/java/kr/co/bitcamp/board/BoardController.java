@@ -248,7 +248,7 @@ public class BoardController {
 		
 		return mv;
 	}
-	// 글 한개 댓글
+	// 글 한개 댓글들
 	@RequestMapping(value = "/enquiry_reply", method = RequestMethod.POST)
 	@ResponseBody
 	public List<ReplyVO> enquiry_reply(@RequestParam("enquiry_no") int no){
@@ -264,8 +264,14 @@ public class BoardController {
 	public String replyWrite(ReplyVO vo, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
-		int userno = (Integer)session.getAttribute("userno");
-		int cnt = dao.replyWrite(userno, vo.getEnquiry_no(), vo.getE_reply_content());
+		String adminStatus = (String)session.getAttribute("adminStatus");
+		int cnt = 0;
+		if(adminStatus == "Y") {
+			cnt = dao.replyWrite(0, vo.getEnquiry_no(), vo.getE_reply_content());
+		}else{
+			int userno = (Integer)session.getAttribute("userno");
+			cnt = dao.replyWrite(userno, vo.getEnquiry_no(), vo.getE_reply_content());
+		}
 		if(cnt > 0) {
 			return "댓글이 등록되었습니다.";
 		}else{
@@ -316,7 +322,8 @@ public class BoardController {
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		int cnt = dao.enquiryUpdate(vo);
 		if(cnt > 0) {
-			mv.setViewName("redirect:boardEnquiry");
+			mv.addObject("str", "enquiry_editOk");
+			mv.setViewName("/board/alters");
 		}else {
 			mv.setViewName("redirect:enquiry_editForm");
 		}
@@ -328,6 +335,7 @@ public class BoardController {
 	public ModelAndView enquiry_delForm(int no) {
 		ModelAndView mv = new ModelAndView();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
+		dao.enquiryReplyDelete(no);
 		int cnt = dao.enquiryDelete(no);
 		if(cnt > 0) {
 			mv.setViewName("redirect:boardEnquiry");
@@ -454,18 +462,220 @@ public class BoardController {
 		File f = new File(path, file);
 		f.delete();
 	}
+	// 한개 리스트로
 	@RequestMapping("/review_listForm")
-	public ModelAndView review_listForm(int no) {
+	public ModelAndView review_listForm(int no, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		
+		PagingVO pagevo = new PagingVO();
+		pagevo.setPageNum(Integer.parseInt(request.getParameter("pageNum")));
+		pagevo.setSearchKey(request.getParameter("searchKey"));
+		pagevo.setSearchWord(request.getParameter("searchWord"));
+		pagevo.setReview_no(no);
+		dao.reviewHit(no);
+		LeadLagVO pnvo = dao.getLeadLagSelect(pagevo);
+		
 		mv.addObject("vo", dao.list(no));
+		mv.addObject("pagevo", pagevo);
+		mv.addObject("pnvo", pnvo);
 		mv.setViewName("board/review_listForm");
 		
 		return mv;
 	}
-	
+	// 글 삭제
+	@RequestMapping("/review_delForm")
+	public String review_delForm(int no, HttpServletRequest request) {
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		ReviewVO vo = dao.listDelete_files(no);
+		dao.reviewReplyDelete(no);
+		int cnt = dao.listDelete(no);
+		if(cnt > 0) {
+			String path = request.getSession().getServletContext().getRealPath("/resources/review");
+			for(String fName : vo.getFileList()) {
+				if(fName != null) {
+					File f = new File(path, fName);
+					f.delete();
+				}
+			}
+			return "redirect:boardReview";
+		}else {
+			return "redirect:review_listForm";
+		}
+	}
+	// 댓글 가져오기
+	@RequestMapping("/review_reply")
+	@ResponseBody
+	public List<ReviewReplyVO> review_reply(@RequestParam("review_no") int no){
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		
+		return dao.replyAll(no);
+	}
+	// 댓글 작성
+	@RequestMapping("/review_replyWrite")
+	@ResponseBody
+	public String review_replyWrite(ReviewReplyVO vo, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		int userno = (Integer)session.getAttribute("userno");
+		int cnt = dao.replyWrite(userno, vo.getReview_no(), vo.getR_reply_content());
+		if(cnt > 0) {
+			return "댓글이 작성되었습니다.";
+		}else {
+			return "댓글 작성 실패하였습니다.";
+		}
+	}
+	// 댓글 삭제
+	@RequestMapping("/review_replyDel")
+	@ResponseBody
+	public void review_replyDel(int r_reply_no) {
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		dao.replyDel(r_reply_no);
+	}
+	// 댓글 수정 폼
+	@RequestMapping("/review_replyEdit")
+	@ResponseBody
+	public ReviewReplyVO review_replyEdit(int r_reply_no) {
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		
+		return dao.replyOne(r_reply_no);
+	}
+	// 댓글 수정
+	@RequestMapping("/review_replyEditOk")
+	@ResponseBody
+	public void review_replyEditOk(int r_reply_no, String r_reply_content) {
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		dao.replyUpdate(r_reply_no, r_reply_content);
+	}
+	// 글 수정 폼으로
 	@RequestMapping("/review_editForm")
-	public String review_editForm() {return "/board/review_editForm";}
+	public ModelAndView review_editForm(int no) {
+		ModelAndView mv = new ModelAndView();
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		ReviewVO vo = dao.list(no);
+		
+		mv.addObject("cateList", dao.reviewCategory());
+		mv.addObject("goods", dao.reviewGoods(vo.getC_no()));
+		mv.addObject("vo", vo);
+		mv.setViewName("/board/review_editForm");
+		
+		return mv;
+	}
+	// 글 수정에 파일 삭제
+	@RequestMapping("/fileDel")
+	@ResponseBody
+	public String fileDel(HttpServletRequest request, @RequestParam("review_no") int review_no, @RequestParam("filename") String filename, 
+			@RequestParam("fileid") String fileid) {
+		String path = request.getSession().getServletContext().getRealPath("/resources/review");
+		deleteFile(path, filename);
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		dao.reviewEditFileDel(fileid, review_no);
+
+		return "asdsad";
+	}
+	// 글 수정
+	@RequestMapping("/review_edit")
+	public ModelAndView review_edit(ReviewVO vo, HttpServletRequest request) {
+		
+		System.out.println(vo.getReview_file1());
+		System.out.println(vo.getReview_file2());
+		System.out.println(vo.getReview_file3());
+		System.out.println(vo.getReview_file4());
+		System.out.println(vo.getReview_file5());
+		
+		ModelAndView mv = new ModelAndView();
+		String path = request.getSession().getServletContext().getRealPath("/resources/review");
+
+		// request객체로 > MultipartHttpServletRequest생성하여 파일업로드 처리를 한다
+		MultipartHttpServletRequest mr = (MultipartHttpServletRequest)request;
+		
+		// mr에서 MultipartFile객체를 얻어와야 된다
+		List<MultipartFile> files = mr.getFiles("filename");
+		String fileNames[] = new String[5];
+		int idx = 0;
+		if(files != null) {
+			// 업로드할 파일의 수만큼 반복
+			for(int i = 0; i < files.size(); i++) {
+				MultipartFile mf = files.get(i);
+				String fname = mf.getOriginalFilename();	// 업로드한 파일명
+				if(fname != null && !fname.equals("")) {
+					// 파일명 변경
+					File f = new File(path, fname);
+					if(f.exists()) {
+						for(int j = 0;; j++) {
+							String orgFilename = fname.substring(0, fname.lastIndexOf("."));	// 파일명
+							String orgExt = fname.substring(fname.lastIndexOf(".") + 1);	// 확장자명
+							f = new File(path, orgFilename + j + "." + orgExt);
+							if(!f.exists()) {
+								fname = orgFilename + j + "." + orgExt;
+								break;
+							}
+						}
+					}
+					try {
+						mf.transferTo(new File(path, fname));
+					}catch(Exception e) {
+						e.printStackTrace();
+					}
+					fileNames[idx++] = fname;
+				}
+			}
+			for(int i = 0; i < fileNames.length; i++) {
+				if(vo.getReview_file1() == null) {
+					vo.setReview_file1(fileNames[i]);
+				}else if(vo.getReview_file2() == null) {
+					vo.setReview_file2(fileNames[i]);
+				}else if(vo.getReview_file3() == null) {
+					vo.setReview_file3(fileNames[i]);
+				}else if(vo.getReview_file4() == null) {
+					vo.setReview_file4(fileNames[i]);
+				}else if(vo.getReview_file5() == null) {
+					vo.setReview_file5(fileNames[i]);
+				}
+			}
+		}
+		
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		int cnt = dao.reviewUpdate(vo);
+		if(cnt > 0) {
+			mv.addObject("str", "review_edit");
+			mv.setViewName("/board/alters");
+		}else {
+			for(String delFile : fileNames) {
+				// 파일 삭제
+				if(delFile != null) {
+					File f = new File(path, delFile);
+					f.delete();
+				}
+			}
+			mv.addObject("vo", vo);
+			mv.setViewName("redirect:boardReview");
+		}
+		
+		return mv;
+	}
+	// 추천수 올리기
+	@RequestMapping("/review_recommend")
+	@ResponseBody
+	public int review_recommend(@RequestParam("review_no") int review_no, HttpServletRequest request) {
+		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
+		String ip = getClientIpAddr(request);
+		if(dao.reviewRecommendIp(review_no, ip) <= 0) {
+			dao.reviewRecommendUpdate(review_no);
+			dao.reviewRecommendIpUpdate(review_no, ip);
+		}
+		
+		return dao.reviewRecommendSelect(review_no);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	// 정확한 ip주소 구하기

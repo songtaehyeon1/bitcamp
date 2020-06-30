@@ -4,12 +4,6 @@
 <script src = "/bitcamp/editor/ckeditor/ckeditor.js"></script>
 <script>
 	$(function(){
-		CKEDITOR.replace("content");
-		CKEDITOR.config.resize_enabled = false;
-		CKEDITOR.config.height = 400;
-		
-		// CKEDITOR.instances.content.getData();
-		
 		// 평점 클릭시 이벤트
 		$(".star").on('click',function(){
 			var idx = $(this).index();
@@ -18,18 +12,78 @@
 		    	$(".star").eq(i).addClass("on");
 			}
 		});
-		// 평점 누른 갯수(나누기 2해야됨)
-		//console.log($(".on").length / 2);
+		
+		// 상품리스트 가져오기
+		$("#goodsSelect1").change(function(){
+			var url = "/bitcamp/review_goods";
+			var data = "cate=" + $("#goodsSelect1 option:selected").val();
+			$.ajax({
+				url : url,
+				data : data,
+				success : function(result){
+					var $result = $(result);
+					var tag = "<option selected value = "-" disabled = 'disabled'>-</option>";
+					$result.each(function(idx, list){
+						tag += "<option value = '" + list.p_no + "'>" + list.p_name + "</option>";
+					});
+					$("#goodsSelect2").html(tag);
+				}, error : function(e){
+					console.log(e.responseText);
+				}
+			});
+		});
+		
+		// 글 수정 시
+		$("#edit").submit(function(){
+			if($("#goodsSelect1 option:selected").val() != "0" && $("#goodsSelect2 option:selected").val() == "-"){
+				alert("상품을 선택해 주세요.");
+				return false;
+			}
+			if($("#subject").val().trim() == ""){
+				alert("제목을 작성해 주세요.");
+				return false;
+			}
+			if($("#content").val().trim() == ""){
+				alert("내용을 작성해 주세요.");
+				return false;
+			}
+			$("#editForm").append("<input type = 'hidden' name = 'review_rating' value = '" + $(".on").length / 2 + "'>");
+		});
 	});
 	
 	// 목록, 취소 버튼
 	function goboard(){
-		if(confirm("작성한 내용이 적용되지 않습니다.")){
+		if($("#goodsSelect1 option:selected").index() != 0 || $("#goodsSelect2 option:selected").index() != 0 || $("#subject").val().trim() != "" || 
+				$("#content").val().trim() != "" || $("#filename1").val().trim() != "" || $("#filename2").val().trim() != "" || 
+				$("#filename3").val().trim() != "" || $("#filename4").val().trim() != "" || $("#filename5").val().trim() != "" || 
+				$(".on").length / 2 != 1){
+			if(confirm("작성한 내용이 사라집니다.")){
+				location.href = '/bitcamp/boardReview';
+			}
+		}else{
 			location.href = '/bitcamp/boardReview';
 		}
 	}
+	
+	// 파일 삭제
+	function fileDel(str){
+		var fileid = $(str).parent().children("span").attr("id");
+		var filename = $(str).parent().children(".hidden_file").val();
+		if(confirm("파일을 삭제하시겠습니까?")){
+			$.ajax({
+				url : "/bitcamp/fileDel",
+				data : "review_no=${vo.review_no}&filename=" + filename + "&fileid=" + fileid,
+				success : function(result){
+					alert("파일이 삭제되었습니다.");
+					location.reload();
+				}, error : function(e){
+					console.log(e.responseText);
+				}
+			});
+		}
+	}
 </script>
-<div class = "container" id = "review_writeForm">
+<div class = "container" id = "review_editForm">
 	<div id = "nLink"><a href = "/bitcamp/">홈</a>&nbsp;>&nbsp;<span>상품후기</span></div>
 	<div id = "nTitle"><span>상품후기</span><span id = "sss">&nbsp;&nbsp;|&nbsp;&nbsp;대여금액 100,000원 이상 , 직접 설치한 장비와 캠핑모습을 담은 사진 3장 이상으로 캠핑후기를 작성해주시면 캐시백 10,000원을 드립니다. 내용에 맞지 않는 게시물은 관리자의 권한으로 삭제합니다.</span></div>
 	<ul id = "boardCate">
@@ -38,74 +92,128 @@
 		<li onclick = "location.href = '/bitcamp/boardReview'">상품후기</li>
 	</ul>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
-	<form method = "post" action = "/bitcamp/review_editOk">
-		<ul id = "writeForm">
+	<form method = "post" action = "/bitcamp/review_edit" id = "edit" enctype = "multipart/form-data">
+		<ul id = "editForm">
 			<li>상품</li>
 			<li id = "goodsSelect">
-				<select id = "goodsSelect1">
-					<option>-</option>
-					<option>2</option>
-					<option>3</option>
+				<select id = "goodsSelect1" name = "c_no">
+					<option selected value = "0">-</option>
+					<c:forEach var = "cate" items = "${cateList}">
+						<c:if test = "${cate.c_no == vo.c_no}">
+							<option value = "${cate.c_no}" selected>${cate.c_name}</option>
+						</c:if>
+						<c:if test = "${cate.c_no != vo.c_no}">
+							<option value = "${cate.c_no}">${cate.c_name}</option>
+						</c:if>
+					</c:forEach>
 				</select>
-				<select id = "goodsSelect2">
-					<option>-</option>
-					<option>2</option>
-					<option>3</option>
+				<select id = "goodsSelect2" name = "p_no">
+					<option selected disabled = "disabled">-</option>
+					<c:forEach var = "goods" items = "${goods}">
+						<c:if test = "${goods.p_no == vo.p_no}">
+							<option value = "${goods.p_no}" selected>${goods.p_name}</option>
+						</c:if>
+						<c:if test = "${goods.p_no != vo.p_no}">
+							<option value = "${goods.p_no}">${goods.p_name}</option>
+						</c:if>
+					</c:forEach>
 				</select>
 			</li>
 			<li>제목</li>
 			<li id = "titleSelect">
-				<select id = "titleSelect1">
-					<option>궁금합니다</option>
-					<option>반납관련 문의</option>
-					<option>배송관련 문의</option>
-					<option>장비관련 문의</option>
-					<option>예약취소 관련 문의</option>
-					<option>단체대여 관련 문의</option>
-					<option>기타 문의</option>
-				</select>
+				<input type = "text" name = "review_subject" id = "subject" value = "${vo.review_subject}"/>
 			</li>
 			<li>평점</li>
 			<li id = "star">
 				<div class="star-box">
-					<span class="star star_left on"></span>
-					<span class="star star_right on"></span>
-					
-					<span class="star star_left"></span>
-					<span class="star star_right"></span>
-					
-					<span class="star star_left"></span>
-					<span class="star star_right"></span>
-					
-					<span class="star star_left"></span>
-					<span class="star star_right"></span>
-					
-					<span class="star star_left"></span>
-					<span class="star star_right"></span>
+						<span class="star star_left <c:if test = "${vo.review_rating <= 5}">on</c:if>"></span>
+						<span class="star star_right <c:if test = "${vo.review_rating <= 5}">on</c:if>"></span>
+						
+						<span class="star star_left <c:if test = "${vo.review_rating >= 2}">on</c:if>"></span>
+						<span class="star star_right <c:if test = "${vo.review_rating >= 2}">on</c:if>"></span>
+						
+						<span class="star star_left <c:if test = "${vo.review_rating >= 3}">on</c:if>"></span>
+						<span class="star star_right <c:if test = "${vo.review_rating >= 3}">on</c:if>"></span>
+						
+						<span class="star star_left <c:if test = "${vo.review_rating >= 4}">on</c:if>"></span>
+						<span class="star star_right <c:if test = "${vo.review_rating >= 4}">on</c:if>"></span>
+						
+						<span class="star star_left <c:if test = "${vo.review_rating == 5}">on</c:if>"></span>
+						<span class="star star_right <c:if test = "${vo.review_rating == 5}">on</c:if>"></span>
 				</div>
 			</li>
 			<li>
-				<textarea name = "content" id = "content"></textarea>
+				<textarea id = "content" name = "review_content">${vo.review_content}</textarea>
 			</li>
 			<li>첨부파일1</li>
 			<li>
-				<input type = "file" name = "filename1">
+				<c:if test = "${vo.review_file1 == null}">
+					<input type = "file" name = "filename" id = "filename1">
+				</c:if>
+				<c:if test = "${vo.review_file1 != null}">
+					<input type = "hidden" class = "hidden_file" name = "review_file1" value = "${vo.review_file1}">
+					<span id = "review_file1">
+						<c:if test = "${vo.review_file1.length() >= 11}">${vo.review_file1.substring(0, 5)}...${vo.review_file1.substring(vo.review_file1.indexOf(".") - 1)}</c:if>
+						<c:if test = "${vo.review_file1.length() < 11}">${vo.review_file1}</c:if>
+					</span>
+					<button type = "button" class = "file_del_btn" onclick = "fileDel(this);">삭제</button>
+				</c:if>
 			</li>
 			<li>첨부파일2</li>
 			<li>
-				<input type = "file" name = "filename2">
+				<c:if test = "${vo.review_file2 == null}">
+					<input type = "file" name = "filename" id = "filename2">
+				</c:if>
+				<c:if test = "${vo.review_file2 != null}">
+					<input type = "hidden" class = "hidden_file" name = "review_file2" value = "${vo.review_file2}">
+					<span id = "review_file2">
+						<c:if test = "${vo.review_file2.length() >= 11}">${vo.review_file2.substring(0, 5)}...${vo.review_file2.substring(vo.review_file2.indexOf(".") - 1)}</c:if>
+						<c:if test = "${vo.review_file2.length() < 11}">${vo.review_file2}</c:if>
+					</span>
+					<button type = "button" class = "file_del_btn" onclick = "fileDel(this);">삭제</button>
+				</c:if>
 			</li>
 			<li>첨부파일3</li>
 			<li>
-				<input type = "file" name = "filename3">
+				<c:if test = "${vo.review_file3 == null}">
+					<input type = "file" name = "filename" id = "filename1">
+				</c:if>
+				<c:if test = "${vo.review_file3 != null}">
+					<input type = "hidden" class = "hidden_file" name = "review_file3" value = "${vo.review_file3}">
+					<span id = "review_file3">
+						<c:if test = "${vo.review_file3.length() >= 11}">${vo.review_file3.substring(0, 5)}...${vo.review_file3.substring(vo.review_file3.indexOf(".") - 1)}</c:if>
+						<c:if test = "${vo.review_file3.length() < 11}">${vo.review_file3}</c:if>
+					</span>
+					<button type = "button" class = "file_del_btn" onclick = "fileDel(this);">삭제</button>
+				</c:if>
 			</li>
 			<li>첨부파일4</li>
 			<li>
-				<input type = "file" name = "filename4">
+				<c:if test = "${vo.review_file4 == null}">
+					<input type = "file" name = "filename" id = "filename1">
+				</c:if>
+				<c:if test = "${vo.review_file4 != null}">
+					<input type = "hidden" class = "hidden_file" name = "review_file4" value = "${vo.review_file4}">
+					<span id = "review_file4">
+						<c:if test = "${vo.review_file4.length() >= 11}">${vo.review_file4.substring(0, 5)}...${vo.review_file4.substring(vo.review_file4.indexOf(".") - 1)}</c:if>
+						<c:if test = "${vo.review_file4.length() < 11}">${vo.review_file4}</c:if>
+					</span>
+					<button type = "button" class = "file_del_btn" onclick = "fileDel(this);">삭제</button>
+				</c:if>
 			</li>
 			<li>첨부파일5</li>
 			<li>
-				<input type = "file" name = "filename5">
+				<c:if test = "${vo.review_file5 == null}">
+					<input type = "file" name = "filename" id = "filename1">
+				</c:if>
+				<c:if test = "${vo.review_file5 != null}">
+					<input type = "hidden" class = "hidden_file" name = "review_file5" value = "${vo.review_file5}">
+					<span id = "review_file5">
+						<c:if test = "${vo.review_file5.length() >= 11}">${vo.review_file5.substring(0, 5)}...${vo.review_file5.substring(vo.review_file5.indexOf(".") - 1)}</c:if>
+						<c:if test = "${vo.review_file5.length() < 11}">${vo.review_file5}</c:if>
+					</span>
+					<button type = "button" class = "file_del_btn" onclick = "fileDel(this);">삭제</button>
+				</c:if>
 			</li>
 		</ul>
 		<div id = "goBtn">
@@ -115,5 +223,6 @@
 				<input type = "button" value = "취소" onclick = "goboard();">
 			</div>
 		</div>
+		<input type = "hidden" name = "review_no" value = "${vo.review_no}">
 	</form>
 </div>

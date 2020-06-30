@@ -14,6 +14,7 @@ public class PagingVO {
 	private String searchKey;
 	private String searchWord;
 	
+	// 이전글, 다음글 때문에
 	private int notice_no;
 	private int enquiry_no;
 	private int review_no;
