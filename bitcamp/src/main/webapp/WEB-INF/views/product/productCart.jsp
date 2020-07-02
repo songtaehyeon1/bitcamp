@@ -67,9 +67,11 @@
 <input class="cartItems" type="hidden" name="delivery_fee" value="${cart.delivery_fee}" >
 						<td><input type="checkbox" class="checkBox" name="checkBox"
 							style="margin-left: 15px"></td>
-						<td><a href="/bitcamp/productView?p_no=${cart.p_no }"> <img
-								src="/bitcamp/upload/${cart.p_filename1 }" width="78" height="78" onerror="this.src='/bitcamp/resources/products/tent1.png'">
-						</a></td>
+						<td>
+							<a href="/bitcamp/productView?p_no=${cart.p_no }"> 
+								<img src="/bitcamp/upload/${cart.p_filename1 }" width="78" height="78" onerror="this.src='/bitcamp/resources/products/tent1.png'">
+							</a>
+						</td>
 						<td>
 							<div>
 								<label id="curNum" class="curNum" style="display:none">${vs.index}</label><a

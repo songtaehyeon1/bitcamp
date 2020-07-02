@@ -5,20 +5,9 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/order/orderForm.css" />
+<script src="<%=request.getContextPath()%>/js/order/order.js"></script>
 <script>
 $(function() {
-	var start = "${day.orderStart}";
-	var end = "${day.orderEnd}";
-	console.log(start+end)
-		
-	var period = ${day.product_borrow_period}-1+"박"+${day.product_borrow_period}+"일";
-	
-	$("#period").html(start+"~")
-	$("#period").append(end)
-	$("#period").append("("+period+")")
-	
-	
-	
 	$("#addr_paymethod0").click(function() {
 		$("#card-form").css("display","block");
 		$("#card-agree").css("display","block");
@@ -75,10 +64,15 @@ function openDaumZipAddress(type) {
 }
 
 </script>
-<%-- <c:forEach var="vo" items="${productList }"> --%>
-<%-- 	${vo.p_no },${vo.orderStart },${vo.orderEnd } --%>
-<%-- </c:forEach> --%>
 <form method="post" action="/bitcamp/orderOk">
+<input type="hidden" name="limitQuantity" value="${vo.limitQuantity }"><!-- 상품번호 -->
+<input type="hidden" name="p_no" value="${product.p_no }"><!-- 상품번호 -->
+<input type="hidden" name="p_name" value="${product.p_name }"><!-- 상품명 -->
+<input type="hidden" name="orderStart" value="${vo.orderStart }"><!-- 대여 시작일 -->
+<input type="hidden" name="orderEnd" value="${vo.orderEnd }"><!-- 대여 종료일-->
+<input type="hidden" name="total_price" value="${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }"><!--총 결제 금액-->
+
+
 <div id="orderForm" class="container">
 	<div style="height: 130px"></div>
 	<div class="titleArea">
@@ -97,7 +91,6 @@ function openDaumZipAddress(type) {
 	<div id="product_info">
 		<table border="1">
 			<colgroup>
-				<col style="width: 27px">
 				<col style="width: 100px">
 				<col style="width: auto">
 				<col style="width: 100px">
@@ -108,7 +101,6 @@ function openDaumZipAddress(type) {
 			</colgroup>
 			<thead>
 				<tr>
-					<th scope="col"><input type="checkbox"></th>
 					<th scope="col">이미지</th>
 					<th scope="col">상품정보</th>
 					<th scope="col">판매가</th>
@@ -120,41 +112,39 @@ function openDaumZipAddress(type) {
 			</thead>
 			<tbody>
 				<tr>
-					<td><input type="checkbox"></td>
-					<td><a href="/bitcamp/productView?p_no=${product.p_no }"><img
-							src="/bitcamp/upload/${product.p_filename1 }" style="width:100px;height:100px"></a></td>
-					<td><strong><a href="/bitcamp/productView?p_no=${product.p_no }">${product.p_name }</a></strong>
-						<div><label id="period"></label></div>
+					<td>
+						<a href="/bitcamp/productView?p_no=${product.p_no }">
+							<img src="/bitcamp/upload/${product.p_filename1 }" style="width:100px;height:100px" onerror="this.src='/bitcamp/resources/products/tent1.png'">
+						</a>
+					</td>
+					<td>
+						<strong><a href="/bitcamp/productView?p_no=${product.p_no }">${product.p_name }</a></strong>
+						<div><label id="period">${vo.orderStart }~${vo.orderEnd }</label></div>
 					<td>
 						<div>
-							<strong>${product.price }</strong>
+							<strong>${product.price*vo.currentQty }</strong>
 						</div>
 					</td>
-					<td>${day.currentQty}</td>
+					<td>${vo.currentQty}</td>
 					<td><span><img
 							src="//img.echosting.cafe24.com/design/common/icon_cash.gif">
 							4,700원</span></td>
-					<td rowspan="1">[비례]</td>
-					<td><strong>208,850원</strong></td>
+					<td rowspan="1"><label>${product.delivery_fee*vo.currentQty}</label>원</td>
+					<td><strong><label>${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }</label>원</strong></td>
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
-					<td></td>
-					<td colspan="7">상품구매금액 <strong>${product.price }<span>
-								(+50,000)</span></strong> + 배송비 ${product.delivery_fee } = 합계: <strong class="txtEm gIndent10">258,850원</strong>
+					<td colspan="7">상품구매금액 <strong>${product.price*vo.currentQty }<span>
+								(+0)</span></strong> + 배송비 ${product.delivery_fee } = 합계: <strong class="txtEm gIndent10"><label>${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }</label>원</strong>
 					</td>
 				</tr>
 			</tfoot>
-		</table>
+		</table>	
 	</div>
 
 
-	<div
-		style="width: 100%; text-align: right; height: 100px; border-bottom: 1px gray solid">
-		<button type="button">선택 삭제</button>
-	</div>
-
+<!-- 주문자 정보 입력 -->
 	<div id="order_info">
 		<div style="margin-top: 20px">
 			<h5>주문 정보 </h5>
@@ -173,59 +163,65 @@ function openDaumZipAddress(type) {
 					</tr>
 					<tr>
 						<th scope="row">주소</th>
-						<td><input id="ozipcode" name="ozipcode" size="6"
-							maxlength="6" readonly type="text"> <button type="button"
-							class="btn btn-dark" onclick="openDaumZipAddress('o');">우편번호</button><br> <input id="oaddr"
-							name="oaddr" size="40" readonly type="text"
-							style="margin-top: 10px"> <span>기본주소</span><br> <input
-							id="oaddrdetail" name="oaddrdetail" size="40" type="text"
-							style="margin-top: 10px"> <span>나머지주소</span><span>(선택입력가능)</span></td>
+						<td>
+							<input id="ozipcode" name="ozipcode" size="6"maxlength="6" readonly type="text">
+							<button type="button"class="btn btn-dark" onclick="openDaumZipAddress('o');">우편번호</button>
+							<br>
+							<input id="oaddr" name="oaddr" size="40" readonly type="text" style="margin-top: 10px">
+							<span>기본주소</span>
+							<br> 
+							<input id="oaddrdetail" name="oaddrdetail" size="40" type="text" style="margin-top: 10px"> 
+							<span>나머지주소</span>
+							<span>(선택입력가능)</span>
+						</td>
 					</tr>
 					<tr>
 						<th scope="row">연락처</th>
-						<td><select id="otel1" name="otel1">
-								<option value="02">02</option>
-								<option value="031">031</option>
-								<option value="032">032</option>
-								<option value="033">033</option>
-								<option value="041">041</option>
-								<option value="042">042</option>
-								<option value="043">043</option>
-								<option value="044">044</option>
-								<option value="051">051</option>
-								<option value="052">052</option>
-								<option value="053">053</option>
-								<option value="054">054</option>
-								<option value="055">055</option>
-								<option value="061">061</option>
-								<option value="062">062</option>
-								<option value="063">063</option>
-								<option value="064">064</option>
-								<option value="0502">0502</option>
-								<option value="0503">0503</option>
-								<option value="0504">0504</option>
-								<option value="0505">0505</option>
-								<option value="0506">0506</option>
-								<option value="0507">0507</option>
-								<option value="070">070</option>
-								<option value="010">010</option>
-								<option value="011">011</option>
-								<option value="016">016</option>
-								<option value="017">017</option>
-								<option value="018">018</option>
-								<option value="019">019</option>
-								<option value="0508">0508</option>
-						</select>-<input id="otel2" name="otel2" maxlength="4" size="4"
-							type="text">-<input id="otel3" name="otel3"
-							maxlength="4" size="4" type="text"></td>
+						<td>
+							<select id="otel1" name="otel1">
+									<option value="02">02</option>
+									<option value="031">031</option>
+									<option value="032">032</option>
+									<option value="033">033</option>
+									<option value="041">041</option>
+									<option value="042">042</option>
+									<option value="043">043</option>
+									<option value="044">044</option>
+									<option value="051">051</option>
+									<option value="052">052</option>
+									<option value="053">053</option>
+									<option value="054">054</option>
+									<option value="055">055</option>
+									<option value="061">061</option>
+									<option value="062">062</option>
+									<option value="063">063</option>
+									<option value="064">064</option>
+									<option value="0502">0502</option>
+									<option value="0503">0503</option>
+									<option value="0504">0504</option>
+									<option value="0505">0505</option>
+									<option value="0506">0506</option>
+									<option value="0507">0507</option>
+									<option value="070">070</option>
+									<option value="010">010</option>
+									<option value="011">011</option>
+									<option value="016">016</option>
+									<option value="017">017</option>
+									<option value="018">018</option>
+									<option value="019">019</option>
+									<option value="0508">0508</option>
+							</select>-<input id="otel2" name="otel2" maxlength="4" size="4"	type="text">
+									 -<input id="otel3" name="otel3" maxlength="4" size="4" type="text">
+						</td>
 					</tr>
 				</tbody>
 				<!-- 이메일-->
 				<tbody>
 					<tr>
 						<th scope="row">이메일</th>
-						<td><input id="oemail1" name="oemail1" type="text">@<input
-							id="oemail2" name="oemail2" readonly="readonly" type="text">
+						<td>
+							<input id="oemail1" name="oemail1" type="text">@
+							<input id="oemail2" name="oemail2" readonly="readonly" type="text">
 							<select id="oemail3">
 								<option value="" selected="selected">- 이메일 선택 -</option>
 								<option value="naver.com">naver.com</option>
@@ -238,11 +234,12 @@ function openDaumZipAddress(type) {
 								<option value="dreamwiz.com">dreamwiz.com</option>
 								<option value="gmail.com">gmail.com</option>
 								<option value="etc">직접입력</option>
-						</select>
+							</select>
 							<ul>
 								<li>- 이메일을 통해 주문처리과정을 보내드립니다.</li>
 								<li>- 이메일 주소란에는 반드시 수신가능한 이메일주소를 입력해 주세요</li>
-							</ul></td>
+							</ul>
+						</td>
 					</tr>
 				</tbody>
 
@@ -250,9 +247,10 @@ function openDaumZipAddress(type) {
 				<tbody>
 					<tr>
 						<th scope="row">주문조회 비밀번호</th>
-						<td><input id="opassword" name="opassword" size="7"
-							maxlength="12" type="password"> (주문조회시 필요합니다. 4자에서 12자 영문
-							또는 숫자 대소문자 구분)</td>
+						<td>
+							<input id="opassword" name="opassword" size="7"	maxlength="12" type="password"> 
+							(주문조회시 필요합니다. 4자에서 12자 영문 또는 숫자 대소문자 구분)
+						</td>
 					</tr>
 					<tr>
 						<th scope="row">주문조회 비밀번호<br>확인
@@ -265,7 +263,7 @@ function openDaumZipAddress(type) {
 		</div>
 	</div>
 
-
+<!-- 배송지 정보 입력 -->
 	<div id="recipient_info">
 		<div style="margin-top: 20px">
 			<h5>배송 정보</h5>
@@ -281,9 +279,10 @@ function openDaumZipAddress(type) {
 					<tr>
 						<th scope="row">배송지 선택</th>
 						<td><div>
-								<input id="sameaddr0" name="sameaddr" type="radio"> <label
-									for="sameaddr0">주문자 정보와 동일</label> <input id="sameaddr1"
-									name="sameaddr" type="radio"> <label for="sameaddr1">새로운배송지</label>
+								<input id="sameaddr0" name="sameaddr" type="radio"> 
+								<label for="sameaddr0" style="cursor:pointer">주문자 정보와 동일</label>
+								<input id="sameaddr1" name="sameaddr" type="radio"> 
+								<label for="sameaddr1" style="cursor:pointer">새로운배송지</label>
 								<a href="#" id="btn_shipp_addr" class="btn btn-dark">주소록 보기</a>
 							</div></td>
 					</tr>
@@ -349,7 +348,7 @@ function openDaumZipAddress(type) {
 		</div>
 	</div>
 
-
+<!-- 결제 예정 금액 -->
 
 	<div>
 		<div style="margin-top: 20px">
@@ -377,19 +376,19 @@ function openDaumZipAddress(type) {
 					<tr>
 						<td>
 							<div>
-								<strong><span id="total_order_price_view">54,000</span>원</strong>
+								<strong><span id="total_order_price_view">${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }</span>원</strong>
 							</div>
 						</td>
 						<td>
 							<div>
 								<strong>-</strong> <strong><span
-									id="total_sale_price_view">2,000</span>원</strong>
+									id="total_sale_price_view">0</span>원</strong>
 							</div>
 						</td>
 						<td>
 							<div>
 								<strong>=</strong> <strong> <span
-									id="total_order_sale_price_view">52,000</span>원
+									id="total_order_sale_price_view"></span>원
 								</strong>
 							</div>
 						</td>
@@ -413,13 +412,13 @@ function openDaumZipAddress(type) {
 						</tr>
 						<tr>
 							<th scope="row"><strong>총 부가결제금액</strong></th>
-							<td><strong id="total_addpay_price_view">2,000</strong>원</td>
+							<td><strong id="total_addpay_price_view">0</strong>원</td>
 						</tr>
 						<tr>
 							<th scope="row">적립금</th>
 							<td>
 								<p>
-									<input id="input_mile" name="mileage" size="10" type="text">
+									<input id="input_mile" name="mileage" size="10" type="text" value="0">
 									원 (총 사용가능 적립금 : <strong>2,000</strong>원)
 								</p>
 								<ul class="info">
@@ -436,19 +435,23 @@ function openDaumZipAddress(type) {
 		</div>
 	</div>
 
+
+
+<!-- 결제 수단 -->
 	<div style="margin-top: 20px">
 		<h5>결제 수단</h5>
 	</div>
 	<div class="payArea">
 		<div class="payment">
-			<div class="method"
-				style="border-bottom: 3px gray double; margin-bottom: 5px">
-				<span> <input id="addr_paymethod0" name="addr_paymethod"
-					value="card" type="radio" checked="checked"> <label
-					for="addr_paymethod0">카드 결제</label>
-				</span> <span> <input id="addr_paymethod1" name="addr_paymethod"
-					value="cash" type="radio"> <label for="addr_paymethod1">무통장
-						입금</label>
+			<div class="method" style="border-bottom: 3px gray double; margin-bottom: 5px">
+				<span>
+					<input id="addr_paymethod0" name="addr_paymethod"
+					value="card" type="radio" checked="checked"> 
+					<label for="addr_paymethod0">카드 결제</label>
+				</span> 
+				<span> 
+					<input id="addr_paymethod1" name="addr_paymethod" value="cash" type="radio"> 
+					<label for="addr_paymethod1">무통장 입금</label>
 				</span>
 			</div>
 
@@ -547,12 +550,13 @@ function openDaumZipAddress(type) {
 		<!-- 최종결제금액 -->
 		<div id="end_price" style="padding: 10px 10px 10px; height: 100%">
 			<h4 style="font-size: 1em">
-				<strong id="current_pay_name">카드 결제</strong> <span>최종결제 금액</span>
+				<strong id="current_pay_name">카드 결제</strong>
+				<span>최종결제 금액</span>
 			</h4>
 			<p>
-				<input id="total_price" name="total_price"
+				<input id="total_price" name="total_price" 
 					style="text-align: right; border: none; float: none; font-size: 1.5em; background: #fafafa"
-					size="10" readonly value="25000" type="text"><span>원</span>
+					size="10" readonly value="0" type="text"><span>원</span>
 			</p>
 			
 			<p id="chk_purchase_agreement" style="display: none;">
@@ -573,6 +577,5 @@ function openDaumZipAddress(type) {
 			</div>
 		</div>
 	</div>
-
 </div>
 </form>

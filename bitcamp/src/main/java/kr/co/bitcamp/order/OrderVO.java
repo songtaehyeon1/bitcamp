@@ -1,12 +1,12 @@
 package kr.co.bitcamp.order;
 
 public class OrderVO {
-	private int o_no;
+	private String o_no;
+	private String oi_no;
+	private String r_no;
 	private int p_no;
 	private int s_no;
 	private int userno;
-	private int r_no;
-	private int oi_no;
 	private int price;
 	private int day_price;
 	private int mileage;
@@ -37,11 +37,15 @@ public class OrderVO {
 	private String rtel2;
 	private String rtel3;
 	private String rcommnet;
-	private String payment_type;//°áÁ¦Å¸ÀÔ(card/cash)
-	private String bank;//ÀºÇà¸í
-	private String depositor;//ÀÔ±İÀÚ¼º¸í
-	private String payment_time;//°áÁ¦½Ã°£
-	private String card_corp;//Ä«µå»ç¸í
+	private String payment_type;//ê²°ì œ ë°©ì‹(card/cash)
+	private String bank;//ë¬´í†µì¥
+	private String depositor;//ì…ê¸ˆìëª…
+	private String payment_time;//ì…ê¸ˆì‹œê°„
+	private String card_corp;//ì¹´ë“œíšŒì‚¬
+	private String userid;//ìœ ì €ì•„ì´ë””
+	
+	
+	private String delivery_arrival_date;////////ë°°ì†¡ì™„ë£Œë‚ ì§œ...
 	
 	public String getPayment_type() {
 		return payment_type;
@@ -121,10 +125,10 @@ public class OrderVO {
 	public void setRtel3(String rtel3) {
 		this.rtel3 = rtel3;
 	}
-	public int getO_no() {
+	public String getO_no() {
 		return o_no;
 	}
-	public void setO_no(int o_no) {
+	public void setO_no(String o_no) {
 		this.o_no = o_no;
 	}
 	public int getP_no() {
@@ -145,16 +149,16 @@ public class OrderVO {
 	public void setUserno(int userno) {
 		this.userno = userno;
 	}
-	public int getR_no() {
+	public String getR_no() {
 		return r_no;
 	}
-	public void setR_no(int r_no) {
+	public void setR_no(String r_no) {
 		this.r_no = r_no;
 	}
-	public int getOi_no() {
+	public String getOi_no() {
 		return oi_no;
 	}
-	public void setOi_no(int oi_no) {
+	public void setOi_no(String oi_no) {
 		this.oi_no = oi_no;
 	}
 	public int getPrice() {
@@ -299,6 +303,12 @@ public class OrderVO {
 	}
 	public void setRcommnet(String rcommnet) {
 		this.rcommnet = rcommnet;
+	}
+	public String getDelivery_arrival_date() {
+		return delivery_arrival_date;
+	}
+	public void setDelivery_arrival_date(String delivery_arrival_date) {
+		this.delivery_arrival_date = delivery_arrival_date;
 	}
 	
 

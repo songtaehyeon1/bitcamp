@@ -137,13 +137,6 @@ $(function() {
 		"click" : function() {
 			var imgSrc = $(this).attr('src');
 			$('.bigImage').attr('src', imgSrc)
-			console.log(borrow_start.value)
-			var yy = new Date(borrow_start.value).getFullYear();
-			var mm = new Date(borrow_start.value).getMonth() + 1;
-			var dd = new Date(borrow_start.value).getDate();
-			console.log(yy)
-			console.log(mm)
-			console.log(dd)
 		}
 	})
 	// 썸네일 사진 안에 들어가는 div 사이즈
