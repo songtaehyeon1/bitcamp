@@ -28,50 +28,11 @@ public class CategoryController {
 		this.sqlSession = sqlSession;
 	}
 	
-	//SHOP 메뉴 클릭 시
-	@RequestMapping("/listAll")
-	public ModelAndView listAll(String sort, HttpServletRequest req) {
-		CategoryDAOImp dao = sqlSession.getMapper(CategoryDAOImp.class);
-
-		//System.out.println(sort);
-		List<CategoryVO> clist = dao.allCategorySelect();  //사이드바 메뉴
-		List<ProductVO> plist = dao.allProductSelect(sort);  //상품 리스트
-		
-		
-		HttpSession ses = req.getSession();
-		String userno = String.valueOf(ses.getAttribute("userno"));	
-		List<Integer> ilist = dao.allHearts(userno);
-		//관심상품 리스트
-		for (int i=0; i<plist.size(); i++) {  //상품0, 상품1, 상품2 ...
-			for (int j=0; j<ilist.size(); j++) {  //관심상품0(하트버튼), 관심상품1, 관심상품2 ...
-				if(plist.get(i).getP_no()==ilist.get(j)) {  //상품0의 p_no와 관심상품(하트버튼)의 p_no가 일치하면
-					plist.get(i).setHeart("Y");  //관심상품(하트버튼) 표시
-				}
-			}
-		}
-
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("clist", clist);
-		mav.addObject("plist", plist);
-		mav.addObject("c_no", 0);  //카테고리 All은 c_no가 없으므로 값을 0으로 세팅해준다. 
-		                           //값을 세팅해주지 않으면  c_no의 데이터타입이 int이기 때문에 null이나 ''으로 처리할 수 없어 .jsp에서 값을 읽어올 수 없다.
-		mav.addObject("sort",sort );
-		mav.setViewName("category/list");
-		
-		return mav;
-	}
-	
-	//해당 카테고리의 상품 리스트
-	@RequestMapping("/list")
+	//SHOP 메뉴
+	@RequestMapping("/list")  
 	public ModelAndView list(int c_no, String sort, HttpServletRequest req) {
-		/*
-		 *String c_noStr 
-		 *
-		int c_no=0;
-		if(c_noStr!=null) {
-			c_no= Integer.parseInt(c_no_Str);
-		}
-		*/
+		System.out.println(c_no);
+		
 		CategoryDAOImp dao = sqlSession.getMapper(CategoryDAOImp.class);
 		List<CategoryVO> clist = dao.allCategorySelect();		
 		List<ProductVO> plist = dao.productSelect(c_no, sort);		
@@ -79,16 +40,15 @@ public class CategoryController {
 		HttpSession ses = req.getSession();
 		String userno = String.valueOf(ses.getAttribute("userno"));	
 		List<Integer> ilist = dao.allHearts(userno);
-		
 		//관심상품 리스트
 		for (int i=0; i<plist.size(); i++) {  //상품0, 상품1, 상품2 ...
 			for (int j=0; j<ilist.size(); j++) {  //관심상품0(하트버튼), 관심상품1, 관심상품2 ...
-				if(plist.get(i).getP_no()==ilist.get(j)) {  //상품0의 p_no와 관심상품(하트버튼)의 p_no가 일치하면
+				if(plist.get(i).getP_no()==ilist.get(j)) {  //상품0의 p_no와 관심상품(하트버튼)의 p_no가 일치하면  //.get(i)는 상품(i번째)를 뜻한다.
 					plist.get(i).setHeart("Y");  //관심상품(하트버튼) 표시
 				}
 			}
 		}
-		
+	
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("clist", clist);
 		mav.addObject("plist", plist);
@@ -98,14 +58,14 @@ public class CategoryController {
 		
 		return mav;
 	}
-	
+
 	//관심상품 추가
 	@RequestMapping("/addInterest")
 	@ResponseBody
 	public int addinterest(int p_no, HttpServletRequest req) {
 		CategoryDAOImp dao = sqlSession.getMapper(CategoryDAOImp.class);
 		HttpSession ses = req.getSession();
-		int userno = Integer.parseInt(String.valueOf(ses.getAttribute("userno")));
+		int userno = Integer.parseInt(String.valueOf(ses.getAttribute("userno")));  //parseInt() 함수는 매개변수로 String 형만 받기 때문에 Object를 String으로 형변환 한 후 입력해야 한다.
 		
 		InterestVO vo = new InterestVO();
 		vo.setUserno(userno);

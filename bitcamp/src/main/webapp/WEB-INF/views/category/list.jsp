@@ -42,16 +42,9 @@ $(function(){
 	
 	//상품 정렬
 	$('#sort').change(function() {
+		var sort = $(this).val(); 
 		
-		var sort = $(this).val();  
-		var c_no = ${c_no};
-		//console.log(c_no);
-		
-		if(c_no==0){
-			location.href="<%=request.getContextPath()%>/listAll?sort="+sort;	
-		}else if(c_no!=0){
-			location.href="<%=request.getContextPath()%>/list?c_no=${c_no}&sort="+sort;
-		}
+		location.href="<%=request.getContextPath()%>/list?c_no=${c_no}&sort="+sort;
 	});
 	
 	//btn-heart toggle
@@ -59,11 +52,11 @@ $(function(){
 		//btn_heart 
 		$(this).toggleClass("btn_toggle");
 		
-		var test = $(this).attr('class');
-		var p_no = "p_no="+$(this).val();
+		var heart = $(this).attr('class');  //버튼의 현재 class 속성값
+		var p_no = "p_no="+$(this).val();  //버튼의 p_no
 
 		//관심상품
-		if(test=='btn_heart btn_toggle'){  //관심상품 추가
+		if(heart=='btn_heart btn_toggle'){  //관심상품 추가
 			var url = "/bitcamp/addInterest";
 			
 			$.ajax({
@@ -80,7 +73,7 @@ $(function(){
 					console.log("관심상품 추가 에러....");
 				}
 			});
-		}else if(test=='btn_heart'){   //관심상품 삭제
+		}else if(heart=='btn_heart'){   //관심상품 삭제
 			var url = "/bitcamp/delInterest";
 			
 			$.ajax({
@@ -254,11 +247,11 @@ function defaultday(){
 					<!-- 서브메뉴 -->
 					<ul class="dep2">
 						<li>
-							<a href="<%=request.getContextPath()%>/listAll" <c:if test="${c_no==0}">style="font-weight:bold"</c:if> >All</a>
+							<a href="<%=request.getContextPath()%>/list?c_no=0" <c:if test="${c_no==0}">style="font-weight:bold"</c:if>>All</a>
 						</li>
 						<c:forEach var="cvo" items="${clist}">
 							<li>
-								<a href="<%=request.getContextPath()%>/list?c_no=${cvo.c_no}" <c:if test="${c_no==cvo.c_no}">style="font-weight:bold"</c:if> >${cvo.c_name}</a>
+								<a href="<%=request.getContextPath()%>/list?c_no=${cvo.c_no}" <c:if test="${c_no==cvo.c_no}">style="font-weight:bold"</c:if>>${cvo.c_name}</a>
 							</li>	
 						</c:forEach>	
 					</ul>
