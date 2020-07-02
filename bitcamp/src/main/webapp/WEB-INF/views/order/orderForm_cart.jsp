@@ -62,7 +62,7 @@ function openDaumZipAddress(type) {
 }
 </script>
 
-<form method="post" action="/bitcamp/orderOk">
+<form method="post" action="/bitcamp/cartOrderOk">
 <div id="orderForm" class="container">
 	<div style="height: 130px"></div>
 	<div class="titleArea">
@@ -81,7 +81,7 @@ function openDaumZipAddress(type) {
 	<div id="product_info">
 		<table border="1">
 			<colgroup>
-				<col style="width: 27px">
+<%-- 				<col style="width: 27px"> --%>
 				<col style="width: 100px">
 				<col style="width: auto">
 				<col style="width: 100px">
@@ -92,7 +92,6 @@ function openDaumZipAddress(type) {
 			</colgroup>
 			<thead>
 				<tr>
-					<th scope="col"><input type="checkbox"></th>
 					<th scope="col">이미지</th>
 					<th scope="col">상품정보</th>
 					<th scope="col">판매가</th>
@@ -106,7 +105,6 @@ function openDaumZipAddress(type) {
 			<tbody>
 			<c:forEach var="cart" items="${cart}">
 				<tr>
-					<td><input type="checkbox"></td>
 					<td><a href="/bitcamp/productView?p_no=${cart.p_no }">
 						<img src="/bitcamp/upload/${cart.p_filename1 }" style="width:100px;height:100px" onerror="this.src='/bitcamp/resources/products/tent1.png'"></a>
 					</td>
@@ -130,7 +128,6 @@ function openDaumZipAddress(type) {
 			</tbody>
 			<tfoot>
 				<tr>
-					<td></td>
 					<td colspan="7">상품구매금액 <strong><label>0</label>
 								원(+<label>0</label>)</strong> + 배송비 ${product.delivery_fee } = 합계: <strong class="txtEm gIndent10"><label>0</label>원</strong>
 					</td>
@@ -140,11 +137,6 @@ function openDaumZipAddress(type) {
 		</table>
 	</div>
 
-
-	<div
-		style="width: 100%; text-align: right; height: 100px; border-bottom: 1px gray solid">
-		<button type="button">선택 삭제</button>
-	</div>
 
 	<div id="order_info">
 		<div style="margin-top: 20px">

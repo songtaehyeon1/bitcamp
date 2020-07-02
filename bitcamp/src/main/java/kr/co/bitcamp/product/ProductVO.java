@@ -9,6 +9,7 @@ public class ProductVO {
 	private int userno;//유저번호
 	private String p_name;//상품명
 	private int price;//가격	
+	private int day_price;//대여일이 증가할때마다 추가되는 금액
 	private int delivery_fee;//배송비
 	private int delivery_fee_direct;//배송비 직접입력
 	private String p_commnet;//상품설명
@@ -21,16 +22,16 @@ public class ProductVO {
 	private String orderEnd;//주문 마감일
 	private String product_borrow_period;//대여기간
 	private int currentQty;//바로구매할때 선택하는 상품 갯수
-	private int productCount;//관심상품 갯수
-	private int limitQuantity;//제품 최대 대여 가능 갯수
+	private int productCount;//주문 가능 제품 갯수
+	private int limitQuantity;//제품 최대 대여 가능 갯수 --s_noList보다 크면 안됨. 이 사이즈를 orderOk에서 비교해서
 	
 	private ArrayList<Integer> s_noList;//상세 재고들
 	private String p_date;
 	private int rownum;
 	
+	private int total_price;//바로구매할때 전체가격 저장할곳.
 	//////////////////////////
 	private String period;
-	private String total_price;
 	private String pickup;
 	//////////////////////////
 	private String p_deltype;
@@ -168,11 +169,11 @@ public class ProductVO {
 	public void setPeriod(String orderStart,String orderEnd,String borrowPeriod) {
 		this.period = orderStart+"~"+orderEnd+"("+(Integer.parseInt(borrowPeriod)-1)+"박"+borrowPeriod+"일)";
 	}
-	public String getTotal_price() {
+	public int getTotal_price() {
 		return total_price;
 	}
-	public void setTotal_price(int delivery_fee,int price) {
-		this.total_price = Integer.toString(delivery_fee+price);
+	public void setTotal_price(int total_price) {
+		this.total_price = total_price;
 	}
 	public String getPickup() {
 		return pickup;
@@ -198,6 +199,12 @@ public class ProductVO {
 	}
 	public void setDelivery_fee_direct(int delivery_fee_direct) {
 		this.delivery_fee_direct = delivery_fee_direct;
+	}
+	public int getDay_price() {
+		return day_price;
+	}
+	public void setDay_price(int day_price) {
+		this.day_price = day_price;
 	}
 	
 }
