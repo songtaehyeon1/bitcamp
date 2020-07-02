@@ -1,38 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/admin/admin.css" />
-<script>
-	$(function() {
-		$("#allCheck").click(function() {
-			//만약 전체 선택 체크박스가 체크된상태일경우
-			if ($("#allCheck").prop("checked")) {
-				//해당화면에 전체 checkbox들을 체크해준다
-				$("input[type=checkbox]").prop("checked", true);
-				$("input:checkbox[name='chkall']").attr("checked", false);
-				// 전체선택 체크박스가 해제된 경우
-			} else {
-				//해당화면에 모든 checkbox들의 체크를해제시킨다.
-				$("input[type=checkbox]").prop("checked", false);
-			}
-		})
-	});
-</script>
-<div
-	style="height: 70px; background: #333; color: white; font-size: 3em">관리자
-	페이지</div>
-<div id="admin_top_menu_box">
-	<ul>
-		<a href="<%=request.getContextPath()%>/admin/home"><li>관리자홈</li></a>
-		<a href="#"><li>기본설정</li></a>
-		<a href="<%=request.getContextPath()%>/admin/member"><li>회원관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/product"><li>상품관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/orderList"><li class="over">주문관리</li></a>
-		<a href="<%=request.getContextPath()%>/boardNotice"><li>매출관리</li></a>
-	</ul>
-</div>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
+
+
 <div id="admin_top_menu_under">&nbsp;</div>
 <div id="admin_left_menu">
 	<h2>주문관리</h2>
@@ -85,42 +57,38 @@
 				<tr>
 					<th>진행상태</th>
 					<td><label for=""><input type="checkbox"
-							name="ordstate[]" value="1"> 입금대기</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<label for=""><input type="checkbox" name="ordstate[]"
-							value="2"> 결제완료</label>&nbsp;&nbsp;&nbsp;&nbsp; <label for=""><input
-							type="checkbox" name="ordstate[]" value="3"> 배송준비중</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<label for=""><input type="checkbox" name="ordstate[]"
-							value="4"> 배송중</label>&nbsp;&nbsp;&nbsp;&nbsp; <label for=""><input
-							type="checkbox" name="ordstate[]" value="5"> 배송완료</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<label for=""><input type="checkbox" name="ordstate[]"
-							value="6"> 구매확정</label><br></td>
+							name="delivery_status" value="입금대기"> 입금대기</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<label for=""><input type="checkbox"
+							name="delivery_status" value="결제완료"> 결제완료</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<label for=""><input type="checkbox"
+							name="delivery_status" value="배송준비중"> 배송준비중</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<label for=""><input type="checkbox"
+							name="delivery_status" value="배송중"> 배송중</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<label for=""><input type="checkbox"
+							name="delivery_status" value="배송완료"> 배송완료</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<br></td>
 				</tr>
 				<tr>
 					<th>결제수단</th>
 					<td><label for=""><input type="radio"
-							name="od_settle_case" value="0" checked=""> 전체</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<label for=""><input type="radio" name="od_settle_case"
-							value="1"> 신용카드</label>&nbsp;&nbsp;&nbsp;&nbsp;<label for=""><input type="radio" name="od_settle_case"
-							value="5"> 무통장</label></td>
+							name="payment_type" value="All" checked=""> 전체</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<label for=""><input type="radio" name="payment_type"
+							value="card"> 신용카드</label>&nbsp;&nbsp;&nbsp;&nbsp;<label for=""><input
+							type="radio" name="payment_type" value="cash"> 무통장</label></td>
 				</tr>
 				<tr>
 					<th>기간</th>
-					<td><label for=""><input type="radio" name="ndate"
-							value="od_time" checked=""> 주문일</label>&nbsp;&nbsp;&nbsp;&nbsp; <label
-						for=""><input type="radio" name="ndate" value="inpaydate">
-							결제확인일</label>&nbsp;&nbsp;&nbsp;&nbsp; <label for=""><input
-							type="radio" name="ndate" value="od_completedt"> 배송일</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<label for=""><input type="radio" name="ndate"
-							value="od_confirmdt"> 배송완료일</label>&nbsp;&nbsp;&nbsp;&nbsp; <b>일자</b>
-						<input type="text" name="s_date" id="s_date" value=""
-						class="text w100 hasDatepicker"><img
-						class="ui-datepicker-trigger"
-						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
+					<td>
+					<label for=""><input type="radio" name="ndate" value="od_time" checked="">주문일</label>&nbsp;&nbsp;&nbsp;&nbsp; 
+					<label for=""><input type="radio" name="ndate" value="inpaydate">결제확인일</label>&nbsp;&nbsp;&nbsp;&nbsp; 
+					<label for=""><input type="radio" name="ndate" value="od_completedt"> 배송일</label>&nbsp;&nbsp;&nbsp;&nbsp;
+					<label for=""><input type="radio" name="ndate" value="od_confirmdt"> 배송완료일</label>&nbsp;&nbsp;&nbsp;&nbsp; 
+					<b>일자</b>
+					<input type="text" name="s_date" id="s_date" value=""
+						class="text w100 hasDatepicker"><img src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
 						~ <input type="text" name="e_date" id="e_date" value=""
-						class="text w100 hasDatepicker"><img
-						class="ui-datepicker-trigger"
-						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
+						class="text w100"><img src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
 					</td>
 				</tr>
@@ -168,7 +136,6 @@
 			<tbody>
 				<tr>
 					<th class="width50"><input type="checkbox" id="allCheck"></th>
-					<th>가입업체명</th>
 					<th>주문일</th>
 					<th>주문번호</th>
 					<th>주문자명</th>
@@ -177,6 +144,17 @@
 					<th>결제금액</th>
 					<th>결제수단</th>
 					<th>상태</th>
+				</tr>
+				<tr>
+					<td class="width50"><input type="checkbox" id="allCheck"></td>
+					<td>주문일</td>
+					<td>주문번호</td>
+					<td>주문자명</td>
+					<td>회원ID</td>
+					<td>주문금액</td>
+					<td>결제금액</td>
+					<td>결제수단</td>
+					<td>상태</td>
 				</tr>
 				<c:if test="${fn:length(list)==0 }">
 					<tr>
@@ -187,8 +165,8 @@
 		</table>
 
 		<div class="btmbtnwrap" style="position: relative; top: 0px;">
-			<button type="button" onclick="del_();">선택삭제</button>			
-			
+			<button type="button" onclick="del_();">선택삭제</button>
+
 		</div>
 		<table class="adminform priceallwrap">
 			<tbody>
@@ -203,8 +181,7 @@
 						-->
 								<option value="3">배송준비중</option>
 								<option value="4">배송중</option>
-								<option value="5">배송완료</option>
-								<option value="6">구매확정</option>
+								<option value="5">배송완료</option>				
 							</select> (으)로 일괄적으로 수정합니다.
 							<button type="button" onclick="state_ch();">변경하기</button>
 						</div>

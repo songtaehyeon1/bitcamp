@@ -2,44 +2,18 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/admin/admin.css" />
+
 <script>
 	$(function() {
-		$("#allCheck").click(function() {
-			//만약 전체 선택 체크박스가 체크된상태일경우
-			if ($("#allCheck").prop("checked")) {
-				//해당화면에 전체 checkbox들을 체크해준다
-				$("input[type=checkbox]").prop("checked", true);
-				$("input:checkbox[name='chkall']").attr("checked", false);
-				// 전체선택 체크박스가 해제된 경우
-			} else {
-				//해당화면에 모든 checkbox들의 체크를해제시킨다.
-				$("input[type=checkbox]").prop("checked", false);
-			}
+		$("#reset").click(function() {
+			$("input").val('');
+			$("#searchKey").val('p_name');
+			$("#c_no").val(0);
+			$("#all").click();
 		});
-		function updateProduct(p_no){
-			location.href="<%=request.getContextPath()%>
-	/updateProduct?p_no="
-					+ p_no;
-
-		}
 	});
 </script>
-<div
-	style="height: 70px; background: #333; color: white; font-size: 3em">관리자
-	페이지</div>
-<div id="admin_top_menu_box">
-	<ul>
-		<a href="<%=request.getContextPath()%>/admin/home"><li>관리자홈</li></a>
-		<a href="#"><li>기본설정</li></a>
-		<a href="<%=request.getContextPath()%>/admin/member"><li>회원관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/product"><li
-			class="over">상품관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/orderList"><li>주문관리</li></a>
-		<a href="#"><li>매출관리</li></a>
-	</ul>
-</div>
+
 <div id="admin_top_menu_under">&nbsp;</div>
 
 <div id="admin_left_menu">
@@ -80,32 +54,32 @@
 			<tbody>
 				<tr>
 					<th>상품분류</th>
-					<td><select id="it_saletype" name="c_no"
+					<td><select id="c_no" name="c_no"
 						style="border: 1px #CCC solid; height: 25px">
-							<option value="" selected="">전체분류</option>
+							<option value="0" selected="">전체분류</option>
 							<c:forEach var="cvo" items="${clist }">
-								<option value="${cvo.c_no }">${cvo.c_name }</option>
+								<option value="${cvo.c_no }" <c:if test="${pagevo.c_no == cvo.c_no }">selected="selected"</c:if>>${cvo.c_name }</option>
 							</c:forEach>
 					</select></td>
 
 				</tr>
 				<tr>
 					<th>등록일</th>
-					<td><input type="text" name="s_date" id="s_date" value=""
+					<td><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }"
 						class="text w100"><img class="ui-datepicker-trigger"
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
-						alt="Select date" title="Select date"
+						alt="" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
-						~ <input type="text" name="e_date" id="e_date" value=""
+						~ <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }"
 						class="text w100"><img class="ui-datepicker-trigger"
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
-						alt="Select date" title="Select date"
+						alt="" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
 					</td>
 				</tr>
 				<tr>
 					<th>재고여부</th>
-					<td><label for="p_deltype"><input type="radio"
+					<td><label for="p_deltype"><input type="radio" id="all"
 							name="p_deltype" value="All"
 							<c:if test="${pagevo.p_deltype =='All'  || pagevo.p_deltype ==null || pagevo.p_deltype ==''}">checked="checked"</c:if>>전체상품</label>
 						<label for="p_deltype"><input type="radio"
@@ -117,7 +91,7 @@
 				</tr>
 				<tr>
 					<th>직접검색</th>
-					<td><select name="searchKey">
+					<td><select name="searchKey" id="searchKey" >
 							<option value="p_name" selected="">상품명</option>
 							<option value="p_no">상품코드</option>
 					</select> <input type="text" name="searchWord" style="width: 200px;">
@@ -127,6 +101,7 @@
 		</table>
 		<div class="searchbtn">
 			<button class="textsearch">검색</button>
+			<button class="textsearch" type="button" id="reset">초기화</button>
 		</div>
 	</form>
 	<h4 class="allgoodsnum">
@@ -160,7 +135,7 @@
 						</div>
 						<div>
 							<p class="gdname">
-								<a href="#">${vo.p_name }</a>
+								<a href="<%=request.getContextPath()%>/admin/stocklist?p_no=${vo.p_no}">${vo.p_name }</a>
 							</p>
 							<p class="gdcate"></p>
 						</div>

@@ -1,26 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/admin/admin.css" />
+
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <script>
 	$(function() {
 	
-		$("#allCheck").click(function() {
-			//만약 전체 선택 체크박스가 체크된상태일경우
-			if ($("#allCheck").prop("checked")) {
-				//해당화면에 전체 checkbox들을 체크해준다
-				$("input[type=checkbox]").prop("checked", true);
-				$("input:checkbox[name='chkall']").attr("checked", false);
-				// 전체선택 체크박스가 해제된 경우
-			} else {
-				//해당화면에 모든 checkbox들의 체크를해제시킨다.
-				$("input[type=checkbox]").prop("checked", false);
-			}
-		});
 		$("#categorys a").click(function() {
 			var url = "<%=request.getContextPath()%>/admin/selectCategory";
 			var params = "c_no="+$(this).attr('value');
@@ -47,20 +34,7 @@
 	});
 	
 </script>
-<div
-	style="height: 70px; background: #333; color: white; font-size: 3em">관리자
-	페이지</div>
-<div id="admin_top_menu_box">
-	<ul>
-		<a href="<%=request.getContextPath()%>/admin/home"><li>관리자홈</li></a>
-		<a href="#"><li>기본설정</li></a>
-		<a href="<%=request.getContextPath()%>/admin/member"><li>회원관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/product"><li
-			class="over">상품관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/orderList"><li>주문관리</li></a>
-		<a href="#"><li>매출관리</li></a>
-	</ul>
-</div>
+
 <div id="admin_top_menu_under">&nbsp;</div>
 
 <div id="admin_left_menu">

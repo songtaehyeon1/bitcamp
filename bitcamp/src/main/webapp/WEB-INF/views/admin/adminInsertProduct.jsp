@@ -1,23 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/admin/admin.css" />
-<script src="<%=request.getContextPath()%>/js/product/product_write.js"></script>
-<script src="<%=request.getContextPath()%>/editor/ckeditor/ckeditor.js"></script>
-<div
-	style="height: 70px; background: #333; color: white; font-size: 3em">관리자
-	페이지</div>
-<div id="admin_top_menu_box">
-	<ul>
-		<a href="<%=request.getContextPath()%>/admin/home"><li>관리자홈</li></a>
-		<a href="#"><li>기본설정</li></a>
-		<a href="<%=request.getContextPath()%>/admin/member"><li>회원관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/product"><li class="over">상품관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/orderList"><li>주문관리</li></a>
-		<a href="#"><li>매출관리</li></a>
-	</ul>
-</div>
+
+<script src="<%=request.getContextPath()%>/js/admin/product_write.js"></script>
+
+
 <div id="admin_top_menu_under">&nbsp;</div>
 <div id="admin_left_menu">
 	<h2>상품관리</h2>
@@ -78,6 +65,12 @@
 					<th>가격</th>
 					<td colspan="3"><input type="text" class="text" id="price"
 						name="price" value="" style="width: 20%;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"></td>
+				</tr>
+				<tr>
+					<th>1박당 가격</th>
+					<td colspan="3"><input type="text" class="text" id="day_price"
+						name="day_price" value="" style="width: 20%;"
+						oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"></td>
 				</tr>
 				<tr>
 					<th>배송비</th>

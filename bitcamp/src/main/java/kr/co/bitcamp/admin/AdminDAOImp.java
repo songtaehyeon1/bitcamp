@@ -4,6 +4,7 @@ import java.util.List;
 import kr.co.bitcamp.category.CategoryVO;
 import kr.co.bitcamp.member.MemberVO;
 import kr.co.bitcamp.member.WithdrawalVO;
+import kr.co.bitcamp.order.OrderVO;
 import kr.co.bitcamp.product.ProductVO;
 
 public interface AdminDAOImp {
@@ -15,6 +16,7 @@ public interface AdminDAOImp {
 	public int delMember(int userno);
 	public MemberVO selectMember(int userno);
 	public int insertMemberDel(MemberVO vo);
+	public int memberEdit(MemberVO vo);
 	//카테고리
 	public List<CategoryVO> allCategorySelect(); //모든카테고리 선택
 	public int cntCategoryProduct(int c_no); // 카테고리의 등록된 상품 갯수
@@ -35,6 +37,8 @@ public interface AdminDAOImp {
 	public ProductVO productSelect(int p_no);
 	public int delstock(int s_no);
 	public int restoreStock(int s_no);
+	//주문
+	public List<OrderVO> allOrderSelect(PagingVO pagevo);
 	//페이징
 	public int getTotalRecord(PagingVO vo);
 	public int getTotalMemberRecord(PagingVO vo);

@@ -2,22 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/admin/admin.css" />
+
 <script>
-	$(function() {
-		$("#allCheck").click(function() {
-			//만약 전체 선택 체크박스가 체크된상태일경우
-			if ($("#allCheck").prop("checked")) {
-				//해당화면에 전체 checkbox들을 체크해준다
-				$("input[type=checkbox]").prop("checked", true);
-				$("input:checkbox[name='chkall']").attr("checked", false);
-				// 전체선택 체크박스가 해제된 경우
-			} else {
-				//해당화면에 모든 checkbox들의 체크를해제시킨다.
-				$("input[type=checkbox]").prop("checked", false);
-			}
-		})
+	$(function() {	
 		$("#form").submit(function(){
 			var chk = $("input:checkbox[name=chk]:checked").length
 			
@@ -27,23 +14,14 @@
 			}else{
 				return true;
 			}
-		})
+		});
+		$("#reset").click(function() {
+			$("input[type=text]").val('');
+			$("#searchKey").val('username');
+		});
 	});
 </script>
-<div
-	style="height: 70px; background: #333; color: white; font-size: 3em">관리자
-	페이지</div>
-<div id="admin_top_menu_box">
-	<ul>
-		<a href="<%=request.getContextPath()%>/admin/home"><li>관리자홈</li></a>
-		<a href="#"><li>기본설정</li></a>
-		<a href="<%=request.getContextPath()%>/admin/member"><li
-			class="over">회원관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/product"><li>상품관리</li></a>
-		<a href="<%=request.getContextPath()%>/admin/orderList"><li>주문관리</li></a>
-		<a href="#"><li>매출관리</li></a>
-	</ul>
-</div>
+
 <div id="admin_top_menu_under">&nbsp;</div>
 <div id="admin_left_menu">
 	<h2>회원관리</h2>
@@ -72,11 +50,11 @@
 			<tbody>
 				<tr>
 					<th>가입일</th>
-					<td><input type="text" name="s_date" id="s_date"><img
+					<td><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }"><img
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="Select date" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
-						~ <input type="text" name="e_date" id="e_date"><img
+						~ <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }"><img
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
@@ -96,6 +74,7 @@
 		</table>
 		<div class="searchbtn">
 			<button class="textsearch">검색</button>
+			<button class="textsearch" type="button" id="reset">초기화</button>
 		</div>
 	</form>
 
@@ -130,7 +109,7 @@
 						<td>${vo.userno }</td>
 						<td><span style="color: blue">${vo.usermile }</span></td>
 						<td>${vo.userid }</td>
-						<td><a href="" style="color: blue;">${vo.username }</a></td>
+						<td><a href="/bitcamp/admin/memberEdit?userno=${vo.userno}" style="color: blue;">${vo.username }</a></td>
 						<td>${vo.usertel }</td>
 						<td>${vo.useraddr }</td>
 						<td>${vo.useremail }</td>

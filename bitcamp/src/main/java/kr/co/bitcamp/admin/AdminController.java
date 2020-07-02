@@ -104,11 +104,26 @@ public class AdminController {
 	}
 
 	// 회원가입
-	@RequestMapping("/admin/memberJoin")
-	public String goAdminJoin() {
-
-		return "admin/adminJoin";
+	@RequestMapping("/admin/memberEdit")
+	public ModelAndView goAdminmemberEdit(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		int userno = Integer.parseInt(req.getParameter("userno"));
+		MemberVO vo = dao.selectMember(userno);
+		mav.addObject("vo", vo);
+		mav.setViewName("admin/adminMemberEdit");
+		return mav;
 	}
+	//회원 수정
+	@RequestMapping(value = "/admin/memberEditOk",method = RequestMethod.POST)
+	public ModelAndView goAdminmemberEditOk(MemberVO vo) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		dao.memberEdit(vo);
+		mav.setViewName("redirect:member");
+		return mav;
+	}
+	
 	//회원 탈퇴처리
 	@RequestMapping("/admin/memberDel")
 	public ModelAndView goMemberDel(HttpServletRequest req) {
@@ -153,9 +168,20 @@ public class AdminController {
 
 ///////////////////////////주문
 	@RequestMapping("/admin/orderList")
-	public String goAdminOrderlist() {
-
-		return "admin/adminOrderList";
+	public ModelAndView goAdminOrderlist(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		String pageNumStr = req.getParameter("pageNum");
+		PagingVO pagevo = new PagingVO();
+		if (pageNumStr != null) {
+			pagevo.setPageNum(Integer.parseInt(pageNumStr));
+		}
+		dao.allOrderSelect(pagevo);
+		
+		
+		mav.setViewName("admin/adminOrderList");
+		
+		return mav;
 	}
 	@RequestMapping("/admin/orderView")
 	public String goAdminOrderView() {
@@ -208,7 +234,9 @@ public class AdminController {
 		// 페이지 번호 전송된 경우 페이지 번호를 변경한다
 		if (pageNumStr != null) {
 			pagevo.setPageNum(Integer.parseInt(pageNumStr));
-		}		
+		}
+		pagevo.setS_date(request.getParameter("s_date"));
+		pagevo.setE_date(request.getParameter("e_date"));
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
 		pagevo.setS_deltype(request.getParameter("s_deltype"));
 		pagevo.setP_no(Integer.parseInt(request.getParameter("p_no")));
@@ -221,11 +249,12 @@ public class AdminController {
 			int orderStart = Integer.parseInt(request.getParameter("s_date").replaceAll("-", "")); // i번째 상품의 오더 시작 날짜
 			int orderEnd = Integer.parseInt(request.getParameter("e_date").replaceAll("-", "")); // i번째 상품의 오더 끝 날짜
 			ArrayList<Integer> s_noList = (ArrayList<Integer>) dao.allSelectProduct(pvo.getP_no()); // i번째 상품의 재고 코드 리스트
-			for (int j = 0; j < s_noList.size(); j++) { // i번째 상품의 재고 코드 리스트 만큼 반복
-				ArrayList<String> dateList = (ArrayList<String>) dao.allSelectDate(s_noList.get(j));// i번째 상품의 재고 코드
-																									// 리스트의 j번째 재고코드의
-																									// 예약날짜 리스트 얻어옴
+			ArrayList<Integer> s_noList2 = new ArrayList<Integer>();
+			int cnt = s_noList.size();
+			for (int j = 0; j < cnt; j++) { // i번째 상품의 재고 코드 리스트 만큼 반복
+				ArrayList<String> dateList = (ArrayList<String>) dao.allSelectDate(s_noList.get(j));																									
 				int resultCnt = 0;
+				
 				for (int k = 0; k < dateList.size(); k++) {
 					for (int l = orderStart; l <= orderEnd; l++) {
 						if (Integer.parseInt(dateList.get(k)) == l) {
@@ -233,14 +262,13 @@ public class AdminController {
 						}
 					}
 				}
-				if (resultCnt > 0) {
-					s_noList.remove(j);
+				if (resultCnt == 0) {
+					s_noList2.add(s_noList.get(j));
 				}
 				resultCnt = 0;
 			}
-			pvo.setProductCount(s_noList.size()); // 갯수
-			pvo.setS_noList(s_noList); // 가능한 재고코드 리스트			
-			
+			pvo.setProductCount(s_noList2.size()); // 갯수
+			pvo.setS_noList(s_noList2); // 가능한 재고코드 리스트			
 		}
 
 		mav.addObject("pagevo", pagevo);
