@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="ctx" value="<%=request.getContextPath() %>"/>
+<c:set var="ctx" value="<%=request.getContextPath()%>"/>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/category/list.css"/>
 <link rel="stylesheet" type="text/css" href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css"/>
 <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
@@ -30,21 +30,74 @@ $(function(){
 		$(".minus-icon").show();
 	});
 	
+	/*
 	//상품 정렬 
-	var sortOption=["Sort by", "Newest", "Name A-Z", "Price(low to high)", "Price(high to low)"];    
+	var sortOption=["신상품순", "상품명순", "낮은 가격순", "높은 가격순"];    
 	var tag="";
 	for(i=0; i<sortOption.length; i++){
 		tag += "<option>"+sortOption[i]+"</option>";
 	}
 	document.getElementById("sort").innerHTML = tag;	
+	*/
+	
+	//상품 정렬
+	$('#sort').change(function() {
+		
+		var sort = $(this).val();  
+		var c_no = ${c_no};
+		//console.log(c_no);
+		
+		if(c_no==0){
+			location.href="<%=request.getContextPath()%>/listAll?sort="+sort;	
+		}else if(c_no!=0){
+			location.href="<%=request.getContextPath()%>/list?c_no=${c_no}&sort="+sort;
+		}
+	});
 	
 	//btn-heart toggle
 	$(".btn_heart").click(function(){
-		
+		//btn_heart 
 		$(this).toggleClass("btn_toggle");
-		//관심상품 창
-		$(".btn_heart[class*=btn_toggle]").parents(".product-list").prev(".layerWish").css("display","block");
 		
+		var test = $(this).attr('class');
+		var p_no = "p_no="+$(this).val();
+
+		//관심상품
+		if(test=='btn_heart btn_toggle'){  //관심상품 추가
+			var url = "/bitcamp/addInterest";
+			
+			$.ajax({
+				type : "GET",
+				url : url,
+				data : p_no,
+				success : function(result){
+					if(result>0){	
+						//관심상품 창 보여주기
+						$(".btn_heart[class*=btn_toggle]").parents(".product-list").prev(".layerWish").css("display","block");
+					}
+				},
+				error : function(){
+					console.log("관심상품 추가 에러....");
+				}
+			});
+		}else if(test=='btn_heart'){   //관심상품 삭제
+			var url = "/bitcamp/delInterest";
+			
+			$.ajax({
+				type : "GET",
+				url : url,
+				data : p_no,
+				success : function(result){
+					if(result>0){
+						alert("관심 상품목록에서 삭제되었습니다.");
+					}
+				},
+				error : function(){
+					console.log("관심상품 삭제 에러....");
+				}
+			});
+		}
+	
 		/*
 		//관심상품 창
 		var idx = $(this).css("background-image").indexOf("color_heart_icon.png");
@@ -101,7 +154,6 @@ $(function(){
 	}
 	document.getElementById("rental-period").innerHTML = tag;
 	
-
 	//대여 시작일
 	var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 	$('#rental_start').datepicker({
@@ -191,8 +243,6 @@ function defaultday(){
 }
 </script>
 
-
-
 <div class="wrap">
 	<div class="hr-sect">SHOP</div>
 
@@ -204,7 +254,7 @@ function defaultday(){
 					<!-- 서브메뉴 -->
 					<ul class="dep2">
 						<li>
-							<a href="<%=request.getContextPath()%>/listAll" <c:if test="${c_no==null}">style="font-weight:bold"</c:if> >All</a>
+							<a href="<%=request.getContextPath()%>/listAll" <c:if test="${c_no==0}">style="font-weight:bold"</c:if> >All</a>
 						</li>
 						<c:forEach var="cvo" items="${clist}">
 							<li>
@@ -228,28 +278,32 @@ function defaultday(){
 	  </div>
 	  <div class="close"><a onclick="$('.layerWish').hide();"><img src="<%=request.getContextPath()%>/resources/category/close_btn.png" alt="닫기 버튼"></a></div>
 	</div>
-	
+
 	<div class="product-list"> 
 		<div class="sort-container">
 			<select id="sort" name="sort">
+				<option value="p_date" <c:if test="${sort=='p_date'}">selected</c:if>>신상품순</option>
+				<option value="p_name" <c:if test="${sort=='p_name'}">selected</c:if>>상품명순</option>
+				<option value="price" <c:if test="${sort=='price'}">selected</c:if>>낮은 가격순</option>
+				<option value="price_desc" <c:if test="${sort=='price_desc'}">selected</c:if>>높은 가격순</option>
 			</select>
 		</div>
 		
 		<ul>
-		<c:forEach var="plist" items="${plist}">
-			<li>
-			
-			
-				<div class="product-img">		
-					<a href="/bitcamp/productView?p_no=${plist.p_no}"><img src="<%=request.getContextPath()%>/resources/category/${plist.p_filename1}" alt=""></a>
-					<button type="button" class="btn_heart"></button>				
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>${plist.p_name}</strong></a></div>
-				<div class="price">${plist.price}</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-		</c:forEach>
+			<c:forEach var="plist" items="${plist}">
+				<li>
+					<div class="product-img">		
+						<a href="/bitcamp/productView?p_no=${plist.p_no}"><img src="<%=request.getContextPath()%>/resources/category/${plist.p_filename1}" alt=""></a>
+						<c:if test="${logStatus!=null && logStatus=='Y'}">
+							<button type="button" value="${plist.p_no}" class="btn_heart <c:if test="${plist.heart=='Y'}">btn_toggle</c:if>"></button>
+						</c:if>				
+					</div>
+					<div class="add-cart"><a href="#">Add to Cart</a></div>
+					<div class="product-item-name"><a href="#"><strong>${plist.p_name}</strong></a></div>
+					<div class="price">${plist.price}</div>
+					<div class="desc">2박3일 대여요금</div>
+				</li>
+			</c:forEach>
 		</ul>
 	</div>
 	
