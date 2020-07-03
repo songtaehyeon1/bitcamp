@@ -4,7 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <script>
-	$(function() {	
+	$(function() {
+		$("#membermenu").attr("class","over");		
+
 		$("#form").submit(function(){
 			var chk = $("input:checkbox[name=chk]:checked").length
 			

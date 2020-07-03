@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,7 +26,7 @@ import com.google.gson.JsonObject;
 
 import kr.co.bitcamp.category.CategoryVO;
 import kr.co.bitcamp.member.MemberVO;
-import kr.co.bitcamp.product.ProductDAOImp;
+import kr.co.bitcamp.order.OrderVO;
 import kr.co.bitcamp.product.ProductVO;
 
 @Controller
@@ -168,27 +167,51 @@ public class AdminController {
 
 ///////////////////////////주문
 	@RequestMapping("/admin/orderList")
-	public ModelAndView goAdminOrderlist(HttpServletRequest req) {
+	public ModelAndView goAdminOrderlist(PagingVO vo, HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
 		String pageNumStr = req.getParameter("pageNum");
-		PagingVO pagevo = new PagingVO();
 		if (pageNumStr != null) {
-			pagevo.setPageNum(Integer.parseInt(pageNumStr));
-		}
-		dao.allOrderSelect(pagevo);
+			vo.setPageNum(Integer.parseInt(pageNumStr));
+		}	
+
+		List<OrderVO> list = dao.allOrderSelect(vo);
 		
-		
+		mav.addObject("list", list);
 		mav.setViewName("admin/adminOrderList");
 		
 		return mav;
 	}
+	//주문 상세화면
 	@RequestMapping("/admin/orderView")
-	public String goAdminOrderView() {
-
-		return "admin/adminOrderView";
+	public ModelAndView goAdminOrderView(String o_no) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		OrderVO vo = dao.selectOrder(o_no);
+		List<OrderVO> list = dao.orderProductList(o_no);
+		mav.addObject("list", list);
+		mav.addObject("vo", vo);
+		mav.setViewName("admin/adminOrderView");
+		return mav;
 	}
-	
+	//주문 업데이트
+	@RequestMapping("/admin/orderEdit")
+	public ModelAndView goAdminOrderEdit(OrderVO vo) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);		
+		int result = dao.orderEdit(vo);
+		if(result>0) {			
+			if(vo.getDelivery_code() != null && vo.getDelivery_code() !="") {
+				dao.updateInvoice(vo.getO_no(),vo.getDelivery_code());
+			}
+			mav.setViewName("redirect:orderList");
+		}else {
+			mav.addObject("o_no", vo.getO_no());
+			mav.setViewName("redirect:orderView");
+		}		
+		
+		return mav;
+	}
 
 //////////////////////상품	
 	// 상품 리스트

@@ -22,6 +22,7 @@ public interface AdminDAOImp {
 	public int cntCategoryProduct(int c_no); // 카테고리의 등록된 상품 갯수
 	public CategoryVO selectCategory(int c_no); // 카테고리 하나 선택
 	public int updateCategory(CategoryVO vo); //카테고리 업데이트
+	
 	//상품
 	public List<ProductVO> allList(PagingVO pagevo);
 	public List<StockVO> allStockList(PagingVO pagevo);
@@ -39,6 +40,10 @@ public interface AdminDAOImp {
 	public int restoreStock(int s_no);
 	//주문
 	public List<OrderVO> allOrderSelect(PagingVO pagevo);
+	public OrderVO selectOrder(String o_no);
+	public List<OrderVO> orderProductList(String o_no);
+	public int orderEdit(OrderVO vo);
+	public int updateInvoice(String o_no,String delivery_code);
 	//페이징
 	public int getTotalRecord(PagingVO vo);
 	public int getTotalMemberRecord(PagingVO vo);

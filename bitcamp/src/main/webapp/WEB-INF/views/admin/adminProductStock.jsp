@@ -5,7 +5,7 @@
 
 <script>
 	$(function() {
-	
+		$("#productmenu").attr("class","over");
 		$("#form").submit(function() {
 			var chk = $("input:checkbox[name=chk]:checked").length
 
