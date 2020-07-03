@@ -2,8 +2,8 @@ package kr.co.bitcamp.order;
 
 public class OrderVO {
 	private String o_no;
-	private String oi_no;
-	private String r_no;
+	private int oi_no;
+	private int r_no;
 	private int p_no;
 	private int s_no;
 	private int userno;
@@ -43,8 +43,38 @@ public class OrderVO {
 	private String payment_time;//입금시간
 	private String card_corp;//카드회사
 	private String userid;//유저아이디
+	private String cash_time;//신규
+	private String card_time;//신규
+	private int payment_price;//결제된 금액
+	
+	private int p_count;//
+	private String p_name;//
 	
 	
+	public String getUserid() {
+		return userid;
+	}
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+	public String getCash_time() {
+		return cash_time;
+	}
+	public void setCash_time(String cash_time) {
+		this.cash_time = cash_time;
+	}
+	public String getCard_time() {
+		return card_time;
+	}
+	public void setCard_time(String card_time) {
+		this.card_time = card_time;
+	}
+	public int getPayment_price() {
+		return payment_price;
+	}
+	public void setPayment_price(int payment_price) {
+		this.payment_price = payment_price;
+	}
 	private String delivery_arrival_date;////////배송완료날짜...
 	
 	public String getPayment_type() {
@@ -149,16 +179,16 @@ public class OrderVO {
 	public void setUserno(int userno) {
 		this.userno = userno;
 	}
-	public String getR_no() {
+	public int getR_no() {
 		return r_no;
 	}
-	public void setR_no(String r_no) {
+	public void setR_no(int r_no) {
 		this.r_no = r_no;
 	}
-	public String getOi_no() {
+	public int getOi_no() {
 		return oi_no;
 	}
-	public void setOi_no(String oi_no) {
+	public void setOi_no(int oi_no) {
 		this.oi_no = oi_no;
 	}
 	public int getPrice() {
@@ -309,6 +339,18 @@ public class OrderVO {
 	}
 	public void setDelivery_arrival_date(String delivery_arrival_date) {
 		this.delivery_arrival_date = delivery_arrival_date;
+	}
+	public int getP_count() {
+		return p_count;
+	}
+	public void setP_count(int p_count) {
+		this.p_count = p_count;
+	}
+	public String getP_name() {
+		return p_name;
+	}
+	public void setP_name(String p_name) {
+		this.p_name = p_name;
 	}
 	
 

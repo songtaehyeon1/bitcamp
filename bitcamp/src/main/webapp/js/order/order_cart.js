@@ -1,4 +1,10 @@
 $(function() {
+	//총 결제 금액 세팅
+	var totalOrderPrice = parseInt($("#total_order_price_view").html())//총 주문 금액
+	var totalSalePrice = parseInt($("#total_sale_price_view").html())//총 할인 + 부가결제 금액
+	var totalTotal = totalOrderPrice + totalSalePrice//총 결제 예정 금액
+	$("#total_order_sale_price_view").html(totalTotal)
+	$("input[name='totalprice']").val(totalTotal)
 	//이메일 도메인 주소 세팅
 	$("#oemail3").on('change',function(){
 		var domain = $("#oemail3").val();//도메인 주소
@@ -20,9 +26,9 @@ $(function() {
 	})
 	
 	
-	
-	$("input[id='btn_payment']").on('click',function(){
 	//주문정보 입력 안했을 시
+	$("input[id='btn_payment']").on('click',function(){
+		
 		//주문자 이름
 		if($("input[name='oname']").val()==null||$("input[name='oname']").val()==""){
 			$("input[name='oname']").focus()
@@ -63,37 +69,8 @@ $(function() {
 				return false;
 			}
 		}
-	//배송정보
-		//받는사람
-		if($("input[name='rname']").val()==null||$("input[name='rname']").val()==""){
-			$("input[name='rname']").focus()
-			return false;
-		}
-		//우편번호
-		if($("input[name='rzipcode']").val()==null||$("input[name='rzipcode']").val()==""){
-			$("input[name='rzipcode']").focus()
-			return false;
-		}
-		//기본주소
-		if($("input[name='raddr']").val()==null||$("input[name='raddr']").val()==""){
-			$("input[name='raddr']").focus()
-			return false;
-		}
-		//연락처
-		if($("input[name='rtel2']").val()==null||$("input[name='rtel2']").val()==""){
-			$("input[name='rtel2']").focus()
-			return false;
-		}
-		if($("input[name='rtel3']").val()==null||$("input[name='rtel3']").val()==""){
-			$("input[name='rtel3']").focus()
-			return false;
-		}
 		
-		
-		
-		
-		
-		//카드 선택//무통장 선택
+		//카드 선택
 		if($("input:radio[name=addr_paymethod]:checked").val()=="card"){
 			if($("#card_corp").val()==null||$("#card_corp").val()==""){
 				$("#card_corp").focus()
