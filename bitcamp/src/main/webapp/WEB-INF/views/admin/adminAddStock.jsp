@@ -2,9 +2,11 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-
-
-
+<script type="text/javascript">
+	$(function() {
+		$("#productmenu").attr("class","over");
+	});
+</script>
 <div id="admin_top_menu_under">&nbsp;</div>
 
 <div id="admin_left_menu">

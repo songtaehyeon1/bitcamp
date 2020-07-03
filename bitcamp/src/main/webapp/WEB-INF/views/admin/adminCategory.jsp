@@ -7,7 +7,7 @@
 
 <script>
 	$(function() {
-	
+		$("#productmenu").attr("class","over");
 		$("#categorys a").click(function() {
 			var url = "<%=request.getContextPath()%>/admin/selectCategory";
 			var params = "c_no="+$(this).attr('value');

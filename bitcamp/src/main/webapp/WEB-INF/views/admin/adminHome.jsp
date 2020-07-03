@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<script type="text/javascript">
+	$(function() {
+		$("#homemenu").attr("class","over");
+	});
+</script>
 <div id="admin_top_menu_under">&nbsp;</div>
 <div id="admin_left_menu">
 	<div style="margin: 5px 0 10px 0"></div>

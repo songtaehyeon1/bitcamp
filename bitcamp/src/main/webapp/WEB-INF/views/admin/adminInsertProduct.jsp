@@ -3,8 +3,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <script src="<%=request.getContextPath()%>/js/admin/product_write.js"></script>
-
-
+<script type="text/javascript">
+	$(function() {
+		$("#productmenu").attr("class","over");
+	});
+</script>
 <div id="admin_top_menu_under">&nbsp;</div>
 <div id="admin_left_menu">
 	<h2>상품관리</h2>

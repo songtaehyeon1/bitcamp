@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<script
-	src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
 <script>
+	$(function() {
+		$("#membermenu").attr("class", "over");
+	});
 	function openDaumZipAddress() {
 		new daum.Postcode({
 			oncomplete : function(data) {
@@ -38,7 +38,8 @@
 		<li>회원정보 수정화면입니다.</li>
 	</ul>
 
-	<form name="Frm" id="Frm" method="post" action="/bitcamp/admin/memberEditOk">
+	<form name="Frm" id="Frm" method="post"
+		action="/bitcamp/admin/memberEditOk">
 		<table class="admin_table">
 			<tbody>
 				<tr>
@@ -58,13 +59,14 @@
 				</tr>
 				<tr>
 					<th>* 연락처</th>
-					<td><input type="text" id="usertel" class="text" value="${vo.usertel }"
-						placeholder="'-'없이 숫자만 입력" name="usertel" maxlength="13"></td>
+					<td><input type="text" id="usertel" class="text"
+						value="${vo.usertel }" placeholder="'-'없이 숫자만 입력" name="usertel"
+						maxlength="13"></td>
 				</tr>
 				<tr>
 					<th width="15%">* 이름</th>
-					<td width="85%"><input type="text" id="username" name="username"
-						value="${vo.username }" class="text"></td>
+					<td width="85%"><input type="text" id="username"
+						name="username" value="${vo.username }" class="text"></td>
 				</tr>
 
 				<tr>
@@ -76,9 +78,11 @@
 				</tr>
 				<tr>
 					<th>* 주소</th>
-					<td><input type="text" name="useraddr" id="useraddr" class="text w400" value="${vo.useraddr }"
-						readonly> <br> <input type="text" name="useraddrdetail" value="${vo.useraddrdetail }"
-						id="useraddrdetail" class="text w400"></td>
+					<td><input type="text" name="useraddr" id="useraddr"
+						class="text w400" value="${vo.useraddr }" readonly> <br>
+						<input type="text" name="useraddrdetail"
+						value="${vo.useraddrdetail }" id="useraddrdetail"
+						class="text w400"></td>
 				</tr>
 
 

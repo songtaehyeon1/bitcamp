@@ -1,34 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-
+<script type="text/javascript">
+	$(function() {
+		$("#ordermenu").attr("class","over");
+	});
+	function openDaumZipAddress() {
+		new daum.Postcode({
+			oncomplete : function(data) {
+				jQuery("#rzipcode").val(data.zonecode);
+				jQuery("#raddr").val(data.address);
+				jQuery("#raddrdetail").val('');
+				jQuery("#raddrdetail").focus();
+			}
+		}).open();
+	}
+	
+</script>
 <div id="admin_top_menu_under">&nbsp;</div>
 <div id="admin_left_menu">
 	<h2>주문관리</h2>
 	<dl>
 		<dt>주문관리</dt>
 		<dd>
-			<a href="">- 주문통합리스트</a>
-		</dd>
-		<dd>
-			<a href="">- 입금대기리스트</a>
-		</dd>
-		<dd>
-			<a href="">- 결제완료리스트</a>
-		</dd>
-		<dd>
-			<a href="">- 배송준비중리스트</a>
-		</dd>
-		<dd>
-			<a href="">- 배송중리스트</a>
-		</dd>
-		<dd>
-			<a href="">- 배송완료리스트</a>
-		</dd>
-		<dd>
-			<a href="">- 송장등록</a>
-		</dd>
+			<a href="">- 주문리스트</a>
+		</dd>		
 		<dt>취소/교환/반품/환불</dt>
 		<dd>
 			<a href="">- 취소리스트</a>
@@ -48,7 +44,8 @@
 		<li>이 주문에 대한 상세한 내역을 조회하고 수정하실 수 있습니다.</li>
 	</ul>
 	<h4>주문번호 :</h4>
-	<form name="ff" method="get">
+	<form method="get" action="/bitcamp/admin/orderEdit">
+		<input type="hidden" name= "o_no" value="${vo.o_no }"/>
 		<table class="admin_table">
 			<tbody>				
 				<tr>
@@ -56,15 +53,19 @@
 					<th style="width: 35%;">상품정보</th>
 					<th style="width: 5%;">수량</th>
 					<th style="width: 8%;">판매가</th>
-					<th style="width: 8%;">할인금액</th>
+					<th style="width: 8%;">1박당가격</th>
+					<th style="width: 8%;">총 금액</th>
 				</tr>
+				<c:forEach var="pvo" items="${list }" >
 				<tr>
-					<td>1</td>
-					<td>1</td>
-					<td>1</td>
-					<td>1</td>
-					<td>1</td>
+					<td>${pvo.p_no }</td>
+					<td>${pvo.p_name }</td>
+					<td>${pvo.p_count }</td>
+					<td>${pvo.price }</td>
+					<td>${pvo.day_price }</td>
+					<td>${pvo.price*pvo.p_count }</td>
 				</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 
@@ -73,17 +74,15 @@
 			<tbody>
 				<tr>
 					<th width="10%">무통장 주문금액</th>
-					<td width="40%"><b>0</b>원</td>
+					<td width="40%"><b><c:if test="${vo.payment_type =='cash' }">${vo.totalprice }원</c:if></b></td>
 					<th width="10%">카드 주문금액</th>
-					<td width="40%"><b>0</b>원</td>
+					<td width="40%"><b><c:if test="${vo.payment_type =='card' }">${vo.totalprice }원</c:if></b></td>
 				</tr>
 				<tr>
 					<th>무통장 결제금액</th>
-					<td><input type="hidden" name="h_od_receipt_bank" value="">
-						<input type="text" name="od_receipt_bank" value="0"
-						class="text w120" onkeyup="inputNumberFormat(this);">원</td>
+					<td><input type="text" name="payment_price" value="0" class="text w120">원</td>
 					<th>카드 결제금액</th>
-					<td><b></b>원</td>
+					<td><b><c:if test="${vo.payment_type =='card' }">${vo.totalprice }원</c:if></b></td>
 				</tr>
 			</tbody>
 		</table>
@@ -98,19 +97,19 @@
 							<tbody>							
 								<tr>
 									<th>이름(ID)</th>
-									<td><b> ()</b></td>
+									<td><b>${vo.oname }(${vo.userid})</b></td>
 								</tr>
 								<tr>
 									<th>이메일</th>
-									<td></td>
+									<td>${vo.oemail }</td>
 								</tr>
 								<tr>
 									<th>연락처</th>
-									<td>/</td>
+									<td>${vo.otel }</td>
 								</tr>
 								<tr>
 									<th>주문일</th>
-									<td></td>
+									<td>${vo.order_date }</td>
 								</tr>
 							</tbody>
 						</table>
@@ -122,30 +121,29 @@
 							<tbody>
 								<tr>
 									<th>수령자</th>
-									<td><input type="text" name="od_b_name" value=""
+									<td><input type="text" name="rname" value="${vo.rname }"
 										class="text w120"></td>
 								</tr>
 								<tr>
 									<th>연락처</th>
-									<td><input type="text" name="od_b_tel" value=""
+									<td><input type="text" name="rtel" value="${vo.rtel }"
 										class="text w120">
 									</td>
 								</tr>
 								<tr>
 									<th>주소</th>
-									<td><input type="text" name="od_b_zip1" id="post" value=""
+									<td><input type="text" name="rzipcode" id="post" value="${vo.rzipcode }"
 										class="text w70" readonly="">
-										<button type="button" style="width: 70px;"
-											onclick="postSearch()">검색</button></td>
+										<button type="button" style="width: 70px;" onclick="openDaumZipAddress()">검색</button></td>
 								</tr>
 								<tr>
 									<th></th>
 									<td>
 										<ul>
-											<li>기본 <input type="text" name="od_b_addr1" id="address"
-												value="" class="text w400" readonly=""></li>
-											<li>상세 <input type="text" name="od_b_addr2"
-												id="anaddress" value="" class="text w400"></li>
+											<li>기본 <input type="text" name="raddr" id="raddr"
+												value="${vo.raddr }" class="text w400" readonly=""></li>
+											<li>상세 <input type="text" name="raddrdetail"
+												id="raddrdetail" value="${vo.raddrdetail }" class="text w400"></li>
 										</ul>
 									</td>
 								</tr>
@@ -166,11 +164,16 @@
 							<tbody>
 								<tr>
 									<th>결제종류</th>
-									<td></td>
+									<td><c:if test="${vo.payment_type =='cash' }">무통장입금</c:if>
+									<c:if test="${vo.payment_type =='card' }">카드결제</c:if>
+									</td>
 								</tr>
 								<tr>
 									<th>결제시간</th>
-									<td></td>
+									<td>
+										<c:if test="${vo.payment_type =='cash' }">${vo.cash_time }</c:if>
+										<c:if test="${vo.payment_type =='card' }">${vo.card_time }</c:if>
+									</td>
 								</tr>
 							</tbody>
 						</table>
@@ -182,16 +185,15 @@
 							<tbody>
 								<tr>
 									<th>송장번호</th>
-									<td><select name="deliverycode"
+									<td><select name="delivery_corp"
 										style="border: 1px #e6e6e6 solid; height: 30px;">
-											<option value="16">로젠택배</option>
-									</select> <input type="hidden" name="h_od_invoice" value=""> <input
-										type="text" name="od_invoice" value="" class="text w200">
+											<option value="16">CJ대한통운</option>											
+									</select><input	type="text" name="delivery_code" value="${vo.delivery_code }" class="text w200">
 									</td>
 								</tr>
 								<tr>
 									<th>배송일/출고일</th>
-									<td></td>
+									<td>${vo.delivery_date }</td>
 								</tr>
 							</tbody>
 						</table>
@@ -206,15 +208,14 @@
 			<tbody>
 				<tr>
 					<th>고객요청사항</th>
-					<td style="padding: 3px 3px 0px;"><textarea name="od_memo"
-							style="width: 99%; height: 100px; border: 1px #e6e6e6 solid;"></textarea></td>
+					<td style="padding: 3px 3px 0px;"><textarea name="rcommnet"
+							style="width: 99%; height: 100px; border: 1px #e6e6e6 solid;">${vo.rcommnet }</textarea></td>
 				</tr>
 			</tbody>
 		</table>
 		<div class="searchbtn">
-			<button class="textsearch" onclick="submit_('edit');">수정</button>
-			<button type="button" class="textsearch"
-				onclick="location.href='order_list.php'">목록으로</button>
+			<input type="submit" class="btn btn-dark" value="수정"/>
+			<a href="/bitcamp/admin/orderList" class="btn btn-dark">목록으로</a>
 		</div>
 	</form>
 </div>

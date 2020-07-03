@@ -5,6 +5,7 @@
 <script src="<%=request.getContextPath()%>/js/product/product_write.js"></script>
 <script>
 	$(function() {
+		$("#productmenu").attr("class","over");
 		$("#imgbox button").click(function() {
 			var url = "/bitcamp/admin/delimg";
 			var $this = $(this);

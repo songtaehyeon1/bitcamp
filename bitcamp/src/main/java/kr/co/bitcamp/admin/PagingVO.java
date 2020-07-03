@@ -1,5 +1,7 @@
 package kr.co.bitcamp.admin;
 
+import java.util.List;
+
 public class PagingVO {
 
 	private int pageNum = 1;	// 현재 페이지
@@ -17,13 +19,57 @@ public class PagingVO {
 	private int p_no =0;
 	private String s_date;
 	private String e_date;
+	private String s_price;
+	private String e_price;
 	private int userno=0;
 	private String userjointype;
 	private String p_deltype;
-	private String s_deltype;	
+	private String s_deltype;
+	private String payment_type;
+	private String ndate;
+	private String[] delivery_status;
+
 	
-	
-	
+	public String getS_price() {
+		return s_price;
+	}
+
+	public void setS_price(String s_price) {
+		this.s_price = s_price;
+	}
+
+	public String getE_price() {
+		return e_price;
+	}
+
+	public void setE_price(String e_price) {
+		this.e_price = e_price;
+	}
+
+	public String[] getDelivery_status() {
+		return delivery_status;
+	}
+
+	public void setDelivery_status(String[] delivery_status) {
+		this.delivery_status = delivery_status;
+	}
+
+	public String getNdate() {
+		return ndate;
+	}
+
+	public void setNdate(String ndate) {
+		this.ndate = ndate;
+	}
+
+	public String getPayment_type() {
+		return payment_type;
+	}
+
+	public void setPayment_type(String payment_type) {
+		this.payment_type = payment_type;
+	}
+
 	public String getUserjointype() {
 		return userjointype;
 	}
