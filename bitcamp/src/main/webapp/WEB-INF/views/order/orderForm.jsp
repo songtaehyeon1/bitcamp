@@ -8,6 +8,15 @@
 <script src="<%=request.getContextPath()%>/js/order/order.js"></script>
 <script>
 $(function() {
+	//총 결제 금액 세팅
+	var totalOrderPrice = parseInt($("#total_order_price_view").html())//총 주문 금액
+	var totalSalePrice = parseInt($("#total_sale_price_view").html())//총 할인 + 부가결제 금액
+	var totalTotal = totalOrderPrice + totalSalePrice//총 결제 예정 금액
+	$("#total_order_sale_price_view").html(totalTotal)
+	$("input[name='totalprice']").val(totalTotal)
+	
+	
+	
 	$("#addr_paymethod0").click(function() {
 		$("#card-form").css("display","block");
 		$("#card-agree").css("display","block");
@@ -70,7 +79,8 @@ function openDaumZipAddress(type) {
 <input type="hidden" name="p_name" value="${product.p_name }"><!-- 상품명 -->
 <input type="hidden" name="orderStart" value="${vo.orderStart }"><!-- 대여 시작일 -->
 <input type="hidden" name="orderEnd" value="${vo.orderEnd }"><!-- 대여 종료일-->
-<input type="hidden" name="total_price" value="${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }"><!--총 결제 금액-->
+<input type="hidden" name="currentQty" value="${vo.currentQty }"><!-- 대여 종료일-->
+<%-- <input type="hidden" name="totalprice" value="${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }"><!--총 결제 금액--> --%>
 
 
 <div id="orderForm" class="container">
@@ -341,7 +351,7 @@ function openDaumZipAddress(type) {
 					<tr>
 						<th scope="row">배송메시지</th>
 						<td><textarea id="rcommnet" name="rcommnet" rows="5"
-								cols="90"></textarea></td>
+								cols="90" placeholder="ex)배송 전 연락 부탁드립니다."></textarea></td>
 					</tr>
 				</tbody>
 			</table>
@@ -501,14 +511,14 @@ function openDaumZipAddress(type) {
 				<div class="paymentAgree">
 					<div style="margin-top: 10px">
 						<input type="checkbox" id="directpay_card_agree_all">
-						&nbsp;<label for="directpay_card_agree_all">결제대행서비스 약관에 모두
+						&nbsp;<label style="cursor:pointer" for="directpay_card_agree_all">결제대행서비스 약관에 모두
 							동의합니다.</label>
 						<button type="button" id="ec-order-directpay-card-agree-toggle">전체보기</button>
 					</div>
 					<div>
 						<p>
 							<input type="checkbox" id="directpay_card_agree_financial"
-								class="directpay_card_agree_checkbox"> <label
+								class="directpay_card_agree_checkbox"> <label style="cursor:pointer"
 								for="directpay_card_agree_financial">전자금융거래 기본약관</label> <a
 								href="#"
 								onclick="window.open('/protected/order/payment_agree_financial.html', '', 'width=460,height=382');return false;">[내용보기]</a>
@@ -554,9 +564,9 @@ function openDaumZipAddress(type) {
 				<span>최종결제 금액</span>
 			</h4>
 			<p>
-				<input id="total_price" name="total_price" 
+				<input id="total_price" name="totalprice" 
 					style="text-align: right; border: none; float: none; font-size: 1.5em; background: #fafafa"
-					size="10" readonly value="0" type="text"><span>원</span>
+					size="10" readonly value="${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }" type="text"><span>원</span>
 			</p>
 			
 			<p id="chk_purchase_agreement" style="display: none;">

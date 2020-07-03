@@ -29,7 +29,7 @@ public class ProductVO {
 	private String p_date;
 	private int rownum;
 	
-	private int total_price;//바로구매할때 전체가격 저장할곳.
+	private int totalprice;//바로구매할때 전체가격 저장할곳.
 	//////////////////////////
 	private String period;
 	private String pickup;
@@ -169,11 +169,11 @@ public class ProductVO {
 	public void setPeriod(String orderStart,String orderEnd,String borrowPeriod) {
 		this.period = orderStart+"~"+orderEnd+"("+(Integer.parseInt(borrowPeriod)-1)+"박"+borrowPeriod+"일)";
 	}
-	public int getTotal_price() {
-		return total_price;
+	public int getTotalprice() {
+		return totalprice;
 	}
 	public void setTotal_price(int total_price) {
-		this.total_price = total_price;
+		this.totalprice = total_price;
 	}
 	public String getPickup() {
 		return pickup;

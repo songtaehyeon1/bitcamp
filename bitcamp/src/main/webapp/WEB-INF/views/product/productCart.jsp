@@ -65,6 +65,7 @@
 <input class="cartItems" type="hidden" name="filename" value="${cart.p_filename1}">
 <input class="cartItems" type="hidden" name="price" value="${cart.price}" >
 <input class="cartItems" type="hidden" name="delivery_fee" value="${cart.delivery_fee}" >
+<input class="cartItems" type="hidden" name="limitQuantity" value="${cart.limitQuantity}" >
 						<td><input type="checkbox" class="checkBox" name="checkBox"
 							style="margin-left: 15px"></td>
 						<td>
@@ -299,6 +300,7 @@
 				}
 			})
 		</script>
+		
 		<span>총 상품가격<label class="TPrice">0</label>원
 		</span> + <span>총 배송비<label class="deliFee">0원</label></span> = <span>총
 			주문금액<label class="TTFee">0</label>원

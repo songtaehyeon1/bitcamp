@@ -5,6 +5,7 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/order/orderForm.css" />
+<script src="<%=request.getContextPath()%>/js/order/order.js"></script>
 <script>
 $(function() {
 	$("#addr_paymethod0").click(function() {
@@ -63,6 +64,8 @@ function openDaumZipAddress(type) {
 </script>
 
 <form method="post" action="/bitcamp/cartOrderOk">
+
+
 <div id="orderForm" class="container">
 	<div style="height: 130px"></div>
 	<div class="titleArea">
@@ -81,7 +84,6 @@ function openDaumZipAddress(type) {
 	<div id="product_info">
 		<table border="1">
 			<colgroup>
-<%-- 				<col style="width: 27px"> --%>
 				<col style="width: 100px">
 				<col style="width: auto">
 				<col style="width: 100px">
@@ -104,6 +106,8 @@ function openDaumZipAddress(type) {
 			
 			<tbody>
 			<c:forEach var="cart" items="${cart}">
+<input type="hidden" name="limitQuantity" value="${cart.limitQuantity}">
+<input type="hidden" name="currentQty" value="${cart.currentQty}">
 				<tr>
 					<td><a href="/bitcamp/productView?p_no=${cart.p_no }">
 						<img src="/bitcamp/upload/${cart.p_filename1 }" style="width:100px;height:100px" onerror="this.src='/bitcamp/resources/products/tent1.png'"></a>
@@ -121,15 +125,41 @@ function openDaumZipAddress(type) {
 							4,700원
 						</span>
 					</td>
-					<td rowspan="1"><label>${cart.delivery_fee*cart.currentQty }</label>원</td>
-					<td><strong><label>${cart.price*cart.currentQty+cart.delivery_fee*cart.currentQty }</label>원</strong></td>
+					<td rowspan="1"><label class="TotalDeliveryFee">${cart.delivery_fee*cart.currentQty }</label>원</td>
+					<td><strong><label class="TotalProductPrice">${cart.price*cart.currentQty+cart.delivery_fee*cart.currentQty }</label>원</strong></td>
 				</tr>
 				</c:forEach>
 			</tbody>
+			<script>/* 최종결제금액 설정 */
+				$(function(){
+					var deliveryfee =0;
+					var productprice =0;
+					$.each($(".TotalDeliveryFee"),function(index){
+						deliveryfee += parseInt($(this).text())
+					})
+					$.each($(".TotalProductPrice"),function(index){
+						productprice += parseInt($(this).text())
+					})
+						var TDF = document.getElementById("TDF")
+						var TTP = document.getElementById("TPP")
+						TDF.innerHTML =deliveryfee
+						TTP.innerHTML =productprice
+						TT.innerHTML = (deliveryfee+productprice)
+						$("#total_order_price_view").html(TT.innerHTML)
+						var a = parseInt($("#total_order_price_view").html())
+						var b = parseInt($("#total_sale_price_view").html())
+						console.log(a+"///"+b)
+						$("#total_order_sale_price_view").html(a+b)
+						var c = $("#total_order_sale_price_view").html()
+						$("input[name='totalprice']").val(c)
+				})
+			</script>
 			<tfoot>
 				<tr>
-					<td colspan="7">상품구매금액 <strong><label>0</label>
-								원(+<label>0</label>)</strong> + 배송비 ${product.delivery_fee } = 합계: <strong class="txtEm gIndent10"><label>0</label>원</strong>
+					<td colspan="7">상품구매금액
+						<strong><label id="TPP">0</label>원(+<label>0</label>)</strong> 
+						+ <strong>배송비 <label id="TDF">0</label></strong> 
+						= 합계: <strong class="txtEm gIndent10"><label id="TT">0</label>원</strong>
 					</td>
 				</tr>
 			</tfoot>
@@ -264,9 +294,9 @@ function openDaumZipAddress(type) {
 					<tr>
 						<th scope="row">배송지 선택</th>
 						<td><div>
-								<input id="sameaddr0" name="sameaddr" type="radio"> <label
+								<input id="sameaddr0" name="sameaddr" type="radio"> <label style="cursor:pointer"
 									for="sameaddr0">주문자 정보와 동일</label> <input id="sameaddr1"
-									name="sameaddr" type="radio"> <label for="sameaddr1">새로운배송지</label>
+									name="sameaddr" type="radio"> <label style="cursor:pointer" for="sameaddr1">새로운배송지</label>
 								<a href="#" id="btn_shipp_addr" class="btn btn-dark">주소록 보기</a>
 							</div></td>
 					</tr>
@@ -325,7 +355,7 @@ function openDaumZipAddress(type) {
 					<tr>
 						<th scope="row">배송메시지</th>
 						<td><textarea id="rcommnet" name="rcommnet" rows="5"
-								cols="90"></textarea></td>
+								cols="90" placeholder="ex)배송 전 연락 부탁드립니다."></textarea></td>
 					</tr>
 				</tbody>
 			</table>
@@ -366,7 +396,7 @@ function openDaumZipAddress(type) {
 						<td>
 							<div>
 								<strong>-</strong> <strong><span
-									id="total_sale_price_view">2,000</span>원</strong>
+									id="total_sale_price_view">0</span>원</strong>
 							</div>
 						</td>
 						<td>
@@ -402,7 +432,7 @@ function openDaumZipAddress(type) {
 							<th scope="row">적립금</th>
 							<td>
 								<p>
-									<input id="input_mile" name="mileage" size="10" type="text">
+									<input id="input_mile" name="mileage" size="10" type="text" value="0">
 									원 (총 사용가능 적립금 : <strong>2,000</strong>원)
 								</p>
 								<ul class="info">
@@ -481,14 +511,14 @@ function openDaumZipAddress(type) {
 				<div class="paymentAgree">
 					<div style="margin-top: 10px">
 						<input type="checkbox" id="directpay_card_agree_all">
-						&nbsp;<label for="directpay_card_agree_all">결제대행서비스 약관에 모두
+						&nbsp;<label style="cursor:pointer" for="directpay_card_agree_all">결제대행서비스 약관에 모두
 							동의합니다.</label>
 						<button type="button" id="ec-order-directpay-card-agree-toggle">전체보기</button>
 					</div>
 					<div>
 						<p>
 							<input type="checkbox" id="directpay_card_agree_financial"
-								class="directpay_card_agree_checkbox"> <label
+								class="directpay_card_agree_checkbox"> <label style="cursor:pointer"
 								for="directpay_card_agree_financial">전자금융거래 기본약관</label> <a
 								href="#"
 								onclick="window.open('/protected/order/payment_agree_financial.html', '', 'width=460,height=382');return false;">[내용보기]</a>
@@ -533,10 +563,11 @@ function openDaumZipAddress(type) {
 				<strong id="current_pay_name">카드 결제</strong> <span>최종결제 금액</span>
 			</h4>
 			<p>
-				<input id="total_price" name="total_price"
+				<input id="total_price" name="totalprice"
 					style="text-align: right; border: none; float: none; font-size: 1.5em; background: #fafafa"
-					size="10" readonly value="25000" type="text"><span>원</span>
+					size="10" readonly value="0" type="text"><span>원</span>
 			</p>
+			
 			
 			<p id="chk_purchase_agreement" style="display: none;">
 				<input id="chk_purchase_agreement0" name="chk_purchase_agreement"

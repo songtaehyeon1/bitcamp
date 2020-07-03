@@ -7,7 +7,7 @@ public interface ProductDAOImp {
 	//레코드 하나 선택해서 보기
 	public ProductVO productView(int p_no);
 	//전체 레코드 선택
-	public List<ProductVO> ProductallSelectRecord();
+	public List<ProductVO> productAllSelectRecord();
 	//관심상품 보기
 	public List<ProductVO> selectInterest();
 	//재고 보기
