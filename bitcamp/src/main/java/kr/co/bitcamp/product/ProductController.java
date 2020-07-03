@@ -40,7 +40,14 @@ public class ProductController {
 			session.setAttribute("productList", productList);
 		}
 		// 파라미터값을 받아와서 vo에 저장함.
-		int p_no = Integer.parseInt(request.getParameter("p_no")); // 제품번호
+		System.out.println("1=" +request.getParameter("p_no"));
+		System.out.println("2=" +request.getParameter("delivery_fee"));
+		System.out.println("3=" +request.getParameter("price"));
+		System.out.println("4=" +request.getParameter("currentQty"));
+		System.out.println("5=" +request.getParameter("limitQuantity"));
+		System.out.println("6=" +request.getParameter("product_borrow_period"));
+		
+		int p_no = Integer.parseInt(request.getParameter("p_no")); // 제품번호 
 		String p_name = request.getParameter("p_name"); // 제품명
 		int delivery_fee = Integer.parseInt(request.getParameter("delivery_fee")); // 배송비
 		String orderStart = request.getParameter("orderStart");// 대여기간 시작날
@@ -66,7 +73,6 @@ public class ProductController {
 			vo.setDelivery_fee(delivery_fee);
 		}
 
-		vo.setTotal_price(vo.getDelivery_fee(), price);// 전체 가격
 		vo.setPeriod(orderStart, orderEnd, borrowPeriod);// 기간 yyyy-mm-dd~yyyy-mm-dd(x박x일)
 
 		// 장바구니에 기존 상품이 있는지 없는지 검사
@@ -78,7 +84,7 @@ public class ProductController {
 		// 세션값 추가
 		productList.add(vo);
 		session.setAttribute("productList", productList);
-
+		System.out.println(session.getAttribute("productList"));
 		// mav 설정
 		mav.setViewName("redirect:productCartList");
 		return mav;
@@ -124,48 +130,27 @@ public class ProductController {
 	public ModelAndView productList() {
 		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("list", dao.allSelectRecord());
+		mav.addObject("list", dao.ProductallSelectRecord());
 		mav.setViewName("product/productList");
 		return mav;
 	}
-
-
-
-//////////////////////////// review 글 땡겨오기
-//	   @RequestMapping("/productReview")/////////////////////나중에 태현이거 긁어오기
-//		public ModelAndView productReview() {
-//			ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
-//			ModelAndView mav = new ModelAndView();
-//			mav.addObject("list", dao.allSelectRecord());
-//			mav.setViewName("product/productList");
-//			return mav;
-//		}
-
-//////////////////////////// enquiry 글 땡겨오기
-//	   @RequestMapping("/productEnquiry")/////////////////////나중에 태현이거 긁어오기
-//		public ModelAndView productEnquiry() {
-//			ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
-//			ModelAndView mav = new ModelAndView();
-//			mav.addObject("list", dao.allSelectRecord());
-//			mav.setViewName("product/productList");
-//			return mav;
-//		}
-
+	//몇개까지 가능한지 체크하는거
 	@RequestMapping("/availableChk")
 	@ResponseBody
 	public ProductVO availableChk(HttpServletRequest req) {
-        System.out.println(req.getParameter("p_no"));
-        System.out.println(req.getParameter("s_date").replaceAll("-", ""));
-        System.out.println(req.getParameter("e_date").replaceAll("-", ""));
         int p_no = Integer.parseInt(req.getParameter("p_no"));
-        
         ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
         ProductVO pvo = dao.productSelect(p_no);
-
+        
 		if (req.getParameter("s_date") != null && req.getParameter("e_date") != null && req.getParameter("s_date") != "" && req.getParameter("e_date") != "") {
 			int orderStart = Integer.parseInt(req.getParameter("s_date").replaceAll("-", "")); 
 			int orderEnd = Integer.parseInt(req.getParameter("e_date").replaceAll("-", "")); 
+			System.out.println(orderStart+","+orderEnd);
+			
+			
 			ArrayList<Integer> s_noList = (ArrayList<Integer>) dao.productAllSelectProduct(pvo.getP_no()); 
+			ArrayList<Integer> s_noList2 = new ArrayList<Integer>(); 
+			
 			for (int j = 0; j < s_noList.size(); j++) { 
 				ArrayList<String> dateList = (ArrayList<String>) dao.productAllSelectDate(s_noList.get(j));
 				int resultCnt = 0;
@@ -176,17 +161,36 @@ public class ProductController {
 						}
 					}
 				}
-				if (resultCnt > 0) {
-					s_noList.remove(j);
+				if (resultCnt == 0) {
+					s_noList2.add(s_noList.get(j));
 				}
 				resultCnt = 0;
 			}
-			pvo.setProductCount(s_noList.size()); 
-			pvo.setS_noList(s_noList);		
-			
+			pvo.setProductCount(s_noList2.size()); 
+			pvo.setS_noList(s_noList2);		
 		}
-        
         return pvo;
 	}
-
 }
+	
+
+	
+	////////////////////////////review 글 땡겨오기
+	//@RequestMapping("/productReview")/////////////////////나중에 태현이거 긁어오기
+	//public ModelAndView productReview() {
+	//ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
+	//ModelAndView mav = new ModelAndView();
+	//mav.addObject("list", dao.allSelectRecord());
+	//mav.setViewName("product/productList");
+	//return mav;
+	//}
+	
+	////////////////////////////enquiry 글 땡겨오기
+	//@RequestMapping("/productEnquiry")/////////////////////나중에 태현이거 긁어오기
+	//public ModelAndView productEnquiry() {
+	//ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
+	//ModelAndView mav = new ModelAndView();
+	//mav.addObject("list", dao.allSelectRecord());
+	//mav.setViewName("product/productList");
+	//return mav;
+	//}

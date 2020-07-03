@@ -6,10 +6,12 @@ public class ProductVO {
 	private int c_no;//카테고리 번호
 	private String c_name;//카테고리 이름
 	private int p_no;//상품코드
+	private int userno;//유저번호
 	private String p_name;//상품명
-	private int price;//가격
+	private int price;//가격	
+	private int day_price;//대여일이 증가할때마다 추가되는 금액
 	private int delivery_fee;//배송비
-	private int delivery_fee_direct;//배송비 직접 입력
+	private int delivery_fee_direct;//배송비 직접입력
 	private String p_commnet;//상품설명
 	private String p_filename1;//상품사진1
 	private String p_filename2;//상품사진2
@@ -20,30 +22,27 @@ public class ProductVO {
 	private String orderEnd;//주문 마감일
 	private String product_borrow_period;//대여기간
 	private int currentQty;//바로구매할때 선택하는 상품 갯수
-	private int productCount;//관심상품 갯수
+	private int productCount;//주문 가능 제품 갯수
+	private int limitQuantity;//제품 최대 대여 가능 갯수 --s_noList보다 크면 안됨. 이 사이즈를 orderOk에서 비교해서
+	
 	private ArrayList<Integer> s_noList;//상세 재고들
 	private String p_date;
 	private int rownum;
-	private String heart ="N";  //관심상품 
 	
+	private int total_price;//바로구매할때 전체가격 저장할곳.
+	//////////////////////////
+	private String period;
+	private String pickup;
+	//////////////////////////
+	private String p_deltype;
+	
+	private String heart = "N"; //관심상품 버튼 상태
 	
 	public String getHeart() {
 		return heart;
 	}
 	public void setHeart(String heart) {
 		this.heart = heart;
-	}
-	public int getRownum() {
-		return rownum;
-	}
-	public void setRownum(int rownum) {
-		this.rownum = rownum;
-	}
-	public String getP_date() {
-		return p_date;
-	}
-	public void setP_date(String p_date) {
-		this.p_date = p_date;
 	}
 	public int getC_no() {
 		return c_no;
@@ -80,12 +79,6 @@ public class ProductVO {
 	}
 	public void setDelivery_fee(int delivery_fee) {
 		this.delivery_fee = delivery_fee;
-	}
-	public int getDelivery_fee_direct() {
-		return delivery_fee_direct;
-	}
-	public void setDelivery_fee_direct(int delivery_fee_direct) {
-		this.delivery_fee_direct = delivery_fee_direct;
 	}
 	public String getP_commnet() {
 		return p_commnet;
@@ -158,6 +151,67 @@ public class ProductVO {
 	}
 	public void setCurrentQty(int currentQty) {
 		this.currentQty = currentQty;
+	}
+	public int getUserno() {
+		return userno;
+	}
+	public void setUserno(int userno) {
+		this.userno = userno;
+	}
+	public String getP_date() {
+		return p_date;
+	}
+	public void setP_date(String p_date) {
+		this.p_date = p_date;
+	}
+	public int getRownum() {
+		return rownum;
+	}
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
+	}
+	public String getPeriod() {
+		return period;
+	}
+	public void setPeriod(String orderStart,String orderEnd,String borrowPeriod) {
+		this.period = orderStart+"~"+orderEnd+"("+(Integer.parseInt(borrowPeriod)-1)+"박"+borrowPeriod+"일)";
+	}
+	public int getTotal_price() {
+		return total_price;
+	}
+	public void setTotal_price(int total_price) {
+		this.total_price = total_price;
+	}
+	public String getPickup() {
+		return pickup;
+	}
+	public void setPickup(String pickup) {
+		pickup = "방문 수령";
+		this.pickup = pickup;
+	}
+	public String getP_deltype() {
+		return p_deltype;
+	}
+	public void setP_deltype(String p_deltype) {
+		this.p_deltype = p_deltype;
+	}
+	public int getLimitQuantity() {
+		return limitQuantity;
+	}
+	public void setLimitQuantity(int limitQuantity) {
+		this.limitQuantity = limitQuantity;
+	}
+	public int getDelivery_fee_direct() {
+		return delivery_fee_direct;
+	}
+	public void setDelivery_fee_direct(int delivery_fee_direct) {
+		this.delivery_fee_direct = delivery_fee_direct;
+	}
+	public int getDay_price() {
+		return day_price;
+	}
+	public void setDay_price(int day_price) {
+		this.day_price = day_price;
 	}
 	
 }
