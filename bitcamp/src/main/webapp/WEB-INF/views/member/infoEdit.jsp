@@ -1,41 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/member/infoEdit.css"/>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<title>회원정보 수정</title>
-
-<style>
-	.wrap{margin-top:150px;}
-	.container{
-		margin-top:32px; 
-		width:40%;
-	}
-	.content{border-top:2px solid #444;}
-	form{margin-top:15px;}
-	strong{color:#666;}
-	label{	
-		width:100%;
-		background-color:#F6F6F6;  
-	}
-	.lbl_userid, .lbl_Birth, .lbl_tel{width:100%;}
-	#userid, #code{border-radius:5px;}
-	.row{margin:0 auto;}
-	.gender{margin-top: 15px;}
-	.btn-group-toggle{
-		width:100%;
-	}
-	.btn-group-toggle label{border:1px solid #ced4da;}
-	span button{
-		margin-top:38px;
-		width:100px;
-		height:50px;
-		position:relative;
-		left:260px;
-	}
-	.btnModify, .btnCancel{
-		font-size:1em;
-		font-weight:bold; 
-	}
-</style>
 
 <c:if test="${result>0}">
 	<script>

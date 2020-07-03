@@ -1,355 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="ctx" value="<%=request.getContextPath() %>"/>
-<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js"
-	type="text/javascript"></script>
-<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css"
-	rel="stylesheet" type="text/css" />
+<c:set var="ctx" value="<%=request.getContextPath()%>"/>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/category/list.css"/>
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css"/>
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 
 <title>리스트</title>
-	
-<style>
-.wrap{
-	margin:170px 100px 0 100px;
-	overflow:auto;
-}
-.hr-sect {
-	display: flex;
-	flex-basis: 100%;
-	align-items: center;
-	font-size:36px;
-	margin: 8px 0px;
-}
-.hr-sect::before, .hr-sect::after {
-	content: "";
-	flex-grow: 1;
-	background: rgba(0, 0, 0, 0.35);
-	height: 1px;
-	font-size: 0px;
-	line-height: 0px;
-	margin: 0px 16px;
-}
 
-/*sidebar*/
-.sidebar ul, .sidebar li, .product-list ul, .product-list li{
-	margin:0;
-	padding:0;
-	list-style-type:none;  
-}
-a:link, a:visited{
-	text-decoration:none;
-	color:#222;
-}
-.sidebar{
-	position:fixed;
-	width:200px;
-	margin-top:100px;
-	padding:20px;
-	float:left; 
-}
-.sidebar>span{font-size:26px;}
-.sidemenu{ 
-	border-top:1px solid rgba(12, 1, 69, 0.2);
-	border-bottom:1px solid rgba(12, 1, 69, 0.2);		  
-	padding:20px 0;
-}
-.minus-icon{
-	float:right;
-	margin-top:7px;
-	width:10px;
-	height:10px;  
-	display:block;
-}
-.plus-icon{
-	float:right;
-	margin-top:7px;
-	width:10px;
-	height:10px; 
-	display:none;
-}
-.sidemenu, .dep2{margin-top:20px;}
-.dep2 li:first-child ~ li a:hover{
-	text-decoration:none;
-	color:#BDBDBD;
-}
-
-/*관심상품*/
-.layerWish {
-    position: fixed;
-    top: 41%;
-    left: 47%;
-    z-index: 1000;
-    width: 440px;
-    max-width: 440px;
-    height: 320px;
-    margin: -72px 0 0 -150px;
-    border: 1px solid #000;
-    border-radius:6px;
-    background: #fff;
-    text-align: center;
-    display:none;
-}
-.layerWish h1 {
-    font-size: 21px;
-    text-align: center;
-    color: #000;
-    font-weight: bold;
-    margin: 60px auto 30px;
-}
-.layerWish .content p {
-    color: #000;
-    font-size: 16px;
-    font-weight: 400;
-    margin-bottom: 40px;
-    line-height: 22px;
-}
-.layerWish .btnArea a {
-    display: inline-block;
-    padding: 10px 20px;
-    color: #000;
-    border: 1px solid #000;
-    box-sizing: border-box;
-    margin: 0 5px;
-    font-size: 15px;
-    font-weight: 500;
-}
-.layerWish .btnArea a.wishlist-confirm {
-    background: #000;
-    color: #fff;
-}
-.layerWish .close {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-}
-
-/*product-list*/
-.sort-container{
-	width:200px; 
-	height:34px; 
-	position:relative;
-	left:1220px;
-}
-/*
-.sort-container{
-	width:200px; 
-	height:34px; 
-	float:right;
-	margin-top:80px;
-	margin-right:40px; 
-}
-*/
-#sort{
-	width:100%;
-	height:100%; 
-	padding:0 10px;	
-}
-/*셀렉트박스 기본 화살표 지우기*/
-select{
-	-webkit-appearance: none; /*for chrome*/
-	-moz-appearance: none; /*for firefox*/
-	appearance: none;
-	background-image:url(${ctx}/resources/category/arrow_icon.png);
-	background-repeat:no-repeat;
-	background-position:right 10px center;
-}
-select::-ms-expand{
-	display: none; /*for IE10,11*/
-}
-select:focus {
-  outline: none;
-}
-.product-list{ 	
-	width:1440px; 
-	float:left; 
-	margin:100px 0 0 240px;
-}
-.product-list li{
-	position:relative;
-	float:left;	
-	width:33.3%;
-	height:600px;
-	padding:30px;
-	box-sizing:border-box;  /*padding 값을 너비값에 포함시키는 것*/
-	/*width:32%;*/
-	/*margin-left:2%;*/
-}
-/*
-.product-list li:first-child{margin-left:0;}
-.product-list li:nth-child(3n+1){margin-left:0;}
-*/
-.product-list li div{
-	text-align:center;
-	margin-bottom:5px;
-}
-	/*마우스 오버시 이미지 확대 효과*/
-.product-img{
-	overflow:hidden; /*부모 크기를 벗어나지 않고 내부 이미지 확대 */
-	height:440px; 
-}
-.product-img img{
-	width:100%;
-	/*마우스가 이미지를 벗어났을때도 자연스럽게 크기가 줄어들게 하기 위함*/
-	transform:scale(1.0);
-	transition:all 0.5s ease-in-out;
-}
-.product-img img:hover{
-    -webkit-transform:scale(1.1); /*for chrome*/
-    -moz-transform:scale(1.1); /*for firefox*/
-    -o-transform:scale(1.1); /*for opera*/
-    transform:scale(1.1);
-    transition: transform 0.5s;
-    -o-transition: transform 0.5s;
-    -moz-transition: transform 0.5s;
-    -webkit-transition: transform 0.5s;
-}
-.btn_heart{
-	position:relative;
-	right:-140px;
-	top:-380px;
-	width:45px;
-	height:45px;
-	border:none;
-	border-radius:50%;	
-	background:rgb(246,246,246) no-repeat 50% 50%;
-	background-image:url(${ctx}/resources/category/heart_icon.png);
-	transition:all ease 1s;
-}
-.btn_heart:focus{
-	outline:none;
-}
-.btn_toggle{
-	background-image:url(${ctx}/resources/category/color_heart_icon.png);
-	transform:rotate(720deg);
-}
-.add-cart{
-    position:absolute;
-    top:420px;
-	width:420px; 
-	height:50px;
-	line-height:50px;
-	background-color:rgb(219, 22, 58);
-	transition-property:transform;
-	transition-duration:399ms;
-	/*display:none;*/
-	visibility:hidden;
-}
-.add-cart a{
-	color:#fff;
-	display:block;
-	width:100%; 
-}
-.product-item-name{
-	font-size:20px;
-	color:#333;
-}
-.price{
-	font-size:17px;
-	font-weight:bolder;
-	color:#5D5D5D;
-}
-.desc{
-	font-size:13px;
-	color:#666; 
-}
-
-/*modal*/
-.modal{
-	width:100%;
-	height:100%;
-	position:fixed;
-	left:0;
-	top:0;
-	z-index:100;
-	background:rgba(0, 0, 0, 0.5);
-}
-.modal .modal_container{
-	width:400px;
-    height:500px;
-    border-radius:6px;
-    background-color:#fff;
-	text-align:center;
-	position:absolute;
-	top:50%;
-	margin-top:-250px;
-	left:50%;
-	margin-left:-200px;
-	padding:30px; 
-	float:left;
-	text-align:left;
-}
-.layer_name{
-    font-size:24px;
-}
-.btn_close{
-    float:right;
-    width:32px;
-    height:32px;
-    border:none;
-    outline:none;
-    background: url(${ctx}/resources/category/close_btn.png) no-repeat 50% 50%;
-}
-.inner_option, .group_btn{
-	width:100%;
-	padding-top:12px;
-}
-.tit_cart{
-	width:100%;
-	font-size:16px;
-	text-align:left;
-    padding-bottom:12px;
-    border-bottom:2px solid #333;
-    line-height:24px;
-    display:inline-block;
-}
-.inner_option>div:first-of-type{
-	  padding-top:12px;
-}
-#delivery-charge, #rental-period{
-	float:right;
-	width:230px;
-	padding:0 10px;	
-}
-#rental_start-container, #rental_end-container{
-	height:20px;
-}
-#rental_start-container>label, #rental_end-container>label{
-}
-#rental_start, #rental_end{
-	/* float:right; */
-	width:230px;
-}
-.group_btn button{
-	width:49%;
-	height:54px;
-	font-weight:bold;
-	border-radius:3px;
-	outline:none;
-}
-.total{
-	width:100%;
-	float:left;
-	font-size:16px;
-	line-height:24px;
-}
-.sum{
-	float:right;
-}
-.num{
-	font-size:24px;
-}
-.btn_cancel{
-    border:1px solid #5D5D5D;;
-    background-color:#fff;
-    color:#5D5D5D;
-}
-.btn_cart{
-	float:right;
-    border:1px solid #DB163A;
-    background-color:#DB163A;
-    color:#fff;
-}
-</style>
 <script>
 $(function(){
 	/*
@@ -373,21 +30,67 @@ $(function(){
 		$(".minus-icon").show();
 	});
 	
+	/*
 	//상품 정렬 
-	var sortOption=["Sort by", "Newest", "Name A-Z", "Price(low to high)", "Price(high to low)"];    
+	var sortOption=["신상품순", "상품명순", "낮은 가격순", "높은 가격순"];    
 	var tag="";
 	for(i=0; i<sortOption.length; i++){
 		tag += "<option>"+sortOption[i]+"</option>";
 	}
 	document.getElementById("sort").innerHTML = tag;	
+	*/
+	
+	//상품 정렬
+	$('#sort').change(function() {
+		var sort = $(this).val(); 
+		
+		location.href="<%=request.getContextPath()%>/list?c_no=${c_no}&sort="+sort;
+	});
 	
 	//btn-heart toggle
 	$(".btn_heart").click(function(){
-		
+		//btn_heart 
 		$(this).toggleClass("btn_toggle");
-		//관심상품 창
-		$(".btn_heart[class*=btn_toggle]").parents(".product-list").prev(".layerWish").css("display","block");
 		
+		var heart = $(this).attr('class');  //버튼의 현재 class 속성값
+		var p_no = "p_no="+$(this).val();  //버튼의 p_no
+
+		//관심상품
+		if(heart=='btn_heart btn_toggle'){  //관심상품 추가
+			var url = "/bitcamp/addInterest";
+			
+			$.ajax({
+				type : "GET",
+				url : url,
+				data : p_no,
+				success : function(result){
+					if(result>0){	
+						//관심상품 창 보여주기
+						$(".btn_heart[class*=btn_toggle]").parents(".product-list").prev(".layerWish").css("display","block");
+					}
+				},
+				error : function(){
+					console.log("관심상품 추가 에러....");
+				}
+			});
+		}else if(heart=='btn_heart'){   //관심상품 삭제
+			var url = "/bitcamp/delInterest";
+			
+			$.ajax({
+				type : "GET",
+				url : url,
+				data : p_no,
+				success : function(result){
+					if(result>0){
+						alert("관심 상품목록에서 삭제되었습니다.");
+					}
+				},
+				error : function(){
+					console.log("관심상품 삭제 에러....");
+				}
+			});
+		}
+	
 		/*
 		//관심상품 창
 		var idx = $(this).css("background-image").indexOf("color_heart_icon.png");
@@ -444,7 +147,6 @@ $(function(){
 	}
 	document.getElementById("rental-period").innerHTML = tag;
 	
-
 	//대여 시작일
 	var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 	$('#rental_start').datepicker({
@@ -534,8 +236,6 @@ function defaultday(){
 }
 </script>
 
-
-
 <div class="wrap">
 	<div class="hr-sect">SHOP</div>
 
@@ -546,14 +246,14 @@ function defaultday(){
 				<li class="dep1"><a href="#">Collection</a> <img src="<%=request.getContextPath()%>/resources/category/minus_icon.png" alt="마이너스 아이콘" class="minus-icon"><img src="<%=request.getContextPath()%>/resources/category/plus_icon.png" alt="플러스 아이콘" class="plus-icon">
 					<!-- 서브메뉴 -->
 					<ul class="dep2">
-						<li><a href="#"><b>All</b></a></li>
-						<li><a href="#">Camping Package</a></li>
-						<li><a href="#">Tent/Tarp</a></li>
-						<li><a href="#">Mat/Sleeping bag</a></li>
-						<li><a href="#">Coppell/Burner/Cooking</a></li>
-						<li><a href="#">Chair/Table/etc.</a></li>
-						<li><a href="#">Brazier/BBQ</a></li>
-						<li><a href="#">Backpacking</a></li>
+						<li>
+							<a href="<%=request.getContextPath()%>/list?c_no=0" <c:if test="${c_no==0}">style="font-weight:bold"</c:if>>All</a>
+						</li>
+						<c:forEach var="cvo" items="${clist}">
+							<li>
+								<a href="<%=request.getContextPath()%>/list?c_no=${cvo.c_no}" <c:if test="${c_no==cvo.c_no}">style="font-weight:bold"</c:if>>${cvo.c_name}</a>
+							</li>	
+						</c:forEach>	
 					</ul>
 				</li>  <!-- .dep1 -->
 			</ul>
@@ -571,134 +271,32 @@ function defaultday(){
 	  </div>
 	  <div class="close"><a onclick="$('.layerWish').hide();"><img src="<%=request.getContextPath()%>/resources/category/close_btn.png" alt="닫기 버튼"></a></div>
 	</div>
-	
+
 	<div class="product-list"> 
 		<div class="sort-container">
 			<select id="sort" name="sort">
+				<option value="p_date" <c:if test="${sort=='p_date'}">selected</c:if>>신상품순</option>
+				<option value="p_name" <c:if test="${sort=='p_name'}">selected</c:if>>상품명순</option>
+				<option value="price" <c:if test="${sort=='price'}">selected</c:if>>낮은 가격순</option>
+				<option value="price_desc" <c:if test="${sort=='price_desc'}">selected</c:if>>높은 가격순</option>
 			</select>
 		</div>
-	
+		
 		<ul>
-			<li>
-				<div class="product-img">		
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_01.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>				
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>코베아 문리버2 4인 캠핑세트</strong></a></div>
-				<div class="price">158,850원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
+			<c:forEach var="plist" items="${plist}">
+				<li>
+					<div class="product-img">		
+						<a href="/bitcamp/productView?p_no=${plist.p_no}"><img src="<%=request.getContextPath()%>/resources/category/${plist.p_filename1}" alt=""></a>
+						<c:if test="${logStatus!=null && logStatus=='Y'}">
+							<button type="button" value="${plist.p_no}" class="btn_heart <c:if test="${plist.heart=='Y'}">btn_toggle</c:if>"></button>
+						</c:if>				
+					</div>
+					<div class="add-cart"><a href="#">Add to Cart</a></div>
+					<div class="product-item-name"><a href="#"><strong>${plist.p_name}</strong></a></div>
+					<div class="price">${plist.price}</div>
+					<div class="desc">2박3일 대여요금</div>
 				</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_02.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>3인 컴팩트 세트</strong></a></div>
-				<div class="price">93,600원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_03.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>4인 기본세트</strong></a></div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_01.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>4인 기본세트</strong></a></div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_02.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>4인 기본세트</strong></a></div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_03.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>4인 기본세트</strong></a></div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_01.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>4인 기본세트</strong></a></div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_02.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>4인 기본세트</strong></a></div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_03.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>4인 기본세트</strong></a></div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_01.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>4인 기본세트</strong></a></div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_02.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>4인 기본세트</strong></a></div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img src="<%=request.getContextPath()%>/resources/category/product_03.png" alt=""></a>
-					<button type="button" class="btn_heart"></button>
-				</div>
-				<div class="add-cart"><a href="#">Add to Cart</a></div>
-				<div class="product-item-name"><a href="#"><strong>4인 기본세트</strong></a></div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
+			</c:forEach>
 		</ul>
 	</div>
 	

@@ -1,0 +1,99 @@
+@charset "UTF-8";
+a, a:hover{
+	text-decoration:none;
+	color:#6c757d;
+}
+.wrap{margin-top:150px;}
+small{padding-left:10px;}
+.find {width:40%;}
+.row{margin:0 auto;}
+form{	
+	text-align:center; 
+	border:1px solid #e8e8e8; 
+	padding:20px;
+	margin-bottom:32px;
+}
+table {
+    width:100%;
+    font-size:0.9em;  
+}
+thead{background-color:#e8e8e8;}
+thead td{
+	font-size:1em;
+	text-align:center; 
+	font-weight:bold;
+}
+tr{border-bottom:1px solid #e5e5e5;}
+th{
+	width:20%;
+	text-align:left;
+	background-color:#f9f9f9;  
+	padding:10px;
+}
+td{
+	text-align:left;
+	padding:10px;
+}
+span div{
+	margin-top:18px;
+	width:100px;
+	height:50px;
+	text-align:center;
+}
+.a-left{
+	float:left;
+	font-weight:bold; 
+}
+.a-right{
+	float:right;
+	font-weight:bold;
+}
+
+.findIdOk {
+   position: fixed;
+   top: 41%;
+   left: 47%;
+   z-index: 1000;
+   width: 440px;
+   max-width: 440px;
+   height: 320px;
+   margin: -72px 0 0 -150px;
+   border: 1px solid #000;
+   border-radius:6px;
+   background: #fff;
+   text-align: center;
+   display:none;
+}
+.findIdOk h1 {
+    font-size: 21px;
+    text-align: center;
+    color: #000;
+    font-weight: bold;
+    margin: 60px auto 30px;
+}
+.findIdOk .content p {
+    color: #000;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 40px;
+    line-height: 22px;
+}
+.findIdOk .btnArea a {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #000;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    margin: 0 5px;
+    font-size: 15px;
+    font-weight: 500;
+}
+.findIdOk .btnArea a.findIdOk-login {
+    background: #000;
+    color: #fff;
+}
+.findIdOk .close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}

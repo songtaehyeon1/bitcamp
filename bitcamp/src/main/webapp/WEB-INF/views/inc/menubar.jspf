@@ -123,7 +123,7 @@
 				<li><a href="/bitcamp">
 						<p class="main-menu-p">HOME</p>
 				</a></li>
-				<li id="shop-menu"><a href="/bitcamp/list">
+				<li id="shop-menu"><a href="<%=request.getContextPath()%>/list?c_no=0">
 						<p class="main-menu-p">SHOP</p>
 				</a>
 					<div id="shop-menu-content">

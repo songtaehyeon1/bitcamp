@@ -80,7 +80,7 @@ public class MemberController {
 			try {
 				MimeMessage message = mailSender.createMimeMessage();
 				MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
-				messageHelper.setFrom("hellojaeeun@naver.com");
+				messageHelper.setFrom("mail-test@naver.com");
 				messageHelper.setTo(tomail);  
 				messageHelper.setSubject(title);  
 				messageHelper.setText(content);  
@@ -122,7 +122,7 @@ public class MemberController {
 			try {
 				MimeMessage message = mailSender.createMimeMessage();
 				MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
-				messageHelper.setFrom("hellojaeeun@naver.com");
+				messageHelper.setFrom("mail-test@naver.com");
 				messageHelper.setTo(tomail);
 				messageHelper.setSubject(title);
 				messageHelper.setText("text/html; charset=UTF-8", content);
