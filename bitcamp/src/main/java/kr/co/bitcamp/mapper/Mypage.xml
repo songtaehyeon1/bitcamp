@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.bitcamp.member.MypageDAO">
+	<!-- 배송주소록 등록 ===================================================================== 배송지 -->
+	<insert id = "shippingInsert" parameterType = "kr.co.bitcamp.member.MypageVO">
+		insert into jusorok(rno, userno, rname, rzipcode, raddr, raddrdetail, rtel, rcheck) 
+		values(jusorok_sq.nextval, #{userno}, #{rname}, #{rzipcode}, #{raddr}, #{raddrdetail}, #{rtel}, 1)
+	</insert>
+	<!-- 주소록 리스트 가져오기 -->
+	<select id = "shippingList" resultType = "kr.co.bitcamp.member.MypageVO">
+		select * from jusorok where userno = #{param1} order by rno desc
+	</select>
+	<!-- 주소록 모두 해제, 하나 선택 -->
+	<update id = "shippingRelease">
+		update jusorok set rcheck = 0 where userno = #{param1}
+	</update>
+	<update id = "shippingSelect">
+		update jusorok set rcheck = 1 where rno = #{param1}
+	</update>
+	<!-- 배송지 수정 정보 가져오기 -->
+	<select id = "shippingEditList" resultType = "kr.co.bitcamp.member.MypageVO">
+		select rno, rname, rzipcode, raddr, raddrdetail, rtel from jusorok where rno = #{param1}
+	</select>
+	<!-- 배송지 수정 -->
+	<update id = "shippingEdit" parameterType = "kr.co.bitcamp.member.MypageVO">
+		update jusorok set rname = #{rname}, rzipcode = #{rzipcode}, raddr = #{raddr}, raddrdetail = #{raddrdetail}, rtel = #{rtel} 
+		where rno = #{rno}
+	</update>
+	<!-- 배송지 삭제 -->
+	<delete id = "shippingDelete">
+		delete from jusorok where rno = #{param1}
+	</delete>
+	<!-- 게시물 가져오기 ========================================================================= 게시물 관리 -->
+	<select id = "mypageBoardEnquiry" resultType = "kr.co.bitcamp.board.EnquiryVO">
+		select enquiry_no, b.userno userno, c_no, p_no, enquiry_subject, enquiry_content, enquiry_hit, 
+		to_char(enquiry_writedate, 'YYYY-MM-DD') enquiry_writedate, enquiry_secret, userid from board_enquiry b, member m 
+		where b.userno = m.userno and m.userno = #{param1}
+	</select>
+	<select id = "mypageBoardReview" resultType = "kr.co.bitcamp.board.ReviewVO">
+		select review_no, b.userno userno, c_no, p_no, review_subject, review_content, review_hit, review_rating, review_recommend, userid, 
+		to_char(review_writedate, 'YYYY-MM-DD') review_writedate, review_file1, review_file2, review_file3, review_file4, review_file5 
+		from board_review b, member m where b.userno = m.userno and m.userno = #{param1}
+	</select>
+</mapper>

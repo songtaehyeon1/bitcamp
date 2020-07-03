@@ -1,0 +1,153 @@
+@charset "UTF-8";
+.container{
+	padding : 0;
+	min-width : 1250px;
+}
+
+.container a{
+	text-decoration : none;
+}
+
+#shipping_write_div ul{
+	list-style : none;
+	margin : 0;
+	padding : 0;
+	border : 1px solid black;
+	float : left;
+	font-size : 13px;
+}
+
+#shipping_write_div li{
+	float : left;
+	height : 50px;
+	line-height : 50px;
+}
+
+#shipping_write_div li:nth-child(2n + 1){
+	width : 10%;
+	text-align : center;
+	border-right : 1px solid black;
+	background : black;
+	color : white;
+}
+
+#shipping_write_div li:nth-child(2n){
+	width : 90%;
+	padding-left : 10px;
+}
+
+#shipping_write_div input{
+	height : 25px;
+	line-height : 25px;
+}
+
+#shipping_address *{
+	float : left;
+}
+
+#shipping_write_div li:nth-child(4){
+	border-top : 1px solid black;
+	border-bottom : 1px solid black;
+	height : 120px;
+	line-height : 120px;
+}
+
+#shipping_write_div li:nth-child(3){
+	border-top : 1px solid white;
+	border-bottom : 1px solid white;
+	height : 120px;
+	line-height : 120px;
+}
+
+#shipping_address button{
+	height : 25px;
+	line-height : 20px;
+	border : none;
+	background : black;
+	color : white;
+	border-radius : 3px;
+}
+
+#userzipcode{
+	max-width : 150px;
+	margin-right : 10px;
+	border-radius : 3px;
+}
+
+#shipping_address_div{
+	margin-top : 10px;
+}
+
+.shipping_addrdetail input{
+	width : 700px;
+}
+
+#shipping_btn{
+	height : 60px;
+	line-height : 60px;
+	float : right;
+	font-size : 13px;
+}
+
+.write_btn, .cancle_btn{
+	width : 70px;
+	height : 40px;
+	line-height : 40px;
+	border : none;
+}
+
+.write_btn{
+	background : black;
+	color : white;
+}
+
+.cancle_btn{
+	background : white;
+	border : 1px solid black;
+}
+
+#shipping_tel input{
+	width : 70px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

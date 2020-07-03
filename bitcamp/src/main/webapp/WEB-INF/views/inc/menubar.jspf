@@ -56,6 +56,14 @@
 			$(this).children("a").css('color', '#A29C9C');
 		});
 
+		
+		$("#mypage_a").click(function(){
+			if("${logStatus}".trim() == ""){
+				alert("로그인 후 마이페이지로 갈 수 있습니다.");
+				location.href = "/bitcamp/loginFrm";
+				return false;
+			}
+		});
 	});
 </script>
 <style>
@@ -127,23 +135,23 @@
 				<li><a href="#">
 						<p class="main-menu-p">ABOUT</p>
 				</a></li>
-				<li><a href="#">
-						<p class="main-menu-p">CONTACT</p>
+				<li><a href="/bitcamp/boardNotice">
+						<p class="main-menu-p">COMMUNITY</p>
 				</a></li>
 				<li>
 					<div id="login-box">
 						<c:if test="${logStatus==null||logStatus==''||logStatus=='N'}">
-							<a href="/bitcamp/loginFrm"><i class="fas fa-user"></i> login</a>
+							<a href="/bitcamp/loginFrm"><i class="fas fa-user"></i> LOGIN</a>
 						</c:if>
 						<c:if test="${logStatus!=null&&logStatus=='Y'}">
 							<span style="color:#D8D8D8"><b>${username}</b> 님</span> <br/>
-							<a href="/bitcamp/logout"><i class="fas fa-user"></i> logout</a>
+							<a href="/bitcamp/logout"><i class="fas fa-user"></i> LOGOUT</a>
 						</c:if>
 					</div>
 				</li>
 				<li id="my-menu">
-					<a href="#">
-						<p class="main-menu-p">My</p>
+					<a href="/bitcamp/mypage" id = "mypage_a">
+						<p class="main-menu-p">MYPAGE</p>
 					</a>
 					<div id="my-menu-content">
 						<a href="/bitcamp/pwdChkFrm?str=update">회원정보 수정</a> 
@@ -154,7 +162,7 @@
 				</li>
 				<li>
 					<div id="cart-box">
-						<a href="#"><i class="fas fa-shopping-cart"></i> Cart</a>
+						<a href="#"><i class="fas fa-shopping-cart"></i> CART</a>
 						<c:if test="${logStatus!=null&&logStatus=='Y'}">
 							<span class="badge badge-pill badge-light blink bounce">0</span>
 						</c:if>

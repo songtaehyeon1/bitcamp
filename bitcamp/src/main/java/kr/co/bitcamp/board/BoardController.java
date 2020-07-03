@@ -51,9 +51,6 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView();
 		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
 		pagevo.setTotalRecord(dao.getTotalRecord(pagevo));
-		
-		/*HttpSession session = request.getSession();
-		session.setAttribute("adminStatus", "N");*/
 
 		mv.addObject("pagevo", pagevo);
 		mv.addObject("list", dao.allList(pagevo));
@@ -191,6 +188,10 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		HttpSession session = request.getSession();
+		if((Integer)session.getAttribute("userno") == null) {
+			mv.setViewName("redirect:loginFrm");
+			return mv;
+		}
 		vo.setUserno((Integer)session.getAttribute("userno"));
 		vo.setEnquiry_ip(getClientIpAddr(request));
 		int cnt = dao.enquiryInsert(vo);

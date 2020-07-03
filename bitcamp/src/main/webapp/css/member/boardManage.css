@@ -1,0 +1,131 @@
+@charset "UTF-8";
+.container{
+	padding : 0;
+	min-width : 1250px;
+}
+
+.container a{
+	text-decoration : none;
+}
+
+/* 게시물 관리 메인 */
+#mypage_boardManage_main{
+	width : 1250px;
+	font-size : 13px;
+}
+
+#mypage_boardManage_main ul{
+	list-style : none;
+	margin : 0;
+	padding : 0;
+	float : left;
+	width : 1250px;
+}
+
+#mypage_boardManage_main li{
+	float : left;
+	text-align : center;
+	height : 40px;
+	line-height : 40px;
+	border-bottom : 1px solid black;
+	border-right : 1px solid black;
+}
+
+#mypage_boardManage_main li:nth-of-type(-n + 6){
+	background : black;
+	color : white;
+}
+
+#mypage_boardManage_main li:nth-of-type(-n + 5){
+	border-right : 1px solid white;
+}
+
+#mypage_boardManage_main li:nth-of-type(6n + 1){
+	width : 5%;
+	border-left : 1px solid black;
+}
+
+#mypage_boardManage_main li:nth-of-type(6n + 2){
+	width : 10%;
+}
+
+#mypage_boardManage_main li:nth-of-type(6n + 3){
+	width : 64%;
+	text-align : left;
+	padding-left : 10px;
+}
+
+#mypage_boardManage_main li:nth-of-type(3){
+	text-align : center;
+}
+
+#mypage_boardManage_main li:nth-of-type(6n + 4){
+	width : 8%;
+}
+
+#mypage_boardManage_main li:nth-of-type(6n + 5){
+	width : 8%;
+}
+
+#mypage_boardManage_main li:nth-of-type(6n){
+	width : 5%;
+	border-right : 1px solid black;
+}
+
+#nothing_boardManage{
+	width : 1250px;
+	height : 200px;
+	line-height : 150px;
+	text-align : center;
+	border : 1px solid black;
+}
+
+.wordCut{
+	white-space : nowrap;
+	overflow : hidden;
+	text-overflow : ellipsis;
+}
+
+.pointer{
+	cursor : pointer;
+}
+
+.pointer:hover{
+	color : #B4B4B4;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

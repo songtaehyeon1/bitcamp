@@ -154,6 +154,7 @@
 			success : function(result){
 				if("${vo.review_recommend}" != result){
 					alert("추천 되었습니다.");
+					location.reload();
 				}else{
 					alert("이미 추천을 하셨습니다.");
 				}

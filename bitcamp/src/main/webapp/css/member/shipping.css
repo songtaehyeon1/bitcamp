@@ -1,0 +1,198 @@
+@charset "UTF-8";
+.container{
+	padding : 0;
+	min-width : 1250px;
+}
+
+.container a{
+	text-decoration : none;
+}
+
+/* 주소록 */
+#shipping_main ul{
+	list-style : none;
+	margin : 0;
+	padding : 0;
+	font-size : 13px;
+}
+
+#shipping_main li{
+	float : left;
+	text-align : center;
+	height : 40px;
+	line-height : 40px;
+	border-bottom : 1px solid black;
+}
+
+#shipping_main li:nth-of-type(-n + 6){
+	background : black;
+	color : white;
+	border-right : 1px solid white;
+}
+
+#shipping_main li:nth-of-type(6n + 1){
+	width : 3%;
+	border-left : 1px solid black;
+}
+
+#shipping_main li:nth-of-type(6n + 2){
+	width : 8%;
+}
+
+#shipping_main li:nth-of-type(6n + 3){
+	width : 10%;
+}
+
+#shipping_main li:nth-of-type(6n + 4){
+	width : 10%;
+}
+
+#shipping_main li:nth-of-type(6n + 5){
+	width : 64%;
+}
+
+#shipping_main li:nth-of-type(6n){
+	width : 5%;
+	border-right : 1px solid black;
+}
+
+.shipping_selectedBtn{
+	border : none;
+	background : black;
+	width : 80px;
+	height : 30px;
+	line-height : 20px;
+	border-radius : 3px;
+	color : white;
+}
+
+.shipping_selectBtn{
+	border : none;
+	background : white;
+	width : 80px;
+	height : 30px;
+	line-height : 20px;
+	border : 2px solid black;
+	border-radius : 3px;
+}
+
+.shipping_updateBtn{
+	border : none;
+	background : #484848;
+	width : 50px;
+	height : 30px;
+	line-height : 20px;
+	border : 2px solid black;
+	border-radius : 3px;
+	color : white;
+}
+
+.shipping_in_de{
+	width : 1250px;
+	height : 30px;
+	line-height : 30px;
+	margin-top : 20px;
+	float : left;
+	font-size : 13px;
+}
+
+.shipping_div{
+	width : 140px;
+	height : 30px;
+	line-height : 30px;
+	float : left;
+}
+
+.shipping_delete_btn{
+	width : 140px;
+	height : 30px;
+	line-height : 30px;
+	border : 1px solid black;
+	border-radius : 3px;
+	background : white;
+}
+
+.shipping_insert_btn{
+	width : 140px;
+	height : 30px;
+	line-height : 30px;
+	border-radius : 3px;
+	background : black;
+	color : white;
+	border : none;
+}
+
+.shipping_in_de>div:nth-of-type(2){
+	float : right;
+}
+
+.shipping_precaution_div{
+	width : 1250px;
+	height : 150px;
+	border : 1px solid #D8D8D8;
+	float : left;
+	margin-top : 50px;
+}
+
+.shipping_precaution_div{
+	font-size : 13px;
+}
+
+.shipping_precaution_top{
+	width : 100%;
+	height : 35px;
+	line-height : 35px;
+	padding-left : 20px;
+	background : #D8D8D8;
+}
+
+.shipping_precaution_div ul{
+	margin-top : 10px;
+}
+
+.shipping_precaution_div li{
+	line-height : 30px;
+}
+
+#nothing_shipping{
+	width : 1250px;
+	height : 200px;
+	line-height : 150px;
+	text-align : center;
+	border : 1px solid black;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
