@@ -1,5 +1,7 @@
 package kr.co.bitcamp.order;
 
+import java.sql.Date;
+
 public class OrderVO {
 	private String o_no;
 	private int oi_no;
@@ -46,10 +48,9 @@ public class OrderVO {
 	private String cash_time;//신규
 	private String card_time;//신규
 	private int payment_price;//결제된 금액
-	
-	private int p_count;//
+	private int p_count;//선택하고 결제된 제품 수량
 	private String p_name;//
-	
+	private java.util.Date stock_date;//예약날짜
 	
 	public String getUserid() {
 		return userid;
@@ -351,6 +352,12 @@ public class OrderVO {
 	}
 	public void setP_name(String p_name) {
 		this.p_name = p_name;
+	}
+	public java.util.Date getStock_date() {
+		return stock_date;
+	}
+	public void setStock_date(java.util.Date stock_date) {
+		this.stock_date = stock_date;
 	}
 	
 
