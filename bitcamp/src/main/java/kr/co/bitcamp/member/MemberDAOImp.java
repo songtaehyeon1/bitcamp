@@ -28,7 +28,7 @@ public interface MemberDAOImp {
 	//회원정보 수정_로그인 id에 해당하는 회원정보 선택
 	public MemberVO getMember(String userid); 
 	
-	//회원정보 수정
+	//회원정보 수정 완료
 	public int memberUpdate(MemberVO vo);
 	
 	//탈퇴 전 해당 회원의 가입일, 마일리지 확인

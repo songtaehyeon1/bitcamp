@@ -15,6 +15,7 @@ public class MemberVO {
 	
 	private String userlogdate;
 	private String userjointype;
+	private String reason;  //Ε»Επ »ηΐ―
 	
 	private String logStatus="N";
 
@@ -122,6 +123,14 @@ public class MemberVO {
 		this.userjointype = userjointype;
 	}
 	
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
 	public String getLogStatus() {
 		return logStatus;
 	}

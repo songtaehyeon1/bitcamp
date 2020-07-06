@@ -3,58 +3,72 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.bitcamp.member.MemberDAOImp">
+	<!-- 로그인 체크 -->
 	<select id="loginCheck" parameterType="kr.co.bitcamp.member.MemberVO" resultType="kr.co.bitcamp.member.MemberVO">
 		select userno, userid, userpwd, username from member where userid=#{userid} and userpwd=#{userpwd} and userjointype='Y'
 	</select>
 
+	<!-- 로그인_접속 날짜 저장 -->
 	<update id="logdateUpdate">
 		update member set userlogdate=to_date(#{userlogdate}, 'YYYY-MM-DD HH24:MI:SS') where userid=#{userid}
 	</update>
 
+	<!-- 아이디 찾기 -->
 	<select id="idFind" resultType="kr.co.bitcamp.member.MemberVO">
 		select rpad(substr(userid, 1, round(length(userid)/2)), length(userid), '*') userid, to_char(regdate, 'YYYY-MM-DD') regdate from member where username=#{param1} and useremail=#{param2}
 	</select>
 	
+	<!-- 비밀번호 찾기 -->
 	<select id="pwdFind" resultType="kr.co.bitcamp.member.MemberVO">
 		select userpwd from member where username=#{param1} and userid=#{param2} and useremail=#{param3}
 	</select>
 
+	<!-- 비밀번호 변경 -->
 	<update id="pwdChange" parameterType="string">
 		update member set userpwd=#{param2} where userid=#{param1}
 	</update>
 
+	<!-- 회원가입_아이디 중복확인 -->
 	<select id="idCheck" resultType="int">
 		select count(userid) from member where userid=#{userid}
 	</select>
 	
+	<!-- 회원 등록 -->
 	<insert id="memberInsert" parameterType="kr.co.bitcamp.member.MemberVO">
 		insert into member(userno, userid, userpwd, username, useremail, usertel, userzipcode, useraddr, useraddrdetail, regdate, usermile) values(userno_sq.nextval, #{userid}, #{userpwd}, #{username}, #{useremail}, #{usertel}, #{userzipcode}, #{useraddr}, #{useraddrdetail}, sysdate, 2000)
 	</insert>
 	
+	<!-- 비밀번호 확인 -->
 	<select id="pwdCheck" resultType="int">
 		select count(userpwd) from member where userid=#{param1} and userpwd=#{param2}
 	</select>
 	
+	<!-- 회원정보 수정_로그인 id에 해당하는 회원정보 선택 -->
 	<select id="getMember" resultType="kr.co.bitcamp.member.MemberVO">
 		select userno, userid, userpwd, username, useremail, usertel, userzipcode, useraddr, useraddrdetail from member where userid=#{userid}
 	</select>
 	
+	<!-- 회원정보 수정 완료 -->
 	<update id="memberUpdate">
 		update member set userpwd=#{userpwd}, useremail=#{useremail}, usertel=#{usertel}, userzipcode=#{userzipcode}, useraddr=#{useraddr}, useraddrdetail=#{useraddrdetail} where userid=#{userid}
 	</update>
 	
+	<!-- 탈퇴 전 정보 확인 -->
 	<select id="withdrawalChk" resultType="kr.co.bitcamp.member.MemberVO">
 		select to_char(regdate, 'YYYY-MM-DD') regdate, usermile from member where userid=#{param1}
 	</select>
 
+	<!-- 탈퇴 시 저장 할 정보 -->
 	<select id="withdrawal" resultType = "kr.co.bitcamp.member.MemberVO">
 		select userno, userid, username from member where userid=#{param1}
 	</select>
 
+    <!-- 탈퇴 회원 등록 -->
 	<insert id="withdrawalInsert" parameterType="kr.co.bitcamp.member.WithdrawalVO">
 		insert into m_withdrawal(userno, userid, username, reason, withdrawaldate) values(#{userno}, #{userid}, #{username}, #{reason}, sysdate)
 	</insert>
 	
+	<!-- 회원타입 변경 -->
 	<update id="joinTypeUpdate">
 		update member set userjointype='N' where userid=#{param1}
 	</update>
