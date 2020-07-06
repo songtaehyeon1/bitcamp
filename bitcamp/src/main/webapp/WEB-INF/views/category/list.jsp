@@ -105,28 +105,42 @@ $(function(){
 			$(this).css("opacity", "1");
 		});
 
-		//장바구니 카운트
-		var cnt = 1;
-		$(".btn_cart").click(function() {
-			$(".badge").html(cnt++);
-		});
-
 		//장바구니 팝업창 열기
 		$('.add-cart a').click(function() {
 			$('.modal').css('display', 'block');
 		});
 		//장바구니 팝업창 닫기
 		$('.modal .btn_close, .btn_cancel').click(function() {
+			//#modalFrm 초기화 하기
+			$("#delivery-charge").val('-1');
+			$("#rental-period").val('2');
+			$("#rental_start").val('');
+			$("#rental_end").val('');
+			$("#currentQty").attr('value','0');
+			$("#limitQuantity").html('0');
+			$('.delivery-fee-container').css("display","none");
+			//장바구니 팝업창 닫기	
 			$('.modal').css('display', 'none');
 		});
 
-		//배송비 결제 
-		var chargeOption = ["- 결제 방식 선택 -", "방문 수령", "주문시 결제"];
+		//배송비 결제 방법
+		var chargeOption = ["- 결제 방법 선택 -", "방문 수령", "주문시 결제"];
 		var tag = "";
 		for (i=0; i<chargeOption.length; i++) {
 			tag += "<option value='"+(i-1)+"'>" + chargeOption[i] + "</option>";  //value="-1" 부터
 		}
 		document.getElementById("delivery-charge").innerHTML = tag;
+		$("#delivery-charge option:eq(0)").attr("disabled", true);  //비활성화
+		
+		//배송비 
+		$('#delivery-charge').change(function() {
+			var state = $('#delivery-charge option:selected').val();
+			if (state==1) {
+				$('.delivery-fee-container').css("display","block");
+			} else {
+				$('.delivery-fee-container').css("display","none");
+			}
+		});
 		
 		//대여 기간 	
 		var periodOption = ["- 대여 기간 선택 -", "2박3일", "3박4일(+15,000원)", "4박5일(+30,000원)", "5박6일(+45,000원)"];
@@ -135,6 +149,7 @@ $(function(){
 			tag += "<option value='"+(i+2)+"'>" +periodOption[i]+ "</option>"; //value="2" 부터
 		}
 		document.getElementById("rental-period").innerHTML = tag;
+		$("#rental-period option:eq(0)").attr("disabled", true);  //비활성화
 
 		//대여 시작일
 		var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
@@ -156,12 +171,12 @@ $(function(){
 			format : "yyyy-mm-dd",
 			minDate : function() {
 				var date = new Date(rental_start.value);
-				date.setDate(date.getDate() +parseInt($("#rental-period").val()));
+				date.setDate(date.getDate() +parseInt($("#rental-period").val()-1));
 					
 				return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 			},maxDate : function() {
 				var date = new Date(rental_start.value);
-				date.setDate(date.getDate() +parseInt($("#rental-period").val()));
+				date.setDate(date.getDate() +parseInt($("#rental-period").val()-1));
 				
 				return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 			}
@@ -169,7 +184,7 @@ $(function(){
 
 		//수량 + , - 버튼
 		$('.productQty').click(this, function() {
-			var currentQty = parseInt($('.currentQty').val());  //주문 수량
+			var currentQty = parseInt($('#currentQty').val());  //주문 수량
 			var limitQty = parseInt($('#limitQuantity').html());  //재고 수량
 			
 			console.log("currentQty="+currentQty);
@@ -178,13 +193,16 @@ $(function(){
 			if($(this).hasClass("plus")) {
 				if(currentQty < limitQty) {
 					var plus = currentQty +1;
-					$('.currentQty').attr('value', plus);
+					console.log('plus');
+					$('#currentQty').attr('value', plus);
+					$('.num').html(plus * $("#price").val());
 				}
 			}
 			if($(this).hasClass("minus")) {
 				if(currentQty > 1) {
 					var minus = currentQty -1;
-					$('.currentQty').attr('value', minus);
+					$('#currentQty').attr('value', minus);
+					$('.num').html(minus * $("#price").val())
 				}
 			}
 		});
@@ -192,6 +210,32 @@ $(function(){
 		//수량 <input/>의 포커스 없애기
 		$('.input_noclick').focus(this, function() {
 			this.blur();
+		});
+		
+		//#modalFrm 검사 
+		$(document).on("submit", "#modalFrm", function(){
+			
+			if($("#delivery-charge").val()==null){
+				alert("배송비 결제방법을 선택해 주세요.");
+				return false;   
+			}
+			
+			if( $("#rental-period").val()==null){
+				alert("대여 기간을 선택해 주세요.");
+				return false;
+			}
+			
+			if( $("#rental_start").val()=="" ){
+				alert("대여 시작일을 선택해 주세요.");
+				return false;
+			}
+			
+			if( $(".limitQuantity").val()=="" || $(".limitQuantity").val()==null || $(".limitQuantity").val()==0){
+				alert("현재 해당 상품의 재고가 없습니다.");
+				return false;
+			}
+			
+			return true;
 		});
 }); //jquery 종료
 
@@ -221,7 +265,7 @@ function changeEndDay(startDay) {
 	}
 	
 	var date = new Date(startDay);// 주문 시작일을 받음.
-	var period = parseInt($("#rental-period").val());// 대여기간
+	var period = parseInt($("#rental-period").val()-1);// 대여기간
 	date.setDate(date.getDate() + period);// 주문 시작일 + 대여기간
 	//	$("#rental_period").html(startDay+"~")//시작일
 	var year = date.getFullYear();// yyyy
@@ -266,6 +310,7 @@ function availableChk() {
 			},
 			success : function(result) {
 				$("#limitQuantity").html(result.productCount);
+				$(".limitQuantity").val(result.productCount);
 			},
 			error : function(e) {
 				alert("상품 재고 체크 에러...." + e.responseText);
@@ -275,18 +320,16 @@ function availableChk() {
 }
 
 //장바구니 담기_데이터
-function addCart(p_no, p_filename, p_name, delivery_fee, product_borrow_period, orderStart, orderEnd, currentQty, limitQuantity, price) {
+function addCart(p_no, p_filename, p_name,  delivery_fee, product_borrow_period, orderStart, orderEnd, currentQty, limitQuantity, price) {
 	$("#p_no").val(p_no);
 	$("#p_filename").val(p_filename);
 	$("#p_name").val(p_name);
-	//$("#delivery-charge").val(delivery_fee);
+	$("#delivery_fee").val(delivery_fee);	
 	//$("#rental-period").val(product_borrow_period);
 	//$("#rental_start").val(orderStart);
 	//$("#rental_end").val(orderEnd);
-	//$("#currentQty").val(currentQty);
-	$(".limitQuantity").val(limitQuantity);
+	//$("#currentQty").val(currentQty);	
 	$("#price").val(price);
-	$("#delivery_fee").val();
 	
 	$(".p_name").text(p_name);
 	$(".num").text(price);
@@ -363,7 +406,7 @@ function addCart(p_no, p_filename, p_name, delivery_fee, product_borrow_period, 
 		</ul>
 	</div>
 
-	<form method="post" action="/bitcamp/productCart">
+	<form method="post" action="/bitcamp/productCart" id="modalFrm">
 		<div class="modal">
 			<div class="modal_container">
 				<input type="hidden" id="p_no" name="p_no"/> 		
@@ -375,13 +418,15 @@ function addCart(p_no, p_filename, p_name, delivery_fee, product_borrow_period, 
 				<div class="inner_option">
 					<strong class="tit_cart p_name"></strong>
 					<input type="hidden" id="p_name" name="p_name"/>
-
 					<div class="delivery-charge-container" style="overflow:auto">
 						<label>배송비 결제</label> 
 						<select id="delivery-charge" name="product_payment">
 						</select>
 					</div>
-					<input type="hidden" id="delivery_fee" name="delivery_fee"/>
+					
+					<div class="delivery-fee-container" style="display:none;">
+						<label>배송비</label> <span class="won" style="float: right;">원</span> <input type="text" id="delivery_fee" name="delivery_fee" readonly style="border:none; float:right; width:215px; padding:0 10px; text-align:right; outline:none;"/>
+					</div>
 
 					<div class="rental-period-container" style="overflow:auto">
 						<label>대여 기간</label> 
@@ -393,7 +438,7 @@ function addCart(p_no, p_filename, p_name, delivery_fee, product_borrow_period, 
 						<input id="rental_start" name="orderStart" readonly onchange="changeEndDay(this.value);availableChk()" />
 					</div>
 
-					<div class="rental_end-container" style="overflow:auto;s">
+					<div class="rental_end-container" style="overflow:auto;">
 						<label>대여 종료일</label> 
 						<input id="rental_end" name="orderEnd" readonly onkeyup="defaultday()"/>
 					</div>
@@ -402,13 +447,13 @@ function addCart(p_no, p_filename, p_name, delivery_fee, product_borrow_period, 
 						<label>수량</label>
 						<span class="qty">
 							<button type="button" class="btn minus productQty"><i class="icon-minus"></i></button>
-							<input type="text" class="currentQty cartItems input_noclick transparent" name="currentQty" value="1" readonly>
+							<input type="text" class="currentQty cartItems input_noclick transparent" id="currentQty" name="currentQty" value="0" readonly>
 							<button type="button" class="btn plus productQty"><i class="icon-plus"></i></button>
 						</span>
 						
 						<div class="quantity_msg">
-							<span><label id="limitQuantity">(최대수량)</label>개까지 구매 가능합니다.</span>
-							<input type="hidden" class="limitQuantity" name="limitQuantity">
+							<span><label id="limitQuantity">0</label>개까지 구매 가능합니다.</span>
+							<input type="hidden" class="limitQuantity" name="limitQuantity" value='0'>
 						</div>
 					</div>
 
@@ -418,7 +463,7 @@ function addCart(p_no, p_filename, p_name, delivery_fee, product_borrow_period, 
 							<span class="sum"> 
 								<span class="num">0</span> 
 								<input type="hidden" id="price" name="price"/>
-								<span class="won">원</span>
+								<span>원</span>
 							</span>
 						</div>
 					</div>
