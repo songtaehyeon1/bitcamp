@@ -252,7 +252,14 @@
 	</update>
 	<!-- 송장 추가 -->
 	<update id="updateInvoice">
-		update ordertable set delivery_code=#{param2},delivery_date=sysdate where o_no=#{param1}
+		update ordertable set delivery_code=#{param2},delivery_date=#{param3},delivery_arrival_date =#{param4}
+		<choose>
+			<when test="param4 !=null and param4 !=''">, delivery_status='배송완료' </when>
+			<otherwise>
+				, delivery_status='배송중'
+			</otherwise>		
+		</choose>
+		where o_no=#{param1}
 	</update>
 	<!-- 모든 주문 리스트 -->
 	<select id="allOrderSelect"
@@ -265,11 +272,14 @@
 		totalprice,to_char(order_date,'YYYY-MM-DD')
 		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
 		to_char(delivery_arrival_date,'YYYY-MM-DD')
-		delivery_arrival_date,delivery_status,payment_type,rname,userid,oname
+		delivery_arrival_date,delivery_status,payment_type,rname,oname
+		<if test="userno !=null and userno!=0 and userno !=''">
+			,userid
+		</if>
 		from ordertable o
 		inner join order_info i on o.oi_no = i.oi_no
 		inner join Recipient r on o.r_no = r.r_no
-		<if test="userno !=null and userno==0">
+		<if test="userno !=null and userno!=0 and userno !=''">
 			inner join member m on o.userno = m.userno
 		</if>
 		<if test="payment_type !=null and payment_type=='card'">
@@ -280,6 +290,111 @@
 		</if>
 		<where>
 			<if test="delivery_status != null">
+				AND delivery_status in
+				<foreach collection="delivery_status" item="delivery_status"
+					index="i" open="(" close=")" separator=",">
+					#{delivery_status}
+				</foreach>
+			</if>
+			<if
+				test="searchKey != null and searchWord != null and searchKey != '' and searchWord != ''">
+				AND ${searchKey} like '%'||#{searchWord}||'%'
+			</if>
+			<if
+				test="s_price != null and s_price !='' and (e_price == null or e_price =='')">
+				AND totalprice <![CDATA[>=]]>${s_price}
+			</if>
+			<if
+				test="(s_price == null or s_price =='') and e_price != null and e_price !=''">
+				and totalprice <![CDATA[<=]]>${e_price}
+			</if>
+			<if
+				test="s_price != null and e_price != null and s_price !='' and e_price !=''">
+				AND totalprice <![CDATA[>=]]>${s_price}
+				and totalprice <![CDATA[<=]]>${e_price}
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !='' and ndate =='order_date'">
+				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !='' and ndate =='delivery_arrival_date'">
+				AND to_char(delivery_arrival_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_char(delivery_arrival_date,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !='' and ndate =='delivery_date'">
+				AND to_char(delivery_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_char(delivery_date,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>
+		</where>
+		order by o_no desc)
+		where
+		rownum <![CDATA[<=]]>
+		#{pageNum} * #{onePageRecord}
+		order by o_no asc)
+		where rownum <![CDATA[<=]]>
+		<if test="pageNum == totalPage">#{lastPageRecord}</if>
+		<if test="pageNum != totalPage">#{onePageRecord}</if>
+		order by o_no desc
+	</select>
+
+	<!-- 전체 품목 페이지 수 구하기(검색) -->
+	<select id="getTotalRecord"
+		parameterType="kr.co.bitcamp.admin.PagingVO" resultType="int">
+		select count(p_no) from product left join category using(c_no)
+		<where>
+			<if
+				test="p_deltype!= null and p_deltype !='' and p_deltype !='All'">
+				AND p_deltype = #{p_deltype}
+			</if>
+			<if test="searchKey != null and searchWord != null">
+				AND ${searchKey} like '%'||#{searchWord}||'%'
+			</if>
+			<if test="c_no != 0">
+				AND c_no = ${c_no}
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !='' ">
+				AND to_char(p_date,'YYYY-MM-DD') <![CDATA[>]]>to_date('${s_date}','YYYY-MM-DD')
+				and to_char(p_date,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>
+		</where>
+
+
+	</select>
+	<!-- 주문리스트 전체 페이지 수 구하기 -->
+	<select id="getOrderTotalRecord"
+		parameterType="kr.co.bitcamp.admin.PagingVO" resultType="int">
+		select count(o_no) from(
+		select
+		o.o_no o_no,o.userno,o.r_no,o.oi_no,mileage,
+		totalprice,to_char(order_date,'YYYY-MM-DD')
+		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
+		to_char(delivery_arrival_date,'YYYY-MM-DD')
+		delivery_arrival_date,delivery_status,payment_type,rname,oname
+		<if test="userno !=null and userno!=0 and userno !=''">
+			,userid
+		</if>
+		from ordertable o
+		inner join order_info i on o.oi_no = i.oi_no
+		inner join Recipient r on o.r_no = r.r_no
+		<if test="userno !=null and userno !=0 and userno !=''">
+			inner join member m on o.userno = m.userno
+		</if>
+		<if test="payment_type !=null and payment_type=='card' and payment_type !=''">
+			inner join card on o.o_no = card.o_no
+		</if>
+		<if test="payment_type !=null and payment_type=='cash' and payment_type !=''">
+			inner join cash on o.o_no = cash.o_no
+		</if>
+		<where>
+			<if test="delivery_status != null and delivery_status !=''">
 				AND delivery_status in
 				<foreach collection="delivery_status" item="delivery_status"
 					index="i" open="(" close=")" separator=",">
@@ -316,39 +431,7 @@
 
 
 		</where>
-		order by o_no desc)
-		where
-		rownum <![CDATA[<=]]>
-		#{pageNum} * #{onePageRecord}
-		order by o_no asc)
-		where rownum <![CDATA[<=]]>
-		<if test="pageNum == totalPage">#{lastPageRecord}</if>
-		<if test="pageNum != totalPage">#{onePageRecord}</if>
-		order by o_no desc
-	</select>
-
-	<!-- 전체 품목 페이지 수 구하기(검색) -->
-	<select id="getTotalRecord"
-		parameterType="kr.co.bitcamp.admin.PagingVO" resultType="int">
-		select count(p_no) from product left join category using(c_no)
-		<where>
-			<if
-				test="p_deltype!= null and p_deltype !='' and p_deltype !='All'">
-				AND p_deltype = #{p_deltype}
-			</if>
-			<if test="searchKey != null and searchWord != null">
-				AND ${searchKey} like '%'||#{searchWord}||'%'
-			</if>
-			<if test="c_no != 0">
-				AND c_no = ${c_no}
-			</if>
-			<if
-				test="s_date != null and e_date != null and s_date !='' and e_date !='' ">
-				AND to_char(p_date,'YYYY-MM-DD') <![CDATA[>]]>to_date('${s_date}','YYYY-MM-DD')
-				and to_char(p_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
-			</if>
-		</where>
+		)
 
 
 	</select>
@@ -409,7 +492,7 @@
 			</if>
 		</where>
 	</select>
-
+	
 
 	<!-- 재고의 예약 확인용 -->
 	<select id="allSelectProduct" parameterType="int"

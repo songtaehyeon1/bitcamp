@@ -17,13 +17,34 @@
 				return true;
 			}
 		});
+		
+
+		$('#s_date').datepicker({
+			uiLibrary : 'bootstrap4.4.1',
+				format : "yyyy-mm-dd",
+				icons: { rightIcon: null }
+
+		
+					
+		});
+		$('#e_date').datepicker({
+			uiLibrary : 'bootstrap4.4.1',
+				format : "yyyy-mm-dd",
+				icons: { rightIcon: null }
+		
+					
+		});
 		$("#reset").click(function() {
 			$("input[type=text]").val('');
 			$("#searchKey").val('username');
 		});
 	});
 </script>
-
+<style>
+	#datepickerbox div,#datepickerbox img,#datepickerbox span{
+		float: left
+	}
+</style>
 <div id="admin_top_menu_under">&nbsp;</div>
 <div id="admin_left_menu">
 	<h2>회원관리</h2>
@@ -52,11 +73,11 @@
 			<tbody>
 				<tr>
 					<th>가입일</th>
-					<td><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }"><img
+					<td id="datepickerbox" ><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }"><img
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="Select date" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
-						~ <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }"><img
+						<span>~</span> <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }"><img
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">

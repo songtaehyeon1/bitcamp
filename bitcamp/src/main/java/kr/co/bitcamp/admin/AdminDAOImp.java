@@ -43,13 +43,14 @@ public interface AdminDAOImp {
 	public OrderVO selectOrder(String o_no);
 	public List<OrderVO> orderProductList(String o_no);
 	public int orderEdit(OrderVO vo);
-	public int updateInvoice(String o_no,String delivery_code);
+	public int updateInvoice(String o_no,String delivery_code,String delivery_date,String delivery_arrival_date);
 	//∆‰¿Ã¬°
 	public int getTotalRecord(PagingVO vo);
 	public int getTotalMemberRecord(PagingVO vo);
 	public int getTotalWithdrawalRecord(PagingVO vo);
 	public int getTotalStockRecord(PagingVO vo);	
 	public LeadLagVO getLeadLagSelect(PagingVO pagevo);
+	public int getOrderTotalRecord(PagingVO vo);
 	
 	
 }

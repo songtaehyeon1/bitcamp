@@ -4,16 +4,39 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <script>
 	$(function() {
-		$("#productmenu").attr("class","over");
+		$("#productmenu").attr("class", "over");
 		$("#reset").click(function() {
 			$("input").val('');
 			$("#searchKey").val('p_name');
 			$("#c_no").val(0);
 			$("#all").click();
+
 		});
+
+		$('#s_date').datepicker({
+			uiLibrary : 'bootstrap4.4.1',
+			format : "yyyy-mm-dd",
+			icons : {
+				rightIcon : null
+			}
+
+		});
+		$('#e_date').datepicker({
+			uiLibrary : 'bootstrap4.4.1',
+			format : "yyyy-mm-dd",
+			icons : {
+				rightIcon : null
+			}
+
+		});
+
 	});
 </script>
-
+<style>
+#datepickerbox div, #datepickerbox img, #datepickerbox span {
+	float: left
+}
+</style>
 <div id="admin_top_menu_under">&nbsp;</div>
 
 <div id="admin_left_menu">
@@ -58,20 +81,23 @@
 						style="border: 1px #CCC solid; height: 25px">
 							<option value="0" selected="">전체분류</option>
 							<c:forEach var="cvo" items="${clist }">
-								<option value="${cvo.c_no }" <c:if test="${pagevo.c_no == cvo.c_no }">selected="selected"</c:if>>${cvo.c_name }</option>
+								<option value="${cvo.c_no }"
+									<c:if test="${pagevo.c_no == cvo.c_no }">selected="selected"</c:if>>${cvo.c_name }</option>
 							</c:forEach>
 					</select></td>
 
 				</tr>
 				<tr>
 					<th>등록일</th>
-					<td><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }"
-						class="text w100"><img class="ui-datepicker-trigger"
+					<td id="datepickerbox"><input type="text" name="s_date"
+						id="s_date" value="${pagevo.s_date }" class="text w100"><img
+						class="ui-datepicker-trigger"
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
-						~ <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }"
-						class="text w100"><img class="ui-datepicker-trigger"
+						<span>~</span> <input type="text" name="e_date" id="e_date"
+						value="${pagevo.e_date }" class="text w100"><img
+						class="ui-datepicker-trigger"
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
@@ -79,8 +105,8 @@
 				</tr>
 				<tr>
 					<th>재고여부</th>
-					<td><label for="p_deltype"><input type="radio" id="all"
-							name="p_deltype" value="All"
+					<td><label for="p_deltype"><input type="radio"
+							id="all" name="p_deltype" value="All"
 							<c:if test="${pagevo.p_deltype =='All'  || pagevo.p_deltype ==null || pagevo.p_deltype ==''}">checked="checked"</c:if>>전체상품</label>
 						<label for="p_deltype"><input type="radio"
 							name="p_deltype" value="Y"
@@ -91,7 +117,7 @@
 				</tr>
 				<tr>
 					<th>직접검색</th>
-					<td><select name="searchKey" id="searchKey" >
+					<td><select name="searchKey" id="searchKey">
 							<option value="p_name" selected="">상품명</option>
 							<option value="p_no">상품코드</option>
 					</select> <input type="text" name="searchWord" style="width: 200px;">
@@ -105,7 +131,7 @@
 		</div>
 	</form>
 	<h4 class="allgoodsnum">
-		총 <span class="red">${fn:length(list) }</span>개의 상품이 검색되었습니다.
+		총 <span class="red">${pagevo.totalRecord }</span>개의 상품이 검색되었습니다.
 
 	</h4>
 
@@ -135,7 +161,8 @@
 						</div>
 						<div>
 							<p class="gdname">
-								<a href="<%=request.getContextPath()%>/admin/stocklist?p_no=${vo.p_no}">${vo.p_name }</a>
+								<a
+									href="<%=request.getContextPath()%>/admin/stocklist?p_no=${vo.p_no}">${vo.p_name }</a>
 							</p>
 							<p class="gdcate"></p>
 						</div>

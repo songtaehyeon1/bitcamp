@@ -4,6 +4,19 @@
 <script type="text/javascript">
 	$(function() {
 		$("#ordermenu").attr("class","over");
+		var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+		$('#delivery_date').datepicker({
+			uiLibrary : 'bootstrap4.4.1',
+			format : "yyyy-mm-dd",
+			icons: { rightIcon: null }
+					
+		});
+		$('#delivery_arrival_date').datepicker({
+			uiLibrary : 'bootstrap4.4.1',
+			format : "yyyy-mm-dd",
+			icons: { rightIcon: null }
+					
+		});
 	});
 	function openDaumZipAddress() {
 		new daum.Postcode({
@@ -15,6 +28,7 @@
 			}
 		}).open();
 	}
+
 	
 </script>
 <div id="admin_top_menu_under">&nbsp;</div>
@@ -193,7 +207,11 @@
 								</tr>
 								<tr>
 									<th>배송일/출고일</th>
-									<td>${vo.delivery_date }</td>
+									<td><input type="text" name="delivery_date" id="delivery_date" class="text" value="${vo.delivery_date }"/></td>
+								</tr>
+								<tr>
+									<th>배송완료일</th>
+									<td><input type="text" name="delivery_arrival_date" id="delivery_arrival_date" class="text" value="${vo.delivery_arrival_date }"/></td>
 								</tr>
 							</tbody>
 						</table>

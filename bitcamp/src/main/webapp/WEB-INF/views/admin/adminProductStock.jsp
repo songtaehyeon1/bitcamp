@@ -15,10 +15,32 @@
 			} else {
 				return true;
 			}
-		})
+		});
+
+		$('#s_date').datepicker({
+			uiLibrary : 'bootstrap4.4.1',
+				format : "yyyy-mm-dd",
+				icons: { rightIcon: null }
+
+		
+					
+		});
+		$('#e_date').datepicker({
+			uiLibrary : 'bootstrap4.4.1',
+				format : "yyyy-mm-dd",
+				icons: { rightIcon: null }
+		
+					
+		});
+		
+		
 	});
 </script>
-
+<style>
+#datepickerbox div, #datepickerbox img, #datepickerbox span {
+	float: left
+}
+</style>
 <div id="admin_top_menu_under">&nbsp;</div>
 
 <div id="admin_left_menu">
@@ -53,12 +75,12 @@
 			<tbody>
 				<tr>
 					<th>예약날짜</th>
-					<td><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }"
+					<td id="datepickerbox"><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }"
 						class="text w100"><img class="ui-datepicker-trigger"
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="Select date" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
-						~ <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }"
+						<span>~</span> <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }"
 						class="text w100"><img class="ui-datepicker-trigger"
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="Select date" title="Select date"
@@ -111,7 +133,7 @@
 		</div>
 	</form>
 	<h4 class="allgoodsnum">
-		총 <span class="red">${fn:length(list) }</span>개의 상품이 검색되었습니다.
+		총 <span class="red">${pagevo.totalRecord }</span>개의 상품이 검색되었습니다.
 
 	</h4>
 

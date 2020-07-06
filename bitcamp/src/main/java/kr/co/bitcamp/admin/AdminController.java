@@ -174,9 +174,12 @@ public class AdminController {
 		if (pageNumStr != null) {
 			vo.setPageNum(Integer.parseInt(pageNumStr));
 		}	
-
+		vo.setSearchKey(req.getParameter("searchKey"));
+		vo.setSearchWord(req.getParameter("searchWord"));
 		List<OrderVO> list = dao.allOrderSelect(vo);
 		
+		vo.setTotalRecord(dao.getOrderTotalRecord(vo));
+		mav.addObject("pagevo", vo);
 		mav.addObject("list", list);
 		mav.setViewName("admin/adminOrderList");
 		
@@ -202,8 +205,9 @@ public class AdminController {
 		int result = dao.orderEdit(vo);
 		if(result>0) {			
 			if(vo.getDelivery_code() != null && vo.getDelivery_code() !="") {
-				dao.updateInvoice(vo.getO_no(),vo.getDelivery_code());
+				dao.updateInvoice(vo.getO_no(),vo.getDelivery_code(),vo.getDelivery_date(),vo.getDelivery_arrival_date());
 			}
+			//if(vo.getP)
 			mav.setViewName("redirect:orderList");
 		}else {
 			mav.addObject("o_no", vo.getO_no());
