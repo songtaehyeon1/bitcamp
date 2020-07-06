@@ -1,0 +1,152 @@
+@charset "UTF-8";
+.container{
+	padding : 0;
+	min-width : 1250px;
+}
+
+.container a{
+	text-decoration : none;
+}
+
+/* 관심상품 */
+.mypageWishList_main{
+	width : 1250px;
+	font-size : 13px;
+	text-align : center;
+}
+
+.mypageWishList_main ul{
+	list-style : none;
+	margin : 0;
+	padding : 0;
+}
+
+.mypageWishList_main li{
+	float : left;
+	border-bottom : 1px solid black;
+	border-right : 1px solid black;
+	height : 60px;
+	line-height : 60px;
+}
+
+.mypageWishList_main li:nth-of-type(-n + 5){
+	background : black;
+	color : white;
+}
+
+.mypageWishList_main li:nth-of-type(-n + 4){
+	border-right : 1px solid white;
+}
+
+.mypageWishList_main li:nth-of-type(5n + 1){
+	width : 8%;
+	border-left : 1px solid black;
+}
+
+.mypageWishList_main li:nth-of-type(5n + 2){
+	text-align : left;
+	width : 68%;
+}
+
+.mypageWishList_main li:nth-of-type(2){
+	text-align : center;
+}
+
+.mypageWishList_main li:nth-of-type(5n + 3){
+	width : 8%;
+}
+
+.mypageWishList_main li:nth-of-type(5n + 4){
+	width : 8%;
+}
+
+.mypageWishList_main li:nth-of-type(5n){
+	width : 8%;
+}
+
+.mypageWishList_nothing{
+	width : 1250px;
+	height : 200px;
+	line-height : 200px;
+	border : 1px solid black;
+	float : left;
+}
+
+.mypageWishList_btn{
+	border : none;
+	width : 50px;
+	height : 40px;
+	line-height : 40px;
+	background : black;
+	color : white;
+}
+
+.mypageWishList_go{
+	cursor : pointer;
+	padding-left : 20px;
+}
+
+.mypageWishList_go:hover{
+	color : #D8D8D8;
+}
+
+.mypageWishList_main_btn{
+	width : 100px;
+	height : 50px;
+	line-height : 50px;
+	background : black;
+	color : white;
+	margin-top : 20px;
+	border : none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

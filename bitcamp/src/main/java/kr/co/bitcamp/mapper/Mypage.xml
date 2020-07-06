@@ -3,6 +3,38 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.bitcamp.member.MypageDAO">
+	<!-- 마이페이지 리스트 ================================================================== 마이페이지 -->
+	<select id = "mypageTopList" resultType = "kr.co.bitcamp.member.MypageVO">
+		select sum(totalprice) orderTot, count(o_no) orderCnt from ordertable o where userno = #{param1}
+	</select>
+	<select id = "mypageMileageOne" resultType = "int">
+		select usermile from member where userno = #{param1}
+	</select>
+	<select id = "delivery_before" resultType = "String">
+		select count(delivery_status) delivery_before from ordertable where delivery_status = '입금대기' and userno = #{param1}
+	</select>
+	<select id = "delivery_pay_com" resultType = "String">
+		select count(delivery_status) delivery_pay_com from ordertable where delivery_status = '결제완료' and userno = #{param1}
+	</select>
+	<select id = "delivery_ship_pro" resultType = "String">
+		select count(delivery_status) delivery_ship_pro from ordertable where delivery_status = '배송중' and userno = #{param1}
+	</select>
+	<select id = "delivery_com" resultType = "String">
+		select count(delivery_status) delivery_com from ordertable where delivery_status = '배송완료' and userno = #{param1}
+	</select>
+	<select id = "delivery_cancel" resultType = "String">
+		select count(delivery_status) delivery_cancel from ordertable where delivery_status = '취소' and userno = #{param1}
+	</select>
+	<select id = "delivery_return" resultType = "String">
+		select count(delivery_status) delivery_return from ordertable where delivery_status = '반품' and userno = #{param1}
+	</select>
+
+
+
+
+
+
+
 	<!-- 배송주소록 등록 ===================================================================== 배송지 -->
 	<insert id = "shippingInsert" parameterType = "kr.co.bitcamp.member.MypageVO">
 		insert into jusorok(rno, userno, rname, rzipcode, raddr, raddrdetail, rtel, rcheck) 
@@ -32,6 +64,10 @@
 	<delete id = "shippingDelete">
 		delete from jusorok where rno = #{param1}
 	</delete>
+	
+	
+	
+	
 	<!-- 게시물 가져오기 ========================================================================= 게시물 관리 -->
 	<select id = "mypageBoardEnquiry" resultType = "kr.co.bitcamp.board.EnquiryVO">
 		select enquiry_no, b.userno userno, c_no, p_no, enquiry_subject, enquiry_content, enquiry_hit, 
@@ -43,4 +79,68 @@
 		to_char(review_writedate, 'YYYY-MM-DD') review_writedate, review_file1, review_file2, review_file3, review_file4, review_file5 
 		from board_review b, member m where b.userno = m.userno and m.userno = #{param1}
 	</select>
+	
+	
+	
+	
+	<!-- 주문조회 정보 가져오기 ======================================================================= 주문조회 -->
+	<select id = "mypageOrderList" resultType = "kr.co.bitcamp.member.MypageOrderVO">
+		select ot.o_no o_no, userno, r_no, oi_no, mileage, totalprice, to_char(order_date, 'YYYY-MM-DD') order_date, 
+		to_char(delivery_date, 'YYYY-MM-DD') delivery_date, to_char(delivery_arrival_date, 'YYYY-MM-DD') delivery_arrival_date, 
+		delivery_status, payment_price, delivery_code, p_count, p_commnet, p_filename1 
+		from ordertable ot, order_product op, product p 
+		where ot.o_no(+) = op.o_no and op.p_no = p.p_no(+) and userno = #{param1} 
+		<if test = "param2 != 'all'">
+			and delivery_status = #{param2} 
+		</if>
+		<if test = "param3 != '' and param3 != null">
+			and order_date <![CDATA[>=]]> #{param3} 
+		</if>
+		<if test = "param4 != '' and param4 != null">
+			and order_date - 1 <![CDATA[<=]]> #{param4} 
+		</if>
+	</select>
+	<!-- 주문 하나 선택 -->
+	<select id="selectOrder" resultType="kr.co.bitcamp.order.OrderVO">
+		select
+		o.o_no,o.userno,o.r_no,o.oi_no,mileage,
+		totalprice,to_char(order_date,'YYYY-MM-DD')
+		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
+		to_char(delivery_arrival_date,'YYYY-MM-DD')
+		delivery_arrival_date,delivery_status,payment_type,userid,cash_time,card_time,oname,otel,oemail,ozipcode,oaddr,oaddrdetail,opassword,rname,rtel,rzipcode,raddr,raddrdetail,rcommnet,delivery_code
+		from ( select O_NO, USERNO, R_NO, OI_NO, MILEAGE, TOTALPRICE, ORDER_DATE, DELIVERY_DATE, DELIVERY_ARRIVAL_DATE,delivery_code, DELIVERY_STATUS, PAYMENT_TYPE, CARD_CORP, card.PAYMENT_TIME card_time, BANK, DEPOSITOR, cash.PAYMENT_TIME cash_time from ordertable left join card card using(o_no) left join cash cash using(o_no)) o
+        inner join member m on o.userno = m.userno 
+        inner join order_info i on o.oi_no = i.oi_no
+		inner join Recipient r on o.r_no = r.r_no where o.o_no = #{param1}
+	</select>
+	<!-- 주문 수정 -->
+	<update id="mypageOrderEdit" parameterType="kr.co.bitcamp.order.OrderVO">
+		update Recipient set rname=#{rname}, rtel=#{rtel}, rzipcode = #{rzipcode}, raddr =#{raddr}, raddrdetail =#{raddrdetail},rcommnet=#{rcommnet} 
+		where r_no = #{r_no}
+	</update>
+	<!-- 송장 추가 -->
+	<update id="updateInvoice">
+		update ordertable set delivery_code=#{param2},delivery_date=#{param3},delivery_arrival_date =#{param4}
+		<choose>
+			<when test="param4 !=null and param4 !=''">, delivery_status='배송완료' </when>
+			<otherwise>
+				, delivery_status='배송중'
+			</otherwise>		
+		</choose>
+		where o_no=#{param1}
+	</update>
+	
+	
+	
+	
+	<!-- 관심상품 리스트 ============================================================================= 관심상품 -->
+	<select id = "mypageWishLists" resultType = "kr.co.bitcamp.member.MypageWishListVO">
+		select userno, i.p_no p_no, p_filename1, p_commnet, price, price * 0.01 mileage, p_name 
+		from interest i, product p 
+		where i.p_no = p.p_no and userno = #{param1}
+	</select>
+	<!-- 관심상품 삭제 -->
+	<delete id = "mypageWishListDel">
+		delete from interest where userno = #{param1} and p_no = #{param2}
+	</delete>
 </mapper>

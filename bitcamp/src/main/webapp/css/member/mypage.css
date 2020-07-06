@@ -22,8 +22,8 @@
 
 .mypage_main_div_div{
 	width : 500px;
-	height : 55px;
-	line-height : 70px;
+	height : 110px;
+	line-height : 110px;
 	margin : 0 auto;
 	padding-right : 30px;
 }
@@ -34,8 +34,8 @@
 
 .mypage_main_div_div>div{
 	float : right;
-	height : 55px;
-	line-height : 70px;
+	height : 110px;
+	line-height : 110px;
 }
 
 .mypage_main_div>div:nth-of-type(2), .mypage_main_div>div:nth-of-type(2)>div{

@@ -1,0 +1,150 @@
+@charset "UTF-8";
+.container{
+	padding : 0;
+	min-width : 1250px;
+}
+
+.container a{
+	text-decoration : none;
+}
+
+/* 주문조회 수정 메인 */
+table.admin_table {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px #e6e6e6 solid;
+	font-size: 12px;
+	margin-top: 5px;
+	margin-bottom: 30px
+}
+
+tr {
+	display: table-row;
+	vertical-align: inherit;
+	border-color: inherit;
+	height: 40px;
+}
+
+table.admin_table tbody th {
+	background: #f6f6f6;
+	text-align: left;
+	padding-left: 15px;
+	width: 130px;
+	height: 30px;
+	border: 1px #e6e6e6 solid
+}
+
+table.admin_table tbody td {
+	background: #fff;
+	vertical-align: middle;
+	line-height: 2.5em;
+	padding-left: 15px;
+	height: 30px;
+	border: 1px #e6e6e6 solid
+}
+
+table.admin_table input.text {
+	font-size: 12px;
+	color: #333;
+	width: 200px;
+	height: 25px;
+	border: 1px #CCC solid;
+	padding-left: 10px
+}
+
+table.admin_table input.radio {
+	font-size: 12px;
+	color: #333;
+	border: 1px #CCC solid;
+	padding: 0;
+	vertical-align: middle;
+	margin-right: 5px
+}
+
+table.admin_table input.w50 {
+	width: 50px;
+}
+
+table.admin_table input.w400 {
+	width: 400px;
+}
+
+ul, li, ol {
+	list-style-type: none;
+	margin : 0;
+	padding : 0;
+}
+
+.searchbtn {
+	text-align: center;
+	margin: 20px 0 40px;
+}
+
+.searchbtn .textsearch {
+	text-align: center;
+	background: 0;
+	border: 0;
+}
+
+h4 {
+	text-align: left;
+	height: 25px;
+	background: url(/images/point.gif) 2px 7px no-repeat;
+	padding-left: 17px;
+	margin: 0 0 7px;
+	line-height: 25px;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

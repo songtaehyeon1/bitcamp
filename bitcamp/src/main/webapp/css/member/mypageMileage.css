@@ -1,0 +1,112 @@
+@charset "UTF-8";
+.container{
+	padding : 0;
+	min-width : 1250px;
+}
+
+.container a{
+	text-decoration : none;
+}
+
+/* 마일리지 메인 */
+#mypage_mileage_main{
+	height : 170px;
+	border : 5px solid #D8D8D8;
+}
+
+.mypage_mileage_div{
+	width : 50%;
+	border-right : 1px solid #D8D8D8;
+	float : left;
+}
+
+.mypage_mileage_div_div{
+	width : 500px;
+	height : 55px;
+	line-height : 70px;
+	margin : 0 auto;
+	padding-right : 30px;
+}
+
+.mypage_mileage_div_div>span:nth-of-type(3){
+	margin-right : 20px;
+}
+
+.mypage_mileage_div_div>div{
+	float : right;
+	height : 55px;
+	line-height : 70px;
+}
+
+.mypage_mileage_div>div:nth-of-type(2), .mypage_mileage_div>div:nth-of-type(2)>div{
+	line-height : 40px;
+}
+
+.mypage_mileage_div>div:nth-of-type(3), .mypage_mileage_div>div:nth-of-type(3)>div{
+	line-height : 10px;
+}
+
+.mypage_font{
+	font-size : 13px;
+}
+
+.mypage_btn{
+	border : none;
+	background : black;
+	color : white;
+	height : 20px;
+	line-height : 20px;
+	border-radius : 3px;
+	margin-left : 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
