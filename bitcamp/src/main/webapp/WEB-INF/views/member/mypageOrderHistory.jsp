@@ -87,7 +87,7 @@
 				<li>${list.p_count}</li>
 				<li>${list.totalprice}원</li>
 				<li>${list.delivery_status}</li>
-				<li><span class = "mypage_hover">취소</span>/<span class = "mypage_hover">반품</span></li>
+				<li><span class = "mypage_hover" onclick = "">취소</span>/<span class = "mypage_hover" onclick = "">반품</span></li>
 			</c:forEach>
 		</ul>
 		<c:if test = "${list == '[]'}">
