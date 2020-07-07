@@ -213,6 +213,7 @@ public class BoardController {
 		String sUserid = (String)session.getAttribute("userid");
 		String enquiry_secret = request.getParameter("enquiry_secret");
 		String userid = request.getParameter("userid");
+		String mypage = request.getParameter("mypage");
 		if(enquiry_secret.equals("N")) {
 			if(adminStatus != "Y" && (!userid.equals(sUserid) || userid == null)) {
 				mv.addObject("str", "secret");
@@ -241,7 +242,8 @@ public class BoardController {
 		}catch (Exception e) {
 			str = "상품을 선택하지 않았습니다.";
 		}
-		
+
+		mv.addObject("mypage", mypage);
 		mv.addObject("str", str);
 		mv.addObject("list", list);
 		mv.addObject("pagevo", pagevo);
@@ -303,12 +305,13 @@ public class BoardController {
 	}
 	// 글 수정폼으로
 	@RequestMapping("/enquiry_editForm")
-	public ModelAndView enquiry_editForm(int no) {
+	public ModelAndView enquiry_editForm(int no, String mypage) {
 		ModelAndView mv = new ModelAndView();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		EnquiryVO vo = dao.list(no);
 		vo.setC_no(dao.enquiryUpdateCate(vo.getP_no()));
 		
+		mv.addObject("mypage", mypage);
 		mv.addObject("cateList", dao.enquiryCategory());
 		mv.addObject("goods", dao.enquiryUpdateGoods(vo.getC_no()));
 		mv.addObject("vo", vo);
@@ -318,13 +321,17 @@ public class BoardController {
 	}
 	// 글 수정
 	@RequestMapping("/enquiry_editOk")
-	public ModelAndView enquiry_editOk(EnquiryVO vo) {
+	public ModelAndView enquiry_editOk(EnquiryVO vo, String mypage) {
 		ModelAndView mv = new ModelAndView();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		int cnt = dao.enquiryUpdate(vo);
 		if(cnt > 0) {
 			mv.addObject("str", "enquiry_editOk");
-			mv.setViewName("/board/alters");
+			if(mypage.equals("mypageBoard")) {
+				mv.setViewName("redirect:mypageboard");
+			}else {
+				mv.setViewName("/board/alters");
+			}
 		}else {
 			mv.setViewName("redirect:enquiry_editForm");
 		}
@@ -333,13 +340,17 @@ public class BoardController {
 	}
 	// 글 삭제
 	@RequestMapping("/enquiry_delForm")
-	public ModelAndView enquiry_delForm(int no) {
+	public ModelAndView enquiry_delForm(int no, String mypage) {
 		ModelAndView mv = new ModelAndView();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		dao.enquiryReplyDelete(no);
 		int cnt = dao.enquiryDelete(no);
 		if(cnt > 0) {
-			mv.setViewName("redirect:boardEnquiry");
+			if(mypage.equals("mypageBoard")) {
+				mv.setViewName("redirect:mypageboard");
+			}else {
+				mv.setViewName("redirect:boardEnquiry");
+			}
 		}else {
 			mv.setViewName("redirect:enquiry_listForm");
 		}
@@ -477,6 +488,9 @@ public class BoardController {
 		dao.reviewHit(no);
 		LeadLagVO pnvo = dao.getLeadLagSelect(pagevo);
 		
+		String mypage = request.getParameter("mypage");
+		
+		mv.addObject("mypage", mypage);
 		mv.addObject("vo", dao.list(no));
 		mv.addObject("pagevo", pagevo);
 		mv.addObject("pnvo", pnvo);
@@ -491,6 +505,7 @@ public class BoardController {
 		ReviewVO vo = dao.listDelete_files(no);
 		dao.reviewReplyDelete(no);
 		int cnt = dao.listDelete(no);
+		String mypage = request.getParameter("mypage");
 		if(cnt > 0) {
 			String path = request.getSession().getServletContext().getRealPath("/resources/review");
 			for(String fName : vo.getFileList()) {
@@ -499,7 +514,11 @@ public class BoardController {
 					f.delete();
 				}
 			}
-			return "redirect:boardReview";
+			if(mypage.equals("mypageBoard")) {
+				return "redirect:mypageboard";
+			}else {
+				return "redirect:boardReview";
+			}
 		}else {
 			return "redirect:review_listForm";
 		}
@@ -550,11 +569,12 @@ public class BoardController {
 	}
 	// 글 수정 폼으로
 	@RequestMapping("/review_editForm")
-	public ModelAndView review_editForm(int no) {
+	public ModelAndView review_editForm(int no, String mypage) {
 		ModelAndView mv = new ModelAndView();
 		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
 		ReviewVO vo = dao.list(no);
 		
+		mv.addObject("mypage", mypage);
 		mv.addObject("cateList", dao.reviewCategory());
 		mv.addObject("goods", dao.reviewGoods(vo.getC_no()));
 		mv.addObject("vo", vo);
@@ -577,13 +597,6 @@ public class BoardController {
 	// 글 수정
 	@RequestMapping("/review_edit")
 	public ModelAndView review_edit(ReviewVO vo, HttpServletRequest request) {
-		
-		System.out.println(vo.getReview_file1());
-		System.out.println(vo.getReview_file2());
-		System.out.println(vo.getReview_file3());
-		System.out.println(vo.getReview_file4());
-		System.out.println(vo.getReview_file5());
-		
 		ModelAndView mv = new ModelAndView();
 		String path = request.getSession().getServletContext().getRealPath("/resources/review");
 
@@ -636,11 +649,16 @@ public class BoardController {
 			}
 		}
 		
+		String mypage = request.getParameter("mypage");
 		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
 		int cnt = dao.reviewUpdate(vo);
 		if(cnt > 0) {
 			mv.addObject("str", "review_edit");
-			mv.setViewName("/board/alters");
+			if(mypage.equals("mypageBoard")) {
+				mv.setViewName("redirect:mypageboard");
+			}else {
+				mv.setViewName("/board/alters");
+			}
 		}else {
 			for(String delFile : fileNames) {
 				// 파일 삭제
@@ -660,10 +678,16 @@ public class BoardController {
 	@ResponseBody
 	public int review_recommend(@RequestParam("review_no") int review_no, HttpServletRequest request) {
 		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
-		String ip = getClientIpAddr(request);
+		/*String ip = getClientIpAddr(request);
 		if(dao.reviewRecommendIp(review_no, ip) <= 0) {
 			dao.reviewRecommendUpdate(review_no);
 			dao.reviewRecommendIpUpdate(review_no, ip);
+		}*/
+		HttpSession session = request.getSession();
+		String userid = (String)session.getAttribute("userid");
+		if(dao.reviewRecommendId(review_no, userid) <= 0) {
+			dao.reviewRecommendUpdate(review_no);
+			dao.reviewRecommendIdUpdate(review_no, userid);
 		}
 		
 		return dao.reviewRecommendSelect(review_no);

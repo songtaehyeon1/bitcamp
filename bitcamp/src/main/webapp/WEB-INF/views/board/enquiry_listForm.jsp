@@ -172,11 +172,16 @@
 		<li>${list.enquiry_content}</li>
 	</ul>
 	<div id = "boardGo">
-		<button onclick = "location.href = '/bitcamp/boardEnquiry?pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>';">목록</button>
+		<c:if test = "${mypage == null}">
+			<button onclick = "location.href = '/bitcamp/boardEnquiry?pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>';">목록</button>
+		</c:if>
+		<c:if test = "${mypage != null}">
+			<button onclick = "history.back();">게시물 관리</button>
+		</c:if>
 		<c:if test = "${list.userid == userid || adminStatus == 'Y'}">
 			<div class = "boardGo_right">
-				<button class = "boardList_edit" onclick = "location.href = '/bitcamp/enquiry_editForm?no=${list.enquiry_no}';">수정</button>
-				<button class = "boardList_del" onclick = "if(confirm('진짜로 삭제하시겠습니까?')){location.href = '/bitcamp/enquiry_delForm?no=${list.enquiry_no}';};">삭제</button>
+				<button class = "boardList_edit" onclick = "location.href = '/bitcamp/enquiry_editForm?no=${list.enquiry_no}&mypage=${mypage}';">수정</button>
+				<button class = "boardList_del" onclick = "if(confirm('진짜로 삭제하시겠습니까?')){location.href = '/bitcamp/enquiry_delForm?no=${list.enquiry_no}&mypage=${mypage}';};">삭제</button>
 			</div>
 		</c:if>
 	</div>

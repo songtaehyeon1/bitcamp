@@ -16,7 +16,7 @@
 			<c:forEach var = "list" items = "${eList}">
 				<li>${list.enquiry_no}</li>
 				<li>고객문의</li>
-				<li class = "wordCut pointer" onclick = "location.href = '/bitcamp/enquiry_listForm?no=${list.enquiry_no}&pageNum=1&enquiry_secret=${list.enquiry_secret}&userid=${list.userid}'">${list.enquiry_subject}<c:if test = "${list.enquiry_secret == 'N'}">&nbsp;<img src = "/bitcamp/resources/board/lock.png"></c:if></li>
+				<li class = "wordCut pointer" onclick = "location.href = '/bitcamp/enquiry_listForm?no=${list.enquiry_no}&pageNum=1&enquiry_secret=${list.enquiry_secret}&userid=${list.userid}&mypage=mypageBoard'">${list.enquiry_subject}<c:if test = "${list.enquiry_secret == 'N'}">&nbsp;<img src = "/bitcamp/resources/board/lock.png"></c:if></li>
 				<li>${list.userid}</li>
 				<li>${list.enquiry_writedate}</li>
 				<li>${list.enquiry_hit}</li>
@@ -24,7 +24,7 @@
 			<c:forEach var = "list" items = "${rList}">
 				<li>${list.review_no}</li>
 				<li>상품후기</li>
-				<li onclick = "location.href = '/bitcamp/review_listForm?no=${list.review_no}&pageNum=1';" class = "pointer wordCut">${list.review_subject}</li>
+				<li onclick = "location.href = '/bitcamp/review_listForm?no=${list.review_no}&pageNum=1&mypage=mypageBoard';" class = "pointer wordCut">${list.review_subject}</li>
 				<li>${list.userid}</li>
 				<li>${list.review_writedate}</li>
 				<li>${list.review_hit}</li>
@@ -34,5 +34,5 @@
 			</c:if>
 		</ul>
 	</div>
-	<button class = "mypageWishList_main_btn" onclick = "location.href = '/bitcamp/mypage';">목록으로</button>
+	<button class = "mypageWishList_main_btn" onclick = "location.href = '/bitcamp/mypage';">MY PAGE</button>
 </div>

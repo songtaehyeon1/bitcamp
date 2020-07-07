@@ -101,5 +101,5 @@
 			</ul>
 		</div>
 	</div>
-	<button class = "mypageWishList_main_btn" onclick = "location.href = '/bitcamp/mypage';">목록으로</button>
+	<button class = "mypageWishList_main_btn" onclick = "location.href = '/bitcamp/mypage';">MY PAGE</button>
 </div>

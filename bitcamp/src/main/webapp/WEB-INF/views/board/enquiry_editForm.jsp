@@ -128,5 +128,6 @@
 			</div>
 		</div>
 		<input type = "hidden" name = "enquiry_no" value = "${vo.enquiry_no}">
+		<input type = "hidden" name = "mypage" value = "${mypage}">
 	</form>
 </div>

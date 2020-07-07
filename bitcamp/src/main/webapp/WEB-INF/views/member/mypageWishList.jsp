@@ -24,5 +24,5 @@
 			<div class = "mypageWishList_nothing">관심상품 내역이 없습니다.</div>
 		</c:if>
 	</div>
-	<button class = "mypageWishList_main_btn" onclick = "location.href = '/bitcamp/mypage';">목록으로</button>
+	<button class = "mypageWishList_main_btn" onclick = "location.href = '/bitcamp/mypage';">MY PAGE</button>
 </div>

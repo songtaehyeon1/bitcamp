@@ -117,19 +117,27 @@
 				) where review_no = #{review_no}
 	</select>
 	<!-- 추천 수 ip가져오기 -->
-	<select id = "reviewRecommendIp" resultType = "int">
-		select count(review_no) from review_recommend where review_no = #{param1} and recommend_ip = #{param2}
-	</select>
+	<!-- <select id = "reviewRecommendIp" resultType = "int">
+		select count(review_no) from review_recommend where review_no = #{param1} and recommend_id = #{param2}
+	</select> -->
+	<!-- 추천 ip 저장 -->
+	<!-- <insert id = "reviewRecommendIpUpdate">
+		insert into review_recommend(review_no, recommend_id) values(#{param1}, #{param2})
+	</insert> -->
 	<!-- 추천 수 올리기 -->
 	<update id = "reviewRecommendUpdate">
 		update board_review set review_recommend = review_recommend + 1 where review_no = #{param1}
 	</update>
-	<!-- 추천 ip 저장 -->
-	<insert id = "reviewRecommendIpUpdate">
-		insert into review_recommend(review_no, recommend_ip) values(#{param1}, #{param2})
-	</insert>
 	<!-- 추천 수 가져오기 -->
 	<select id = "reviewRecommendSelect" resultType = "int">
 		select review_recommend from board_review where review_no = #{param1}
 	</select>
+	<!-- 추천 수 id 가져오기 -->
+	<select id = "reviewRecommendId" resultType = "int">
+		select count(review_no) from review_recommend where review_no = #{param1} and recommend_id = #{param2}
+	</select>
+	<!-- 추천 id 저장 -->
+	<insert id = "reviewRecommendIdUpdate">
+		insert into review_recommend(review_no, recommend_id) values(#{param1}, #{param2})
+	</insert>
 </mapper>

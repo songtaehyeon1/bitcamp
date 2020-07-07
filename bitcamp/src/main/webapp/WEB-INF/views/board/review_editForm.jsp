@@ -224,5 +224,6 @@
 			</div>
 		</div>
 		<input type = "hidden" name = "review_no" value = "${vo.review_no}">
+		<input type = "hidden" name = "mypage" value = "${mypage}">
 	</form>
 </div>

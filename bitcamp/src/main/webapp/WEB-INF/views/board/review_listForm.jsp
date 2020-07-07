@@ -148,13 +148,17 @@
 	
 	// 추천 수 올리기
 	function recommend_up(){
+		if("${userid}".trim() == "" || "${userid}" == null){
+			alert("로그인 후 추천이 가능합니다.");
+			return false;
+		}
 		$.ajax({
 			url : "/bitcamp/review_recommend",
 			data : "review_no=${vo.review_no}",
 			success : function(result){
-				if("${vo.review_recommend}" != result){
+				if($("#recommendNum").text() != result){
 					alert("추천 되었습니다.");
-					location.reload();
+					$("#recommendNum").html(result);
 				}else{
 					alert("이미 추천을 하셨습니다.");
 				}
@@ -240,7 +244,7 @@
 			</div>
 			<div id = "list_content">${vo.review_content}</div>
 		</li>
-		<li>첨부파일</li>
+		<!-- <li>첨부파일</li>
 		<li>
 			<c:if test = "${vo.review_file1 != null}">
 				<a href = "bitcamp/resources/review/${vo.review_file1}" download>
@@ -282,14 +286,19 @@
 				</span>
 			</a>
 			</c:if>
-		</li>
+		</li> -->
 	</ul>
 	<div id = "boardGo">
+		<c:if test = "${mypage == null}">
 		<button onclick = "location.href = '/bitcamp/boardReview?pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>';">목록</button>
+		</c:if>
+		<c:if test = "${mypage != null}">
+			<button onclick = "history.back();">게시물 관리</button>
+		</c:if>
 		<c:if test = "${vo.userid == userid || adminStatus == 'Y'}">
 			<div class = "boardGo_right">
-				<button class = "boardList_edit" onclick = "location.href = '/bitcamp/review_editForm?no=${vo.review_no}';">수정</button>
-				<button class = "boardList_del" onclick = "if(confirm('진짜로 삭제하시겠습니까?')){location.href = '/bitcamp/review_delForm?no=${vo.review_no}';};">삭제</button>
+				<button class = "boardList_edit" onclick = "location.href = '/bitcamp/review_editForm?no=${vo.review_no}&mypage=${mypage}';">수정</button>
+				<button class = "boardList_del" onclick = "if(confirm('진짜로 삭제하시겠습니까?')){location.href = '/bitcamp/review_delForm?no=${vo.review_no}&mypage=${mypage}';};">삭제</button>
 			</div>
 		</c:if>
 	</div>
