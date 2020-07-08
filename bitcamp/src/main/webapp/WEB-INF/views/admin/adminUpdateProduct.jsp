@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<script src="<%=request.getContextPath()%>/js/product/product_write.js"></script>
+<script src="<%=request.getContextPath()%>/js/admin/product_write.js"></script>
 <script>
 	$(function() {
 		$("#productmenu").attr("class","over");
@@ -206,7 +206,7 @@
 			<tbody>
 				<tr>
 					<th>상품상세설명</th>
-					<td><textarea id="p_commnet" name="p_commnet">${vo.p_commnet }</textarea></td>
+					<td><textarea id="p_commnet" name="p_commnet" value="${vo.p_commnet }">${vo.p_commnet }</textarea></td>
 				</tr>
 			</tbody>
 		</table>

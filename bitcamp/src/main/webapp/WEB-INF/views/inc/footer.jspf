@@ -34,12 +34,12 @@
 					<p class="f_title">SUPPORT</p>
 					<div class="f_support">
 						<p class="su_cont">
-							<a href="#">공지사항</a><a href="#">고객문의</a><a href="#">상품후기</a><a
-								href="#">마이쇼핑</a>
+							<a href="/bitcamp/boardNotice">공지사항</a><a href="/bitcamp/boardEnquiry">고객문의</a><a href="/bitcamp/boardReview">상품후기</a><a
+								href="/bitcamp/mypage">마이쇼핑</a>
 						</p>
 						<p class="su_cont">
-							<a href="#">장바구니</a><a href="#">주문조회</a><a href="#">관심상품</a><a
-								href="#">배송조회</a>
+							<a href="/bitcamp/productCartList">장바구니</a><a href="/bitcamp/mypageOrderHistory">주문조회</a><a href="/bitcamp/mypageWishList">관심상품</a><a
+								href="http://service.epost.go.kr/trace.RetrieveRegiPrclDeliv.postal?sid1=" onclick="window.open(this.href,'배송조회',width=800,height=800);return false;">배송조회</a>
 						</p>
 
 					</div>

@@ -87,7 +87,32 @@
 				<li>${list.p_count}</li>
 				<li>${list.totalprice}원</li>
 				<li>${list.delivery_status}</li>
-				<li><span class = "mypage_hover" onclick = "">취소</span>/<span class = "mypage_hover" onclick = "">반품</span></li>
+				<li>
+					<c:if test = "${list.delivery_status != '취소요청' && list.delivery_status != '반품요청' && list.delivery_status != '취소' && list.delivery_status != '반품'}">
+						<span class = "mypage_hover" onclick = "if(confirm('반품요청 하시겠습니까?')){location.href = '/bitcamp/mypageOrderCancle?o_no=${list.o_no}&str=orderReturn';}">반품</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '입금대기'}">
+						<span class = "mypage_hover" onclick = "if(confirm('취소요청 하시겠습니까?')){location.href = '/bitcamp/mypageOrderCancle?o_no=${list.o_no}&str=orderCancle';}">취소</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '결제완료'}">
+						<span class = "mypage_hover" onclick = "if(confirm('취소요청 하시겠습니까?')){location.href = '/bitcamp/mypageOrderCancle?o_no=${list.o_no}&str=orderCancle';}">취소</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '배송중'}">
+						<span class = "mypage_hover" onclick = "if(confirm('반품요청 하시겠습니까?')){location.href = '/bitcamp/mypageOrderCancle?o_no=${list.o_no}&str=orderReturn';}">반품</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '배송완료'}">
+						<span class = "mypage_hover" onclick = "if(confirm('반품요청 하시겠습니까?')){location.href = '/bitcamp/mypageOrderCancle?o_no=${list.o_no}&str=orderReturn';}">반품</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '취소요청' || list.delivery_status == '반품요청'}">
+						<span>${list.delivery_status}중 입니다.</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '취소'}">
+						<span>${list.delivery_status}가 되었습니다.</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '반품'}">
+						<span>${list.delivery_status}이 되었습니다.</span>
+					</c:if>
+				</li>
 			</c:forEach>
 		</ul>
 		<c:if test = "${list == '[]'}">

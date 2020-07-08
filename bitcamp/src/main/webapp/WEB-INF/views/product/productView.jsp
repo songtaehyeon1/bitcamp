@@ -138,12 +138,12 @@
 									format : "yyyy-mm-dd",
 									minDate : function() {
 										var date = new Date(borrow_start.value);
-							            date.setDate(date.getDate()+parseInt(product_borrow_period.value));
+							            date.setDate(date.getDate()+parseInt(product_borrow_period.value-1));
 							            return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 									},
 									maxDate : function() {
 							            var date = new Date(borrow_start.value);
-							            date.setDate(date.getDate()+parseInt(product_borrow_period.value));
+							            date.setDate(date.getDate()+parseInt(product_borrow_period.value-1));
 							            return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 									}
 								});
@@ -333,7 +333,7 @@
 		
 		
         <p id="product_returnExchange"><span><h1>반품/교환정보</h1></span></p>	
- 	    <img src="<%=request.getContextPath()%>/resources/products/notice.jpg" width="30%">	  
+ 	    <img src="<%=request.getContextPath()%>/resources/products/notice.jpg" width="100%">	  
 	</div>
 	
 </body>

@@ -5,7 +5,7 @@
 <mapper namespace="kr.co.bitcamp.member.MemberDAOImp">
 	<!-- 로그인 체크 -->
 	<select id="loginCheck" parameterType="kr.co.bitcamp.member.MemberVO" resultType="kr.co.bitcamp.member.MemberVO">
-		select userno, userid, userpwd, username from member where userid=#{userid} and userpwd=#{userpwd} and userjointype='Y'
+		select userno, userid, userpwd, username, userjointype from member where userid=#{userid} and userpwd=#{userpwd}
 	</select>
 
 	<!-- 로그인_접속 날짜 저장 -->

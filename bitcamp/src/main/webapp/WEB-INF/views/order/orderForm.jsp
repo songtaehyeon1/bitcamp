@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/order/orderForm.css" />
 <script src="<%=request.getContextPath()%>/js/order/order.js"></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <script>
 $(function() {
 	//총 결제 금액 세팅
@@ -72,6 +73,37 @@ function openDaumZipAddress(type) {
 	}
 }
 
+//카드 결제
+function payment(){
+	
+	var IMP = window.IMP;
+  	   IMP.init('imp81940054');
+   	   IMP.request_pay({
+       pg : 'inicis',
+       pay_method : 'card',
+       merchant_uid : 'merchant_' + new Date().getTime(),
+       name : '${product.p_name}', //상품명
+       amount : 1004, //상품 가격 $("input[name='totalprice']").val();	
+       buyer_email :  "",//이메일
+       buyer_name : $("input[name='oname']").val(),//구매자 이름
+       buyer_tel : ""//구매자 연락처
+   }, function(rsp) {
+	    if ( rsp.success ) {
+			  $("#btn_payment").trigger("click");
+	    	 var msg = '결제가 완료되었습니다.';
+	          msg += '\n고유ID : ' + rsp.imp_uid;
+	          msg += '\n상점 거래ID : ' + rsp.merchant_uid;
+	          msg += '\결제 금액 : ' + rsp.paid_amount;
+	          msg += '카드 승인번호 : ' + rsp.apply_num;
+       		  alert(msg);
+	       }else {
+             var msg = '결제에 실패하였습니다.';
+             msg += '에러내용 : ' + rsp.error_msg;
+             alert(msg);
+	       }
+   });
+   
+}
 </script>
 <form method="post" action="/bitcamp/orderOk">
 <input type="hidden" name="limitQuantity" value="${vo.limitQuantity }"><!-- 상품번호 -->
@@ -80,7 +112,6 @@ function openDaumZipAddress(type) {
 <input type="hidden" name="orderStart" value="${vo.orderStart }"><!-- 대여 시작일 -->
 <input type="hidden" name="orderEnd" value="${vo.orderEnd }"><!-- 대여 종료일-->
 <input type="hidden" name="currentQty" value="${vo.currentQty }"><!-- 대여 종료일-->
-<%-- <input type="hidden" name="totalprice" value="${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }"><!--총 결제 금액--> --%>
 
 
 <div id="orderForm" class="container">
@@ -139,14 +170,14 @@ function openDaumZipAddress(type) {
 					<td><span><img
 							src="//img.echosting.cafe24.com/design/common/icon_cash.gif">
 							4,700원</span></td>
-					<td rowspan="1"><label>${product.delivery_fee*vo.currentQty}</label>원</td>
-					<td><strong><label>${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }</label>원</strong></td>
+					<td rowspan="1"><label>${vo.delivery_fee*vo.currentQty}</label>원</td>
+					<td><strong><label>${vo.price*vo.currentQty+vo.delivery_fee*vo.currentQty }</label>원</strong></td>
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
 					<td colspan="7">상품구매금액 <strong>${product.price*vo.currentQty }<span>
-								(+0)</span></strong> + 배송비 ${product.delivery_fee } = 합계: <strong class="txtEm gIndent10"><label>${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }</label>원</strong>
+								(+0)</span></strong> + 배송비 ${vo.delivery_fee } = 합계: <strong class="txtEm gIndent10"><label>${vo.price*vo.currentQty+vo.delivery_fee*vo.currentQty }</label>원</strong>
 					</td>
 				</tr>
 			</tfoot>
@@ -169,7 +200,7 @@ function openDaumZipAddress(type) {
 				<tbody>
 					<tr>
 						<th scope="row">주문하시는 분</th>
-						<td><input id="oname" name="oname" size="15" type="text"></td>
+						<td><input id="oname" name="oname" size="15" type="text" ></td>
 					</tr>
 					<tr>
 						<th scope="row">주소</th>
@@ -386,7 +417,7 @@ function openDaumZipAddress(type) {
 					<tr>
 						<td>
 							<div>
-								<strong><span id="total_order_price_view">${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }</span>원</strong>
+								<strong><span id="total_order_price_view">${vo.price*vo.currentQty+vo.delivery_fee*vo.currentQty }</span>원</strong>
 							</div>
 						</td>
 						<td>
@@ -446,7 +477,6 @@ function openDaumZipAddress(type) {
 	</div>
 
 
-
 <!-- 결제 수단 -->
 	<div style="margin-top: 20px">
 		<h5>결제 수단</h5>
@@ -463,47 +493,6 @@ function openDaumZipAddress(type) {
 					<input id="addr_paymethod1" name="addr_paymethod" value="cash" type="radio"> 
 					<label for="addr_paymethod1">무통장 입금</label>
 				</span>
-			</div>
-
-
-			<div id="card-form"
-				style="display: block;">
-				<div>
-					<table border="1">
-						<colgroup>
-							<col style="width: 15%">
-							<col style="width: auto">
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row">카드선택</th>
-								<td><select id="card_corp" name="card_corp">
-										<option value="" selected="selected">선택해주세요.</option>
-										<option value="신한카드">신한카드(구 LG카드 포함)</option>
-										<option value="비씨카드">비씨카드</option>
-										<option value="국민카드">KB국민카드</option>
-										<option value="하나카드(구 외환)">하나카드(구 외환)</option>
-										<option value="삼성카드">삼성카드</option>
-										<option value="현대카드">현대카드</option>
-										<option value="롯데카드">롯데카드</option>
-										<option value="우리카드">우리카드</option>
-										<option value="하나카드(구 하나SK)">하나카드(구 하나SK)</option>
-										<option value="NH농협카드">NH농협카드</option>
-										<option value="씨티카드">씨티카드</option>
-										<option value="수협카드">수협카드</option>
-										<option value="광주은행카드">광주은행카드</option>
-										<option value="전북은행카드">전북은행카드</option>
-										<option value="제주은행카드">제주은행카드</option>
-								</select></td>
-							</tr>
-							<tr>
-								<th scope="row">할부기간</th>
-								<td><select id="directpay_card_installment_select"
-									disabled="disabled"><option value="0">일시불</option></select></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
 			</div>
 
 			<div id="card-agree"
@@ -566,7 +555,7 @@ function openDaumZipAddress(type) {
 			<p>
 				<input id="total_price" name="totalprice" 
 					style="text-align: right; border: none; float: none; font-size: 1.5em; background: #fafafa"
-					size="10" readonly value="${vo.price*vo.currentQty+product.delivery_fee*vo.currentQty }" type="text"><span>원</span>
+					size="10" readonly value="${vo.price*vo.currentQty+vo.delivery_fee*vo.currentQty }" type="text"><span>원</span>
 			</p>
 			
 			<p id="chk_purchase_agreement" style="display: none;">
@@ -575,8 +564,12 @@ function openDaumZipAddress(type) {
 					for="chk_purchase_agreement0">결제정보를 확인하였으며, 구매진행에 동의합니다.</label>
 			</p>
 			<div>
-				<input type="submit" id="btn_payment" class="btn btn-dark" value="결제하기">
+				<button type="button" onclick="payment();" class="payment_card btn btn-dark">결제하기</button>
+				<input type="submit" id="btn_payment" value="결제하기" class="payment_pay btn btn-dark" style="display:none">
 			</div>
+			
+	
+			
 			<div>
 				<dl>
 					<dt>

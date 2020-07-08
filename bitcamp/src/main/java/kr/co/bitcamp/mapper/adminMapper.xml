@@ -3,6 +3,46 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.bitcamp.admin.AdminDAOImp">
+	<!-- 총게시판 게시물수 -->
+	<select id="totalboardcnt" resultType="int">
+		SELECT enquiry_no+review_no totalboardcnt FROM (select count(enquiry_no) enquiry_no from board_enquiry),(select count(review_no) review_no from board_review)
+	</select>
+	<!-- 오늘 게시판 게시물수 -->
+	<select id="todayboardcnt" resultType="int">
+		SELECT enquiry_no+review_no todayboardcnt FROM (select count(enquiry_no) enquiry_no from board_enquiry where to_char(enquiry_writedate,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')),(select count(review_no) review_no from board_review where to_char(review_writedate,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD'))
+	</select>
+	<!-- 오늘 댓글수 -->
+	<select id="todayreplycnt" resultType="int">
+		SELECT e_reply_no+r_reply_no todayreplycnt FROM (select count(e_reply_no) e_reply_no from enquiry_reply where to_char(e_reply_writedate,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')),(select count(r_reply_no) r_reply_no from review_reply where to_char(r_reply_writedate,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD'))
+	</select>
+	<!-- 오늘 회원 가입 수 -->
+	<select id="todayMembercnt" resultType="int">
+		select count(userno) from member where to_char(regdate,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
+	</select>
+	<!-- 총 회원수 -->
+	<select id="totalMembercnt" resultType="int">
+		select count(userno) from member
+	</select>
+	<!-- 오늘 탈퇴 회원 -->
+	<select id="todayWithdrawalcnt" resultType="int">
+		select count(userno) from m_withdrawal where to_char(withdrawaldate,'YYYY-MM-DD') = to_char(withdrawaldate,'YYYY-MM-DD')
+	</select>
+	<!-- 토탈 오더 -->
+	<select id="totalOrdercnt" resultType="int">
+		select count(o_no) from ordertable	
+	</select>
+	<!-- 오늘 오더 -->
+	<select id="todayOrdercnt" resultType="int">
+		select count(o_no) from ordertable where to_char(order_date,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
+	</select>
+	<select id="todayreturncnt" resultType="int">
+		select count(o_no) from return where to_char(return_date,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
+	</select>
+	<select id="todayCancelcnt" resultType="int">
+		select count(o_no) from cancel where to_char(cancel_date,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
+	</select>
+	
+	
 	<!-- 상품 추가 -->
 	<insert id="productWrite"
 		parameterType="kr.co.bitcamp.product.ProductVO">
@@ -54,7 +94,7 @@
 		adminpwd = #{adminpwd}
 	</select>
 	<!-- 모든 카테고리를 반환 -->
-	<select id="allCategorySelect"
+	<select id="adminallCategorySelect"
 		resultType="kr.co.bitcamp.category.CategoryVO">
 		select c_no,c_name from category order by c_no
 	</select>
@@ -66,12 +106,12 @@
 		c_no=#{param1} GROUP by c_no, c_name
 	</select>
 	<!-- 카테고리 선택 -->
-	<select id="selectCategory"
+	<select id="adminselectCategory"
 		resultType="kr.co.bitcamp.category.CategoryVO">
 		select c_no,c_name from category where c_no =#{param1}
 	</select>
 	<!-- 카테고리 수정 -->
-	<update id="updateCategory"
+	<update id="adminupdateCategory"
 		parameterType="kr.co.bitcamp.category.CategoryVO">
 		update category set c_name=#{c_name} where c_no=#{c_no}
 	</update>
@@ -80,8 +120,7 @@
 		resultType="kr.co.bitcamp.product.ProductVO">
 		select
 		ROWNUM,p_no,c_no,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5,p_date,c_name
-		from product left join category using(c_no) where p_deltype='Y' order
-		by p_no desc
+		from product left join category using(c_no) where p_deltype='Y' order by p_no desc
 	</select>
 	<!-- 모든 멤버 리스트 -->
 	<select id="allMemberList"
@@ -164,7 +203,7 @@
 
 
 	<!-- 모든품목리스트 & 페이징 -->
-	<select id="allList"
+	<select id="allpList"
 		parameterType="kr.co.bitcamp.admin.PagingVO"
 		resultType="kr.co.bitcamp.product.ProductVO">
 		select * from (
@@ -230,15 +269,14 @@
 		order by s_no desc
 	</select>
 	<!-- 주문 하나 선택 -->
-	<select id="selectOrder" resultType="kr.co.bitcamp.order.OrderVO">
+	<select id="selectAdminOrder" resultType="kr.co.bitcamp.order.OrderVO">
 		select
-		o.o_no,o.userno,o.r_no,o.oi_no,mileage,
+		o.o_no,nvl(o.userno,0) userno,o.r_no,o.oi_no,mileage,
 		totalprice,to_char(order_date,'YYYY-MM-DD')
 		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
 		to_char(delivery_arrival_date,'YYYY-MM-DD')
-		delivery_arrival_date,delivery_status,payment_type,userid,cash_time,card_time,oname,otel,oemail,ozipcode,oaddr,oaddrdetail,opassword,rname,rtel,rzipcode,raddr,raddrdetail,rcommnet,delivery_code
-		from ( select O_NO, USERNO, R_NO, OI_NO, MILEAGE, TOTALPRICE, ORDER_DATE, DELIVERY_DATE, DELIVERY_ARRIVAL_DATE,delivery_code, DELIVERY_STATUS, PAYMENT_TYPE, CARD_CORP, card.PAYMENT_TIME card_time, BANK, DEPOSITOR, cash.PAYMENT_TIME cash_time from ordertable left join card card using(o_no) left join cash cash using(o_no)) o
-        inner join member m on o.userno = m.userno 
+		delivery_arrival_date,delivery_status,payment_type,nvl(userid,'비회원') userid,cash_time,card_time,oname,otel,oemail,ozipcode,oaddr,oaddrdetail,opassword,rname,rtel,rzipcode,raddr,raddrdetail,rcommnet,delivery_code
+		from ( select O_NO, USERNO,userid, R_NO, OI_NO, MILEAGE, TOTALPRICE, ORDER_DATE, DELIVERY_DATE, DELIVERY_ARRIVAL_DATE,delivery_code, DELIVERY_STATUS, PAYMENT_TYPE, card.PAYMENT_TIME card_time, BANK, DEPOSITOR, cash.PAYMENT_TIME cash_time from ordertable left join card card using(o_no) left join cash cash using(o_no) left join member m using(userno)) o 
         inner join order_info i on o.oi_no = i.oi_no
 		inner join Recipient r on o.r_no = r.r_no where o.o_no = #{param1}
 	</select>
@@ -250,8 +288,32 @@
 	<update id="orderEdit" parameterType="kr.co.bitcamp.order.OrderVO">
 		update Recipient set rname=#{rname}, rtel=#{rtel}, rzipcode = #{rzipcode}, raddr =#{raddr}, raddrdetail =#{raddrdetail},rcommnet=#{rcommnet} 
 	</update>
+	<!-- 선택 주문 배송상태 일괄 변경 -->
+	<update id="allD_statusUpdate">	
+		update ordertable set delivery_status = #{param2}
+		<if test="param2 == '배송중'">
+			, delivery_date=sysdate
+			, delivery_arrival_date = null
+		</if>
+		<if test="param2 == '배송완료'">
+			, delivery_arrival_date=sysdate
+		</if>
+		<if test="param2 == '입금대기' or param2 =='결제완료'">
+			, delivery_date = null
+			, delivery_arrival_date = null
+		</if>		
+		where o_no = #{param1}
+	</update>
+	<!-- 선택 주문 취소 -->
+	<insert id="allD_statuscancel">
+		insert into return(o_no,return_date,return_status) values(#{param1},sysdate,'반품요청')
+	</insert>
+	<!-- 선택 주문 취소 -->
+	<update id="allD_statusreturn">
+		insert into cancel(o_no,cancel_date,cancel_status) values(#{param1},sysdate,'취소요청')
+	</update>
 	<!-- 송장 추가 -->
-	<update id="updateInvoice">
+	<update id="updateadminInvoice">
 		update ordertable set delivery_code=#{param2},delivery_date=#{param3},delivery_arrival_date =#{param4}
 		<choose>
 			<when test="param4 !=null and param4 !=''">, delivery_status='배송완료' </when>
@@ -273,7 +335,7 @@
 		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
 		to_char(delivery_arrival_date,'YYYY-MM-DD')
 		delivery_arrival_date,delivery_status,payment_type,rname,oname
-		<if test="userno !=null and userno!=0 and userno !=''">
+		<if test="userno !=null and userno!= 0 and userno !=''">
 			,userid
 		</if>
 		from ordertable o
@@ -288,7 +350,7 @@
 		<if test="payment_type !=null and payment_type=='cash'">
 			inner join cash on o.o_no = cash.o_no
 		</if>
-		<where>
+		<where>			
 			<if test="delivery_status != null">
 				AND delivery_status in
 				<foreach collection="delivery_status" item="delivery_status"
@@ -342,7 +404,133 @@
 		<if test="pageNum != totalPage">#{onePageRecord}</if>
 		order by o_no desc
 	</select>
-
+	<!-- 모든 주문 취소 -->
+	<select id="allOrderCancelSelect"
+		parameterType="kr.co.bitcamp.admin.PagingVO"
+		resultType="kr.co.bitcamp.order.OrderVO">
+		select * from (
+		select * from (
+		select
+		o.o_no,o.userno,o.r_no,o.oi_no,mileage,
+		totalprice,to_char(order_date,'YYYY-MM-DD')
+		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
+		to_char(delivery_arrival_date,'YYYY-MM-DD')
+		delivery_arrival_date,delivery_status,payment_type,rname,oname
+		<if test="userno !=null and userno!=0 and userno !=''">
+			,userid
+		</if>
+		from ordertable o
+		inner join order_info i on o.oi_no = i.oi_no
+		inner join Recipient r on o.r_no = r.r_no
+		<if test="userno !=null and userno!=0 and userno !=''">
+			inner join member m on o.userno = m.userno
+		</if>
+		<if test="payment_type !=null and payment_type=='card'">
+			inner join card on o.o_no = card.o_no
+		</if>
+		<if test="payment_type !=null and payment_type=='cash'">
+			inner join cash on o.o_no = cash.o_no
+		</if>
+		<where>
+			delivery_status in('취소요청','취소')	
+			<if
+				test="searchKey != null and searchWord != null and searchKey != '' and searchWord != ''">
+				AND ${searchKey} like '%'||#{searchWord}||'%'
+			</if>
+			<if
+				test="s_price != null and s_price !='' and (e_price == null or e_price =='')">
+				AND totalprice <![CDATA[>=]]>${s_price}
+			</if>
+			<if
+				test="(s_price == null or s_price =='') and e_price != null and e_price !=''">
+				and totalprice <![CDATA[<=]]>${e_price}
+			</if>
+			<if
+				test="s_price != null and e_price != null and s_price !='' and e_price !=''">
+				AND totalprice <![CDATA[>=]]>${s_price}
+				and totalprice <![CDATA[<=]]>${e_price}
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
+				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>			
+		</where>
+		order by o_no desc)
+		where
+		rownum <![CDATA[<=]]>
+		#{pageNum} * #{onePageRecord}
+		order by o_no asc)
+		where rownum <![CDATA[<=]]>
+		<if test="pageNum == totalPage">#{lastPageRecord}</if>
+		<if test="pageNum != totalPage">#{onePageRecord}</if>
+		order by o_no desc
+	</select>
+	
+	<!-- 모든 반품 취소 -->
+	<select id="allOrderReturnSelect"
+		parameterType="kr.co.bitcamp.admin.PagingVO"
+		resultType="kr.co.bitcamp.order.OrderVO">
+		select * from (
+		select * from (
+		select
+		o.o_no,o.userno,o.r_no,o.oi_no,mileage,
+		totalprice,to_char(order_date,'YYYY-MM-DD')
+		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
+		to_char(delivery_arrival_date,'YYYY-MM-DD')
+		delivery_arrival_date,delivery_status,payment_type,rname,oname
+		<if test="userno !=null and userno!=0 and userno !=''">
+			,userid
+		</if>
+		from ordertable o
+		inner join order_info i on o.oi_no = i.oi_no
+		inner join Recipient r on o.r_no = r.r_no
+		<if test="userno !=null and userno!=0 and userno !=''">
+			inner join member m on o.userno = m.userno
+		</if>
+		<if test="payment_type !=null and payment_type=='card'">
+			inner join card on o.o_no = card.o_no
+		</if>
+		<if test="payment_type !=null and payment_type=='cash'">
+			inner join cash on o.o_no = cash.o_no
+		</if>
+		<where>
+			delivery_status in('반품요청','반품')	
+			<if
+				test="searchKey != null and searchWord != null and searchKey != '' and searchWord != ''">
+				AND ${searchKey} like '%'||#{searchWord}||'%'
+			</if>
+			<if
+				test="s_price != null and s_price !='' and (e_price == null or e_price =='')">
+				AND totalprice <![CDATA[>=]]>${s_price}
+			</if>
+			<if
+				test="(s_price == null or s_price =='') and e_price != null and e_price !=''">
+				and totalprice <![CDATA[<=]]>${e_price}
+			</if>
+			<if
+				test="s_price != null and e_price != null and s_price !='' and e_price !=''">
+				AND totalprice <![CDATA[>=]]>${s_price}
+				and totalprice <![CDATA[<=]]>${e_price}
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
+				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>			
+		</where>
+		order by o_no desc)
+		where
+		rownum <![CDATA[<=]]>
+		#{pageNum} * #{onePageRecord}
+		order by o_no asc)
+		where rownum <![CDATA[<=]]>
+		<if test="pageNum == totalPage">#{lastPageRecord}</if>
+		<if test="pageNum != totalPage">#{onePageRecord}</if>
+		order by o_no desc
+	</select>
 	<!-- 전체 품목 페이지 수 구하기(검색) -->
 	<select id="getTotalRecord"
 		parameterType="kr.co.bitcamp.admin.PagingVO" resultType="int">
@@ -435,6 +623,108 @@
 
 
 	</select>
+	<!-- 취소 전체 페이지 수 구하기 -->
+	<select id="getOrderCancelTotalRecord"
+		parameterType="kr.co.bitcamp.admin.PagingVO"
+		resultType="int">
+		select count(o_no) from(
+		select * from (
+		select * from (
+		select
+		o.o_no,o.userno,o.r_no,o.oi_no,mileage,
+		totalprice,to_char(order_date,'YYYY-MM-DD')
+		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
+		to_char(delivery_arrival_date,'YYYY-MM-DD')
+		delivery_arrival_date,delivery_status,payment_type,rname,oname
+		<if test="userno !=null and userno!=0 and userno !=''">
+			,userid
+		</if>
+		from ordertable o
+		inner join order_info i on o.oi_no = i.oi_no
+		inner join Recipient r on o.r_no = r.r_no
+		<if test="userno !=null and userno!=0 and userno !=''">
+			inner join member m on o.userno = m.userno
+		</if>
+		<if test="payment_type !=null and payment_type=='card'">
+			inner join card on o.o_no = card.o_no
+		</if>
+		<if test="payment_type !=null and payment_type=='cash'">
+			inner join cash on o.o_no = cash.o_no
+		</if>
+		<where>
+			delivery_status in('취소요청','취소')	
+			<if
+				test="searchKey != null and searchWord != null and searchKey != '' and searchWord != ''">
+				AND ${searchKey} like '%'||#{searchWord}||'%'
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
+				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>			
+		</where>
+		order by o_no desc)
+		where
+		rownum <![CDATA[<=]]>
+		#{pageNum} * #{onePageRecord}
+		order by o_no asc)
+		where rownum <![CDATA[<=]]>
+		<if test="pageNum == totalPage">#{lastPageRecord}</if>
+		<if test="pageNum != totalPage">#{onePageRecord}</if>
+		order by o_no desc)
+	</select>
+	<!-- 반품 수 -->
+	<select id="getOrderReturnTotalRecord"
+		parameterType="kr.co.bitcamp.admin.PagingVO"
+		resultType="int">
+		select count(o_no) from(
+		select * from (
+		select * from (
+		select
+		o.o_no,o.userno,o.r_no,o.oi_no,mileage,
+		totalprice,to_char(order_date,'YYYY-MM-DD')
+		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
+		to_char(delivery_arrival_date,'YYYY-MM-DD')
+		delivery_arrival_date,delivery_status,payment_type,rname,oname
+		<if test="userno !=null and userno!=0 and userno !=''">
+			,userid
+		</if>
+		from ordertable o
+		inner join order_info i on o.oi_no = i.oi_no
+		inner join Recipient r on o.r_no = r.r_no
+		<if test="userno !=null and userno!=0 and userno !=''">
+			inner join member m on o.userno = m.userno
+		</if>
+		<if test="payment_type !=null and payment_type=='card'">
+			inner join card on o.o_no = card.o_no
+		</if>
+		<if test="payment_type !=null and payment_type=='cash'">
+			inner join cash on o.o_no = cash.o_no
+		</if>
+		<where>
+			delivery_status in('반품요청','반품')	
+			<if
+				test="searchKey != null and searchWord != null and searchKey != '' and searchWord != ''">
+				AND ${searchKey} like '%'||#{searchWord}||'%'
+			</if>
+			<if
+				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
+				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
+				to_date('${e_date}','YYYY-MM-DD')
+			</if>			
+		</where>
+		order by o_no desc)
+		where
+		rownum <![CDATA[<=]]>
+		#{pageNum} * #{onePageRecord}
+		order by o_no asc)
+		where rownum <![CDATA[<=]]>
+		<if test="pageNum == totalPage">#{lastPageRecord}</if>
+		<if test="pageNum != totalPage">#{onePageRecord}</if>
+		order by o_no desc)
+	</select>
 	<!-- 전체 회원 페이지 수 구하기(검색) -->
 	<select id="getTotalMemberRecord"
 		parameterType="kr.co.bitcamp.admin.PagingVO" resultType="int">
@@ -495,13 +785,13 @@
 	
 
 	<!-- 재고의 예약 확인용 -->
-	<select id="allSelectProduct" parameterType="int"
+	<select id="adminallSelectProduct" parameterType="int"
 		resultType="Integer">
 		select s_no from product_stock where p_no = ${param1} and
 		s_deltype='Y'
 	</select>
 
-	<select id="allSelectDate" parameterType="int"
+	<select id="adminallSelectDate" parameterType="int"
 		resultType="String">
 		select to_char(stock_date,'YYYYMMDD') from reservate where
 		s_no = ${param1}
@@ -530,6 +820,12 @@
 		update member set
 		userjointype='N' where userno = ${param1}
 	</update>
+	<update id="updateMemberDelType" parameterType="int">
+		update member set userjointype='Y' where userno =${param1}	
+	</update>
+	<delete id="delMemberTodelList">
+		delete from m_withdrawal where userno =${param1}
+	</delete>
 
 
 

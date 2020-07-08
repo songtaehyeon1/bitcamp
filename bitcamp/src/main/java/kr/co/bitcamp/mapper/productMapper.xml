@@ -8,7 +8,7 @@
 		from product,category
 		where product.c_no=category.c_no and p_no=#{param1}
 	</select>
-	<select id="allSelectRecord" parameterType="kr.co.bitcamp.product.ProductVO" resultType="kr.co.bitcamp.product.ProductVO">
+	<select id="productAllSelectRecord" parameterType="kr.co.bitcamp.product.ProductVO" resultType="kr.co.bitcamp.product.ProductVO">
 		select p_no,c_name,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5
 		from product,category where product.c_no=category.c_no
 		order by p_no desc
@@ -26,7 +26,6 @@
 		select s_no from product_stock where p_no = #{param1} and s_deltype='Y'
 	</select>
 	<select id="productAllSelectDate" parameterType="int" resultType="String">
-		select to_char(stock_date,'YYYYMMDD') from reservate where
-		s_no = #{param1}
+		select to_char(stock_date,'YYYYMMDD') from reservate where s_no = #{param1}
 	</select>
 </mapper>

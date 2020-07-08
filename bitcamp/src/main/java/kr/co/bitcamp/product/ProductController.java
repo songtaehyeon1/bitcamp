@@ -123,7 +123,7 @@ public class ProductController {
 	public ModelAndView productList() {
 		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("list", dao.productAllSelectRecord());
+		mav.addObject("list", dao.ProductallSelectRecord());
 		mav.setViewName("product/productList");
 		return mav;
 	}

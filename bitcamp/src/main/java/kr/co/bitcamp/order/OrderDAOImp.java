@@ -2,6 +2,8 @@ package kr.co.bitcamp.order;
 
 import java.util.ArrayList;
 
+import kr.co.bitcamp.product.ProductVO;
+
 public interface OrderDAOImp {
 	public ArrayList<Integer> allSelectProduct(int p_no);
 	public ArrayList<String> allSelectDate(int s_no);
@@ -15,5 +17,9 @@ public interface OrderDAOImp {
 	public String orderNumber(OrderVO vo);//오더넘버 시퀀스 얻어오기..
 	
 	public int order_product(OrderVO vo);//주문번호에 담긴 상품번호,상품갯수 조회
+	public int order_product_cart(ProductVO vo);//카트에서부터 상품 주문할때 상품번호,갯수
+	public int reservate(ProductVO vo);//예약
 	
+	public int order_stock(ProductVO vo);//주문번호당 어떤 제품이 빠져나갔는지 알아야함.
+	public int paymentInfoInsert(OrderVO vo);//카드결제시 정보 저장
 }

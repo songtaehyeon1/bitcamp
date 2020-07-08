@@ -109,6 +109,7 @@ $(function(){
 		$('.add-cart a').click(function() {
 			$('.modal').css('display', 'block');
 		});
+		
 		//장바구니 팝업창 닫기
 		$('.modal .btn_close, .btn_cancel').click(function() {
 			//#modalFrm 초기화 하기
@@ -116,9 +117,13 @@ $(function(){
 			$("#rental-period").val('2');
 			$("#rental_start").val('');
 			$("#rental_end").val('');
-			$("#currentQty").attr('value','0');
+			$("#currentQty").attr('value','1');
 			$("#limitQuantity").html('0');
-			$('.delivery-fee-container').css("display","none");
+			$('.delivery-fee-container').css("display","none");			
+			$(".rental_start-container").css("visibility", "hidden");  //대여 시작일 숨기기
+			$(".rental_end-container").css("visibility", "hidden");  //대여 종료일 숨기기
+			$('.quantity_msg').css("color", "#343a40");  //최대 주문수량 메세지
+			
 			//장바구니 팝업창 닫기	
 			$('.modal').css('display', 'none');
 		});
@@ -163,7 +168,19 @@ $(function(){
 				return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 			}
 		});
-
+		
+		//대여 기간 선택 후 대여 시작일 보여주기
+		$("#rental-period").change(function(){
+			$(".rental_start-container").css("visibility", "visible");
+		});
+		
+		//대여 시작일 선택 후 대여 종료일 보여주기
+		$("#rental_start").on("change", function(){
+			if($("#rental_start").val().trim()!=""){
+				$(".rental_end-container").css("visibility", "visible");
+			}
+		});
+		
 		//대여 종료일
 		var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 		$('#rental_end').datepicker({
@@ -193,16 +210,17 @@ $(function(){
 			if($(this).hasClass("plus")) {
 				if(currentQty < limitQty) {
 					var plus = currentQty +1;
-					console.log('plus');
 					$('#currentQty').attr('value', plus);
-					$('.num').html(plus * $("#price").val());
+					$('.num').html(plus * $("#price").val());  //수량에 따른 합계 변동
+					$('.quantity_msg').css("color", "#dc3545");  //최대 주문수량 메세지
 				}
 			}
 			if($(this).hasClass("minus")) {
 				if(currentQty > 1) {
 					var minus = currentQty -1;
 					$('#currentQty').attr('value', minus);
-					$('.num').html(minus * $("#price").val())
+					$('.num').html(minus * $("#price").val());  //수량에 따른 합계 변동
+					$('.quantity_msg').css("color", "#343a40");  //최대 주문수량 메세지
 				}
 			}
 		});
@@ -230,6 +248,11 @@ $(function(){
 				return false;
 			}
 			
+			if( $("#currentQty").val()=="" || $("#currentQty").val()==null || $("#currentQty").val()==0){
+				alert("수량을 선택해 주세요.");
+				return false;
+			}
+			
 			if( $(".limitQuantity").val()=="" || $(".limitQuantity").val()==null || $(".limitQuantity").val()==0){
 				alert("현재 해당 상품의 재고가 없습니다.");
 				return false;
@@ -240,57 +263,51 @@ $(function(){
 }); //jquery 종료
 
 //JavaScript
-////////////
+//대여 기간
 function period_change(period) {
-	var date = new Date(rental_start.value);  //주문 시작일을 받음.
 	var period = parseInt(period);  //대여기간
-	date.setDate(date.getDate() + period);  //주문 시작일 +대여기간
+	var date = new Date(rental_start.value);  //대여 시작일
+	date.setDate(date.getDate() + period);  //대여 시작일 +대여기간
 
+	var year = date.getFullYear();  //yyyy
+	var month = (date.getMonth() +1);  //mm
+	month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+	var day = date.getDate();  //dd
+	day = day >= 10 ? day : '0' + day;  //day 두자리로 저장
+	var yyyymmdd = year + '-' + month + '-' + day;  //'-' 추가하여 yyyy-mm-dd 형태 생성
+	$("#rental_end").datepicker('value', yyyymmdd);
+}
+
+//대여 시작일 선택 시 대여 종료일 자동 선택
+function changeEndDay(startDay) {
+	var date = new Date(startDay);  //대여 시작일
+	var period = parseInt($("#rental-period").val()-1);  //대여기간
+	date.setDate(date.getDate() + period);  //주문 시작일 + 대여기간
+	//$("#rental_period").html(startDay+"~")  //대여 시작일 출력
+	
+	var year = date.getFullYear();  //yyyy
+	var month = (date.getMonth() +1);  //mm
+	month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+	var day = date.getDate();  //dd
+	day = day >= 10 ? day : '0' + day;  //day 두자리로 저장
+	var yyyymmdd = year + '-' + month + '-' + day;  // '-' 추가하여 yyyy-mm-dd 형태 생성
+	$("#rental_end").datepicker('value', yyyymmdd);
+	//	$("#rental_period").append(yyyymmdd)  //대여 종료일 출력
+}
+
+//대여 종료일  변경 불가
+function defaultday() {
+	var date = new Date($("#rental_start").val());  //대여 시작일
+	var period = parseInt($("#rental-period").val());  //대여기간
+	date.setDate(date.getDate() + period);  //대여 시작일 + 대여기간
+	
 	var year = date.getFullYear();  //yyyy
 	var month = (1 + date.getMonth());  //mm
 	month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
 	var day = date.getDate();  //dd
 	day = day >= 10 ? day : '0' + day;  //day 두자리로 저장
-	var yyyymmdd = year + '-' + month + '-' + day;  //'-' 추가하여 yyyy-mm-dd 형태 생성
-	$("#rental_end").datepicker('value', yyyymmdd)
-
-}
-
-//주문 날짜 선택시 마감날짜도 자동 값적용
-function changeEndDay(startDay) {
-	// 주문 시작일이 설정되면,마감날짜가 보이게 된다.
-	if (rental_start.value != null || rental_start.value != '') {
-		$("#rental_end_wrap").css("display", "flex");
-		$("#orderDetail_wrap").css("display", "flex");
-	}
-	
-	var date = new Date(startDay);// 주문 시작일을 받음.
-	var period = parseInt($("#rental-period").val()-1);// 대여기간
-	date.setDate(date.getDate() + period);// 주문 시작일 + 대여기간
-	//	$("#rental_period").html(startDay+"~")//시작일
-	var year = date.getFullYear();// yyyy
-	var month = (1 + date.getMonth());// mm
-	month = month >= 10 ? month : '0' + month;// month 두자리로 저장
-	var day = date.getDate();// dd
-	day = day >= 10 ? day : '0' + day;// day 두자리로 저장
-	var yyyymmdd = year + '-' + month + '-' + day;// '-' 추가하여 yyyy-mm-dd 형태 생성
-	$("#rental_end").datepicker('value', yyyymmdd)
-	//	$("#borrow_period").append(yyyymmdd)//종료일
-
-}
-
-//대여 종료일  변경 불가
-function defaultday() {
-	var date = new Date($("#rental_start").val());// 주문 시작일을 받음.
-	var period = parseInt($("#rental-period").val());// 대여기간
-	date.setDate(date.getDate() + period);// 주문 시작일 + 대여기간
-	var year = date.getFullYear();// yyyy
-	var month = (1 + date.getMonth());// mm
-	month = month >= 10 ? month : '0' + month;// month 두자리로 저장
-	var day = date.getDate();// dd
-	day = day >= 10 ? day : '0' + day;// day 두자리로 저장
-	var yyyymmdd = year + '-' + month + '-' + day;// '-' 추가하여 yyyy-mm-dd 형태 생성
-	$("#rental_end").datepicker('value', yyyymmdd)
+	var yyyymmdd = year + '-' + month + '-' + day;  // '-' 추가하여 yyyy-mm-dd 형태 생성
+	$("#rental_end").datepicker('value', yyyymmdd);
 }
 
 //상품 재고 체크
@@ -388,7 +405,7 @@ function addCart(p_no, p_filename, p_name,  delivery_fee, product_borrow_period,
 			<c:forEach var="plist" items="${plist}">
 				<li class="list">
 					<div class="product-img">
-						<a href="/bitcamp/productView?p_no=${plist.p_no}"><img src="<%=request.getContextPath()%>/resources/category/${plist.p_filename1}" onerror="this.src='/bitcamp/resources/category/product_01.png'"></a>
+						<a href="/bitcamp/productView?p_no=${plist.p_no}"><img src="<%=request.getContextPath()%>/upload/${plist.p_filename1}" onerror="this.src='/bitcamp/resources/category/product_01.png'"></a>
 						<c:if test="${logStatus!=null && logStatus=='Y'}">
 							<button type="button" value="${plist.p_no}" class="btn_heart <c:if test="${plist.heart=='Y'}">btn_toggle</c:if>"></button>
 						</c:if>
@@ -399,7 +416,7 @@ function addCart(p_no, p_filename, p_name,  delivery_fee, product_borrow_period,
 					<div class="product-item-name">
 						<a href="/bitcamp/productView?p_no=${plist.p_no}"><strong>${plist.p_name}</strong></a>
 					</div>
-					<div class="price">${plist.price}</div>
+					<div class="price">${plist.price}원</div>
 					<div class="desc">2박3일 대여요금</div>
 				</li>
 			</c:forEach>
@@ -424,18 +441,19 @@ function addCart(p_no, p_filename, p_name,  delivery_fee, product_borrow_period,
 						</select>
 					</div>
 					
-					<div class="delivery-fee-container" style="display:none;">
-						<label>배송비</label> <span class="won" style="float: right;">원</span> <input type="text" id="delivery_fee" name="delivery_fee" readonly style="border:none; float:right; width:215px; padding:0 10px; text-align:right; outline:none;"/>
+					<div class="delivery-fee-container">
+						<label>배송비</label> <span class="won">원</span> <input type="text" id="delivery_fee" name="delivery_fee" readonly/>
 					</div>
 
 					<div class="rental-period-container" style="overflow:auto">
 						<label>대여 기간</label> 
-						<select id="rental-period" name="product_borrow_period" onchange="period_change(this.value)"></select>
+						<select id="rental-period" name="product_borrow_period" onchange="period_change(this.value)">
+						</select>
 					</div>
 
 					<div class="rental_start-container" style="overflow:auto;">
 						<label>대여 시작일</label> 
-						<input id="rental_start" name="orderStart" readonly onchange="changeEndDay(this.value);availableChk()" />
+						<input id="rental_start" name="orderStart" readonly onchange="changeEndDay(this.value); availableChk();"/>
 					</div>
 
 					<div class="rental_end-container" style="overflow:auto;">
@@ -447,7 +465,7 @@ function addCart(p_no, p_filename, p_name,  delivery_fee, product_borrow_period,
 						<label>수량</label>
 						<span class="qty">
 							<button type="button" class="btn minus productQty"><i class="icon-minus"></i></button>
-							<input type="text" class="currentQty cartItems input_noclick transparent" id="currentQty" name="currentQty" value="0" readonly>
+							<input type="text" class="currentQty cartItems input_noclick transparent" id="currentQty" name="currentQty" value="1" readonly>
 							<button type="button" class="btn plus productQty"><i class="icon-plus"></i></button>
 						</span>
 						

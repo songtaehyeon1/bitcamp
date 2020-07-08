@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.google.gson.JsonObject;
-
 import kr.co.bitcamp.category.CategoryVO;
 import kr.co.bitcamp.member.MemberVO;
 import kr.co.bitcamp.order.OrderVO;
@@ -43,16 +41,37 @@ public class AdminController {
 	}
 
 	@RequestMapping("/admin")
-	public String goAdminlogin(HttpServletRequest req) {
-		HttpSession ses = req.getSession();
-		ses.setAttribute("adminStatus", "N");
+	public String goAdminlogin(HttpServletRequest req) {	
 		return "admin/adminLogin";
 	}
 
 	@RequestMapping("/admin/home")
-	public String goAdminHome() {
-
-		return "admin/adminHome";
+	public ModelAndView goAdminHome() {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		int totalboardcnt = dao.totalboardcnt();
+		int todayboardcnt = dao.todayboardcnt();
+		int todayreplycnt = dao.todayreplycnt();
+		int todayMembercnt = dao.todayMembercnt();
+		int totalMembercnt = dao.totalMembercnt();
+		int todayWithdrawalcnt = dao.todayWithdrawalcnt();
+		int totalOrdercnt =dao.totalOrdercnt();
+		int todayOrdercnt=dao.todayOrdercnt();
+		int todayReturncnt = dao.todayreturncnt();
+		int todayCancelcnt = dao.todayCancelcnt();
+		
+		mav.addObject("todayReturncnt", todayReturncnt);
+		mav.addObject("todayCancelcnt", todayCancelcnt);
+		mav.addObject("totalOrdercnt", totalOrdercnt);		
+		mav.addObject("todayOrdercnt", todayOrdercnt);
+		mav.addObject("todayWithdrawalcnt", todayWithdrawalcnt);
+		mav.addObject("totalMembercnt", totalMembercnt);
+		mav.addObject("todayMembercnt", todayMembercnt);
+		mav.addObject("totalboardcnt", totalboardcnt);
+		mav.addObject("todayboardcnt", todayboardcnt);
+		mav.addObject("todayreplycnt", todayreplycnt);
+		mav.setViewName("admin/adminHome");
+		return mav;
 	}
 
 /////////////////////////관리자 로그인
@@ -62,14 +81,22 @@ public class AdminController {
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
 		AdminLoginVO vo2 = dao.adminLogin(vo);
 		ModelAndView mav = new ModelAndView();
-//		System.out.println(vo2.getAdminId());
-//		System.out.println(vo2.getAdminpwd());
 		if (vo2 == null) {
 			mav.setViewName("redirect:admin");
 		} else {
 			ses.setAttribute("adminStatus", "Y");
-			mav.setViewName("admin/adminHome");
+			mav.setViewName("redirect:admin/home");
 		}
+		return mav;
+	}
+	
+	@RequestMapping("/adminLogout")
+	public ModelAndView goAdminLogout(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		HttpSession ses = req.getSession();
+		ses.invalidate();
+		
+		mav.setViewName("redirect:admin");
 		return mav;
 	}
 /////////////////////////회원
@@ -138,6 +165,21 @@ public class AdminController {
 		mav.setViewName("redirect:member");		
 		return mav;
 	}
+	//탈퇴회원 복구 처리
+	@RequestMapping("/admin/memberReturn")
+	public ModelAndView goMemberReturn(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		String[] list = req.getParameterValues("chk");
+		for(int i=0;i<list.length;i++) {
+			int userno = Integer.parseInt(list[i]);		
+			dao.delMemberTodelList(userno);
+			dao.updateMemberDelType(userno);
+		}				
+		mav.setViewName("redirect:memberdellist");
+		return mav;
+		
+	}
 	// 회원삭제 리스트
 	@RequestMapping("/admin/memberdellist")
 	public ModelAndView goAdminMemberDellist(HttpServletRequest request) {
@@ -174,9 +216,10 @@ public class AdminController {
 		if (pageNumStr != null) {
 			vo.setPageNum(Integer.parseInt(pageNumStr));
 		}	
+		
 		vo.setSearchKey(req.getParameter("searchKey"));
 		vo.setSearchWord(req.getParameter("searchWord"));
-		List<OrderVO> list = dao.allOrderSelect(vo);
+		List<OrderVO> list = dao.allOrderSelect(vo);		
 		
 		vo.setTotalRecord(dao.getOrderTotalRecord(vo));
 		mav.addObject("pagevo", vo);
@@ -185,12 +228,50 @@ public class AdminController {
 		
 		return mav;
 	}
+	@RequestMapping("/admin/orderCancelList")
+	public ModelAndView goAdminOrderCancellist(PagingVO vo, HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		String pageNumStr = req.getParameter("pageNum");
+		if (pageNumStr != null) {
+			vo.setPageNum(Integer.parseInt(pageNumStr));
+		}	
+		vo.setSearchKey(req.getParameter("searchKey"));
+		vo.setSearchWord(req.getParameter("searchWord"));
+		List<OrderVO> list = dao.allOrderCancelSelect(vo);
+		
+		vo.setTotalRecord(dao.getOrderCancelTotalRecord(vo));
+		mav.addObject("pagevo", vo);
+		mav.addObject("list", list);
+		mav.setViewName("admin/adminCancelList");
+		
+		return mav;
+	}
+	@RequestMapping("/admin/orderReturnList")
+	public ModelAndView goAdminOrderReturnlist(PagingVO vo, HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		String pageNumStr = req.getParameter("pageNum");
+		if (pageNumStr != null) {
+			vo.setPageNum(Integer.parseInt(pageNumStr));
+		}	
+		vo.setSearchKey(req.getParameter("searchKey"));
+		vo.setSearchWord(req.getParameter("searchWord"));
+		List<OrderVO> list = dao.allOrderReturnSelect(vo);
+		
+		vo.setTotalRecord(dao.getOrderReturnTotalRecord(vo));
+		mav.addObject("pagevo", vo);
+		mav.addObject("list", list);
+		mav.setViewName("admin/adminReturnList");
+		
+		return mav;
+	}
 	//주문 상세화면
 	@RequestMapping("/admin/orderView")
 	public ModelAndView goAdminOrderView(String o_no) {
 		ModelAndView mav = new ModelAndView();
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
-		OrderVO vo = dao.selectOrder(o_no);
+		OrderVO vo = dao.selectAdminOrder(o_no);
 		List<OrderVO> list = dao.orderProductList(o_no);
 		mav.addObject("list", list);
 		mav.addObject("vo", vo);
@@ -205,7 +286,7 @@ public class AdminController {
 		int result = dao.orderEdit(vo);
 		if(result>0) {			
 			if(vo.getDelivery_code() != null && vo.getDelivery_code() !="") {
-				dao.updateInvoice(vo.getO_no(),vo.getDelivery_code(),vo.getDelivery_date(),vo.getDelivery_arrival_date());
+				dao.updateadminInvoice(vo.getO_no(),vo.getDelivery_code(),vo.getDelivery_date(),vo.getDelivery_arrival_date());
 			}
 			//if(vo.getP)
 			mav.setViewName("redirect:orderList");
@@ -217,6 +298,56 @@ public class AdminController {
 		return mav;
 	}
 
+	//주문 배송상태 일괄 변경
+	@RequestMapping("/admin/updateD_status")
+	public ModelAndView goDupdateall(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		String[] o_no=req.getParameterValues("chk");
+		String statech = req.getParameter("statech");
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		if(statech.equals("입금대기")||statech.equals("결제완료")||statech.equals("배송준비중")||statech.equals("배송중")||statech.equals("배송완료")) {
+			for (int i = 0; i < o_no.length; i++) {
+				dao.allD_statusUpdate(o_no[i],statech);
+			}		
+		}else if(statech.equals("반품요청")) {
+			for (int i = 0; i < o_no.length; i++) {
+				dao.allD_statusUpdate(o_no[i],statech);
+				dao.allD_statuscancel(o_no[i],statech);
+			}	
+		}else if(statech.equals("취소요청")) {
+			for (int i = 0; i < o_no.length; i++) {
+				dao.allD_statusUpdate(o_no[i],statech);
+				dao.allD_statusreturn(o_no[i],statech);
+			}	
+		}
+				
+		mav.setViewName("redirect:orderList");
+		return mav;
+		
+	}
+	@RequestMapping("/admin/updateCancelD_status")
+	public ModelAndView goudateCancelD(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		String[] o_no=req.getParameterValues("chk");
+		for (int i = 0; i < o_no.length; i++) {
+			dao.allD_statusUpdate(o_no[i],"취소");
+		}		
+		mav.setViewName("redirect:orderCancelList");
+		return mav;
+	}
+	@RequestMapping("/admin/updateReturnD_status")
+	public ModelAndView goudateReturnD(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		String[] o_no=req.getParameterValues("chk");
+		for (int i = 0; i < o_no.length; i++) {
+			dao.allD_statusUpdate(o_no[i],"반품");
+		}		
+		mav.setViewName("redirect:orderReturnList");
+		return mav;
+	}
+	
 //////////////////////상품	
 	// 상품 리스트
 	@RequestMapping("/admin/product")
@@ -245,9 +376,9 @@ public class AdminController {
 
 		pagevo.setTotalRecord(dao.getTotalRecord(pagevo));
 
-		List<CategoryVO> clist = dao.allCategorySelect();
+		List<CategoryVO> clist = dao.adminallCategorySelect();
 		mav.addObject("pagevo", pagevo);
-		mav.addObject("list", dao.allList(pagevo));
+		mav.addObject("list", dao.allpList(pagevo));
 		mav.addObject("clist", clist);
 		mav.setViewName("admin/adminProductList");
 		return mav;
@@ -268,18 +399,18 @@ public class AdminController {
 		pagevo.setS_deltype(request.getParameter("s_deltype"));
 		pagevo.setP_no(Integer.parseInt(request.getParameter("p_no")));
 		pagevo.setTotalRecord(dao.getTotalStockRecord(pagevo));
-		List<CategoryVO> clist = dao.allCategorySelect();
+		List<CategoryVO> clist = dao.adminallCategorySelect();
 		List<StockVO> list = dao.allStockList(pagevo);
 		ProductVO pvo = dao.productSelect(Integer.parseInt(request.getParameter("p_no")));
 
 		if (request.getParameter("s_date") != null && request.getParameter("e_date") != null && request.getParameter("s_date") != "" && request.getParameter("e_date") != "") {
 			int orderStart = Integer.parseInt(request.getParameter("s_date").replaceAll("-", "")); // i번째 상품의 오더 시작 날짜
 			int orderEnd = Integer.parseInt(request.getParameter("e_date").replaceAll("-", "")); // i번째 상품의 오더 끝 날짜
-			ArrayList<Integer> s_noList = (ArrayList<Integer>) dao.allSelectProduct(pvo.getP_no()); // i번째 상품의 재고 코드 리스트
+			ArrayList<Integer> s_noList = (ArrayList<Integer>) dao.adminallSelectProduct(pvo.getP_no()); // i번째 상품의 재고 코드 리스트
 			ArrayList<Integer> s_noList2 = new ArrayList<Integer>();
 			int cnt = s_noList.size();
 			for (int j = 0; j < cnt; j++) { // i번째 상품의 재고 코드 리스트 만큼 반복
-				ArrayList<String> dateList = (ArrayList<String>) dao.allSelectDate(s_noList.get(j));																									
+				ArrayList<String> dateList = (ArrayList<String>) dao.adminallSelectDate(s_noList.get(j));																									
 				int resultCnt = 0;
 				
 				for (int k = 0; k < dateList.size(); k++) {
@@ -365,7 +496,7 @@ public class AdminController {
 	public ModelAndView goAdminProductCategory() {
 		ModelAndView mav = new ModelAndView();
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
-		List<CategoryVO> list = dao.allCategorySelect();
+		List<CategoryVO> list = dao.adminallCategorySelect();
 		mav.addObject("list", list);
 		mav.setViewName("admin/adminCategory");
 		return mav;
@@ -375,7 +506,7 @@ public class AdminController {
 	@ResponseBody
 	public CategoryVO ajaxCategorySelect(int c_no) {
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
-		CategoryVO vo = dao.selectCategory(c_no);
+		CategoryVO vo = dao.adminselectCategory(c_no);
 		vo.setCnt(dao.cntCategoryProduct(c_no));
 		return vo;
 	}
@@ -397,7 +528,7 @@ public class AdminController {
 	public ModelAndView goAdminupdateCategory(CategoryVO vo) {
 		ModelAndView mav = new ModelAndView();
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
-		int cnt = dao.updateCategory(vo);
+		int cnt = dao.adminupdateCategory(vo);
 		mav.addObject("cnt", cnt);
 		mav.setViewName("admin/adminCategoryUpdateOk");
 		return mav;
@@ -406,7 +537,7 @@ public class AdminController {
 	@RequestMapping("/admin/insertProduct")
 	public ModelAndView goAdminInsertProduct() {
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
-		List<CategoryVO> list = dao.allCategorySelect();
+		List<CategoryVO> list = dao.adminallCategorySelect();
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("clist", list);
 		mav.setViewName("admin/adminInsertProduct");
@@ -561,7 +692,7 @@ public class AdminController {
 	@RequestMapping(value = "/updateProduct", method = RequestMethod.GET)
 	public ModelAndView productUpdate(HttpServletRequest req) {
 		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
-		List<CategoryVO> list = dao.allCategorySelect();
+		List<CategoryVO> list = dao.adminallCategorySelect();
 		ProductVO vo = dao.productSelect(Integer.parseInt(req.getParameter("p_no")));
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("clist", list);

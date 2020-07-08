@@ -61,6 +61,10 @@ public interface MypageDAO {
 	public int mypageOrderEdit(OrderVO vo);
 	public int updateInvoice(String o_no,String delivery_code,String delivery_date,String delivery_arrival_date);
 	
+	// 주문 취소, 반품
+	public int mypageOrderCancle(String o_no);
+	public int mypageOrderReturn(String o_no);
+	
 	
 	
 	

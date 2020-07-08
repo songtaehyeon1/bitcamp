@@ -197,6 +197,18 @@ public class MypageController {
 		
 		return mv;
 	}
+	// 주문조회 최소
+	@RequestMapping("/mypageOrderCancle")
+	public String mypageOrderCancle(String o_no, String str) {
+		MypageDAO dao = sqlSession.getMapper(MypageDAO.class);
+		if(str.equals("orderCancle")) {
+			dao.mypageOrderCancle(o_no);
+		}else if(str.equals("orderReturn")) {
+			dao.mypageOrderReturn(o_no);
+		}
+		
+		return "redirect:mypageOrderHistory";
+	}
 	
 	// 관심상품으로 이동 ============================================================================== 관심상품
 	@RequestMapping("/mypageWishList")

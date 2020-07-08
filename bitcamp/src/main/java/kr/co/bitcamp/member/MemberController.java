@@ -153,8 +153,13 @@ public class MemberController {
 		MemberVO memVo = dao.loginCheck(vo);
 		
 		if(memVo==null) {  //로그인 실패
-			mav.setViewName("redirect:loginFrm");
-		}else {  //로그인 성공
+			//로그인 아이디, 비밀번호 불일치
+			mav.addObject("result", 0);
+			mav.setViewName("member/loginFrmOk");
+		}else if(memVo !=null && memVo.getUserjointype().equals("N")){  //탈퇴 회원의 로그인 시도
+			mav.addObject("result", 1);
+			mav.setViewName("member/loginFrmOk");
+		}else if(memVo !=null && memVo.getUserjointype().equals("Y")){  //로그인 성공
 			//접속 날짜 구하기
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  //날짜 형식 지정하기
 			Date today  = new Date();

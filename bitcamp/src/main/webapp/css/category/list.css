@@ -1,4 +1,3 @@
-
 .wrap{
 	margin:170px 100px 0 100px;
 	overflow:auto;
@@ -300,6 +299,23 @@ select:focus {
 	width:230px;
 	padding:0 10px;	
 }
+.delivery-fee-container{
+	display:none;
+}
+#delivery_fee{
+	 border:none;
+	 float:right; 
+	 width:215px; 
+	 padding:0 10px; 
+	 text-align:right; 
+	 outline:none;
+}
+.won{
+	 float:right;
+}
+.rental_start-container, .rental_end-container{
+	visibility:hidden;
+}
 .rental_start-container>label, .rental_end-container>label{
 	float:left;
 }
@@ -342,6 +358,7 @@ select:focus {
 	float:right;
 	padding:0 10px;	
 	font-size:small;
+
 }
 .total{
 	width:100%;

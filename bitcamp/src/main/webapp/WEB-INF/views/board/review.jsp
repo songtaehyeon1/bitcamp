@@ -64,7 +64,7 @@
 		<c:if test = "${list != null && list != ''}">
 			<c:forEach var = "list" items = "${list}">
 				<li>${list.review_no}</li>
-				<li><img src = "/bitcamp/resources/product/${list.p_filename1}" alt = ""><span>${list.p_name}</span></li>
+				<li><img src = "/bitcamp/upload/${list.p_filename1}" alt = ""><span>${list.p_name}</span></li>
 				<li onclick = "location.href = '/bitcamp/review_listForm?no=${list.review_no}&pageNum=${pagevo.pageNum}<c:if test = '${pagevo.searchKey != null && pagevo.searchWord != null}'>&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>';" class = "pointer wordCut">${list.review_subject}</li>
 				<li>${list.userid}</li>
 				<li>${list.review_writedate}</li>

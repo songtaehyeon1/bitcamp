@@ -4,10 +4,70 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.bitcamp.order.OrderDAOImp">
 	<select id="allSelectProduct" parameterType="int" resultType="Integer">
-		select s_no from product_stock where p_no = #{param1}
+		select s_no from product_stock where p_no = #{param1} and
+		s_deltype='Y'
 	</select>
-	
 	<select id="allSelectDate" parameterType="int" resultType="String">
 		select to_char(stock_date,'YYYYMMDD') from reservate where s_no = #{param1}
 	</select>
+	
+	
+	<insert id="order_info" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into order_info (oi_no,oname,ozipcode,oaddr,oaddrdetail,otel,oemail,opassword)
+		values(oino_sq.nextval,#{oname},#{ozipcode},#{oaddr},#{oaddrdetail},#{otel},#{oemail},#{opassword})
+		 <selectKey keyProperty="oi_no" resultType="int" order="AFTER">
+			  select oino_sq.currval FROM DUAL
+		</selectKey>
+	</insert>
+	<insert id="order_recipient" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into recipient (r_no,rname,rzipcode,raddr,raddrdetail,rtel,rcommnet)
+		values(rno_sq.nextval,#{rname},#{rzipcode},#{raddr},#{raddrdetail},#{rtel},#{rcommnet})
+		<selectKey keyProperty="r_no" resultType="int" order="AFTER">
+			select rno_sq.currval from dual
+		</selectKey>
+	</insert>
+	
+	<select id="orderNumber" parameterType="kr.co.bitcamp.order.OrderVO"  resultType="String">
+		select ono_sq.nextval from dual
+	</select>
+	
+	<insert id="ordertable" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into ordertable 
+		(o_no, userno, r_no, oi_no, mileage, totalprice, order_date, delivery_date, delivery_arrival_date, delivery_status, payment_type,payment_price)
+		values(#{o_no},${userno},#{r_no},#{oi_no},
+			   #{mileage},#{totalprice},sysdate,#{delivery_date},#{delivery_arrival_date},#{delivery_status},#{payment_type},#{payment_price} )
+	</insert>
+	
+	<insert id="paymethod_card" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into card (o_no,payment_time) values(#{o_no},sysdate)
+	</insert>
+	<insert id="paymethod_cash" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into cash (bank,depositor,o_no,payment_time) values(#{bank},#{depositor},#{o_no},sysdate)
+	</insert>
+	
+	<insert id="order_product" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into order_product (p_no,o_no,p_count)
+		values(#{p_no},#{o_no},#{p_count})
+	</insert>
+	
+	<insert id="order_product_cart" parameterType="kr.co.bitcamp.product.ProductVO">
+		insert into order_product(p_no,o_no,p_count)
+		values(#{p_no},#{o_no},#{currentQty})
+	</insert>
+	<insert id ="reservate" parameterType="kr.co.bitcamp.product.ProductVO">
+		insert into reservate (p_no,s_no,stock_date) values(#{p_no},#{s_no},#{stock_date})
+	</insert>
+
+	<insert id="order_stock" parameterType="kr.co.bitcamp.product.ProductVO">
+		insert into order_stock (o_no,s_no) values(#{o_no},#{s_no})
+	</insert>
+	<insert id="paymentInfoInsert" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into paymentInfoInsert (o_no,oname,ozipcode,otel,oemail,rname,raddr,raddrdetail,totalprice,rcommnet)
+		values(#{o_no},#{oname},#{ozipcode},#{otel},#{oemail},#{rname},#{raddr},#{raddrdetail},#{totalprice},#{rcommnet})
+	</insert>
 </mapper>
+
+
+
+
+

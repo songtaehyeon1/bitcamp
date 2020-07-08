@@ -207,11 +207,11 @@
 								</tr>
 								<tr>
 									<th>배송일/출고일</th>
-									<td><input type="text" name="delivery_date" id="delivery_date" class="text" value="${vo.delivery_date }"/></td>
+									<td><input type="text" name="delivery_date" id="delivery_date" autocomplete="off" class="text" value="${vo.delivery_date }"/></td>
 								</tr>
 								<tr>
 									<th>배송완료일</th>
-									<td><input type="text" name="delivery_arrival_date" id="delivery_arrival_date" class="text" value="${vo.delivery_arrival_date }"/></td>
+									<td><input type="text" name="delivery_arrival_date" id="delivery_arrival_date" autocomplete="off" class="text" value="${vo.delivery_arrival_date }"/></td>
 								</tr>
 							</tbody>
 						</table>

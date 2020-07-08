@@ -1,7 +1,5 @@
 package kr.co.bitcamp.order;
 
-import java.sql.Date;
-
 public class OrderVO {
 	private String o_no;
 	private int oi_no;
@@ -22,11 +20,11 @@ public class OrderVO {
 	private String ozipcode;
 	private String oaddr;
 	private String oaddrdetail;
-	private String otel;
+	private String otel;//주문자 - 연락처
 	private String otel1;
 	private String otel2;
 	private String otel3;
-	private String oemail;
+	private String oemail;//이메일
 	private String oemail1;
 	private String oemail2;
 	private String opassword;
@@ -34,11 +32,11 @@ public class OrderVO {
 	private String rzipcode;
 	private String raddr;
 	private String raddrdetail;
-	private String rtel;
+	private String rtel;//실질적 배송 받는사람 전화번호
 	private String rtel1;
 	private String rtel2;
 	private String rtel3;
-	private String rcommnet;
+	private String rcommnet;//배송메세지
 	private String payment_type;//결제 방식(card/cash)
 	private String bank;//무통장
 	private String depositor;//입금자명

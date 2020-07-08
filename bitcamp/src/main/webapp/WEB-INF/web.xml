@@ -20,7 +20,7 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml,/WEB-INF/spring/appServlet/mvc-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -54,6 +54,10 @@
 			<url-pattern>/WEB-INF/views/*</url-pattern>
 			<include-prelude>/WEB-INF/views/inc/menubar.jspf</include-prelude>
 			<include-coda>/WEB-INF/views/inc/footer.jspf</include-coda>
+		</jsp-property-group>
+		<jsp-property-group>
+			<url-pattern>/WEB-INF/views/admin/*</url-pattern>
+			<include-prelude>/WEB-INF/views/inc/adminmenubar.jspf</include-prelude>
 		</jsp-property-group>
 	</jsp-config>
 

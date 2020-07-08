@@ -8,6 +8,8 @@
         <setting name="jdbcTypeForNull" value="NULL" />
     </settings>
   <typeAliases>
-   		<package name="kr.co.bitcamp.product"/>    
+   		<package name="kr.co.bitcamp.product"/>
+   		<package name="kr.co.bitcamp.admin"/>
+   		  
   </typeAliases>
 </configuration>

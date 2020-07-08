@@ -5,7 +5,8 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/order/orderForm.css" />
-<script src="<%=request.getContextPath()%>/js/order/order.js"></script>
+<script src="<%=request.getContextPath()%>/js/order/order_cart.js"></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <script>
 $(function() {
 	$("#addr_paymethod0").click(function() {
@@ -108,6 +109,7 @@ function openDaumZipAddress(type) {
 			<c:forEach var="cart" items="${cart}">
 <input type="hidden" name="limitQuantity" value="${cart.limitQuantity}">
 <input type="hidden" name="currentQty" value="${cart.currentQty}">
+<input type="hidden" name="p_no" value="${cart.p_no}">
 				<tr>
 					<td><a href="/bitcamp/productView?p_no=${cart.p_no }">
 						<img src="/bitcamp/upload/${cart.p_filename1 }" style="width:100px;height:100px" onerror="this.src='/bitcamp/resources/products/tent1.png'"></a>
@@ -116,7 +118,7 @@ function openDaumZipAddress(type) {
 						<div><label id="period">${cart.orderStart }~${cart.orderEnd }</label></div>
 					<td>
 						<div>
-							<strong>${cart.price*cart.currentQty }</strong>
+							<strong class="TotalProductPrice">${cart.price*cart.currentQty }</strong>
 						</div>
 					</td>
 					<td>${cart.currentQty}</td>
@@ -126,7 +128,7 @@ function openDaumZipAddress(type) {
 						</span>
 					</td>
 					<td rowspan="1"><label class="TotalDeliveryFee">${cart.delivery_fee*cart.currentQty }</label>원</td>
-					<td><strong><label class="TotalProductPrice">${cart.price*cart.currentQty+cart.delivery_fee*cart.currentQty }</label>원</strong></td>
+					<td><strong><label >${cart.price*cart.currentQty+cart.delivery_fee*cart.currentQty }</label>원</strong></td>
 				</tr>
 				</c:forEach>
 			</tbody>
@@ -466,46 +468,6 @@ function openDaumZipAddress(type) {
 			</div>
 
 
-			<div id="card-form"
-				style="display: block;">
-				<div>
-					<table border="1">
-						<colgroup>
-							<col style="width: 15%">
-							<col style="width: auto">
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row">카드선택</th>
-								<td><select id="card_corp" name="card_corp">
-										<option value="" selected="selected">선택해주세요.</option>
-										<option value="신한카드">신한카드(구 LG카드 포함)</option>
-										<option value="비씨카드">비씨카드</option>
-										<option value="국민카드">KB국민카드</option>
-										<option value="하나카드(구 외환)">하나카드(구 외환)</option>
-										<option value="삼성카드">삼성카드</option>
-										<option value="현대카드">현대카드</option>
-										<option value="롯데카드">롯데카드</option>
-										<option value="우리카드">우리카드</option>
-										<option value="하나카드(구 하나SK)">하나카드(구 하나SK)</option>
-										<option value="NH농협카드">NH농협카드</option>
-										<option value="씨티카드">씨티카드</option>
-										<option value="수협카드">수협카드</option>
-										<option value="광주은행카드">광주은행카드</option>
-										<option value="전북은행카드">전북은행카드</option>
-										<option value="제주은행카드">제주은행카드</option>
-								</select></td>
-							</tr>
-							<tr>
-								<th scope="row">할부기간</th>
-								<td><select id="directpay_card_installment_select"
-									disabled="disabled"><option value="0">일시불</option></select></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-
 			<div id="card-agree"
 				style="display: block;">
 				<div class="paymentAgree">
@@ -575,7 +537,8 @@ function openDaumZipAddress(type) {
 					for="chk_purchase_agreement0">결제정보를 확인하였으며, 구매진행에 동의합니다.</label>
 			</p>
 			<div>
-				<input type="submit" id="btn_payment" class="btn btn-dark" value="결제하기">
+				<button type="button" onclick="payment_card();" class="payment_card btn btn-dark">결제하기</button>
+				<input type="submit" onclick="payment_card();" id="btn_payment" value="결제하기" class="payment_pay btn btn-dark" style="display:none">
 			</div>
 			<div>
 				<dl>

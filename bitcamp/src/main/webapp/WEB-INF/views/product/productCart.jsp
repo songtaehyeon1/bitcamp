@@ -118,7 +118,7 @@
 					</tr>
 					<tr class="summary">
 						<td colspan="10">상품가격 <span class="cart_qtyprice">${cart.price*cart.currentQty}</span>원 배송비 <span class="cart_deliverfee">${cart.delivery_fee*cart.currentQty }</span>원
-							= 주문금액<span>${cart.price*cart.currentQty+cart.delivery_fee }</span>원
+							= 주문금액<span class="cart_eachPrice">${cart.price*cart.currentQty+cart.delivery_fee*cart.currentQty }</span>원
 						</td>
 					</tr>
 				</tbody>
@@ -311,7 +311,7 @@
 	<div class="container" style="text-align: center; margin-top: 100px;">
 	
 		<!-- 계속 쇼핑하기 버튼 -->
-		<a href="/bitcamp/productList" class="shopAndPurchaseBtn"
+		<a href="/bitcamp/list?c_no=0" class="shopAndPurchaseBtn"
 			style="margin-right: 2%;text-decoration:none" >계속 쇼핑하기</a>
 		<!-- 주문하기 버튼 -->
 		<input type="submit" id="cart_order" style="display:none;"  formaction="/bitcamp/cartOrder">

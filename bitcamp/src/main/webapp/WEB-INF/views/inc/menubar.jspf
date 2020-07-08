@@ -144,8 +144,8 @@
 				<li><a href="#">
 						<p class="main-menu-p">ABOUT</p>
 				</a></li>
-				<li><a href="#">
-						<p class="main-menu-p">CONTACT</p>
+				<li><a href="/bitcamp/boardNotice">
+						<p class="main-menu-p">COMMUNITY</p>
 				</a></li>
 				<li>
 					<div id="login-box">
@@ -159,8 +159,8 @@
 					</div>
 				</li>
 				<li id="my-menu">
-					<a href="#">
-						<p class="main-menu-p">MyPage</p>
+					<a href="/bitcamp/mypage" id = "mypage_a">
+						<p class="main-menu-p">MYPAGE</p>
 					</a>
 					<div id="my-menu-content">
 						<c:if test="${logStatus==null||logStatus==''||logStatus=='N'}">
@@ -190,9 +190,9 @@
 				<li>
 					<div id="cart-box">
 						<a href="/bitcamp/productCartList"><i class="fas fa-shopping-cart"></i> Cart</a>
-						<c:if test="${logStatus!=null&&logStatus=='Y'}">
+						
 							<span class="badge badge-pill badge-light blink bounce">${fn:length(productList)}</span>
-						</c:if>
+				
 					</div>
 				</li>
 			</ul>
