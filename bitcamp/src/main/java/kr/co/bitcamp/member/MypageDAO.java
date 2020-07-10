@@ -3,6 +3,7 @@ package kr.co.bitcamp.member;
 import java.util.List;
 
 import kr.co.bitcamp.board.EnquiryVO;
+import kr.co.bitcamp.board.PagingVO;
 import kr.co.bitcamp.board.ReviewVO;
 import kr.co.bitcamp.order.OrderVO;
 
@@ -51,8 +52,7 @@ public interface MypageDAO {
 	
 	
 	// 주문조회 정보 가져오기(검색) ====================================================================== 주문조회
-	public List<MypageOrderVO> mypageOrderList(int userno);
-	public List<MypageOrderVO> mypageOrderList(int userno, String delivery_status, String order_date_start, String order_date_end);
+	public List<MypageOrderVO> mypageOrderList(PagingVO pagevo);
 	
 	// 주문조회 하나 정보 가져오기
 	public OrderVO selectOrder(String o_no);
@@ -64,6 +64,9 @@ public interface MypageDAO {
 	// 주문 취소, 반품
 	public int mypageOrderCancle(String o_no);
 	public int mypageOrderReturn(String o_no);
+	
+	// 전체 페이지 수(검색)
+	public int getTotalRecord(PagingVO pagevo);
 	
 	
 	

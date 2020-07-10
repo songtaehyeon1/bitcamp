@@ -39,6 +39,9 @@
 				$result.each(function(i, list){
 					tag += "<div class = 'reply'>";
 					tag += "	<div>";
+					if(list.userid == null && "${adminStatus == 'Y'}"){
+						list.userid = "관리자";
+					}
 					tag += "		<span class = 'reply_span1'>" + list.userid + "</span>";
 					tag += "		<span>작성날짜 : " + list.r_reply_writedate + "</span>";
 					tag += "	</div>";
@@ -46,7 +49,7 @@
 					tag += "		<div class = 'reply_content'>";
 					tag += list.r_reply_content;
 					tag += "		</div>";
-					if(list.userid == '${userid}'){
+					if(list.userid == '${userid}' || "${adminStatus}" == 'Y'){
 						tag += "	<div class = 'reply_right'>";
 						tag += "		<button class = 'reply_edit' onclick = 'reply_edit(this);'>수정</button>";
 						tag += "		<button class = 'reply_del' onclick = 'reply_del(this);'>삭제</button>";
@@ -71,7 +74,7 @@
 			alert("댓글을 작성해 주세요.");
 			return false;
 		}
-		var data = "userno=1&review_no=" + ${vo.review_no} + "&r_reply_content=" + content_val;
+		var data = "userno=" + ${vo.userno} + "&review_no=" + ${vo.review_no} + "&r_reply_content=" + content_val;
 		$.ajax({
 			url : "/bitcamp/review_replyWrite",
 			data : data,
@@ -107,6 +110,9 @@
 			url : "/bitcamp/review_replyEdit",
 			data : "r_reply_no=" + $(btn).parent().children("input[name=r_reply_no]").val(),
 			success : function(result){
+				if("${adminStatus == 'Y'}"){
+					result.userid = "관리자";
+				}
 				$(btn).parent().parent().parent().html(
 						"<div class = 'replyForm'>" +
 							"<div class = 'replyForm_above'>" +
@@ -171,7 +177,7 @@
 </script>
 <div class = "container" id = "review_listFormBody">
 	<div id = "nLink"><a href = "/bitcamp/">홈</a>&nbsp;>&nbsp;<span>상품후기</span></div>
-	<div id = "nTitle"><span>상품후기</span><span id = "sss">&nbsp;&nbsp;|&nbsp;&nbsp;대여금액 100,000원 이상 , 직접 설치한 장비와 캠핑모습을 담은 사진 3장 이상으로 캠핑후기를 작성해주시면 캐시백 10,000원을 드립니다. 내용에 맞지 않는 게시물은 관리자의 권한으로 삭제합니다.</span></div>
+	<div id = "nTitle"><span>상품후기</span></div>
 	<ul id = "boardCate">
 		<li onclick = "location.href = '/bitcamp/boardNotice'">공지사항</li>
 		<li onclick = "location.href = '/bitcamp/boardEnquiry'">고객문의</li>
@@ -180,13 +186,13 @@
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<div id = "goods">
 		<c:if test = "${vo.p_filename1 != null && vo.p_name != null && vo.price != 0}">
-			<img src = "/bitcamp/resources/product/${vo.p_filename1}" alt="">
+			<img src = "/bitcamp/upload/${vo.p_filename1}" alt="">
 			<span>${vo.p_name}</span>
 			<span>${vo.price}원</span>
 			<button onclick = "location.href = '/bitcamp/productView?p_no=${vo.p_no}'">상품상세보기</button>
 		</c:if>
 		<c:if test = "${vo.p_filename1 == null || vo.p_name == null || vo.price == 0}">
-			<span style = "height : 110px; line-height : 110px;">상품을 선택하지 않았습니다.</span>
+			<span style = "height : 110px; line-height : 110px; color : #555;">상품을 선택하지 않았습니다.</span>
 		</c:if>
 	</div>
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
@@ -218,75 +224,32 @@
 			<div id = "list_imgs">
 				<c:if test = "${vo.review_file1 != null}">
 					<div>
-						<img src = "/bitcamp/resources/review/${vo.review_file1}">
+						<img src = "/bitcamp/resources/review/${vo.review_file1}" alt = "">
 					</div>
 				</c:if>
 				<c:if test = "${vo.review_file2 != null}">
 					<div>
-						<img src = "/bitcamp/resources/review/${vo.review_file2}">
+						<img src = "/bitcamp/resources/review/${vo.review_file2}" alt = "">
 					</div>
 				</c:if>
 				<c:if test = "${vo.review_file3 != null}">
 					<div>
-						<img src = "/bitcamp/resources/review/${vo.review_file3}">
+						<img src = "/bitcamp/resources/review/${vo.review_file3}" alt = "">
 					</div>
 				</c:if>
 				<c:if test = "${vo.review_file4 != null}">
 					<div>
-						<img src = "/bitcamp/resources/review/${vo.review_file4}">
+						<img src = "/bitcamp/resources/review/${vo.review_file4}" alt = "">
 					</div>
 				</c:if>
 				<c:if test = "${vo.review_file5 != null}">
 					<div>
-						<img src = "/bitcamp/resources/review/${vo.review_file5}">
+						<img src = "/bitcamp/resources/review/${vo.review_file5}" alt = "">
 					</div>
 				</c:if>
 			</div>
 			<div id = "list_content">${vo.review_content}</div>
 		</li>
-		<!-- <li>첨부파일</li>
-		<li>
-			<c:if test = "${vo.review_file1 != null}">
-				<a href = "bitcamp/resources/review/${vo.review_file1}" download>
-					<span>
-						<c:if test = "${vo.review_file1.length() >= 11}">${vo.review_file1.substring(0, 5)}...${vo.review_file1.substring(vo.review_file1.indexOf(".") - 1)}</c:if>
-						<c:if test = "${vo.review_file1.length() < 11}">${vo.review_file1}</c:if>
-					</span>
-				</a>
-			</c:if>
-			<c:if test = "${vo.review_file2 != null}">
-			<a href = "bitcamp/resources/review/${vo.review_file2}" download>
-				<span>
-					<c:if test = "${vo.review_file2.length() >= 11}">${vo.review_file2.substring(0, 5)}...${vo.review_file2.substring(vo.review_file2.indexOf(".") - 1)}</c:if>
-					<c:if test = "${vo.review_file2.length() < 11}">${vo.review_file2}</c:if>
-				</span>
-			</a>
-			</c:if>
-			<c:if test = "${vo.review_file3 != null}">
-			<a href = "bitcamp/resources/review/${vo.review_file3}" download>
-				<span>
-					<c:if test = "${vo.review_file3.length() >= 11}">${vo.review_file3.substring(0, 5)}...${vo.review_file3.substring(vo.review_file3.indexOf(".") - 1)}</c:if>
-					<c:if test = "${vo.review_file3.length() < 11}">${vo.review_file3}</c:if>
-				</span>
-			</a>
-			</c:if>
-			<c:if test = "${vo.review_file4 != null}">
-			<a href = "bitcamp/resources/review/${vo.review_file4}" download>
-				<span>
-					<c:if test = "${vo.review_file4.length() >= 11}">${vo.review_file4.substring(0, 5)}...${vo.review_file4.substring(vo.review_file4.indexOf(".") - 1)}</c:if>
-					<c:if test = "${vo.review_file4.length() < 11}">${vo.review_file4}</c:if>
-				</span>
-			</a>
-			</c:if>
-			<c:if test = "${vo.review_file5 != null}">
-			<a href = "bitcamp/resources/review/${vo.review_file5}" download>
-				<span>
-					<c:if test = "${vo.review_file5.length() >= 11}">${vo.review_file5.substring(0, 5)}...${vo.review_file5.substring(vo.review_file5.indexOf(".") - 1)}</c:if>
-					<c:if test = "${vo.review_file5.length() < 11}">${vo.review_file5}</c:if>
-				</span>
-			</a>
-			</c:if>
-		</li> -->
 	</ul>
 	<div id = "boardGo">
 		<c:if test = "${mypage == null}">
@@ -302,38 +265,43 @@
 			</div>
 		</c:if>
 	</div>
-	<div id = "listMove">
-		<ul>
-			<c:if test = "${pnvo.lagSubject != '다음글'}">
-				<li class = "pointer" onclick = "location.href = '/bitcamp/review_listForm?no=${pnvo.lagNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">▲&emsp;다음글</li>
-			</c:if>
-			<c:if test = "${pnvo.lagSubject == '다음글'}">
-				<li>▲&emsp;다음글</li>
-			</c:if>
-			<c:if test = "${pnvo.lagSubject != '다음글'}">
-				<li class = "pointer" onclick = "location.href = '/bitcamp/review_listForm?no=${pnvo.lagNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">${pnvo.lagSubject}</li>
-			</c:if>
-			<c:if test = "${pnvo.lagSubject == '다음글'}">
-				<li>다음글이 없습니다.</li>
-			</c:if>
-			<c:if test = "${pnvo.leadSubject != '이전글'}">
-				<li class = "pointer" onclick = "location.href = '/bitcamp/review_listForm?no=${pnvo.leadNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">▼&emsp;이전글</li>
-			</c:if>
-			<c:if test = "${pnvo.leadSubject == '이전글'}">
-				<li>▼&emsp;이전글</li>
-			</c:if>
-			<c:if test = "${pnvo.leadSubject != '이전글'}">
-				<li class = "pointer" onclick = "location.href = '/bitcamp/review_listForm?no=${pnvo.leadNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">${pnvo.leadSubject}</li>
-			</c:if>
-			<c:if test = "${pnvo.leadSubject == '이전글'}">
-				<li>이전글이 없습니다.</li>
-			</c:if>
-		</ul>
-	</div>
-	<c:if test = "${userid != null && userid != ''}">
+	<c:if test = "${mypage != 'mypageBoard'}">
+		<div id = "listMove">
+			<ul>
+				<c:if test = "${pnvo.lagSubject != '다음글'}">
+					<li class = "pointer" onclick = "location.href = '/bitcamp/review_listForm?no=${pnvo.lagNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">▲&emsp;다음글</li>
+				</c:if>
+				<c:if test = "${pnvo.lagSubject == '다음글'}">
+					<li>▲&emsp;다음글</li>
+				</c:if>
+				<c:if test = "${pnvo.lagSubject != '다음글'}">
+					<li class = "pointer" onclick = "location.href = '/bitcamp/review_listForm?no=${pnvo.lagNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">${pnvo.lagSubject}</li>
+				</c:if>
+				<c:if test = "${pnvo.lagSubject == '다음글'}">
+					<li>다음글이 없습니다.</li>
+				</c:if>
+				<c:if test = "${pnvo.leadSubject != '이전글'}">
+					<li class = "pointer" onclick = "location.href = '/bitcamp/review_listForm?no=${pnvo.leadNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">▼&emsp;이전글</li>
+				</c:if>
+				<c:if test = "${pnvo.leadSubject == '이전글'}">
+					<li>▼&emsp;이전글</li>
+				</c:if>
+				<c:if test = "${pnvo.leadSubject != '이전글'}">
+					<li class = "pointer" onclick = "location.href = '/bitcamp/review_listForm?no=${pnvo.leadNo}&pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>'">${pnvo.leadSubject}</li>
+				</c:if>
+				<c:if test = "${pnvo.leadSubject == '이전글'}">
+					<li>이전글이 없습니다.</li>
+				</c:if>
+			</ul>
+		</div>
+	</c:if>
+	<c:if test = "${adminStatus == 'Y' || userid != null && userid != ''}">
 		<div id = "replyForm">
 			<div id = "replyForm_above">
-				<span>${userid}</span>
+				<span>
+					<c:if test = "${adminStatus != 'Y'}">${userid}</c:if>
+					<c:if test = "${adminStatus == 'Y'}">관리자</c:if>
+				</span>
 				<span id = "count">0/300</span>
 			</div>
 			<div>
@@ -345,7 +313,7 @@
 			<input type = "hidden" name = "review_no" value = "${vo.review_no}">
 		</div>
 	</c:if>
-	<c:if test = "${userid == null || userid == ''}">
+	<c:if test = "${adminStatus != 'Y' && (userid == null || userid == '')}">
 		<div id = "replyForm" style = "height : 100px; line-height : 85px;">
 			<div style = "text-align : center;">
 				로그인 후 댓글 작성이 가능합니다.

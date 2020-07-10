@@ -78,7 +78,7 @@
 </script>
 <div class = "container" id = "review_writeForm">
 	<div id = "nLink"><a href = "/bitcamp/">홈</a>&nbsp;>&nbsp;<span>상품후기</span></div>
-	<div id = "nTitle"><span>상품후기</span><span id = "sss">&nbsp;&nbsp;|&nbsp;&nbsp;대여금액 100,000원 이상 , 직접 설치한 장비와 캠핑모습을 담은 사진 3장 이상으로 캠핑후기를 작성해주시면 캐시백 10,000원을 드립니다. 내용에 맞지 않는 게시물은 관리자의 권한으로 삭제합니다.</span></div>
+	<div id = "nTitle"><span>상품후기</span></div>
 	<ul id = "boardCate">
 		<li onclick = "location.href = '/bitcamp/boardNotice'">공지사항</li>
 		<li onclick = "location.href = '/bitcamp/boardEnquiry'">고객문의</li>
@@ -127,23 +127,23 @@
 			</li>
 			<li>첨부파일1</li>
 			<li>
-				<input type = "file" name = "filename" id = "filename1">
+				<input type = "file" name = "filename" id = "filename1" accept = "image/gif,image/jpeg,image/png,image/jpg">
 			</li>
 			<li>첨부파일2</li>
 			<li>
-				<input type = "file" name = "filename" id = "filename2">
+				<input type = "file" name = "filename" id = "filename2" accept = "image/gif,image/jpeg,image/png,image/jpg">
 			</li>
 			<li>첨부파일3</li>
 			<li>
-				<input type = "file" name = "filename" id = "filename3">
+				<input type = "file" name = "filename" id = "filename3" accept = "image/gif,image/jpeg,image/png,image/jpg">
 			</li>
 			<li>첨부파일4</li>
 			<li>
-				<input type = "file" name = "filename" id = "filename4">
+				<input type = "file" name = "filename" id = "filename4" accept = "image/gif,image/jpeg,image/png,image/jpg">
 			</li>
 			<li>첨부파일5</li>
 			<li>
-				<input type = "file" name = "filename" id = "filename5">
+				<input type = "file" name = "filename" id = "filename5" accept = "image/gif,image/jpeg,image/png,image/jpg">
 			</li>
 		</ul>
 		<div id = "goBtn">

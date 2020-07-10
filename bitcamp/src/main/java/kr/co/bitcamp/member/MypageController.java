@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import kr.co.bitcamp.board.PagingVO;
 import kr.co.bitcamp.order.OrderVO;
 
 @Controller
@@ -163,7 +164,24 @@ public class MypageController {
 		}
 		int userno = (Integer)session.getAttribute("userno");
 		MypageDAO dao = sqlSession.getMapper(MypageDAO.class);
-		mv.addObject("list", dao.mypageOrderList(userno, delivery_status, order_date_start, order_date_end));
+		
+		// 페이지 번호 구하기
+		String pageNumStr = request.getParameter("pageNum");
+		PagingVO pagevo = new PagingVO();
+		
+		// 페이지 번호 전송된 경우 페이지 번호를 변경한다
+		if(pageNumStr != null) {
+			pagevo.setPageNum(Integer.parseInt(pageNumStr));
+		}
+		
+		pagevo.setUserno(userno);
+		pagevo.setDelivery_status(delivery_status);
+		pagevo.setOrder_date_start(order_date_start);
+		pagevo.setOrder_date_end(order_date_end);
+		pagevo.setTotalRecord(dao.getTotalRecord(pagevo));
+		
+		mv.addObject("pagevo", pagevo);
+		mv.addObject("list", dao.mypageOrderList(pagevo));
 		mv.addObject("delivery_status", delivery_status);
 		mv.setViewName("/member/mypageOrderHistory");
 		

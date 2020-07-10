@@ -6,7 +6,7 @@
 
 #reviewBody a:hover, #reviewBody a:link, #reviewBody a:visited{
 	text-decoration : none;
-	color : black;
+	color : #D8D8D8;
 }
 
 #reviewBody a:hover{
@@ -46,7 +46,7 @@
 
 #nTitle>span:nth-of-type(2){
 	font-size : 13px;
-	color : #757575;
+	color : #555;
 }
 
 #nTitle>span:nth-of-type(1){
@@ -58,7 +58,7 @@
 #boardCate{
 	 width : 1400px;
 	 height : 72px;
-	 background : black;
+	 background : #555;
 }
 
 #boardCate li{
@@ -82,7 +82,6 @@
 #list{
 	width : 1400px;
 	/*margin-top : 20px;*/
-	border-top : 1px solid black;
 }
 
 #list *{
@@ -90,14 +89,14 @@
 }
 
 #list li{
-	border-left : 1px solid black;
-	border-bottom : 1px solid black;
+	border-left : 1px solid #555;
+	border-bottom : 1px solid #555;
 	height : 70px;
 	line-height : 70px;
 }
 
 #list li:nth-of-type(1), #list li:nth-of-type(2), #list li:nth-of-type(3), #list li:nth-of-type(4), #list li:nth-of-type(5), #list li:nth-of-type(6), #list li:nth-of-type(7), #list li:nth-of-type(8){
-	background : black;
+	background : #555;
 	color : white;
 	height : 40px;
 	line-height : 40px;
@@ -157,7 +156,7 @@
 #list li:nth-of-type(8n){
 	width : 8%;
 	text-align : center;
-	border-right : 1px solid black;
+	border-right : 1px solid #555;
 }
 
 #list li:nth-of-type(8n + 2)>img{
@@ -190,7 +189,7 @@
 }
 
 .pointer:hover{
-	color : #B4B4B4;
+	color : #D8D8D8;
 }
 
 /* 평점 */
@@ -250,7 +249,7 @@
 	margin : 0;
 	padding : 0;
 	color : white;
-	background : black;
+	background : #555;
 	border : none;
 	border-radius : 1px;
 }
@@ -277,18 +276,24 @@
 	margin : 0;
 	padding : 0;
 	color : white;
-	background : black;
+	background : #555;
 	border : none;
 	border-radius : 1px;
 }
 
 /* 페이징 */
 .black, .black:hover, .black:link, .black:visited{
-	background : black;
+	background : #555;
 }
 
 .pages:hover{
-	background : black;
+	background : #555;
+	color : black;
+}
+
+.fontColor, .fontColor:hover, .fontColor:visited, .fontColor:link{
+	background : #555;
+	color : white;
 }
 
 

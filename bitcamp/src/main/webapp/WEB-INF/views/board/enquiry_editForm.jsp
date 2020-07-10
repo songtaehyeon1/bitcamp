@@ -77,7 +77,7 @@
 			<li>상품</li>
 			<li id = "goodsSelect">
 				<select id = "goodsSelect1" name = "c_no">
-					<option selected>-</option>
+					<option selected value = "0">-</option>
 					<c:forEach var = "list" items = "${cateList}">
 						<c:if test = "${list.c_no == vo.c_no}">
 							<option value = "${list.c_no}" selected>${list.c_name}</option>

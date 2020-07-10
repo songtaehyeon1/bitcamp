@@ -3,7 +3,7 @@ package kr.co.bitcamp.board;
 public class PagingVO {
 
 	private int pageNum = 1;	// 현재 페이지
-	private int onePageRecord = 5;	// 한 페이지에 출력할 레코드 수
+	private int onePageRecord = 10;	// 한 페이지에 출력할 레코드 수
 	private int totalRecord;	// 총 레코드 수
 	private int totalPage;	// 총 페이지 수
 	private int startPage = 1;	// 시작 페이지 번호
@@ -18,6 +18,12 @@ public class PagingVO {
 	private int notice_no;
 	private int enquiry_no;
 	private int review_no;
+	
+	// 마이페이지
+	private int userno;
+	private String delivery_status;
+	private String order_date_start;
+	private String order_date_end;
 	
 	public PagingVO() {
 	}
@@ -125,6 +131,38 @@ public class PagingVO {
 
 	public void setReview_no(int review_no) {
 		this.review_no = review_no;
+	}
+
+	public int getUserno() {
+		return userno;
+	}
+
+	public void setUserno(int userno) {
+		this.userno = userno;
+	}
+
+	public String getDelivery_status() {
+		return delivery_status;
+	}
+
+	public void setDelivery_status(String delivery_status) {
+		this.delivery_status = delivery_status;
+	}
+
+	public String getOrder_date_start() {
+		return order_date_start;
+	}
+
+	public void setOrder_date_start(String order_date_start) {
+		this.order_date_start = order_date_start;
+	}
+
+	public String getOrder_date_end() {
+		return order_date_end;
+	}
+
+	public void setOrder_date_end(String order_date_end) {
+		this.order_date_end = order_date_end;
 	}
 
 }

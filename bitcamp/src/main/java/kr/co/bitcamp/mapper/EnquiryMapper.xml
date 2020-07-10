@@ -30,7 +30,7 @@
 	<select id = "listGoods" resultType = "kr.co.bitcamp.board.EnquiryVO">
 		select p_name, p_filename1, price from product where p_no = #{param1} and c_no = #{param2}
 	</select>
-	<!-- 한개 리스트의 댓글 -->
+	<!-- 댓글 가져오기 -->
 	<select id = "replyAll" resultType = "kr.co.bitcamp.board.ReplyVO">
 		select e.e_reply_no e_reply_no, e.enquiry_no enquiry_no, e.e_reply_content e_reply_content, 
 		to_char(e.e_reply_writedate, 'YYYY-MM-DD') e_reply_writedate, e.userno userno, m.userid userid 
@@ -40,7 +40,7 @@
 	</select>
 	<!-- 댓글 한개 가져오기 -->
 	<select id = "replyOne" resultType = "kr.co.bitcamp.board.ReplyVO">
-		select e_reply_no, e_reply_content, userid from enquiry_reply e, member m where e.userno = m.userno and e_reply_no = #{param1}
+		select e_reply_no, e_reply_content, userid from enquiry_reply e, member m where e.userno = m.userno(+) and e_reply_no = #{param1}
 	</select>
 	<!-- 댓글 달기 -->
 	<insert id = "replyWrite" parameterType = "kr.co.bitcamp.board.ReplyVO">

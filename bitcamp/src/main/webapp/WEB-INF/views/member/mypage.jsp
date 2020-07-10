@@ -6,16 +6,16 @@
 	<h2>MY PAGE</h2>
 	<hr>
 	<div id = "mypage_save_main">
-		<div class = "mypage_main_div">
+		<!-- <div class = "mypage_main_div">
 			<div class = "mypage_main_div_div">
 				<span>＞</span><span class = "mypage_font">가용적립금</span>
-				<div><span class = "mypage_font" style = "color : red;">${topList.usermile}원</span><!-- <button class = "mypage_btn mypage_font">조회</button> --></div>
+				<div><span class = "mypage_font" style = "color : red;">${topList.usermile}원</span><button class = "mypage_btn mypage_font">조회</button></div>
 			</div>
-			<!-- <div class = "mypage_main_div_div">
+			<div class = "mypage_main_div_div">
 				<span>＞</span><span class = "mypage_font">사용적립금</span>
 				<div><span class = "mypage_font">0원</span></div>
-			</div> -->
-		</div>
+			</div>
+		</div> -->
 		<div class = "mypage_main_div">
 			<!-- <div class = "mypage_main_div_div">
 				<span>＞</span><span class = "mypage_font">총적립금</span>
@@ -28,7 +28,7 @@
 		</div>
 	</div>
 	<div id = "mypage_order_main">
-		<div id = "mypage_order_span"><span class = "mypage_font">나의 주문처리 현황</span></div>
+		<div id = "mypage_order_span"><span class = "mypage_font" style = "color : white;">나의 주문처리 현황</span></div>
 		<div id = "mypage_order_div">
 			<div class = "mypage_center"><div><span class = "mypage_font">입금대기</span></div><div><span><a href = "/bitcamp/mypageOrderHistory?delivery_status=입금대기">${topList.delivery_before}</a></span></div></div>
 			<div class = "mypage_center"><div><span class = "mypage_font">결제완료</span></div><div><span><a href = "/bitcamp/mypageOrderHistory?delivery_status=결제완료">${topList.delivery_pay_com}</a></span></div></div>
