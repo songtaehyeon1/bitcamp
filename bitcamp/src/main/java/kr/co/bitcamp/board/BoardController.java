@@ -51,6 +51,9 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView();
 		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
 		pagevo.setTotalRecord(dao.getTotalRecord(pagevo));
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("adminStatus", "N");
 
 		mv.addObject("pagevo", pagevo);
 		mv.addObject("list", dao.allList(pagevo));
@@ -64,6 +67,7 @@ public class BoardController {
 	// 글 쓰기
 	@RequestMapping(value = "/notice_writeOk", method = RequestMethod.POST)
 	public ModelAndView notice_writeOk(NoticeVO vo) {
+		vo.setNotice_content(vo.getNotice_content().replace("\r\n", "<br>"));
 		ModelAndView mv = new ModelAndView();
 		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
 		int cnt = dao.noticeInsert(vo);
@@ -103,7 +107,9 @@ public class BoardController {
 	public ModelAndView notice_editForm(int no) {
 		ModelAndView mv = new ModelAndView();
 		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
-		mv.addObject("vo", dao.list(no));
+		NoticeVO vo = dao.list(no);
+		vo.setNotice_content(vo.getNotice_content().replace("<br>", "\r\n"));
+		mv.addObject("vo", vo);
 		mv.setViewName("/board/notice_editForm");
 		
 		return mv;
@@ -111,6 +117,7 @@ public class BoardController {
 	// 글 수정
 	@RequestMapping("/notice_editOk")
 	public ModelAndView notice_editOk(NoticeVO vo) {
+		vo.setNotice_content(vo.getNotice_content().replace("\r\n", "<br>"));
 		ModelAndView mv = new ModelAndView();
 		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
 		int cnt = dao.noticeUpdate(vo);
@@ -537,8 +544,14 @@ public class BoardController {
 	public String review_replyWrite(ReviewReplyVO vo, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		ReviewDAO dao = sqlSession.getMapper(ReviewDAO.class);
-		int userno = (Integer)session.getAttribute("userno");
-		int cnt = dao.replyWrite(userno, vo.getReview_no(), vo.getR_reply_content());
+		String adminStatus = (String)session.getAttribute("adminStatus");
+		int cnt = 0;
+		if(adminStatus == "Y") {
+			cnt = dao.replyWrite(0, vo.getReview_no(), vo.getR_reply_content());
+		}else {
+			int userno = (Integer)session.getAttribute("userno");
+			cnt = dao.replyWrite(userno, vo.getReview_no(), vo.getR_reply_content());
+		}
 		if(cnt > 0) {
 			return "댓글이 작성되었습니다.";
 		}else {

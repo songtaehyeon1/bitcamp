@@ -105,6 +105,9 @@
 			url : "/bitcamp/replyEdit",
 			data : "e_reply_no=" + $(btn).parent().children("input[name=e_reply_no]").val(),
 			success : function(result){
+				if("${adminStatus == 'Y'}"){
+					result.userid = "관리자";
+				}
 				$(btn).parent().parent().parent().html(
 						"<div class = 'replyForm'>" +
 							"<div class = 'replyForm_above'>" +
@@ -155,7 +158,7 @@
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<div id = "goods">
 		<c:if test = "${str == ''}">
-			<img src = "/bitcamp/resources/products/${list.p_filename1}" alt="">
+			<img src = "/bitcamp/upload/${list.p_filename1}" alt="">
 			<span>${list.p_name}</span>
 			<span>${list.price}원</span>
 		</c:if>

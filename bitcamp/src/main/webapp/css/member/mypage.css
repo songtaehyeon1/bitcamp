@@ -10,20 +10,19 @@
 
 /* 적립금(맨위) */
 #mypage_save_main{
-	height : 120px;
-	border : 5px solid #D8D8D8;
+	height : 60px;
+	border : 5px solid #555;
 }
 
 .mypage_main_div{
-	width : 50%;
-	border-right : 1px solid #D8D8D8;
+	width : 100%;
 	float : left;
 }
 
 .mypage_main_div_div{
 	width : 500px;
-	height : 110px;
-	line-height : 110px;
+	height : 50px;
+	line-height : 50px;
 	margin : 0 auto;
 	padding-right : 30px;
 }
@@ -34,12 +33,12 @@
 
 .mypage_main_div_div>div{
 	float : right;
-	height : 110px;
-	line-height : 110px;
+	height : 50px;
+	line-height : 50px;
 }
 
 .mypage_main_div>div:nth-of-type(2), .mypage_main_div>div:nth-of-type(2)>div{
-	line-height : 40px;
+	line-height : 20px;
 }
 
 .mypage_font{
@@ -60,11 +59,11 @@
 #mypage_order_main{
 	margin-top : 20px;
 	height : 150px;
-	border : 1px solid #D8D8D8;
+	border : 1px solid #555;
 }
 
 #mypage_order_span{
-	background : #D8D8D8;
+	background : #555;
 	height : 35px;
 	line-height : 35px;
 	padding-left : 20px;
@@ -120,7 +119,7 @@
 }
 
 #mypage_order_div a:hover{
-	color : #FFE400;
+	color : #555;
 }
 
 /* 아래 mypage 메뉴들 */
@@ -131,7 +130,7 @@
 .mypage_menu_div{
 	width : 300px;
 	height : 200px;
-	border : 1px solid #D8D8D8;
+	border : 1px solid #555;
 	padding : 25px;
 	margin : 0 0 10px 10px;
 	float : left;
@@ -153,7 +152,7 @@
 }
 
 .mypage_menu_div:hover{
-	background : #F9F9F9;
+	background : #F3F3F3;
 	cursor : pointer;
 }
 

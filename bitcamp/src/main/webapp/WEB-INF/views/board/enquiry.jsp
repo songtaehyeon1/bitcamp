@@ -80,11 +80,13 @@
 			<input type = "text" id = "searchText" name = "searchText">
 			<input type = "submit" id = "searchBtn" value = "찾기">
 		</div>
-		<form method = "post" action = "/bitcamp/enquiry_writeForm" id = "enquiry_write">
-			<div id = "write">
-				<input type = "submit" id = "writingBtn" value = "글 쓰기">
-			</div>
-		</form>
+		<c:if test = "${adminStatus != 'Y'}">
+			<form method = "post" action = "/bitcamp/enquiry_writeForm" id = "enquiry_write">
+				<div id = "write">
+					<input type = "submit" id = "writingBtn" value = "글 쓰기">
+				</div>
+			</form>
+		</c:if>
 	</div>
 	<div style="width : 1400px; clear : left">
 		<ul class="pagination justify-content-center">
@@ -99,7 +101,7 @@
 			<c:forEach var = "i" begin = "${pagevo.startPage}" end = "${pagevo.startPage + pagevo.onePageCount - 1}">
 				<c:if test = "${i <= pagevo.totalPage}">
 		    		<li class="page-item">
-		    			<a class="page-link pages" href="/bitcamp/boardEnquiry?pageNum=${i}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>"<c:if test = "${i == pagevo.pageNum}">style = "background : black; color : white;"</c:if>>${i}</a>
+		    			<a class="page-link text-black pages <c:if test = "${i == pagevo.pageNum}"> text-white black</c:if>" href="/bitcamp/boardEnquiry?pageNum=${i}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>">${i}</a>
 		    		</li>
 		    	</c:if>
 			</c:forEach>
