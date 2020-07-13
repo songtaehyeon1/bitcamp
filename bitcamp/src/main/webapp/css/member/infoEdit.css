@@ -11,8 +11,16 @@ label{
 	width:100%;
 	background-color:#F6F6F6;  
 }
-.lbl_userid, .lbl_Birth, .lbl_tel{width:100%;}
-#userid, #code{border-radius:5px;}
+.lbl_userid, .lbl_email, .lbl_tel, .lbl_addr{width:100%;}
+#userid, #useremail, #email_cod, #tel{border-radius:5px;}
+#warning, #caution{
+	font-weight:bold;
+	display:none;
+}
+small{
+	position:absolute; 
+	right:0;
+}
 .row{margin:0 auto;}
 .gender{margin-top: 15px;}
 .btn-group-toggle{

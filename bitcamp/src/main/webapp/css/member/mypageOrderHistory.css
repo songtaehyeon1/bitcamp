@@ -37,7 +37,7 @@
 	height : 25px;
 	line-height : 25px;
 	border : none;
-	background : black;
+	background : #555;
 	color : white;
 	border-radius : 5px;
 }
@@ -79,12 +79,12 @@
 	float : left;
 	height : 60px;
 	line-height : 60px;
-	border-right : 1px solid black;
-	border-bottom : 1px solid black;
+	border-right : 1px solid #555;
+	border-bottom : 1px solid #555;
 }
 
 .mypage_order_product_info_ul li:nth-of-type(-n + 7){
-	background : black;
+	background : #555;
 	color : white;
 }
 
@@ -94,7 +94,7 @@
 
 .mypage_order_product_info_ul li:nth-of-type(7n + 1){
 	width : 12%;
-	border-left : 1px solid black;
+	border-left : 1px solid #555;
 }
 
 .mypage_order_product_info_ul li:nth-of-type(7n + 2){
@@ -126,7 +126,7 @@
 	width : 1250px;
 	height : 200px;
 	line-height : 200px;
-	border : 1px solid black;
+	border : 1px solid #555;
 }
 
 .wordCut{
@@ -150,18 +150,54 @@
 }
 
 .mypage_hover:hover{
-	color : #D8D8D8;
+	color : white;
+	background : #555;
 	cursor : pointer;
+}
+
+.mypage_hover{
+	border : 2px solid #555;
+	border-radius : 5px;
+	padding : 5px;
 }
 
 .mypageWishList_main_btn{
 	width : 100px;
 	height : 50px;
 	line-height : 50px;
-	background : black;
+	background : #555;
 	color : white;
 	margin-top : 20px;
 	border : none;
+}
+
+.cr_span{
+	border : 1px solid #555;
+}
+
+.mypageOHImg{
+	width : 90px;
+	height : 50px;
+	line-height : 50px;
+}
+
+/* 페이징 */
+.black, .black:hover, .black:link, .black:visited{
+	background : #555;
+}
+
+.pages{
+	color : black;
+}
+
+.pages:hover{
+	background : #555;
+	color : white;
+}
+
+.fontColor, .fontColor:hover, .fontColor:visited, .fontColor:link{
+	background : #555;
+	color : white;
 }
 
 

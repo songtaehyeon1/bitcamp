@@ -3,18 +3,30 @@ package kr.co.bitcamp.product;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.co.bitcamp.board.EnquiryVO;
+import kr.co.bitcamp.board.ReplyVO;
+import kr.co.bitcamp.board.ReviewVO;
+import kr.co.bitcamp.category.InterestVO;
+
 public interface ProductDAOImp {
-	//레코드 하나 선택해서 보기
+
 	public ProductVO productView(int p_no);
-	//전체 레코드 선택
-	public List<ProductVO> productAllSelectRecord();
-	//관심상품 보기
+	
+	public List<ProductVO> ProductallSelectRecord();
+
 	public List<ProductVO> selectInterest();
-	//재고 보기
+
 	public ProductVO productSelect(int p_no);
 	
 	public ArrayList<Integer> productAllSelectProduct(int p_no);
 	
 	public ArrayList<String> productAllSelectDate(Integer integer);
+
+	public int addInterest(InterestVO vo);
 	
+	public ArrayList<Integer> allHearts(int userno);
+	public ArrayList<ReviewVO> allReviewList(int p_no);
+	public ArrayList<EnquiryVO> allQandAList(EnquiryVO vo);
+	
+	public List<ReplyVO> replyAll(int reviewno);
 }

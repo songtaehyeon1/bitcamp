@@ -105,6 +105,9 @@
 			url : "/bitcamp/replyEdit",
 			data : "e_reply_no=" + $(btn).parent().children("input[name=e_reply_no]").val(),
 			success : function(result){
+				if("${adminStatus == 'Y'}"){
+					result.userid = "관리자";
+				}
 				$(btn).parent().parent().parent().html(
 						"<div class = 'replyForm'>" +
 							"<div class = 'replyForm_above'>" +
@@ -155,7 +158,7 @@
 	<div style = "width : 1400px; height : 20px; float : left;"></div>
 	<div id = "goods">
 		<c:if test = "${str == ''}">
-			<img src = "/bitcamp/resources/products/${list.p_filename1}" alt="">
+			<img src = "/bitcamp/upload/${list.p_filename1}" alt="">
 			<span>${list.p_name}</span>
 			<span>${list.price}원</span>
 		</c:if>
@@ -172,11 +175,16 @@
 		<li>${list.enquiry_content}</li>
 	</ul>
 	<div id = "boardGo">
-		<button onclick = "location.href = '/bitcamp/boardEnquiry?pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>';">목록</button>
+		<c:if test = "${mypage == null}">
+			<button onclick = "location.href = '/bitcamp/boardEnquiry?pageNum=${pagevo.pageNum}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>';">목록</button>
+		</c:if>
+		<c:if test = "${mypage != null}">
+			<button onclick = "history.back();">게시물 관리</button>
+		</c:if>
 		<c:if test = "${list.userid == userid || adminStatus == 'Y'}">
 			<div class = "boardGo_right">
-				<button class = "boardList_edit" onclick = "location.href = '/bitcamp/enquiry_editForm?no=${list.enquiry_no}';">수정</button>
-				<button class = "boardList_del" onclick = "if(confirm('진짜로 삭제하시겠습니까?')){location.href = '/bitcamp/enquiry_delForm?no=${list.enquiry_no}';};">삭제</button>
+				<button class = "boardList_edit" onclick = "location.href = '/bitcamp/enquiry_editForm?no=${list.enquiry_no}&mypage=${mypage}';">수정</button>
+				<button class = "boardList_del" onclick = "if(confirm('진짜로 삭제하시겠습니까?')){location.href = '/bitcamp/enquiry_delForm?no=${list.enquiry_no}&mypage=${mypage}';};">삭제</button>
 			</div>
 		</c:if>
 	</div>

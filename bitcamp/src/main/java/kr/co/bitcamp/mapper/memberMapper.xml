@@ -5,7 +5,7 @@
 <mapper namespace="kr.co.bitcamp.member.MemberDAOImp">
 	<!-- 로그인 체크 -->
 	<select id="loginCheck" parameterType="kr.co.bitcamp.member.MemberVO" resultType="kr.co.bitcamp.member.MemberVO">
-		select userno, userid, userpwd, username from member where userid=#{userid} and userpwd=#{userpwd} and userjointype='Y'
+		select userno, userid, userpwd, username, userjointype from member where userid=#{userid} and userpwd=#{userpwd}
 	</select>
 
 	<!-- 로그인_접속 날짜 저장 -->
@@ -31,6 +31,11 @@
 	<!-- 회원가입_아이디 중복확인 -->
 	<select id="idCheck" resultType="int">
 		select count(userid) from member where userid=#{userid}
+	</select>
+	
+	<!-- 회원가입_이메일 중복확인 -->
+	<select id="mailCheck" resultType="int">
+		select count(useremail) from member where useremail=#{useremail}
 	</select>
 	
 	<!-- 회원 등록 -->

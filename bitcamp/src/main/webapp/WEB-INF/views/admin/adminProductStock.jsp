@@ -76,12 +76,12 @@
 				<tr>
 					<th>예약날짜</th>
 					<td id="datepickerbox"><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }"
-						class="text w100"><img class="ui-datepicker-trigger"
+						class="text w100" autocomplete="off"><img class="ui-datepicker-trigger"
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="Select date" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
 						<span>~</span> <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }"
-						class="text w100"><img class="ui-datepicker-trigger"
+						class="text w100" autocomplete="off"><img class="ui-datepicker-trigger"
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="Select date" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
@@ -201,7 +201,9 @@
 			</c:if>
 			<c:if test="${pagevo.pageNum > 1}">
 				<li class="page-item"><a class="page-link text-white black"
-					href="/bitcamp/admin/stocklist?p_no=${pvo.p_no }&pageNum=${pagevo.pageNum - 1}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>">&lt;</a>
+					href="/bitcamp/admin/stocklist?p_no=${pvo.p_no }&pageNum=${pagevo.pageNum - 1}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>
+					<c:if test="${pagevo.s_deltype != null && pagevo.s_deltype !='' }">&s_deltype=${pagevo.s_deltype }</c:if>
+					">&lt;</a>
 				</li>
 			</c:if>
 			<c:forEach var="i" begin="${pagevo.startPage}"

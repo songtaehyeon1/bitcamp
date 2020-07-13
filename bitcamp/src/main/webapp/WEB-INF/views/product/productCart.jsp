@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/product/product_cart.css" />
 <script src="<%=request.getContextPath()%>/js/product/product_cart.js"></script>
 
+<c:if test="${logStatus=='Y' }">
 
 <form method="post">
 	<div class="container" style="margin-top: 150px">
@@ -21,16 +23,18 @@
 			<thead>
 				<tr>
 					<td colspan="10">
-	
+					
 						<h2>장바구니 제품</h2>
 					</td>
 				</tr>
 				<tr class="head">
 					<th scope="col">
+<c:if test="${fn:length(productList)!=0 }">
 						<label>
 							<input type="checkbox"	style="margin-left: 15px" id="allCheck" class="allCheck">
 							<span style="display: none">전체선택</span>
 						</label>
+</c:if>						
 					</th>
 					<th scope="colgroup" colspan="2">상품정보</th>
 					<th scope="col">상품금액</th>
@@ -53,8 +57,8 @@
 				})
 			</script>
 			<!-- ////////////////////////////////반복될 부분///////////////////////////////////////////// -->
+
 			<c:forEach var="cart" items="${productList}" varStatus="vs">
-	
 				<tbody class="tbody">
 					<tr>
 <input class="cartItems" type="hidden" name="p_no" value="${cart.p_no }">
@@ -101,10 +105,6 @@
 								</div>
 							</div>
 							<div>
-								<span> 
-									<em>최대 1,645원 적립</em>
-									
-								</span>
 							</div>
 						</td>
 						<td>
@@ -118,7 +118,7 @@
 					</tr>
 					<tr class="summary">
 						<td colspan="10">상품가격 <span class="cart_qtyprice">${cart.price*cart.currentQty}</span>원 배송비 <span class="cart_deliverfee">${cart.delivery_fee*cart.currentQty }</span>원
-							= 주문금액<span>${cart.price*cart.currentQty+cart.delivery_fee }</span>원
+							= 주문금액<span class="cart_eachPrice">${cart.price*cart.currentQty+cart.delivery_fee*cart.currentQty }</span>원
 						</td>
 					</tr>
 				</tbody>
@@ -147,8 +147,12 @@
 	
 	
 		</table>
+<c:if test="${fn:length(productList)==0 }">
+		<div style="margin-top:50px;text-align:center;font-weight:700;color:#55575f;font-size:14px">장바구니에 담은 제품이 없습니다.</div>
+</c:if>			
 	</div>
-	
+<c:if test="${fn:length(productList)>0 }">
+
 	<!-- 총 금액 -->
 	<div class="total container">
 		<script>//스크립트가...개지저분.......그때그때 추가하면서 사용했더니 알아보기 힘들다. //#수량 #수량변경
@@ -307,11 +311,13 @@
 		</span>
 	
 	</div>
+</c:if>	
+	<c:if test="${fn:length(productList)>0 }">		
 	<!-- 계속쇼핑하기/ 바로 구매하기 버튼들 -->
 	<div class="container" style="text-align: center; margin-top: 100px;">
 	
 		<!-- 계속 쇼핑하기 버튼 -->
-		<a href="/bitcamp/productList" class="shopAndPurchaseBtn"
+		<a href="/bitcamp/list?c_no=0" class="shopAndPurchaseBtn"
 			style="margin-right: 2%;text-decoration:none" >계속 쇼핑하기</a>
 		<!-- 주문하기 버튼 -->
 		<input type="submit" id="cart_order" style="display:none;"  formaction="/bitcamp/cartOrder">
@@ -320,5 +326,136 @@
 		</a>
 		
 	</div>
+	</c:if>
 </form>
+</c:if>
+<c:if test="${logStatus=='N' }">
 
+<style>
+a{text-decoration:none;}
+a:hover{text-decoration:none;} 
+.container{
+	width:500px;
+	background-color:#fff;
+	border:1px solid #DDD;
+	padding:50px;
+	margin-top:10%;
+}
+.container>h2{
+	text-align:center;
+	margin-bottom:50px;
+}
+.btn{
+	width:400px;
+	margin:20px 0;
+}
+.info>span{
+	float:right;
+	
+}
+.info span, .info span a{
+	color: #757575;
+}
+</style>
+
+<script>
+$(function(){
+	$("#logFrm").submit(function(){
+		//이메일(아이디) 검사
+		if($("#userid").val()==""){     
+			alert("아이디를 입력해주세요.");
+			return false;
+		}	
+		//비밀번호 검사
+		if($("#userpwd").val()==""){
+			alert("비밀번호를 입력해주세요.");
+			return false;
+		}
+		
+		return true;
+	});
+	//////////////////////////////////////////////////
+	
+	//쿠키저장(setCookie)
+	//                 쿠키이름, 쿠키에 넣을 값, 만료일(일 단위)
+	function setCookie(cookieName, value, exdays){
+		var exdate = new Date();
+	    exdate.setDate(exdate.getDate() + exdays);
+	    var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
+	    document.cookie = cookieName + "=" + cookieValue;
+	}
+	   
+	//쿠키 삭제(cookieName)
+	function deleteCookie(cookieName){
+	    var expireDate = new Date();
+	    expireDate.setDate(expireDate.getDate() - 1);
+	    document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
+	}
+	   
+	//쿠키 불러오기(getCookie)
+	function getCookie(cookieName) {
+	    cookieName = cookieName + '=';
+	    var cookieData = document.cookie;
+	    var start = cookieData.indexOf(cookieName);
+	    var cookieValue = '';
+	    if(start != -1){
+	        start += cookieName.length;
+	        var end = cookieData.indexOf(';', start);
+	        if(end == -1)end = cookieData.length;
+	        cookieValue = cookieData.substring(start, end);
+	    }
+	    return unescape(cookieValue);
+	}
+	
+	//아이디 저장
+	//저장된 쿠기값을 가져와서 ID 입력 칸에 넣어준다.
+  	// var userInputId = getCookie("id_cookie");  
+    $("#userid").val(getCookie("id_cookie")); 
+     
+    if($("#userid").val() != ""){  //이전에 이미 ID 저장하기를 해서 처음 페이지 로딩 시, ID 입력 칸에 출력된 ID가 있는 상태라면
+    	$("#saveId").attr("checked", true);  //ID 저장하기를 체크 상태로 두기
+    }
+     
+    $("#saveId").change(function(){  // 체크박스에 변화가 발생시
+        if($("#saveId").is(":checked")){  // ID 저장하기 체크했을 때,
+            // var userInputId = $("#userid").val();
+            setCookie("id_cookie", $("#userid").val(), 7);  // 7일 동안 쿠키 보관
+        }else{  // ID 저장하기 체크 해제 시,
+            deleteCookie("id_cookie");
+        }
+    });
+     
+    //  ID 저장하기가 이미 체크되어 입력칸에 아이디가 출력되어 있는 상태에서 새로 ID를 입력하는 경우, 이럴 때도 쿠키 저장.
+    $("#userid").keyup(function(){  // ID 입력 칸에 ID를 입력할 때,
+        if($("#saveId").is(":checked")){  // ID 저장하기를 체크한 상태라면,
+            var userInputId = $("#userid").val();
+            setCookie("id_cookie", userInputId, 7); // 7일 동안 쿠키 보관
+        }
+    }); 
+});	
+</script>
+
+<div class="container">
+	<h2>LOGIN</h2>
+	<form id="logFrm" method="post" action="/bitcamp/loginOk">
+		<div class="form-group">
+			<input type="text" class="form-control" id="userid" name="userid" placeholder="아이디를 입력해주세요" autofocus/>
+		</div>
+		<div class="form-group">
+      		<input type="password" class="form-control" id="userpwd" name="userpwd" placeholder="비밀번호를 입력해주세요"/>
+      	</div>
+      	<button type="submit" class="btn btn-secondary" style="background-color:black">로그인</button>
+  	</form>
+  	
+  	<div class="info">
+  		<input type="checkbox" id="saveId" name="saveId" value="saveId"/>&nbsp;아이디 저장
+  		<span>
+  			<a href="/bitcamp/contFindFrm">아이디/비밀번호 찾기</a> 
+  			&#124;
+  			<a href="/bitcamp/joinFrm">회원가입</a>
+  		</span>
+  	</div>
+</div>
+
+
+</c:if>

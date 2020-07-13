@@ -246,6 +246,14 @@
 	        $('html').animate({scrollTop : offset.top-100}, 400);
 
 		});
+		$('#about').click(function(){
+
+			var offset = $('#fourth-img').offset();
+
+ 
+	        $('html').animate({scrollTop : offset.top-100}, 400);
+
+		});
 
 
 	});
@@ -254,7 +262,7 @@
 	<div id="main-img">
 		<p>
 			<span class="shadow-lg">PLAN YOUR ADVENTURE</span><br /> <span
-				style="font-size: 30px; top: -20px"><a href="#">shop now</a></span><br />
+				style="font-size: 30px; top: -20px"><a href="/bitcamp/list?c_no=0">shop now</a></span><br />
 			<a
 				id="arrow"><i
 				class="fas fa-chevron-down"></i></a>
@@ -266,7 +274,7 @@
 		<div>
 			<span class="shadow-lg" style="color: white; font-size: 70px;">NEW
 				ARRIVALS</span><br /> <span style="font-size: 30px; top: -20px"><a
-				href="/bitcamp/order">shop now</a></span>
+				href="/bitcamp/list?c_no=0">shop now</a></span>
 		</div>
 		<div
 			style="width: 50%; height: 700px; float: left; display: inline-flex;">
@@ -278,68 +286,39 @@
 	<div id="third-img"
 		style="width: 100%; height: 500px; display: inline-flex;">
 		<div>
-			<div>텐트</div>
+			<div><a href="/bitcamp/list?c_no=2">텐트</a></div>
 			<img src="<%=request.getContextPath()%>/resources/main/tent.jpg" />
 		</div>
 		<div>
-			<div>BBQ/그릴</div>
+			<div><a href="/bitcamp/list?c_no=7">BBQ/그릴</a></div>
 			<img src="<%=request.getContextPath()%>/resources/main/grill.jpg" />
 		</div>
 		<div>
-			<div>코펠/버너</div>
+			<div><a href="/bitcamp/list?c_no=5">코펠/버너</a></div>
 			<img src="<%=request.getContextPath()%>/resources/main/coppel.jpg" />
 		</div>
 	</div>
 
 	<div class="product-list">
 		<ul>
-			<li>
-				<div class="product-img">
-					<a href="#"><img
-						src="<%=request.getContextPath()%>/resources/category/product_01.png"
-						alt=""></a>
-				</div>
-				<div class="go-list">
-					<a href="#">상품 보러가기</a>
-				</div>
-
-				<div class="product-item-name">
-					<a href="#"><strong>코베아 문리버2 4인 캠핑세트</strong></a>
-				</div>
-				<div class="price">158,850원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img
-						src="<%=request.getContextPath()%>/resources/category/product_02.png"
-						alt=""></a>
-				</div>
-				<div class="go-list">
-					<a href="#">상품 보러가기</a>
-				</div>
-				<div class="product-item-name">
-					<a href="#"><strong>3인 컴팩트 세트</strong></a>
-				</div>
-				<div class="price">93,600원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
-			<li>
-				<div class="product-img">
-					<a href="#"><img
-						src="<%=request.getContextPath()%>/resources/category/product_03.png"
-						alt=""></a>
-
-				</div>
-				<div class="go-list">
-					<a href="#">상품 보러가기</a>
-				</div>
-				<div class="product-item-name">
-					<a href="#"><strong>4인 기본세트</strong></a>
-				</div>
-				<div class="price">53,550원(10%할인)</div>
-				<div class="desc">2박3일 대여요금</div>
-			</li>
+			<c:forEach var="plist" items="${plist }">
+				<li>
+					<div class="product-img">
+						<a href="/bitcamp/productView?p_no=${plist.p_no }"><img
+							src="<%=request.getContextPath()%>/upload/${plist.p_filename1 }"
+							alt=""></a>
+					</div>
+					<div class="go-list">
+						<a href="/bitcamp/productView?p_no=${plist.p_no }">상품 보러가기</a>
+					</div>
+	
+					<div class="product-item-name">
+						<a href="/bitcamp/productView?p_no=${plist.p_no }"><strong>${plist.p_name }</strong></a>
+					</div>
+					<div class="price">${plist.price }원</div>
+					<div class="desc">2박3일 대여요금</div>
+				</li>
+			</c:forEach>			
 		</ul>
 	</div>
 

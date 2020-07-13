@@ -89,7 +89,7 @@
 			<c:forEach var = "i" begin = "${pagevo.startPage}" end = "${pagevo.startPage + pagevo.onePageCount - 1}">
 				<c:if test = "${i <= pagevo.totalPage}">
 		    		<li class="page-item">
-		    			<a class="page-link pages" href="/bitcamp/boardNotice?pageNum=${i}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>"<c:if test = "${i == pagevo.pageNum}">style = "background : black; color : white;"</c:if>>${i}</a>
+		    			<a class="page-link text-black pages <c:if test = "${i == pagevo.pageNum}"> text-white black</c:if>" href="/bitcamp/boardNotice?pageNum=${i}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>">${i}</a>
 		    		</li>
 		    	</c:if>
 			</c:forEach>

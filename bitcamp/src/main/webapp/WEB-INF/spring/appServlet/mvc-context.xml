@@ -6,21 +6,44 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
-	
+
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- Intercepter 처리를 할 컨트롤러 목록을 생성하면 dispatherServlet 클래스가 매핑주소에 따라서 Intercept해준다 
-		beans 시작태그에 context, mvc를 추가(하단 Namespaces)
-	-->
+		beans 시작태그에 context, mvc를 추가(하단 Namespaces) -->
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/boardWrite"/>
-			<mvc:mapping path="/boardWriteOk"/>
-			<mvc:mapping path="/boardEdit"/>
-			<mvc:mapping path="/boardEditOk"/>
-			<mvc:mapping path="/boardDel"/>
-			<bean class="kr.co.bitcamp.intercepter.LoginIntercepter"></bean>
+			<mvc:mapping path="/admin/home" />	
+			<mvc:mapping path="/admin/member" />
+			<mvc:mapping path="/admin/memberEdit" />
+			<mvc:mapping path="/admin/memberEditOk" />
+			<mvc:mapping path="/admin/memberDel" />
+			<mvc:mapping path="/admin/memberReturn" />
+			<mvc:mapping path="/admin/memberdellist" />
+			<mvc:mapping path="/admin/orderList" />
+			<mvc:mapping path="/admin/orderView" />
+			<mvc:mapping path="/admin/orderEdit" />
+			<mvc:mapping path="/admin/updateD_status" />
+			<mvc:mapping path="/admin/product" />
+			<mvc:mapping path="/admin/stocklist" />
+			<mvc:mapping path="/admin/addStock" />
+			<mvc:mapping path="/admin/addStockOk" />
+			<mvc:mapping path="/admin/stockDel" />
+			<mvc:mapping path="/admin/stockRestore" />
+			<mvc:mapping path="/admin/productCategory" />
+			<mvc:mapping path="/admin/selectCategory" />
+			<mvc:mapping path="/admin/delimg" />
+			<mvc:mapping path="/admin/updateCategory" />
+			<mvc:mapping path="/admin/insertProduct" />
+			<mvc:mapping path="/imageUpload" />
+			<mvc:mapping path="/productWirteOk" />
+			<mvc:mapping path="/updateProduct" />
+			<mvc:mapping path="/updateProductOk"/>
+			<mvc:mapping path="/admin/sales"/>
+			<mvc:mapping path="/admin/basicInfoEditOk"/>
+			<mvc:mapping path="/admin/basicinfo"/>
+			<bean class="kr.co.bitcamp.intercepter.AdminIntercepter"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
-	
-		
+
+
 </beans>

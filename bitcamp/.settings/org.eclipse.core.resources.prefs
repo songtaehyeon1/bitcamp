@@ -1,2 +1,10 @@
 eclipse.preferences.version=1
+encoding//src/main/java/kr/co/bitcamp/HomeController.java=UTF-8
+encoding//src/main/java/kr/co/bitcamp/admin/DateData.java=UTF-8
+encoding//src/main/java/kr/co/bitcamp/board/BoardController.java=UTF-8
+encoding//src/main/java/kr/co/bitcamp/order/OrderController.java=UTF-8
+encoding//src/main/java/kr/co/bitcamp/order/OrderVO.java=UTF-8
+encoding//src/main/java/kr/co/bitcamp/product/ProductController.java=UTF-8
+encoding//src/main/java/kr/co/bitcamp/product/ProductDAOImp.java=UTF-8
+encoding//src/main/java/kr/co/bitcamp/product/ProductVO.java=UTF-8
 encoding//src/main/webapp/WEB-INF/views/inc/footer.jspf=UTF-8

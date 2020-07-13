@@ -42,7 +42,7 @@
 		<beans:property name="configLocation">
 				<beans:value>classpath:kr/co/bitcamp/conf/mybatis-config.xml</beans:value>
 		</beans:property>
-		<beans:property name="mapperLocations">
+		<beans:property name="mapperLocations">		
 			<beans:list>
 				<beans:value>classpath:kr/co/bitcamp/mapper/*.xml</beans:value>
 			</beans:list>				

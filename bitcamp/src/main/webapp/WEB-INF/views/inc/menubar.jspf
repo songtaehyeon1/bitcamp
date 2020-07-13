@@ -10,13 +10,15 @@
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-	crossorigin="anonymous">
+	crossorigin="anonymous">	
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
 	integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
 	crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
 	integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
@@ -141,11 +143,11 @@
 
 					</div>
 				</li>
-				<li><a href="#">
+				<li><a href="#" id="about">
 						<p class="main-menu-p">ABOUT</p>
 				</a></li>
-				<li><a href="#">
-						<p class="main-menu-p">CONTACT</p>
+				<li><a href="/bitcamp/boardNotice">
+						<p class="main-menu-p">COMMUNITY</p>
 				</a></li>
 				<li>
 					<div id="login-box">
@@ -159,8 +161,8 @@
 					</div>
 				</li>
 				<li id="my-menu">
-					<a href="#">
-						<p class="main-menu-p">MyPage</p>
+					<a href="/bitcamp/mypage" id = "mypage_a">
+						<p class="main-menu-p">MYPAGE</p>
 					</a>
 					<div id="my-menu-content">
 						<c:if test="${logStatus==null||logStatus==''||logStatus=='N'}">
@@ -176,23 +178,26 @@
 						<c:if test="${logStatus!=null && logStatus=='Y'}">
 							<a href="/bitcamp/pwdChangeFrm">비밀번호 변경</a>
 						</c:if>
-					
+						<c:if test="${logStatus==null||logStatus==''||logStatus=='N'}">
 						<a href="/bitcamp/contFindFrm">아이디/비밀번호 찾기</a>
-						
+						</c:if>
 						<c:if test="${logStatus==null||logStatus==''||logStatus=='N'}">
 							<a href="/bitcamp/loginFrm">회원 탈퇴</a>
 						</c:if>
 						<c:if test="${logStatus!=null && logStatus=='Y'}">
 							<a href="/bitcamp/pwdChkFrm?str=delete">회원 탈퇴</a>
 						</c:if>
+						<c:if test="${logStatus==null||logStatus==''||logStatus=='N'}">
+							<a href="/bitcamp/nonmemberOrderHistory">비회원 주문조회</a>
+						</c:if>
 					</div>
 				</li>
 				<li>
 					<div id="cart-box">
 						<a href="/bitcamp/productCartList"><i class="fas fa-shopping-cart"></i> Cart</a>
-						<c:if test="${logStatus!=null&&logStatus=='Y'}">
+						
 							<span class="badge badge-pill badge-light blink bounce">${fn:length(productList)}</span>
-						</c:if>
+				
 					</div>
 				</li>
 			</ul>
@@ -201,7 +206,7 @@
 					<li data-toggle="tooltip" title="맨위로"><a href="javascript:$(document).scrollTop(0)"><i class="fas fa-angle-up fa-2x"></i></a></li>
 					<li data-toggle="tooltip" data-placement="left" title="맨밑으로"><a href="javascript:$(document).scrollTop($(document).height())"><i class="fas fa-angle-down fa-2x"></i></a></li>
 					<li data-toggle="tooltip" data-placement="left" title="홈"><a href="/bitcamp/"><i class="fas fa-home fa-2x"></i></a></li>
-					<li data-toggle="tooltip" data-placement="left" title="마이홈"><a href="/bitcamp/pwdChkFrm"><i class="fas fa-user fa-2x"></i></a></li>
+					<li data-toggle="tooltip" data-placement="left" title="마이홈"><a href="/bitcamp/mypage"><i class="fas fa-user fa-2x"></i></a></li>
 					<li data-toggle="tooltip" data-placement="left" title="장바구니"><a href="/bitcamp/productCartList"><i class="fas fa-shopping-cart fa-2x"></i></a></li>
 				</ul>
 			</div>

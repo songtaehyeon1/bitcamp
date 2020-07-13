@@ -2,7 +2,11 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/admin/admin.css"/>
-
+<style>
+#admin_top_menu_box{
+	display:none;
+}
+</style>
 <table class="login-table" style="float: center">
 	<tbody>
 		<tr>

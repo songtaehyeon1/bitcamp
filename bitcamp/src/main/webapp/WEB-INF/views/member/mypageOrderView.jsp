@@ -19,7 +19,10 @@
 			}
 			var rtel = $("#rtel").val();
 			reg = /(01[0|1|6|7|8|9])[-](\d{4})[-](\d{4}$)/;
-			if(!reg.test(rtel)){
+			var reg2 = /(02)[-](\d{3})[-](\d{4}$)/;
+			var reg3 = /(0[3|4|5|6|7][0|1|2|3|4|5])[-](\d{3})[-](\d{4})/;
+			var reg4 = /(050[2|3|4|5|6|7|8])[-](\d{4})[0](\d{4})/;
+			if(!reg.test(rtel) && !reg2.test(rtel) && !reg3.test(rtel) && !reg4.test(rtel)){
 				alert("연락처를 다시 입력해 주세요.(-까지 작성해 주세요.)");
 				return false;
 			}
@@ -46,11 +49,11 @@
 		<table class="admin_table">
 			<tbody>
 				<tr>
-					<th width="10%">무통장 주문금액</th>
-					<td width="40%"><b><c:if test="${vo.payment_type =='cash' }">${vo.totalprice }원</c:if></b></td>
-					<th width="10%">카드 주문금액</th>
-					<td width="40%"><b><c:if test="${vo.payment_type =='card' }">${vo.totalprice }원</c:if></b></td>
-				</tr>
+					<c:if test="${vo.payment_type =='cash' }"><th width="10%">무통장 주문금액</th>
+					<td><b>${vo.totalprice }원</b></td></c:if>
+					<c:if test="${vo.payment_type =='card' }"><th width="10%">카드 주문금액</th>
+					<td ><b>${vo.totalprice }원</b></td></c:if>
+				</tr>				
 			</tbody>
 		</table>
 
@@ -63,19 +66,19 @@
 						<table class="admin_table">
 							<tbody>							
 								<tr>
-									<th>이름(ID)</th>
+									<th style = "color : white; border-bottom : 1px solid white;">이름(ID)</th>
 									<td><b>${vo.oname }(${vo.userid})</b></td>
 								</tr>
 								<tr>
-									<th>이메일</th>
+									<th style = "color : white; border-bottom : 1px solid white;">이메일</th>
 									<td>${vo.oemail }</td>
 								</tr>
 								<tr>
-									<th>연락처</th>
+									<th style = "color : white; border-bottom : 1px solid white;">연락처</th>
 									<td>${vo.otel }</td>
 								</tr>
 								<tr>
-									<th>주문일</th>
+									<th style = "color : white;">주문일</th>
 									<td>${vo.order_date }</td>
 								</tr>
 							</tbody>
@@ -87,21 +90,21 @@
 						<table class="admin_table">
 							<tbody>
 								<tr>
-									<th>수령자</th>
+									<th style = "color : white; border-bottom : 1px solid white;">수령자</th>
 									<td><input type="text" name="rname" value="${vo.rname}"
 										class="text w120" id = "rname"></td>
 								</tr>
 								<tr>
-									<th>연락처</th>
+									<th style = "color : white; border-bottom : 1px solid white;">연락처</th>
 									<td><input type="text" name="rtel" value="${vo.rtel}"
 										class="text w120" id = "rtel">
 									</td>
 								</tr>
 								<tr>
-									<th>주소</th>
+									<th style = "color : white;">주소</th>
 									<td><input type="text" name="rzipcode" id="userzipcode" value="${vo.rzipcode }"
 										class="text w70" readonly>
-										<button type="button" style="width: 70px;" onclick="openDaumZipAddress()">검색</button></td>
+										<button type="button" style="width: 70px; border : none;" onclick="openDaumZipAddress()">검색</button></td>
 								</tr>
 								<tr>
 									<th></th>
@@ -130,13 +133,13 @@
 						<table class="admin_table">
 							<tbody>
 								<tr>
-									<th>결제종류</th>
+									<th style = "color : white; border-bottom : 1px solid white;">결제종류</th>
 									<td><c:if test="${vo.payment_type =='cash' }">무통장입금</c:if>
 									<c:if test="${vo.payment_type =='card' }">카드결제</c:if>
 									</td>
 								</tr>
 								<tr>
-									<th>결제시간</th>
+									<th style = "color : white;">결제시간</th>
 									<td>
 										<c:if test="${vo.payment_type =='cash' }">${vo.cash_time }</c:if>
 										<c:if test="${vo.payment_type =='card' }">${vo.card_time }</c:if>
@@ -151,7 +154,7 @@
 						<table class="admin_table">
 							<tbody>
 								<tr>
-									<th>송장번호</th>
+									<th style = "color : white;">송장번호</th>
 									<td><select name="delivery_corp"
 										style="border: 1px #e6e6e6 solid; height: 30px; margin-right : 10px;" disabled="disabled">
 											<option value="16">CJ대한통운</option>
@@ -170,7 +173,7 @@
 		<table class="admin_table" style="width: 50%">
 			<tbody>
 				<tr>
-					<th>고객요청사항</th>
+					<th style = "color : white;">고객요청사항</th>
 					<td style="padding: 3px 3px 0px;"><textarea name="rcommnet"
 							style="width: 99%; height: 100px; border: 1px #e6e6e6 solid;">${vo.rcommnet }</textarea></td>
 				</tr>

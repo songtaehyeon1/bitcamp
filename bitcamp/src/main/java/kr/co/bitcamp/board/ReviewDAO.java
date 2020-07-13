@@ -67,15 +67,21 @@ public interface ReviewDAO {
 	public LeadLagVO getLeadLagSelect(PagingVO pagevo);
 	
 	// review 추천 수 ip검색하기
-	public int reviewRecommendIp(int review_no, String ip);
+	/*public int reviewRecommendIp(int review_no, String ip);
+	
+	// review 추천 ip저장
+	public int reviewRecommendIpUpdate(int review_no, String ip);*/
 	
 	// review 추천 수 올리기
 	public int reviewRecommendUpdate(int review_no);
 	
-	// review 추천 ip저장
-	public int reviewRecommendIpUpdate(int review_no, String ip);
-	
 	// review 추천 수 가져오기
 	public int reviewRecommendSelect(int review_no);
+	
+	// review 추천 수 id 가져오기
+	public int reviewRecommendId(int review_no, String userid);
+	
+	// review 추천 id 저장
+	public int reviewRecommendIdUpdate(int review_no, String userid);
 	
 }

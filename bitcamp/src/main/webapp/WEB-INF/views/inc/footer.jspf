@@ -1,6 +1,45 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<script>
+$(document).ready(function(){
+	var url ="/bitcamp/getbasicinfo";
+	$.ajax({
+		type : "GET",
+		url : url,
+		success : function(result) {
+			$("#basicTel").html(result.tel);
+			$("#basicMemo").html(result.memo);
+			$("#basicAccount1").html(result.account1);
+			$("#basicAccountBank1").html(result.account1bank);
+			$("#basicAccountName1").html(result.account1name);
+			$("#basicAccount2").html(result.account2);
+			$("#basicAccountBank2").html(result.account2bank);
+			$("#basicAccountName2").html(result.account2name);
+			$("#basicAccount3").html(result.account3);
+			$("#basicAccountBank3").html(result.account3bank);
+			$("#basicAccountName3").html(result.account3name);
+			$("#basiccorpname").html(result.corpname);
+			$("#basiccorpname2").html(result.corpname);
+			$("#basicceoname").html(result.ceoname);
+			$("#basiclicenseno").html(result.licenseno);
+			$("#basicreportno").html(result.reportno);
+			$("#basiccorptel").html(result.corptel);
+			$("#basiccorpzipcode").html('('+result.corpzipcode+')');
+			$("#basiccorpaddr").html(result.corpaddr);
+			$("#basicmanagername").html(result.managername);
+			$("#basicmanageremail").html('('+result.manageremail+')');
+			$("#basicmanageremail").parent().attr('href','mailto:'+result.manageremail);
+			$("#basickakao").attr('href',result.kakao);
+			$("#basicinstagram").attr('href',result.instagram);
+		},
+		error : function() {
+			console.log("footer 정보 불러오기 에러....");
+		}
+	});
+})
 
+</script>
 <footer>
 	<div id="footerWrap">
 		<div class="fmenu" style = "float : left;">
@@ -8,25 +47,24 @@
 				<!----------------------------------------------------------- 하단 고객센터 --------------------------------------------------->
 				<li>
 					<p class="f_title">CS CENTER</p>
-					<p class="f_boldB">1688-1234</p>
-					<div class="f_cont">
-						운영시간 : 평일 10:00 ~ 17:00<br> 점심시간 : 12:30~13:30<br> 토, 일,
-						공휴일 휴무
+					<p class="f_boldB" id="basicTel"></p>
+					<div class="f_cont" id="basicMemo">
+						
 					</div>
 				</li>
 				<li>
 					<p class="f_title">BANK ACCOUNT</p>
 					<div class="f_cont">
-						<p class="f_boldS">111-1111-1111-11</p>
-						농협은행 / 예금주 비트캠프<br>
+						<p class="f_boldS" id="basicAccount1">111-1111-1111-11</p>
+						<span id="basicAccountBank1">농협은행</span>/예금주<span id="basicAccountName1">비트캠프</span><br>
 					</div>
 					<div class="f_cont">
-						<p class="f_boldS">2222-222-222222</p>
-						우리은행 / 예금주 비트캠프<br>
+						<p class="f_boldS" id="basicAccount2"></p>
+						<span id="basicAccountBank2"></span>/예금주<span id="basicAccountName2"></span><br>
 					</div>
 					<div class="f_cont">
-						<p class="f_boldS">333-33333-33-333</p>
-						기업은행 / 예금주 비트캠프<br>
+						<p class="f_boldS" id="basicAccount3"></p>
+						<span id="basicAccountBank3"></span>/예금주<span id="basicAccountName3"></span><br>
 					</div>
 				</li>
 				<!----------------------------------------------------------- // 하단 고객센터 --------------------------------------------------->
@@ -34,12 +72,12 @@
 					<p class="f_title">SUPPORT</p>
 					<div class="f_support">
 						<p class="su_cont">
-							<a href="#">공지사항</a><a href="#">고객문의</a><a href="#">상품후기</a><a
-								href="#">마이쇼핑</a>
+							<a href="/bitcamp/boardNotice">공지사항</a><a href="/bitcamp/boardEnquiry">고객문의</a><a href="/bitcamp/boardReview">상품후기</a><a
+								href="/bitcamp/mypage">마이쇼핑</a>
 						</p>
 						<p class="su_cont">
-							<a href="#">장바구니</a><a href="#">주문조회</a><a href="#">관심상품</a><a
-								href="#">배송조회</a>
+							<a href="/bitcamp/productCartList">장바구니</a><a href="/bitcamp/mypageOrderHistory">주문조회</a><a href="/bitcamp/mypageWishList">관심상품</a><a
+								href="http://service.epost.go.kr/trace.RetrieveRegiPrclDeliv.postal?sid1=" onclick="window.open(this.href,'배송조회',width=800,height=800);return false;">배송조회</a>
 						</p>
 
 					</div>
@@ -49,10 +87,10 @@
 					<p class="f_title">FOLLOW US</p>
 					<div class="f_sns">
 						<p>
-							<a href="#"><i class="fas fa-comment fa-2x"></i> 카카오톡 상담</a>
+							<a href="#" target="_blank" id="basickakao"><i class="fas fa-comment fa-2x"></i> 카카오톡 상담</a>
 						</p>
 						<p>
-							<a href="https://www.instagram.com/" target="_blank"><i
+							<a href="#" target="_blank" id="basicinstagram"><i
 								class="fab fa-instagram fa-2x"></i> 인스타그램</a>
 						</p>
 
@@ -64,11 +102,14 @@
 				<div class="inner">
 					<div id="footer-corpinfo">
 						<p class="address">
-							<span>회사명 : 비트캠프 </span><span>대표 : 홍길동</span> <span>사업자등록번호
-								: 111-22-33333</span> <span>통신판매업신고 : 제2020-서울마포-0001호</span> <br>
-							<span>전화 : 1688-1111</span> <span>주소 : 서울시 마포구 백범로 비트캠프</span> <span>개인정보보호책임자
-								: <a href="mailto:information@bitcamp.co.kr">(information@bitcamp.co.kr)</a>
-							</span><br> <span>Copyright © 비트캠프. All rights reserved.</span>
+							<span>회사명 : <b id="basiccorpname"></b></span>
+							<span>대표 :<b id="basicceoname"></b> </span> 
+							<span>사업자등록번호	: <b id="basiclicenseno"></b></span> 
+							<span>통신판매업신고 : <b id="basicreportno"></b></span><br>
+							<span>전화 : <b id="basiccorptel"></b></span> 
+							<span>주소 : <b id="basiccorpzipcode"></b><b id="basiccorpaddr"></b></span> 
+							<span>개인정보보호책임자 : <b id="basicmanagername"></b> <a href="#"><b id="basicmanageremail"></b></a>
+							</span><br> <span>Copyright © <b id="basiccorpname2"></b> All rights reserved.</span>
 						</p>
 						<!----------------------------- 하단 인증마크 ----------------------------------------------->
 						<p class="f_mark">

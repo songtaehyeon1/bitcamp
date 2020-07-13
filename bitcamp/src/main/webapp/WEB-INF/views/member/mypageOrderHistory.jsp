@@ -62,7 +62,6 @@
 		<ul>
 			<li>기본적으로 최근 3개월간의 자료가 조회되며, 기간 검색시 지난 주문내역을 조회하실 수 있습니다.</li>
 			<li>주문번호를 클릭하시면 해당 주문에 대한 상세내역을 확인하실 수 있습니다.</li>
-			<li>취소/반품 신청은 주문완료일 기준 30일까지 가능합니다.</li>
 		</ul>
 	</div>
 	<h6>주문 상품 정보</h6>
@@ -82,17 +81,69 @@
 						<label style = "margin-left : 20px;">[</label><label class = "wordCut">${list.o_no}</label><label>]</label>
 					</div>
 				</li>
-				<li><img src = "/bitcamp/resources/products/${list.p_filename1}" alt = ""></li>
+				<li><img src = "/bitcamp/upload/${list.p_filename1}" alt = "" class = "mypageOHImg"></li>
 				<li>${list.p_commnet}</li>
 				<li>${list.p_count}</li>
 				<li>${list.totalprice}원</li>
 				<li>${list.delivery_status}</li>
-				<li><span class = "mypage_hover">취소</span>/<span class = "mypage_hover">반품</span></li>
+				<li>
+					<c:if test = "${list.delivery_status == '입금대기'}">
+						<span class = "mypage_hover" onclick = "if(confirm('취소요청 하시겠습니까?')){location.href = '/bitcamp/mypageOrderCancle?o_no=${list.o_no}&str=orderCancle';}">취소</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '결제완료'}">
+						<span class = "mypage_hover" onclick = "if(confirm('취소요청 하시겠습니까?')){location.href = '/bitcamp/mypageOrderCancle?o_no=${list.o_no}&str=orderCancle';}">취소</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '배송중'}">
+						<span class = "mypage_hover" onclick = "if(confirm('반품요청 하시겠습니까?')){location.href = '/bitcamp/mypageOrderCancle?o_no=${list.o_no}&str=orderReturn';}">반품</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '배송완료'}">
+						<span class = "mypage_hover" onclick = "if(confirm('반품요청 하시겠습니까?')){location.href = '/bitcamp/mypageOrderCancle?o_no=${list.o_no}&str=orderReturn';}">반품</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '취소요청' || list.delivery_status == '반품요청'}">
+						<span>${list.delivery_status}중 입니다.</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '취소'}">
+						<span>${list.delivery_status}가 되었습니다.</span>
+					</c:if>
+					<c:if test = "${list.delivery_status == '반품'}">
+						<span>${list.delivery_status}이 되었습니다.</span>
+					</c:if>
+				</li>
 			</c:forEach>
 		</ul>
 		<c:if test = "${list == '[]'}">
 			<div class = "mypage_order_nothing">주문 내역이 없습니다.</div>
 		</c:if>
 	</div>
-	<button class = "mypageWishList_main_btn" onclick = "location.href = '/bitcamp/mypage';">목록으로</button>
+	<div style = "width : 1250px; height : 20px; float : left;"></div>
+	<div style="width : 1250px; clear : left;">
+		<ul class="pagination justify-content-center">
+			<c:if test = "${pagevo.pageNum == 1}">
+		    	<li class="page-item disabled"><a class="page-link">&lt;</a></li>
+			</c:if>
+			<c:if test = "${pagevo.pageNum > 1}">
+		    	<li class="page-item">
+		    		<a class="page-link text-white black" href="/bitcamp/mypageOrderHistory?pageNum=${pagevo.pageNum - 1}<c:if test = "${delivery_status != null && delivery_status != 'all'}">&delivery_status=${delivery_status}</c:if><c:if test = "${order_date_start != null}">&order_date_start=${order_date_start}</c:if><c:if test = "${order_date_end != null}">&order_date_end=${order_date_end}</c:if>">&lt;</a>
+		    	</li>
+			</c:if>
+			
+			<c:forEach var = "i" begin = "${pagevo.startPage}" end = "${pagevo.startPage + pagevo.onePageCount - 1}">
+				<c:if test = "${i <= pagevo.totalPage}">
+		    		<li class="page-item">
+		    			<a class="page-link pages <c:if test = "${i == pagevo.pageNum}"> text-white black</c:if>" href="/bitcamp/mypageOrderHistory?pageNum=${i}<c:if test = "${delivery_status != null && delivery_status != 'all'}">&delivery_status=${delivery_status}</c:if><c:if test = "${order_date_start != null}">&order_date_start=${order_date_start}</c:if><c:if test = "${order_date_end != null}">&order_date_end=${order_date_end}</c:if>">${i}</a>
+		    		</li>
+		    	</c:if>
+			</c:forEach>
+			
+			<c:if test = "${pagevo.pageNum == pagevo.totalPage || pagevo.totalPage == ''}">
+		    	<li class="page-item disabled"><a class="page-link">&gt;</a></li>
+			</c:if>
+			<c:if test = "${pagevo.pageNum != pagevo.totalPage && pagevo.totalPage != ''}">
+				<li class="page-item">
+					<a class="page-link text-white black" href="/bitcamp/mypageOrderHistory?pageNum=${pagevo.pageNum + 1}<c:if test = "${delivery_status != null && delivery_status != 'all'}">&delivery_status=${delivery_status}</c:if><c:if test = "${order_date_start != null}">&order_date_start=${order_date_start}</c:if><c:if test = "${order_date_end != null}">&order_date_end=${order_date_end}</c:if>">&gt;</a>
+				</li>
+			</c:if>
+		</ul>
+	</div>
+	<button class = "mypageWishList_main_btn" onclick = "location.href = '/bitcamp/mypage';">MY PAGE</button>
 </div>

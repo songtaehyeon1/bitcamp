@@ -3,6 +3,10 @@ package kr.co.bitcamp.product;
 import java.util.ArrayList;
 
 public class ProductVO {
+	private int s_no;///테스트
+	
+	
+	private String o_no;//오더 성공하고 생기는 오더 넘버
 	private int c_no;//카테고리 번호
 	private String c_name;//카테고리 이름
 	private int p_no;//상품코드
@@ -29,21 +33,16 @@ public class ProductVO {
 	private String p_date;
 	private int rownum;
 	
-	private int total_price;//바로구매할때 전체가격 저장할곳.
+	private int totalprice;//바로구매할때 전체가격 저장할곳.
 	//////////////////////////
 	private String period;
 	private String pickup;
 	//////////////////////////
 	private String p_deltype;
+	private java.util.Date stock_date;//예약날짜
 	
-	private String heart = "N"; //관심상품 버튼 상태
+	private String heart="N";//관심상품
 	
-	public String getHeart() {
-		return heart;
-	}
-	public void setHeart(String heart) {
-		this.heart = heart;
-	}
 	public int getC_no() {
 		return c_no;
 	}
@@ -176,11 +175,11 @@ public class ProductVO {
 	public void setPeriod(String orderStart,String orderEnd,String borrowPeriod) {
 		this.period = orderStart+"~"+orderEnd+"("+(Integer.parseInt(borrowPeriod)-1)+"박"+borrowPeriod+"일)";
 	}
-	public int getTotal_price() {
-		return total_price;
+	public int getTotalprice() {
+		return totalprice;
 	}
 	public void setTotal_price(int total_price) {
-		this.total_price = total_price;
+		this.totalprice = total_price;
 	}
 	public String getPickup() {
 		return pickup;
@@ -212,6 +211,30 @@ public class ProductVO {
 	}
 	public void setDay_price(int day_price) {
 		this.day_price = day_price;
+	}
+	public String getO_no() {
+		return o_no;
+	}
+	public void setO_no(String o_no) {
+		this.o_no = o_no;
+	}
+	public java.util.Date getStock_date() {
+		return stock_date;
+	}
+	public void setStock_date(java.util.Date stock_date) {
+		this.stock_date = stock_date;
+	}
+	public int getS_no() {
+		return s_no;
+	}
+	public void setS_no(int s_no) {
+		this.s_no = s_no;
+	}
+	public String getHeart() {
+		return heart;
+	}
+	public void setHeart(String heart) {
+		this.heart = heart;
 	}
 	
 }

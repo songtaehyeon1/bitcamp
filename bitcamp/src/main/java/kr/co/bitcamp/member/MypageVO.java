@@ -13,6 +13,17 @@ public class MypageVO {
 	private String raddrdetail;
 	private int userno;
 	private int rcheck;
+	
+	private int usermile;
+	private int orderTot;
+	private int orderCnt;
+	private String delivery_before;
+	private String delivery_pay_com;
+	private String delivery_ship_pro;
+	private String delivery_com;
+	private String delivery_cancel;
+	private String delivery_return;
+	
 	public int getRno() {
 		return rno;
 	}
@@ -84,6 +95,60 @@ public class MypageVO {
 	}
 	public void setRcheck(int rcheck) {
 		this.rcheck = rcheck;
+	}
+	public int getUsermile() {
+		return usermile;
+	}
+	public void setUsermile(int usermile) {
+		this.usermile = usermile;
+	}
+	public int getOrderTot() {
+		return orderTot;
+	}
+	public void setOrderTot(int orderTot) {
+		this.orderTot = orderTot;
+	}
+	public int getOrderCnt() {
+		return orderCnt;
+	}
+	public void setOrderCnt(int orderCnt) {
+		this.orderCnt = orderCnt;
+	}
+	public String getDelivery_before() {
+		return delivery_before;
+	}
+	public void setDelivery_before(String delivery_before) {
+		this.delivery_before = delivery_before;
+	}
+	public String getDelivery_pay_com() {
+		return delivery_pay_com;
+	}
+	public void setDelivery_pay_com(String delivery_pay_com) {
+		this.delivery_pay_com = delivery_pay_com;
+	}
+	public String getDelivery_ship_pro() {
+		return delivery_ship_pro;
+	}
+	public void setDelivery_ship_pro(String delivery_ship_pro) {
+		this.delivery_ship_pro = delivery_ship_pro;
+	}
+	public String getDelivery_com() {
+		return delivery_com;
+	}
+	public void setDelivery_com(String delivery_com) {
+		this.delivery_com = delivery_com;
+	}
+	public String getDelivery_cancel() {
+		return delivery_cancel;
+	}
+	public void setDelivery_cancel(String delivery_cancel) {
+		this.delivery_cancel = delivery_cancel;
+	}
+	public String getDelivery_return() {
+		return delivery_return;
+	}
+	public void setDelivery_return(String delivery_return) {
+		this.delivery_return = delivery_return;
 	}
 	
 }

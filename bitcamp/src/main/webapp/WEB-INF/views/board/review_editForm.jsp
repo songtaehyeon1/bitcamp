@@ -85,7 +85,7 @@
 </script>
 <div class = "container" id = "review_editForm">
 	<div id = "nLink"><a href = "/bitcamp/">홈</a>&nbsp;>&nbsp;<span>상품후기</span></div>
-	<div id = "nTitle"><span>상품후기</span><span id = "sss">&nbsp;&nbsp;|&nbsp;&nbsp;대여금액 100,000원 이상 , 직접 설치한 장비와 캠핑모습을 담은 사진 3장 이상으로 캠핑후기를 작성해주시면 캐시백 10,000원을 드립니다. 내용에 맞지 않는 게시물은 관리자의 권한으로 삭제합니다.</span></div>
+	<div id = "nTitle"><span>상품후기</span></div>
 	<ul id = "boardCate">
 		<li onclick = "location.href = '/bitcamp/boardNotice'">공지사항</li>
 		<li onclick = "location.href = '/bitcamp/boardEnquiry'">고객문의</li>
@@ -148,7 +148,7 @@
 			<li>첨부파일1</li>
 			<li>
 				<c:if test = "${vo.review_file1 == null}">
-					<input type = "file" name = "filename" id = "filename1">
+					<input type = "file" name = "filename" id = "filename1" accept = "image/gif,image/jpeg,image/png,image/jpg">
 				</c:if>
 				<c:if test = "${vo.review_file1 != null}">
 					<input type = "hidden" class = "hidden_file" name = "review_file1" value = "${vo.review_file1}">
@@ -162,7 +162,7 @@
 			<li>첨부파일2</li>
 			<li>
 				<c:if test = "${vo.review_file2 == null}">
-					<input type = "file" name = "filename" id = "filename2">
+					<input type = "file" name = "filename" id = "filename2" accept = "image/gif,image/jpeg,image/png,image/jpg">
 				</c:if>
 				<c:if test = "${vo.review_file2 != null}">
 					<input type = "hidden" class = "hidden_file" name = "review_file2" value = "${vo.review_file2}">
@@ -176,7 +176,7 @@
 			<li>첨부파일3</li>
 			<li>
 				<c:if test = "${vo.review_file3 == null}">
-					<input type = "file" name = "filename" id = "filename1">
+					<input type = "file" name = "filename" id = "filename1" accept = "image/gif,image/jpeg,image/png,image/jpg">
 				</c:if>
 				<c:if test = "${vo.review_file3 != null}">
 					<input type = "hidden" class = "hidden_file" name = "review_file3" value = "${vo.review_file3}">
@@ -190,7 +190,7 @@
 			<li>첨부파일4</li>
 			<li>
 				<c:if test = "${vo.review_file4 == null}">
-					<input type = "file" name = "filename" id = "filename1">
+					<input type = "file" name = "filename" id = "filename1" accept = "image/gif,image/jpeg,image/png,image/jpg">
 				</c:if>
 				<c:if test = "${vo.review_file4 != null}">
 					<input type = "hidden" class = "hidden_file" name = "review_file4" value = "${vo.review_file4}">
@@ -204,7 +204,7 @@
 			<li>첨부파일5</li>
 			<li>
 				<c:if test = "${vo.review_file5 == null}">
-					<input type = "file" name = "filename" id = "filename1">
+					<input type = "file" name = "filename" id = "filename1" accept = "image/gif,image/jpeg,image/png,image/jpg">
 				</c:if>
 				<c:if test = "${vo.review_file5 != null}">
 					<input type = "hidden" class = "hidden_file" name = "review_file5" value = "${vo.review_file5}">
@@ -224,5 +224,6 @@
 			</div>
 		</div>
 		<input type = "hidden" name = "review_no" value = "${vo.review_no}">
+		<input type = "hidden" name = "mypage" value = "${mypage}">
 	</form>
 </div>

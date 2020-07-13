@@ -1,16 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <script type="text/javascript">
 	$(function() {
 		$("#ordermenu").attr("class", "over");
 		$("#reset").click(function() {
 			$("input").val('');
-			$("#searchKey").val('');		
+			$("#searchKey").val('');
 			$("#order_date").click();
 			$("#payment_all").click();
-			$("input[name='delivery_status']").attr("checked",false);
+			$("input[name='delivery_status']").attr("checked", false);
 
 		});
 
@@ -46,18 +47,16 @@
 	<dl>
 		<dt>주문관리</dt>
 		<dd>
-			<a href="">- 주문리스트</a>
+			<a href="/bitcamp/admin/orderList">- 주문리스트</a>
 		</dd>
 		<dt>취소/교환/반품/환불</dt>
 		<dd>
-			<a href="">- 취소리스트</a>
+			<a href="/bitcamp/admin/orderCancelList">- 취소리스트</a>
 		</dd>
 		<dd>
-			<a href="">- 교환/반품리스트</a>
+			<a href="/bitcamp/admin/orderReturnList">- 교환/반품리스트</a>
 		</dd>
-		<dd>
-			<a href="">- 환불리스트</a>
-		</dd>
+
 	</dl>
 </div>
 
@@ -73,39 +72,43 @@
 			<tbody>
 				<tr>
 					<th>진행상태</th>
-					<td><label for="">
-					<input type="checkbox" name="delivery_status" value="입금대기"
+					<td><label for=""> <input type="checkbox"
+							name="delivery_status" value="입금대기"
 							<c:set var="contains" value="false" />
 							<c:forEach var="item" items="${pagevo.delivery_status}">
 								<c:if test="${item == '입금대기'}"><c:set var="contains" value="true" /></c:if>
 							</c:forEach>
-							<c:if test="${contains == 'true'}">checked="checked"</c:if>
-							>
-							입금대기</label>&nbsp;&nbsp;&nbsp;&nbsp; <label for=""><input
-							type="checkbox" name="delivery_status" value="결제완료" <c:set var="contains" value="false" />
+							<c:if test="${contains == 'true'}">checked="checked"</c:if>>
+							입금대기
+					</label>&nbsp;&nbsp;&nbsp;&nbsp; <label for=""><input
+							type="checkbox" name="delivery_status" value="결제완료"
+							<c:set var="contains" value="false" />
 							<c:forEach var="item" items="${pagevo.delivery_status}">
 								<c:if test="${item == '결제완료'}"><c:set var="contains" value="true" /></c:if>
 							</c:forEach>
-							<c:if test="${contains == 'true'}">checked="checked"</c:if>> 결제완료</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<label for=""><input type="checkbox"
-							name="delivery_status" value="배송준비중" <c:set var="contains" value="false" />
+							<c:if test="${contains == 'true'}">checked="checked"</c:if>>
+							결제완료</label>&nbsp;&nbsp;&nbsp;&nbsp; <label for=""><input
+							type="checkbox" name="delivery_status" value="배송준비중"
+							<c:set var="contains" value="false" />
 							<c:forEach var="item" items="${pagevo.delivery_status}">
 								<c:if test="${item == '배송준비중'}"><c:set var="contains" value="true" /></c:if>
 							</c:forEach>
-							<c:if test="${contains == 'true'}">checked="checked"</c:if>> 배송준비중</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<label for=""><input type="checkbox"
-							name="delivery_status" value="배송중" <c:set var="contains" value="false" />
+							<c:if test="${contains == 'true'}">checked="checked"</c:if>>
+							배송준비중</label>&nbsp;&nbsp;&nbsp;&nbsp; <label for=""><input
+							type="checkbox" name="delivery_status" value="배송중"
+							<c:set var="contains" value="false" />
 							<c:forEach var="item" items="${pagevo.delivery_status}">
 								<c:if test="${item == '배송중'}"><c:set var="contains" value="true" /></c:if>
 							</c:forEach>
-							<c:if test="${contains == 'true'}">checked="checked"</c:if>> 배송중</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<label for=""><input type="checkbox"
-							name="delivery_status" value="배송완료" <c:set var="contains" value="false" />
+							<c:if test="${contains == 'true'}">checked="checked"</c:if>>
+							배송중</label>&nbsp;&nbsp;&nbsp;&nbsp; <label for=""><input
+							type="checkbox" name="delivery_status" value="배송완료"
+							<c:set var="contains" value="false" />
 							<c:forEach var="item" items="${pagevo.delivery_status}">
 								<c:if test="${item == '배송완료'}"><c:set var="contains" value="true" /></c:if>
 							</c:forEach>
-							<c:if test="${contains == 'true'}">checked="checked"</c:if>> 배송완료</label>&nbsp;&nbsp;&nbsp;&nbsp;
-						<br></td>
+							<c:if test="${contains == 'true'}">checked="checked"</c:if>>
+							배송완료</label>&nbsp;&nbsp;&nbsp;&nbsp; <br></td>
 				</tr>
 				<tr>
 					<th>결제수단</th>
@@ -132,12 +135,12 @@
 							type="radio" name="ndate" value="delivery_arrival_date"
 							<c:if test="${pagevo.ndate =='delivery_arrival_date' }">checked="checked"</c:if>>
 							배송완료일</label>&nbsp;&nbsp;&nbsp;&nbsp; <span>일자</span> <input type="text"
-						name="s_date" id="s_date" value="${pagevo.s_date }" autocomplete="off"
-						class="text w100 hasDatepicker"><img
+						name="s_date" id="s_date" value="${pagevo.s_date }"
+						autocomplete="off" class="text w100 hasDatepicker"><img
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
-						<span>~</span> <input type="text" name="e_date" id="e_date" autocomplete="off"
-						value="${pagevo.e_date }" class="text w100"><img
+						<span>~</span> <input type="text" name="e_date" id="e_date"
+						autocomplete="off" value="${pagevo.e_date }" class="text w100"><img
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
 					</td>
@@ -156,8 +159,8 @@
 								<c:if test="${pagevo.searchKey == null || pagevo.searchKey !='' }">selected=""</c:if>>전체</option>
 							<option value="o_no"
 								<c:if test="${pagevo.searchKey =='o_no' }">selected=""</c:if>>주문번호</option>
-							<option value="userid"
-								<c:if test="${pagevo.searchKey =='userid' }">selected=""</c:if>>주문자ID</option>
+							<!--  <option value="userid"
+								<c:if test="${pagevo.searchKey =='userid' }">selected=""</c:if>>주문자ID</option>-->
 							<option value="oname"
 								<c:if test="${pagevo.searchKey =='oname' }">selected=""</c:if>>주문자명</option>
 							<option value="oemail"
@@ -180,55 +183,56 @@
 	<h4 class="allgoodsnum">
 		총 <span class="red">${pagevo.totalRecord }</span>개의 주문건이 있습니다.
 	</h4>
-	<table class="goodslist">
-		<tbody>
-			<tr>
-				<th class="width50"><input type="checkbox" id="allCheck"></th>
-				<th>주문일</th>
-				<th>주문번호</th>
-				<th>주문자명</th>
-				<th>수명인명</th>
-				<th>회원ID</th>
-				<th>주문금액</th>
-				<th>배송일</th>
-				<th>배송완료일</th>
-				<th>결제수단</th>
-				<th>상태</th>
-			</tr>
-			<c:forEach var="vo" items="${list }">
+	<form method="get" action="/bitcamp/admin/updateD_status">
+		<table class="goodslist">
+			<tbody>
+				<tr>
+					<th class="width50"><input type="checkbox" id="allCheck"></th>
+					<th>주문일</th>
+					<th>주문번호</th>
+					<th>주문자명</th>
+					<th>수명인명</th>
+					<th>회원코드</th>
+					<th>주문금액</th>
+					<th>배송일</th>
+					<th>배송완료일</th>
+					<th>결제수단</th>
+					<th>상태</th>
+				</tr>
+				<c:forEach var="vo" items="${list }">
 
-				<tr>
-					<td class="width50"><input type="checkbox" name="chk"></td>
-					<td>${vo.order_date }</td>
-					<td><a href="/bitcamp/admin/orderView?o_no=${vo.o_no }">${vo.o_no }</a></td>
-					<td>${vo.oname }</td>
-					<td>${vo.rname }</td>
-					<td>${vo.userid }</td>
-					<td>${vo.totalprice }</td>
-					<td>${vo.delivery_date }</td>
-					<td>${vo.delivery_arrival_date }</td>
-					<td><c:if test="${vo.payment_type =='cash' }">무통장입금</c:if> <c:if
-							test="${vo.payment_type =='card' }">카드결제</c:if></td>
-					<td>${vo.delivery_status }</td>
-				</tr>
-			</c:forEach>
-			<c:if test="${fn:length(list)==0 }">
-				<tr>
-					<th colspan="15" style="background: #fff;">등록된 데이터가 없습니다.</th>
-				</tr>
-			</c:if>
-		</tbody>
-	</table>
-	<div style="width: 100%; clear: left">
-		<ul class="pagination justify-content-center">
-			<c:if test="${pagevo.pageNum == 1}">
-				<li class="page-item disabled"><a class="page-link">&lt;</a></li>
-			</c:if>
-			<c:if test="${pagevo.pageNum > 1}">
-				<li class="page-item"><a class="page-link text-white black"
-					href="/bitcamp/admin/orderList?pageNum=${pagevo.pageNum - 1}					
+					<tr>
+						<td class="width50"><input type="checkbox" name="chk" value="${vo.o_no }"></td>
+						<td>${vo.order_date }</td>
+						<td><a href="/bitcamp/admin/orderView?o_no=${vo.o_no }">${vo.o_no }</a></td>
+						<td>${vo.oname }</td>
+						<td>${vo.rname }</td>
+						<td>${vo.userno }</td>
+						<td>${vo.totalprice }</td>
+						<td>${vo.delivery_date }</td>
+						<td>${vo.delivery_arrival_date }</td>
+						<td><c:if test="${vo.payment_type =='cash' }">무통장입금</c:if> <c:if
+								test="${vo.payment_type =='card' }">카드결제</c:if></td>
+						<td>${vo.delivery_status }</td>
+					</tr>
+				</c:forEach>
+				<c:if test="${fn:length(list)==0 }">
+					<tr>
+						<th colspan="15" style="background: #fff;">등록된 데이터가 없습니다.</th>
+					</tr>
+				</c:if>
+			</tbody>
+		</table>
+		<div style="width: 100%; clear: left">
+			<ul class="pagination justify-content-center">
+				<c:if test="${pagevo.pageNum == 1}">
+					<li class="page-item disabled"><a class="page-link">&lt;</a></li>
+				</c:if>
+				<c:if test="${pagevo.pageNum > 1}">
+					<li class="page-item"><a class="page-link text-white black"
+						href="/bitcamp/admin/orderList?pageNum=${pagevo.pageNum - 1}					
 					<c:if test = "${pagevo.payment_type !=null }">&payment_type=${pagevo.payment_type }</c:if>
-					<c:if test = "${pagevo.ndate !=null }">&ndaye = ${pagevo.ndate }</c:if>
+					<c:if test = "${pagevo.ndate !=null }">&ndate=${pagevo.ndate }</c:if>
 					<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null  && pagevo.s_date !='' && pagevo.e_date !='' }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>
 					<c:if test = "${pagevo.s_price !=null&& pagevo.s_price !='' }">&s_price=${pagevo.s_price }</c:if>
 					<c:if test = "${pagevo.e_price !=null&& pagevo.e_price !='' }">&e_price=${pagevo.e_price }</c:if>
@@ -240,15 +244,15 @@
 					</c:if>
 	
 					">&lt;</a>
-				</li>
-			</c:if>
-			<c:forEach var="i" begin="${pagevo.startPage}"
-				end="${pagevo.startPage + pagevo.onePageCount - 1}">
-				<c:if test="${i <= pagevo.totalPage}">
-					<li class="page-item"><a class="page-link pages"
-						href="/bitcamp/admin/orderList?pageNum=${i}
+					</li>
+				</c:if>
+				<c:forEach var="i" begin="${pagevo.startPage}"
+					end="${pagevo.startPage + pagevo.onePageCount - 1}">
+					<c:if test="${i <= pagevo.totalPage}">
+						<li class="page-item"><a class="page-link pages"
+							href="/bitcamp/admin/orderList?pageNum=${i}
 						<c:if test = "${pagevo.payment_type !=null }">&payment_type=${pagevo.payment_type }</c:if>
-						<c:if test = "${pagevo.ndate !=null }">&ndaye = ${pagevo.ndate }</c:if>
+						<c:if test = "${pagevo.ndate !=null }">&ndate=${pagevo.ndate }</c:if>
 						<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null && pagevo.s_date !='' && pagevo.e_date !='' }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>
 						<c:if test = "${pagevo.s_price !=null&& pagevo.s_price !='' }">&s_price=${pagevo.s_price }</c:if>
 						<c:if test = "${pagevo.e_price !=null&& pagevo.e_price !='' }">&e_price=${pagevo.e_price }</c:if>
@@ -259,20 +263,20 @@
 							</c:forEach>
 						</c:if>						
 						"
-						<c:if test = "${i == pagevo.pageNum}">style = "background : black; color : white;"</c:if>>${i}</a>
-					</li>
+							<c:if test = "${i == pagevo.pageNum}">style = "background : black; color : white;"</c:if>>${i}</a>
+						</li>
+					</c:if>
+				</c:forEach>
+				<c:if
+					test="${pagevo.pageNum == pagevo.totalPage || pagevo.totalPage == ''}">
+					<li class="page-item disabled"><a class="page-link">&gt;</a></li>
 				</c:if>
-			</c:forEach>
-			<c:if
-				test="${pagevo.pageNum == pagevo.totalPage || pagevo.totalPage == ''}">
-				<li class="page-item disabled"><a class="page-link">&gt;</a></li>
-			</c:if>
-			<c:if
-				test="${pagevo.pageNum != pagevo.totalPage && pagevo.totalPage != ''}">
-				<li class="page-item"><a class="page-link text-white black"
-					href="/bitcamp/admin/orderList?pageNum=${pagevo.pageNum + 1}
+				<c:if
+					test="${pagevo.pageNum != pagevo.totalPage && pagevo.totalPage != ''}">
+					<li class="page-item"><a class="page-link text-white black"
+						href="/bitcamp/admin/orderList?pageNum=${pagevo.pageNum + 1}
 					<c:if test = "${pagevo.payment_type !=null }">&payment_type=${pagevo.payment_type }</c:if>
-					<c:if test = "${pagevo.ndate !=null }">&ndaye = ${pagevo.ndate }</c:if>
+					<c:if test = "${pagevo.ndate !=null }">&ndate=${pagevo.ndate }</c:if>
 					<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null  && pagevo.s_date !='' && pagevo.e_date !=''  }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>
 					<c:if test = "${pagevo.s_price !=null && pagevo.s_price !='' }">&s_price=${pagevo.s_price }</c:if>
 					<c:if test = "${pagevo.e_price !=null&& pagevo.e_price !='' }">&e_price=${pagevo.e_price }</c:if>
@@ -283,32 +287,33 @@
 						</c:forEach>
 					</c:if>					
 					">&gt;</a>
-				</li>
-			</c:if>
-		</ul>
-	</div>
+					</li>
+				</c:if>
+			</ul>
+		</div>
 
-	<table class="adminform priceallwrap">
-		<tbody>
-			<tr>
-				<th>주문상태설정</th>
-				<td>
-					<div>
-						<select name="statech">
-							<option value="1">입금대기</option>
-							<!--
-						<option value="2" >결제완료</option>
-						-->
-							<option value="3">배송준비중</option>
-							<option value="4">배송중</option>
-							<option value="5">배송완료</option>
-						</select> (으)로 일괄적으로 수정합니다.
-						<button type="button" onclick="state_ch();">변경하기</button>
-					</div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+		<table class="adminform priceallwrap">
+			<tbody>
+				<tr>
+					<th>주문상태설정</th>
+					<td>
+						<div>
+							<select name="statech">
+								<option value="입금대기">입금대기</option>							
+								<option value="결제완료" >결제완료</option>					
+								<option value="배송준비중">배송준비중</option>
+								<option value="배송중">배송중</option>
+								<option value="배송완료">배송완료</option>
+								<option value="취소요청">취소요청</option>
+								<option value="반품요청">반품요청</option>
+							</select> (으)로 일괄적으로 수정합니다.
+							<button type="submit">변경하기</button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
 </div>
 
 

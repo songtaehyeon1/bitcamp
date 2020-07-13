@@ -10,19 +10,17 @@
 			<li>이미지</li>
 			<li>상품이름</li>
 			<li>판매가</li>
-			<li>적립금</li>
 			<li>삭제</li>
 			<c:forEach var = "list" items = "${list}">
-				<li><img src = "/bitcamp/resources/products/${list.p_filename1}" alt = ""></li>
+				<li><img src = "/bitcamp/upload/${list.p_filename1}" alt = "" class = "wishListImg"></li>
 				<li class = "mypageWishList_go" onclick = "location.href = '/bitcamp/productView?p_no=${list.p_no}';">${list.p_name}</li>
 				<li>${list.price}</li>
-				<li>${list.mileage}</li>
-				<li><button class = "mypageWishList_btn" onclick = "location.href = '/bitcamp/mypageWishListDel?p_no=${list.p_no}';">삭제</button></li>
+				<li><button class = "mypageWishList_btn" onclick = "if(confirm('관심상품을 삭제 하시겠습니까?')){location.href = '/bitcamp/mypageWishListDel?p_no=${list.p_no}';};">삭제</button></li>
 			</c:forEach>
 		</ul>
 		<c:if test = "${list == '[]'}">
 			<div class = "mypageWishList_nothing">관심상품 내역이 없습니다.</div>
 		</c:if>
 	</div>
-	<button class = "mypageWishList_main_btn" onclick = "location.href = '/bitcamp/mypage';">목록으로</button>
+	<button class = "mypageWishList_main_btn" onclick = "location.href = '/bitcamp/mypage';">MY PAGE</button>
 </div>

@@ -4,10 +4,97 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.bitcamp.order.OrderDAOImp">
 	<select id="allSelectProduct" parameterType="int" resultType="Integer">
-		select s_no from product_stock where p_no = #{param1}
+		select s_no from product_stock where p_no = #{param1} and
+		s_deltype='Y'
 	</select>
-	
 	<select id="allSelectDate" parameterType="int" resultType="String">
 		select to_char(stock_date,'YYYYMMDD') from reservate where s_no = #{param1}
 	</select>
+	
+	
+	<insert id="order_info" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into order_info (oi_no,oname,ozipcode,oaddr,oaddrdetail,otel,oemail,opassword)
+		values(oino_sq.nextval,#{oname},#{ozipcode},#{oaddr},#{oaddrdetail},#{otel},#{oemail},#{opassword})
+		 <selectKey keyProperty="oi_no" resultType="int" order="AFTER">
+			  select oino_sq.currval FROM DUAL
+		</selectKey>
+	</insert>
+	<insert id="order_recipient" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into recipient (r_no,rname,rzipcode,raddr,raddrdetail,rtel,rcommnet)
+		values(rno_sq.nextval,#{rname},#{rzipcode},#{raddr},#{raddrdetail},#{rtel},#{rcommnet})
+		<selectKey keyProperty="r_no" resultType="int" order="AFTER">
+			select rno_sq.currval from dual
+		</selectKey>
+	</insert>
+	
+	<select id="orderNumber" parameterType="kr.co.bitcamp.order.OrderVO"  resultType="String">
+		select ono_sq.nextval from dual
+	</select>
+	
+	<insert id="ordertable" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into ordertable 
+		(o_no, userno, r_no, oi_no, mileage, totalprice, order_date, delivery_date, delivery_arrival_date, delivery_status, payment_type,payment_price,total_delivery_fee)
+		values(#{o_no},#{userno},#{r_no},#{oi_no},
+			   #{mileage},#{totalprice},sysdate,#{delivery_date},#{delivery_arrival_date},#{delivery_status},#{payment_type},#{payment_price},#{total_delivery_fee} )
+	</insert>
+	<insert id="ordertable_nonmember" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into ordertable 
+		(o_no, r_no, oi_no, mileage, totalprice, order_date, delivery_date, delivery_arrival_date, delivery_status, payment_type,payment_price)
+		values(#{o_no},#{r_no},#{oi_no},
+			   #{mileage},#{totalprice},sysdate,#{delivery_date},#{delivery_arrival_date},#{delivery_status},#{payment_type},#{payment_price} )
+	</insert>
+	<insert id="paymethod_card" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into card (card_corp,o_no,payment_time) values(#{card_corp},#{o_no},sysdate)
+	</insert>
+	<insert id="paymethod_cash" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into cash (bank,depositor,o_no,payment_time) values(#{bank},#{depositor},#{o_no},sysdate)
+	</insert>
+	
+	<insert id="order_product" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into order_product (p_no,o_no,p_count)
+		values(#{p_no},#{o_no},#{p_count})
+	</insert>
+	
+	<insert id="order_product_cart" parameterType="kr.co.bitcamp.product.ProductVO">
+		insert into order_product(p_no,o_no,p_count)
+		values(#{p_no},#{o_no},#{currentQty})
+	</insert>
+	<insert id ="reservate" parameterType="kr.co.bitcamp.product.ProductVO">
+		insert into reservate (p_no,s_no,stock_date) values(#{p_no},#{s_no},#{stock_date})
+	</insert>
+
+	<insert id="order_stock" parameterType="kr.co.bitcamp.product.ProductVO">
+		insert into order_stock (o_no,s_no) values(#{o_no},#{s_no})
+	</insert>
+	<insert id="paymentInfoInsert" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into paymentInfoInsert (o_no,buyer_name,buyer_email,buyer_tel,imp_uid,merchant_uid,card_name,apply_num,formattedTime,paid_amount)
+		values(#{o_no},#{buyer_name},#{buyer_email},#{buyer_tel},#{imp_uid},#{merchant_uid},#{card_name},#{apply_num},#{formattedTime},#{paid_amount})
+	</insert>
+	<select id="selectMember" parameterType="int"
+		resultType="kr.co.bitcamp.member.MemberVO">
+		select * from member where userno = ${param1}
+	</select>
+	
+		<!-- 주문 하나 선택 -->
+	<select id="selectOrder" resultType="kr.co.bitcamp.order.OrderVO">
+		select
+		o.o_no,o.r_no,o.oi_no,mileage,
+		totalprice,to_char(order_date,'YYYY-MM-DD')
+		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
+		to_char(delivery_arrival_date,'YYYY-MM-DD')
+		delivery_arrival_date,delivery_status,
+        payment_type,delivery_code,cash_time,card_time,oname,otel,oemail,ozipcode,oaddr,oaddrdetail,opassword,rname,rtel,rzipcode,raddr,raddrdetail,rcommnet,delivery_code
+		from 
+(select O_NO, R_NO, OI_NO, MILEAGE, TOTALPRICE, ORDER_DATE, DELIVERY_DATE, DELIVERY_ARRIVAL_DATE,delivery_code, DELIVERY_STATUS, PAYMENT_TYPE, CARD_CORP, card.PAYMENT_TIME card_time, BANK
+, DEPOSITOR, cash.PAYMENT_TIME cash_time 
+from ordertable left join card card using(o_no) left join cash cash using(o_no))o
+        inner join order_info i on o.oi_no = i.oi_no
+		inner join Recipient r on o.r_no = r.r_no 
+where o.o_no = #{param1} and i.oname=#{param2} and i.opassword=#{param3}
+	</select>
 </mapper>
+
+
+
+
+

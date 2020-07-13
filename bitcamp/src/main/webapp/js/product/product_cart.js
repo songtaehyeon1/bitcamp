@@ -1,5 +1,16 @@
+window.addEventListener( "pageshow", function ( event ) {
+  var historyTraversal = event.persisted || 
+                         ( typeof window.performance != "undefined" && 
+                              window.performance.navigation.type === 2 );
+  if ( historyTraversal ) {
+    // Handle page restore.
+    window.location.reload();
+  }
+});
 
 $(function(){
+	
+	
 	//주문수량 조정
 	$('.productQty').click(this,function(){
 		var currentQty = parseInt($(this).parents('.quantity_wrap').find('.currentQty').val());//현재 주문 수량
@@ -35,7 +46,64 @@ $(function(){
 		tbody.find(".cart_qtyprice").html(priceqty)//가격*수량
 		tbody.find(".cart_deliverfee").html(deliFee)//가격*수량
 		
+		//현재 값이 변경 되었을 때 바로 ajax로 저장해 보내기
+		var p_no1 =tbody.find("input[name='p_no']").val()
+		var p_name1 =tbody.find("input[name='p_name']").val()
+		var orderStart1 =tbody.find("input[name='orderStart']").val()
+		var orderEnd1 =tbody.find("input[name='orderEnd']").val()
+		var borrowPeriod1 =tbody.find("input[name='borrowPeriod']").val()
+		var filename1 =tbody.find("input[name='filename']").val()
+		var price1 =tbody.find("input[name='price']").val()
+		var delivery_fee1 =tbody.find("input[name='delivery_fee']").val()
+		var limitQuantity1 =tbody.find("input[name='limitQuantity']").val()
+//		alert(p_no1+"\n"+
+//				p_name1+"\n"+
+//				orderStart1+"\n"+
+//				orderEnd1+"\n"+
+//				borrowPeriod1+"\n"+
+//				filename1+"\n"+
+//				price1+"\n"+
+//				delivery_fee1+"\n"+
+//				limitQuantity1+"\n")
+		
+		$.ajax({
+			type : "get",
+			url:"/bitcamp/productCartEdit",
+			data : {
+				"p_no":p_no1,
+				"p_name":p_name1,
+				"orderStart":orderStart1,
+				"orderEnd":orderEnd1,
+				"borrowPeriod":borrowPeriod1,
+				"filename":filename1,
+				"price":price1,
+				"delivery_fee":delivery_fee1,
+				"limitQuantity":limitQuantity1,
+				"currentQty":qty
+			},
+			success : function(result) {
+//				alert("갯수 바꿈.")
+			},
+			error : function(e) {
+//				alert("실패" + e.responseText);
+			}
+		});
+		
 	})
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//inputbox에 클릭이나 커서표시가 안되게 하기
 	$('.input_noclick').click(this,function(event){

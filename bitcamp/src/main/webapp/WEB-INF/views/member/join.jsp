@@ -60,7 +60,11 @@ $(function(){
 			alert("이메일을 입력해주세요.");
 			return false; 
 		}
-		
+		if($("#emailChkResult").val()=="no"){
+			alert("이메일 인증요청을 진행해 주세요");
+			return false; 
+		}
+	
 		//휴대전화 검사
 		var reg = /^01[0|1|6|7|8|9][0-9]{7,8}$/;
 		//var reg = /^(010|011|016|017|018|019)[1][0-9]{9,10}$/;
@@ -149,6 +153,90 @@ $(function(){
 			$("#idChk").attr("disabled",true);	
 		}
 	});
+	
+	//ajax로 이메일 보내기(네이버 이용)
+	//이메일 인증
+	function userEmail(url, params, msg1, msg2){
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : params,
+			success : function(result){
+				console.log("result=" +result);
+				
+				if(result=='N'){     //이메일 사용 불가(중복 이메일)
+					alert(msg2);
+					$("#caution").css("display","block");					
+				}else if(result=="Y"){     //이메일 인증코드 전송 성공
+					alert(msg1);
+					//이메일 인증코드 입력창 비활성화 → 활성화
+					$("#email_code").attr('disabled', false); 
+				}else if(result=='yes'){     //이메일 인증확인 성공
+					$("#emailChkResult").val("yes");
+					alert(msg1);
+					//이메일 인증코드 입력창, 인증확인 버튼 활성화 → 비활성화
+					$("#email_code").attr('disabled', true);
+					$(".emailCodeChk").attr('disabled', true); 
+				}else if(result=='no'){     //이메일 인증확인 실패
+					alert(msg2);
+				}
+			},
+			error : function(){
+				console.log("이메일 인증 에러...");
+			}
+		});
+	}
+
+	//이메일 인증요청 클릭 시 (이메일 인증코드 받기)
+	$(".emailCheck").click(function(){
+		$("#emailChkResult").val("no");
+		//이메일(아이디) 정규식 검사
+		//reg = /^\w{8,20}[@][a-zA-Z]{2,10}[.][a-zA-Z]{2,3}([.][a-zA-Z]{2,3})?$/;
+		if($("#useremail").val()==""){     //이메일 미입력 시
+			alert("이메일 주소를 입력해주세요.");
+		}/*else if(!reg.test($("#useremail").val())){     //이메일 정규식 불일치 시
+			alert("이메일 주소를 잘못 입력하였습니다.");
+		}*/else{   
+			//이메일 인증코드 받기
+			var url ="<%=request.getContextPath()%>/mailChk";
+		
+			//폼의 데이터를 직렬화 시키기
+			var params = "useremail="+$("#useremail").val();
+			var msg1 = "해당 이메일 주소로 인증코드를 전송하였습니다.";
+			var msg2 = "이미 가입된 이메일 주소입니다.";
+			userEmail(url, params, msg1, msg2);
+		}
+	});
+	
+	//이메일 인증요청 버튼 비활성화 → 활성화
+	$(document).on("keyup paste","#useremail",function(){
+		$(".emailCheck").attr("disabled", false);
+	});
+	
+	//이메일 인증요청 실패 (사용할 수 없는 이메일)
+	$("#useremail").on('keyup', function() {
+		$("#caution").css("display","none");
+	});	
+	
+	//이메일 인증코드 입력값 인증확인 
+	$("#email_code").on("keyup paste",function(){
+		//인증확인 버튼 비활성화 → 활성화
+		$(".emailCodeChk").attr('disabled', false);
+	});
+
+	//이메일 인증하기
+	$(document).on('click','.emailCodeChk',function(){			
+		var url = "<%=request.getContextPath()%>/mailcodeChk";
+			
+		//폼의 데이터를 직렬화 시키기
+		var params = "email_code="+$("#email_code").val(); 
+		console.log("params="+params)
+		var msg1 = "이메일 인증이 완료되었습니다.";
+		var msg2 = "이메일 인증에 실패하였습니다.";
+		userEmail(url, params, msg1, msg2);
+	});  
+	//////////ajax로 이메일 보내기(네이버 이용) 끝
+	
 
 	//전체동의 체크박스 선택 및 해제
 	$("#checkAll").change(function(){  
@@ -163,9 +251,9 @@ $(function(){
 		}
 	});
 	
-	//약관동의 상세보기 //토글로 바꾸자
-	$(".view_indetail").on("click",function(){
-		$(".agree_txt").css("display","block");
+	//약관동의 상세보기 
+	$(".view_indetail").click(function(){
+		$(this).next().toggleClass("txt_div");
 	});
 });//jquery
 
@@ -230,13 +318,28 @@ function openDaumZipAddress() {
 			</div>
 	
 			<div class="form-group">
-				<label for="text">이름</label> 
+				<label for="username">이름</label> 
 				<input type="text" class="form-control" id="username" placeholder="이름" name="username" maxlength="20">
 			</div>
 			
-			<div class="form-group">
-				<label for="eamil" class="lbl_email">이메일</label> 
-				<input type="email" class="form-control" id="useremail" placeholder="이메일 주소" name="useremail"> 
+			<div class="form-group input-group">
+				<label for="useremail" class="lbl_email">이메일</label> 
+				<small><code id="caution">사용 할 수 없는 이메일 주소입니다.</code></small>
+				<input type="email" class="form-control" id="useremail" placeholder="이메일 주소" name="useremail"/> 
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary emailCheck" type="button" disabled>인증요청</button>
+				</div>
+			</div>
+	
+			<div class="form-group input-group">
+				<label for="email_code" class="lbl_email">이메일 인증코드</label>
+				<small>메일함을 확인하여 이메일 인증코드를 입력해주세요.</small>
+				<input type="text" class="form-control" id="email_code" placeholder="인증코드" name="email_code" disabled>
+				<!-- 이메일 인증확인 여부 설정 -->
+				<input type="hidden" id="emailChkResult" name="emailChkResult" value="no"/>
+				<div class="input-group-append">
+					<button class="btn btn-secondary emailCodeChk" type="button" disabled>인증확인</button>
+				</div>
 			</div>
 			
 			<div class="form-group input-group">
@@ -286,22 +389,61 @@ function openDaumZipAddress() {
 		        	<label class="form-check-label" for="check1">
 		        		<input type="checkbox" class="form-check-input" id="check1" name="option2" value="[필수] 이용약관 동의">[필수] 이용약관 동의
 		      		</label>
-		      		<a href="#" class="view_indetail" target="_blank">상세보기</a>
+		      		<span class="view_indetail">상세보기</span>
 		      		<div class="agree_txt">
-		      			<textarea rows="5" cols="73" readonly></textarea>
+		      		<pre>
+제1조(목적)
+이 약관은 OO 회사(전자상거래 사업자)가 운영하는 OO 사이버 몰(이하 “몰”이라 한다)에서 제공하는 인터넷 관련 서비스(이하 “서비스”라 한다)를 이용함에 있어 사이버 몰과 이용자의 권리?의무 및 책임사항을 규정함을 목적으로 합니다.
+
+※「PC통신, 무선 등을 이용하는 전자상거래에 대해서도 그 성질에 반하지 않는 한 이 약관을 준용합니다」
+
+제2조(정의)
+①“몰” 이란 OO 회사가 재화 또는 용역(이하 “재화등”이라 함)을 이용자에게 제공하기 위하여 컴퓨터등 정보통신설비를 이용하여 재화등을 거래할 수 있도록 설정한 가상의 영업장을 말하며, 아울러 사이버몰을 운영하는 사업자의 의미로도 사용합니다.
+
+②“이용자”란 “몰”에 접속하여 이 약관에 따라 “몰”이 제공하는 서비스를 받는 회원 및 비회원을 말합니다.
+
+③ ‘회원’이라 함은 “몰”에 개인정보를 제공하여 회원등록을 한 자로서, “몰”의 정보를 지속적으로 제공받으며, “몰”이 제공하는 서비스를 계속적으로 이용할 수 있는 자를 말합니다.
+
+④ ‘비회원’이라 함은 회원에 가입하지 않고 “몰”이 제공하는 서비스를 이용하는 자를 말합니다.
+
+제3조 (약관등의 명시와 설명 및 개정)
+① “몰”은 이 약관의 내용과 상호 및 대표자 성명, 영업소 소재지 주소(소비자의 불만을 처리할 수 있는 곳의 주소를 포함), 전화번호?모사전송번호?전자우편주소, 사업자등록번호, 통신판매업신고번호, 개인정보관리책임자등을 이용자가 쉽게 알 수 있도록 00 사이버몰의 초기 서비스화면(전면)에 게시합니다. 다만, 약관의 내용은 이용자가 연결화면을 통하여 볼 수 있도록 할 수 있습니다.
+
+② “몰은 이용자가 약관에 동의하기에 앞서 약관에 정하여져 있는 내용 중 청약철회?배송책임?환불조건 등과 같은 중요한 내용을 이용자가 이해할 수 있도록 별도의 연결화면 또는 팝업화면 등을 제공하여 이용자의 확인을 구하여야 합니다.
+
+③ “몰”은 전자상거래등에서의소비자보호에관한법률, 약관의규제에관한법률, 전자거래기본법, 전자서명법, 정보통신망이용촉진등에관한법률, 방문판매등에관한법률, 소비자보호법 등 관련법을 위배하지 않는 범위에서 이 약관을 개정할 수 있습니다.
+
+④ “몰”이 약관을 개정할 경우에는 적용일자 및 개정사유를 명시하여 현행약관과 함께 몰의 초기화면에 그 적용일자 7일이전부터 적용일자 전일까지 공지합니다.
+다만, 이용자에게 불리하게 약관내용을 변경하는 경우에는 최소한 30일 이상의 사전 유예기간을 두고 공지합니다. 이 경우 "몰“은 개정전 내용과 개정후 내용을 명확하게 비교하여 이용자가 알기 쉽도록 표시합니다.
+
+⑤ “몰”이 약관을 개정할 경우에는 그 개정약관은 그 적용일자 이후에 체결되는 계약에만 적용되고 그 이전에 이미 체결된 계약에 대해서는 개정전의 약관조항이 그대로 적용됩니다. 다만 이미 계약을 체결한 이용자가 개정약관 조항의 적용을 받기를 원하는 뜻을 제3항에 의한 개정약관의 공지기간내에 ‘몰“에 송신하여 ”몰“의 동의를 받은 경우에는 개정약관 조항이 적용됩니다.
+
+⑥ 이 약관에서 정하지 아니한 사항과 이 약관의 해석에 관하여는 전자상거래등에서의소비자보호에관한법률, 약관의규제등에관한법률, 공정거래위원회가 정하는 전자상거래등에서의소비자보호지침 및 관계법령 또는 상관례에 따릅니다.
+		      		</pre>
 		      		</div>
 			    </div>
 			    <div class="form-check">
 		        	<label class="form-check-label" for="check2">
 		        		<input type="checkbox" class="form-check-input" id="check2" name="option3" value="[필수] 개인정보 수집 및 이용 동의">[필수] 개인정보 수집 및 이용 동의
 		      		</label>
-		      		<a href="#" class="view_indetail" target="_blank">상세보기</a>
+		      		<span class="view_indetail">상세보기</span>
+      				<div class="agree_txt">
+	      			</div>
 			    </div>
 				<div class="form-check">
 		        	<label class="form-check-label" for="check3">
 		        		<input type="checkbox" class="form-check-input" id="check3" name="option4" value="[선택] 쇼핑정보 수신 동의">[선택] 쇼핑정보 수신 동의
 		      		</label>
-		      		<a href="#" class="view_indetail" target="_blank">상세보기</a>
+		      		<span class="view_indetail">상세보기</span>
+	      			<div class="agree_txt">
+	      				<pre>
+할인쿠폰 및 혜택, 이벤트, 신상품 소식 등 쇼핑몰에서 제공하는 유익한 쇼핑정보를 SMS나 이메일로 받아보실 수 있습니다.
+
+단, 주문/거래 정보 및 주요 정책과 관련된 내용은 수신동의 여부와 관계없이 발송됩니다.
+
+선택 약관에 동의하지 않으셔도 회원가입은 가능하며, 회원가입 후 회원정보수정 페이지에서 언제든지 수신여부를 변경하실 수 있습니다.
+	      				</pre>
+	      			</div>
 			    </div>
 			</div>
 			

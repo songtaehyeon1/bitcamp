@@ -73,11 +73,11 @@
 			<tbody>
 				<tr>
 					<th>가입일</th>
-					<td id="datepickerbox" ><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }"><img
+					<td id="datepickerbox" ><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }" autocomplete="off"><img
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="Select date" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
-						<span>~</span> <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }"><img
+						<span>~</span> <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }" autocomplete="off"><img
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
@@ -86,12 +86,12 @@
 				<tr>
 					<th>직접검색</th>
 					<td><select name="searchKey" id="searchKey">
-							<option value="username">회원명</option>
-							<option value="userid">회원아이디</option>
-							<option value="usertel">전화번호</option>
-							<option value="useremail">이메일</option>
-							<option value="useraddr">주소</option>
-					</select> <input type="text" id="searchWord" name="searchWord"></td>
+							<option value="username" <c:if test="${pagevo.searchKey =='username' || pagevo.searchKey ==null || pagevo.searchKey=='' }">selected=""</c:if>>회원명</option>
+							<option value="userid" <c:if test="${pagevo.searchKey =='userid' }">selected=""</c:if>>회원아이디</option>
+							<option value="usertel" <c:if test="${pagevo.searchKey =='usertel' }">selected=""</c:if>>전화번호</option>
+							<option value="useremail" <c:if test="${pagevo.searchKey =='useremail' }">selected=""</c:if>>이메일</option>
+							<option value="useraddr" <c:if test="${pagevo.searchKey =='useraddr' }">selected=""</c:if>>주소</option>
+					</select> <input type="text" id="searchWord" name="searchWord" value="${pagevo.searchWord }"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -158,15 +158,18 @@
 				</c:if>
 				<c:if test="${pagevo.pageNum > 1}">
 					<li class="page-item"><a class="page-link text-white black"
-						href="/bitcamp/admin/member?pageNum=${pagevo.pageNum - 1}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>">&lt;</a>
+						href="/bitcamp/admin/member?pageNum=${pagevo.pageNum - 1}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>
+						<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null  && pagevo.s_date !='' && pagevo.e_date !=''  }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>
+						">&lt;</a>
 					</li>
 				</c:if>
 				<c:forEach var="i" begin="${pagevo.startPage}"
 					end="${pagevo.startPage + pagevo.onePageCount - 1}">
 					<c:if test="${i <= pagevo.totalPage}">
 						<li class="page-item"><a class="page-link pages"
-							href="/bitcamp/admin/member?pageNum=${i}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>"
-							<c:if test = "${i == pagevo.pageNum}">style = "background : black; color : white;"</c:if>>${i}</a>
+							href="/bitcamp/admin/member?pageNum=${i}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>
+							<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null  && pagevo.s_date !='' && pagevo.e_date !=''  }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>
+							"<c:if test = "${i == pagevo.pageNum}">style = "background : black; color : white;"</c:if>>${i}</a>
 						</li>
 					</c:if>
 				</c:forEach>
@@ -177,7 +180,7 @@
 				<c:if
 					test="${pagevo.pageNum != pagevo.totalPage && pagevo.totalPage != ''}">
 					<li class="page-item"><a class="page-link text-white black"
-						href="/bitcamp/admin/member?pageNum=${pagevo.pageNum + 1}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>">&gt;</a>
+						href="/bitcamp/admin/member?pageNum=${pagevo.pageNum + 1}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if><c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null  && pagevo.s_date !='' && pagevo.e_date !=''  }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>">&gt;</a>
 					</li>
 				</c:if>
 			</ul>

@@ -56,7 +56,7 @@ $(function() {
 	//ckeditor높이
 	CKEDITOR.config.height = 400;
 	//ckeditor 기본 내용
-	CKEDITOR.instances.p_commnet.setData("<p>이미지 폭은 1200 이하로 설정해주세요.</p>")
+	//CKEDITOR.instances.p_commnet.setData("<p>이미지 폭은 1200 이하로 설정해주세요.</p>")
 	
 	
 

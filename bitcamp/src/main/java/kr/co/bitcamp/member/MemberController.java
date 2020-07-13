@@ -2,6 +2,7 @@ package kr.co.bitcamp.member;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
@@ -10,15 +11,16 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
+
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
+
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -153,8 +155,13 @@ public class MemberController {
 		MemberVO memVo = dao.loginCheck(vo);
 		
 		if(memVo==null) {  //로그인 실패
-			mav.setViewName("redirect:loginFrm");
-		}else {  //로그인 성공
+			//로그인 아이디, 비밀번호 불일치
+			mav.addObject("result", 0);
+			mav.setViewName("member/loginFrmOk");
+		}else if(memVo !=null && memVo.getUserjointype().equals("N")){  //탈퇴 회원의 로그인 시도
+			mav.addObject("result", 1);
+			mav.setViewName("member/loginFrmOk");
+		}else if(memVo !=null && memVo.getUserjointype().equals("Y")){  //로그인 성공
 			//접속 날짜 구하기
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  //날짜 형식 지정하기
 			Date today  = new Date();
@@ -232,6 +239,62 @@ public class MemberController {
 			return "Y";
 		}
 	}	
+	
+	//이메일 중복확인
+	@RequestMapping(value="/mailChk", method=RequestMethod.POST)
+	@ResponseBody
+	public String mailChk(String useremail, HttpSession session) {
+		MemberDAOImp dao = sqlSession.getMapper(MemberDAOImp.class);
+		int cnt = dao.mailCheck(useremail);
+
+		if(cnt>0) {  //사용할 수 없는 이메일
+			return "N";
+		}else {  //사용할 수 있는 이메일
+			UUID random = UUID.randomUUID();  //UUID :중복되지 않는 고유한 키 값
+			String mailCode = random.toString();
+			
+			String tomail = useremail; 
+			String title = "[THEBITCAMP] 회원가입을 위한 이메일 인증코드 입니다.";
+			String content = "<div style='width:100%; background-color:#f2f2f2; padding:50px; text-align:center;'>";
+			       content += "<div style='width:600px; background-color:#fff; padding:16px; margin:0 auto;'>";
+			       content += "<h1 style='margin-bottom:20px;'>회원가입을 위한 이메일 인증코드 입니다.</h1>";
+				   content += "<p style='color:#343a40;'>안녕하세요. THEBITCAMP입니다. <br/>";
+				   content += "회원가입을 위한 이메일 인증코드를 알려드립니다.<br/>";
+				   content += "이메일 인증코드는 <strong>"+mailCode+"</strong> 입니다.</p></div>";	
+				   content += "<img src='http://localhost:9090/bitcamp/resources/category/mail-img.png' style='width:630px; height:350px;'></div>";
+			try {
+				MimeMessage message = mailSender.createMimeMessage();
+				MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+				messageHelper.setFrom("mail-test@naver.com");
+				messageHelper.setTo(tomail);
+				messageHelper.setSubject(title);
+				messageHelper.setText("text/html; charset=UTF-8", content);
+				
+				mailSender.send(message);
+				session.setAttribute("mailCode", mailCode);
+				
+				System.out.println("메일 전송 성공");
+			}catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+			return "Y";
+		}
+	}
+	
+	//이메일 인증코드 확인
+	@RequestMapping(value="/mailcodeChk", method=RequestMethod.POST)
+	@ResponseBody
+	public String mailcodeCheck(String email_code, HttpSession session) {
+		//System.out.println(email_code);  //사용자가 입력한 이메일 인증코드
+		
+		String mailCode = (String)session.getAttribute("mailCode");  //이메일 인증코드 전송 시, session에 담은 mailCode 가져오기
+		//System.out.println(mailCode);	
+		if(email_code.equals(mailCode)) {
+			return "yes";
+		}else {
+			return "no";
+		}
+	}
 	
 	//회원가입 완료
 	@RequestMapping(value="/joinOk", method=RequestMethod.POST)

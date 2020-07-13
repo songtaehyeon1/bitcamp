@@ -6,11 +6,11 @@
 
 #review_listFormBody a:hover, #review_listFormBody a:link, #review_listFormBody a:visited{
 	text-decoration : none;
-	color : black;
+	color : #555;
 }
 
 #review_listFormBody a:hover{
-	color : gray;
+	color : #555;
 }
 
 #review_listFormBody ul, #review_listFormBody li{
@@ -44,7 +44,7 @@
 
 #nTitle>span:nth-of-type(2){
 	font-size : 13px;
-	color : #757575;
+	color : #555;
 }
 
 #nTitle>span:nth-of-type(1){
@@ -56,7 +56,7 @@
 #boardCate{
 	 width : 1400px;
 	 height : 72px;
-	 background : black;
+	 background : #555;
 }
 
 #boardCate li{
@@ -81,7 +81,7 @@
 	width : 1400px;
 	height : 150px;
 	line-height : 150px;
-	border : 5px solid black;
+	border : 5px solid #555;
 	float : left;
 	/*margin-top : 20px;*/
 	padding : 20px;
@@ -118,7 +118,7 @@
 	width : 170px;
 	height : 40px;
 	line-height : 40px;
-	border : 1px solid black;
+	border : 1px solid #555;
 	background : white;
 	font-weight : bold;
 	font-size : 13px;
@@ -128,7 +128,7 @@
 #listForm{
 	margin-top : 20px;
 	width : 1400px;
-	border : 1px solid black;
+	border : 1px solid #555;
 }
 
 #listForm *{
@@ -142,7 +142,7 @@
 #listForm>li:nth-of-type(1), #listForm>li:nth-of-type(3){
 	width : 10%;
 	height : 40px;
-	background : black;
+	background : #555;
 	color : white;
 	padding : 10px;
 }
@@ -150,7 +150,7 @@
 #listForm>li:nth-of-type(2), #listForm>li:nth-of-type(4){
 	width : 90%;
 	height : 40px;
-	border-bottom : 1px solid black;
+	border-bottom : 1px solid #555;
 	padding : 10px;
 }
 
@@ -167,7 +167,7 @@
 #listForm>li:nth-of-type(6){
 	width : 10%;
 	height : 40px;
-	background : black;
+	background : #555;
 	color : white;
 	padding : 10px;
 }
@@ -175,7 +175,7 @@
 #listForm>li:nth-of-type(7){
 	width : 90%;
 	height : 40px;
-	border-top : 1px solid black;
+	border-top : 1px solid #555;
 	padding : 10px;
 }
 
@@ -240,7 +240,7 @@
 #recommendBtn{
 	border : none;
 	color : white;
-	background : black;
+	background : #555;
 }
 
 /* 목록으로, 수정, 삭제 */
@@ -256,7 +256,7 @@
 	height : 50px;
 	line-height : 50px;
 	border : none;
-	background : black;
+	background : #555;
 	color : white;
 	font-weight : bold;
 	font-size : 1.2em;
@@ -271,7 +271,7 @@
 	height : 50px;
 	line-height : 50px;
 	border : none;
-	background : black;
+	background : #555;
 	color : white;
 	font-size : 13px;
 }
@@ -288,7 +288,7 @@
 
 #listMove>ul{
 	width : 1400px;
-	border : 1px solid black;
+	border : 1px solid #555;
 }
 
 #listMove li{
@@ -300,14 +300,14 @@
 }
 
 #listMove li:nth-of-type(2){
-	border-bottom : 1px solid black;
+	border-bottom : 1px solid #555;
 }
 
 #listMove li:nth-of-type(2n + 1){
 	width : 8%;
 	height : 40px;
 	line-height : 40px;
-	background : black;
+	background : #555;
 	color : white;
 	padding-left : 20px;
 }
@@ -359,7 +359,7 @@
 	width : 60px;
 	height : 40px;
 	line-height : 40px;
-	background : black;
+	background : #555;
 	color : white;
 	margin-top : 5px;
 }
@@ -397,7 +397,7 @@
 	width : 60px;
 	height : 30px;
 	line-height : 30px;
-	background : black;
+	background : #555;
 	color : white;
 }
 
@@ -417,7 +417,7 @@
 
 #listMove>ul{
 	width : 1400px;
-	border : 1px solid black;
+	border : 1px solid #555;
 }
 
 #listMove li{
@@ -429,14 +429,14 @@
 }
 
 #listMove li:nth-of-type(2){
-	border-bottom : 1px solid black;
+	border-bottom : 1px solid #555;
 }
 
 #listMove li:nth-of-type(2n + 1){
 	width : 8%;
 	height : 40px;
 	line-height : 40px;
-	background : black;
+	background : #555;
 	color : white;
 	padding-left : 20px;
 }

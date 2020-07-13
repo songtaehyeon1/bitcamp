@@ -57,11 +57,11 @@
 				<tr>
 					<th>신청일</th>
 					<td id="datepickerbox"><input type="text" name="s_date" id="s_date" value="${pagevo.s_date }"
-						class="text w100"><img
+						class="text w100" autocomplete="off"><img
 						class="ui-datepicker-trigger" src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="Select date" title="Select date"
 						style="margin-left: 2px; vertical-align: middle; cursor: Pointer;">
-						<span>~</span> <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }"
+						<span>~</span> <input type="text" name="e_date" id="e_date" value="${pagevo.e_date }" autocomplete="off"
 						class="text w100 hasDatepicker"><img
 						src="<%=request.getContextPath()%>/resources/admin/calendar.gif"
 						alt="Select date" title="Select date"
@@ -71,9 +71,9 @@
 				<tr>
 					<th>직접검색</th>
 					<td><select name="searchKey">
-							<option value="username">회원명</option>
-							<option value="userid">회원아이디</option>
-					</select> <input type="text" name="searchWord" value=""></td>
+							<option value="username" <c:if test="${pagevo.searchKey =='username' }">selected=""</c:if>>회원명</option>
+							<option value="userid" <c:if test="${pagevo.searchKey =='userid' }">selected=""</c:if>>회원아이디</option>
+					</select> <input type="text" name="searchWord" value="${pagevo.searchWord }"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -83,14 +83,11 @@
 	</form>
 	<h4 class="allgoodsnum">
 		총 <span class="red">${pagevo.totalRecord }</span>명의 회원이 있습니다.
-		<div>
-			<button type="button" class="textsearch" onclick="submit_();">탈퇴처리</button>
-		</div>
 	</h4>
 
 
 	<!-- 회원 리스트 -->
-	<form method="get" action="#">
+	<form method="get" action="/bitcamp/admin/memberReturn">
 		<table class="goodslist">
 			<tbody>
 				<tr>
@@ -104,8 +101,8 @@
 				</tr>
 				<c:forEach var="vo" items="${list }">
 				<tr>
-					<td class="width50"><input type="checkbox" name="chk[]"
-						value="13"></td>
+					<td class="width50"><input type="checkbox" name="chk"
+						value="${vo.userno }"></td>
 					<td>${vo.userno}</td>
 					<td>${vo.userid }</td>
 					<td><a href=""
@@ -124,7 +121,7 @@
 			</tbody>
 		</table>
 		<div style="margin-top: 5px;">
-			<button type="button" name="btn" onclick="chkDelete();">선택삭제</button>
+			<button type="submit" name="btn">선택삭제</button>
 		</div>
 	</form>
 	<!-- 페이징 -->
@@ -135,15 +132,19 @@
 				</c:if>
 				<c:if test="${pagevo.pageNum > 1}">
 					<li class="page-item"><a class="page-link text-white black"
-						href="/bitcamp/admin/memberdellist?pageNum=${pagevo.pageNum - 1}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>">&lt;</a>
+						href="/bitcamp/admin/memberdellist?pageNum=${pagevo.pageNum - 1}
+						<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>
+						<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null  && pagevo.s_date !='' && pagevo.e_date !=''  }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>
+						">&lt;</a>
 					</li>
 				</c:if>
 				<c:forEach var="i" begin="${pagevo.startPage}"
 					end="${pagevo.startPage + pagevo.onePageCount - 1}">
 					<c:if test="${i <= pagevo.totalPage}">
 						<li class="page-item"><a class="page-link pages"
-							href="/bitcamp/admin/memberdellist?pageNum=${i}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>"
-							<c:if test = "${i == pagevo.pageNum}">style = "background : black; color : white;"</c:if>>${i}</a>
+							href="/bitcamp/admin/memberdellist?pageNum=${i}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>
+							<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null  && pagevo.s_date !='' && pagevo.e_date !=''  }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>
+							"<c:if test = "${i == pagevo.pageNum}">style = "background : black; color : white;"</c:if>>${i}</a>
 						</li>
 					</c:if>
 				</c:forEach>
@@ -154,7 +155,8 @@
 				<c:if
 					test="${pagevo.pageNum != pagevo.totalPage && pagevo.totalPage != ''}">
 					<li class="page-item"><a class="page-link text-white black"
-						href="/bitcamp/admin/memberdellist?pageNum=${pagevo.pageNum + 1}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>">&gt;</a>
+						href="/bitcamp/admin/memberdellist?pageNum=${pagevo.pageNum + 1}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>
+						<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null  && pagevo.s_date !='' && pagevo.e_date !=''  }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>">&gt;</a>
 					</li>
 				</c:if>
 			</ul>

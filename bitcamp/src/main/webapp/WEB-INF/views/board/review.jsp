@@ -45,7 +45,7 @@
 </script>
 <div class = "container" id = "reviewBody">
 	<div id = "nLink"><a href = "/bitcamp/">홈</a>&nbsp;>&nbsp;<span>상품후기</span></div>
-	<div id = "nTitle"><span>상품후기</span><span id = "sss">&nbsp;&nbsp;|&nbsp;&nbsp;대여금액 100,000원 이상 , 직접 설치한 장비와 캠핑모습을 담은 사진 3장 이상으로 캠핑후기를 작성해주시면 캐시백 10,000원을 드립니다. 내용에 맞지 않는 게시물은 관리자의 권한으로 삭제합니다.</span></div>
+	<div id = "nTitle"><span>상품후기</span></div>
 	<ul id = "boardCate">
 		<li onclick = "location.href = '/bitcamp/boardNotice'">공지사항</li>
 		<li onclick = "location.href = '/bitcamp/boardEnquiry'">고객문의</li>
@@ -64,7 +64,7 @@
 		<c:if test = "${list != null && list != ''}">
 			<c:forEach var = "list" items = "${list}">
 				<li>${list.review_no}</li>
-				<li><img src = "/bitcamp/resources/product/${list.p_filename1}" alt = ""><span>${list.p_name}</span></li>
+				<li><img src = "/bitcamp/upload/${list.p_filename1}" alt = ""><span>${list.p_name}</span></li>
 				<li onclick = "location.href = '/bitcamp/review_listForm?no=${list.review_no}&pageNum=${pagevo.pageNum}<c:if test = '${pagevo.searchKey != null && pagevo.searchWord != null}'>&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>';" class = "pointer wordCut">${list.review_subject}</li>
 				<li>${list.userid}</li>
 				<li>${list.review_writedate}</li>
@@ -103,11 +103,13 @@
 			<input type = "text" id = "searchText" name = "searchWord">
 			<input type = "submit" id = "searchBtn" value = "찾기">
 		</div>
-		<form method = "post" action = "/bitcamp/review_writeForm" id = "review_write">
-			<div id = "write">
-				<input type = "submit" id = "writingBtn" value = "글 쓰기">
-			</div>
-		</form>
+		<c:if test = "${adminStatus != 'Y'}">
+			<form method = "post" action = "/bitcamp/review_writeForm" id = "review_write">
+				<div id = "write">
+					<input type = "submit" id = "writingBtn" value = "글 쓰기">
+				</div>
+			</form>
+		</c:if>
 	</div>
 	<div style="width : 1400px; clear : left">
 		<ul class="pagination justify-content-center">
@@ -122,7 +124,7 @@
 			<c:forEach var = "i" begin = "${pagevo.startPage}" end = "${pagevo.startPage + pagevo.onePageCount - 1}">
 				<c:if test = "${i <= pagevo.totalPage}">
 		    		<li class="page-item">
-		    			<a class="page-link pages" href="/bitcamp/boardReview?pageNum=${i}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>"<c:if test = "${i == pagevo.pageNum}">style = "background : black; color : white;"</c:if>>${i}</a>
+		    			<a class="page-link text-green pages <c:if test = "${i == pagevo.pageNum}"> text-white black</c:if>" href="/bitcamp/boardReview?pageNum=${i}<c:if test = "${pagevo.searchKey != null && pagevo.searchWord != null}">&searchKey=${pagevo.searchKey}&searchWord=${pagevo.searchWord}</c:if>">${i}</a>
 		    		</li>
 		    	</c:if>
 			</c:forEach>
