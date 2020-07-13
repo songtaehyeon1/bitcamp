@@ -33,6 +33,11 @@
 		select count(userid) from member where userid=#{userid}
 	</select>
 	
+	<!-- 회원가입_이메일 중복확인 -->
+	<select id="mailCheck" resultType="int">
+		select count(useremail) from member where useremail=#{useremail}
+	</select>
+	
 	<!-- 회원 등록 -->
 	<insert id="memberInsert" parameterType="kr.co.bitcamp.member.MemberVO">
 		insert into member(userno, userid, userpwd, username, useremail, usertel, userzipcode, useraddr, useraddrdetail, regdate, usermile) values(userno_sq.nextval, #{userid}, #{userpwd}, #{username}, #{useremail}, #{usertel}, #{userzipcode}, #{useraddr}, #{useraddrdetail}, sysdate, 2000)

@@ -19,6 +19,9 @@ public interface MemberDAOImp {
 	//회원가입_아이디 중복확인
 	public int idCheck(String userid);
 	
+	//회원가입_아이디 중복확인
+	public int mailCheck(String useremail);
+	
 	//회원 등록
 	public int memberInsert(MemberVO vo);
 	

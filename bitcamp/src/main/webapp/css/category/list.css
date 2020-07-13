@@ -171,10 +171,12 @@ select:focus {
 	text-align:center;
 	margin-bottom:5px;
 }
-	/*마우스 오버시 이미지 확대 효과*/
+/*마우스 오버시 이미지 확대 효과*/
 .product-img{
 	overflow:hidden; /*부모 크기를 벗어나지 않고 내부 이미지 확대 */
-	height:440px; 
+	height:440px;
+	line-height:440px;
+	vertical-align:middle; 
 }
 .product-img img{
 	width:100%;
@@ -195,7 +197,7 @@ select:focus {
 .btn_heart{
 	position:relative;
 	right:-140px;
-	top:-380px;
+	top:-415px;
 	width:45px;
 	height:45px;
 	border:none;
@@ -203,6 +205,7 @@ select:focus {
 	background:rgb(246,246,246) no-repeat 50% 50%;
 	background-image:url(/bitcamp/resources/category/heart_icon.png);
 	transition:all ease 1s;
+	vertical-align:top;
 }
 .btn_heart:focus{
 	outline:none;

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.bitcamp.AccessorDAO">
+	<select id = "accessorIpCheck" resultType = "int">
+		select count(accessor_ip) from accessor where accessor_ip = #{param1} and to_char(accessor_date) = to_char(sysdate)
+	</select>
+	<insert id = "accessorIpInsert">
+		insert into accessor(accessor_ip, accessor_date) values(#{param1}, sysdate)
+	</insert>
+</mapper>

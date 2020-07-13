@@ -29,38 +29,34 @@
 	line-height : 60px;
 }
 
-.mypageWishList_main li:nth-of-type(-n + 5){
+.mypageWishList_main li:nth-of-type(-n + 4){
 	background : #555;
 	color : white;
 }
 
-.mypageWishList_main li:nth-of-type(-n + 4){
+.mypageWishList_main li:nth-of-type(-n + 3){
 	border-right : 1px solid white;
 }
 
-.mypageWishList_main li:nth-of-type(5n + 1){
+.mypageWishList_main li:nth-of-type(4n + 1){
 	width : 8%;
 	border-left : 1px solid #555;
 }
 
-.mypageWishList_main li:nth-of-type(5n + 2){
+.mypageWishList_main li:nth-of-type(4n + 2){
 	text-align : left;
-	width : 68%;
+	width : 76%;
 }
 
 .mypageWishList_main li:nth-of-type(2){
 	text-align : center;
 }
 
-.mypageWishList_main li:nth-of-type(5n + 3){
+.mypageWishList_main li:nth-of-type(4n + 3){
 	width : 8%;
 }
 
-.mypageWishList_main li:nth-of-type(5n + 4){
-	width : 8%;
-}
-
-.mypageWishList_main li:nth-of-type(5n){
+.mypageWishList_main li:nth-of-type(4n){
 	width : 8%;
 }
 
@@ -98,6 +94,12 @@
 	color : white;
 	margin-top : 20px;
 	border : none;
+}
+
+.wishListImg{
+	width : 90px;
+	height : 50px;
+	line-height : 50px;
 }
 
 

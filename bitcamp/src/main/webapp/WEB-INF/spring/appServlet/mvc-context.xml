@@ -38,6 +38,9 @@
 			<mvc:mapping path="/productWirteOk" />
 			<mvc:mapping path="/updateProduct" />
 			<mvc:mapping path="/updateProductOk"/>
+			<mvc:mapping path="/admin/sales"/>
+			<mvc:mapping path="/admin/basicInfoEditOk"/>
+			<mvc:mapping path="/admin/basicinfo"/>
 			<bean class="kr.co.bitcamp.intercepter.AdminIntercepter"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>

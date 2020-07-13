@@ -10,9 +10,9 @@ a{text-decoration:none;}
 .title, .join{width:40%;}
 .join>h2, .tablist{text-align:center;}
 .tablist b{font-size:1.5em;}
-.lbl_userid, .lbl_tel, .lbl_addr{width:100%;}
-#userid, #tel{border-radius:5px;}
-#warning{
+.lbl_userid, .lbl_email, .lbl_tel, .lbl_addr{width:100%;}
+#userid, #useremail, #email_code, #tel{border-radius:5px;}
+#warning, #caution{
 	font-weight:bold;
 	display:none;
 }

@@ -26,7 +26,7 @@ public class MypageController {
 		this.sqlSession = sqlSession;
 	}
 	
-	// ë§ˆì´í˜ì´ì§€ë¡œ ì´ë™
+	// ¸¶ÀÌÆäÀÌÁö·Î ÀÌµ¿
 	@RequestMapping("/mypage")
 	public ModelAndView mypage(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
@@ -50,7 +50,7 @@ public class MypageController {
 		
 		return mv;
 	}
-	// ë°°ì†¡ì£¼ì†Œë¡ìœ¼ë¡œ ì´ë™ ============================================================== ë°°ì†¡ì§€
+	// ¹è¼ÛÁÖ¼Ò·ÏÀ¸·Î ÀÌµ¿ ============================================================== ¹è¼ÛÁö
 	@RequestMapping("/mypageshipping")
 	public ModelAndView mypageshipping(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
@@ -66,12 +66,12 @@ public class MypageController {
 		
 		return mv;
 	}
-	// ë°°ì†¡ì£¼ì†Œë¡ ë“±ë¡í¼ìœ¼ë¡œ
+	// ¹è¼ÛÁÖ¼Ò·Ï µî·ÏÆûÀ¸·Î
 	@RequestMapping("/shipping_writeForm")
 	public String shipping_writeForm() {
 		return "/member/shippingWriteForm";
 	}
-	// ë°°ì†¡ì£¼ì†Œë¡ ë“±ë¡
+	// ¹è¼ÛÁÖ¼Ò·Ï µî·Ï
 	@RequestMapping(value = "/shippingWrite", method = RequestMethod.POST)
 	public String shippingWrite(MypageVO vo, HttpServletRequest request) {
 		vo.setRtel(vo.getTel1(), vo.getTel2(), vo.getTel3());
@@ -89,7 +89,7 @@ public class MypageController {
 			return "redirect:shipping_writeForm";
 		}
 	}
-	// ë°°ì†¡ì§€ ì„ íƒ
+	// ¹è¼ÛÁö ¼±ÅÃ
 	@RequestMapping("/shipping_select")
 	public String shipping_select(int rno, HttpServletRequest request) {
 		MypageDAO dao = sqlSession.getMapper(MypageDAO.class);
@@ -100,7 +100,7 @@ public class MypageController {
 		
 		return "redirect:mypageshipping";
 	}
-	// ë°°ì†¡ì§€ ìˆ˜ì •í¼ìœ¼ë¡œ
+	// ¹è¼ÛÁö ¼öÁ¤ÆûÀ¸·Î
 	@RequestMapping("/shippingEditForm")
 	public ModelAndView shippingEditForm(int rno) {
 		ModelAndView mv = new ModelAndView();
@@ -110,7 +110,7 @@ public class MypageController {
 		
 		return mv;
 	}
-	// ë°°ì†¡ì§€ ìˆ˜ì •
+	// ¹è¼ÛÁö ¼öÁ¤
 	@RequestMapping("/shippingEdit")
 	public String shippingEdit(MypageVO vo) {
 		MypageDAO dao = sqlSession.getMapper(MypageDAO.class);
@@ -122,17 +122,17 @@ public class MypageController {
 			return "redirect:/";
 		}
 	}
-	// ë°°ì†¡ì§€ ì‚­ì œ
+	// ¹è¼ÛÁö »èÁ¦
 	@RequestMapping("/shipping_delete")
 	@ResponseBody
 	public String shipping_delete(int rno) {
 		MypageDAO dao = sqlSession.getMapper(MypageDAO.class);
 		dao.shippingDelete(rno);
 		
-		return "ì„±ê³µ";
+		return "¼º°ø";
 	}
 	
-	// ê²Œì‹œë¬¼ ê´€ë¦¬ë¡œ ì´ë™ ======================================================================= ê²Œì‹œë¬¼ ê´€ë¦¬
+	// °Ô½Ã¹° °ü¸®·Î ÀÌµ¿ ======================================================================= °Ô½Ã¹° °ü¸®
 	@RequestMapping("/mypageboard")
 	public ModelAndView mypageboard(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
@@ -150,7 +150,7 @@ public class MypageController {
 		return mv;
 	}
 	
-	// ì£¼ë¬¸ ì¡°íšŒë¡œ ì´ë™ ============================================================================ ì£¼ë¬¸ë‚´ì—­ ì¡°íšŒ
+	// ÁÖ¹® Á¶È¸·Î ÀÌµ¿ ============================================================================ ÁÖ¹®³»¿ª Á¶È¸
 	@RequestMapping("/mypageOrderHistory")
 	public ModelAndView mypageOrderHistory(HttpServletRequest request, String delivery_status, String order_date_start, String order_date_end) {
 		ModelAndView mv = new ModelAndView();
@@ -165,11 +165,11 @@ public class MypageController {
 		int userno = (Integer)session.getAttribute("userno");
 		MypageDAO dao = sqlSession.getMapper(MypageDAO.class);
 		
-		// í˜ì´ì§€ ë²ˆí˜¸ êµ¬í•˜ê¸°
+		// ÆäÀÌÁö ¹øÈ£ ±¸ÇÏ±â
 		String pageNumStr = request.getParameter("pageNum");
 		PagingVO pagevo = new PagingVO();
 		
-		// í˜ì´ì§€ ë²ˆí˜¸ ì „ì†¡ëœ ê²½ìš° í˜ì´ì§€ ë²ˆí˜¸ë¥¼ ë³€ê²½í•œë‹¤
+		// ÆäÀÌÁö ¹øÈ£ Àü¼ÛµÈ °æ¿ì ÆäÀÌÁö ¹øÈ£¸¦ º¯°æÇÑ´Ù
 		if(pageNumStr != null) {
 			pagevo.setPageNum(Integer.parseInt(pageNumStr));
 		}
@@ -187,7 +187,7 @@ public class MypageController {
 		
 		return mv;
 	}
-	// ì£¼ë¬¸ì¡°íšŒ ìˆ˜ì • í¼ìœ¼ë¡œ
+	// ÁÖ¹®Á¶È¸ ¼öÁ¤ ÆûÀ¸·Î
 	@RequestMapping("/mypageOrderView")
 	public ModelAndView mypageOrderView(String o_no) {
 		ModelAndView mv = new ModelAndView();
@@ -197,7 +197,7 @@ public class MypageController {
 		
 		return mv;
 	}
-	// ì£¼ë¬¸ì¡°íšŒ ìˆ˜ì •
+	// ÁÖ¹®Á¶È¸ ¼öÁ¤
 	@RequestMapping("/mypageOrderEdit")
 	public ModelAndView mypageOrderEdit(OrderVO vo) {
 		ModelAndView mv = new ModelAndView();
@@ -215,7 +215,7 @@ public class MypageController {
 		
 		return mv;
 	}
-	// ì£¼ë¬¸ì¡°íšŒ ìµœì†Œ
+	// ÁÖ¹®Á¶È¸ ÃÖ¼Ò
 	@RequestMapping("/mypageOrderCancle")
 	public String mypageOrderCancle(String o_no, String str) {
 		MypageDAO dao = sqlSession.getMapper(MypageDAO.class);
@@ -228,7 +228,7 @@ public class MypageController {
 		return "redirect:mypageOrderHistory";
 	}
 	
-	// ê´€ì‹¬ìƒí’ˆìœ¼ë¡œ ì´ë™ ============================================================================== ê´€ì‹¬ìƒí’ˆ
+	// °ü½É»óÇ°À¸·Î ÀÌµ¿ ============================================================================== °ü½É»óÇ°
 	@RequestMapping("/mypageWishList")
 	public ModelAndView mypageWishList(HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -253,7 +253,7 @@ public class MypageController {
 		return "redirect:mypageWishList";
 	}
 	
-	// ë§ˆì¼ë¦¬ì§€ë¡œ ì´ë™ ============================================================================== ë§ˆì¼ë¦¬ì§€
+	// ¸¶ÀÏ¸®Áö·Î ÀÌµ¿ ============================================================================== ¸¶ÀÏ¸®Áö
 	/*@RequestMapping("/mypageMileage")
 	public ModelAndView mypageMileage() {
 		ModelAndView mv = new ModelAndView();

@@ -82,24 +82,29 @@
 	<!-- 댓글 작성 -->
 	<insert id = "replyWrite">
 		insert into review_reply(r_reply_no, userno, review_no, r_reply_content, r_reply_writedate)
-		values(review_reply_sq.nextval, #{param1}, #{param2}, #{param3}, sysdate)
+		<if test = "param1 == 0">
+			values(review_reply_sq.nextval, '', #{param2}, #{param3}, sysdate)
+		</if> 
+		<if test = "param1 != 0">
+			values(review_reply_sq.nextval, #{param1}, #{param2}, #{param3}, sysdate)
+		</if>
 	</insert>
 	<!-- 댓글 가져오기 -->
 	<select id = "replyAll" resultType = "kr.co.bitcamp.board.ReviewReplyVO">
 		select r.r_reply_no r_reply_no, r.review_no review_no, r.r_reply_content r_reply_content, 
 		to_char(r.r_reply_writedate, 'YYYY-MM-DD') r_reply_writedate, r.userno userno, m.userid userid 
 		from review_reply r, member m 
-		where r.userno = m.userno and review_no = #{param1}
+		where r.userno = m.userno(+) and review_no = #{param1}
 		order by r_reply_no desc
 	</select>
 	<!-- 댓글 삭제 -->
 	<delete id = "replyDel">
 		delete from review_reply where r_reply_no = #{param1}
 	</delete>
-	<!-- 댓글 수정 폼 -->
+	<!-- 댓글 한개 가져오기 -->
 	<select id = "replyOne" resultType = "kr.co.bitcamp.board.ReviewReplyVO">
 		select r_reply_no, r_reply_content, userid 
-		from review_reply r, member m where r.userno = m.userno and r_reply_no = #{param1}
+		from review_reply r, member m where r.userno = m.userno(+) and r_reply_no = #{param1}
 	</select>
 	<!-- 댓글 수정 -->
 	<update id = "replyUpdate">

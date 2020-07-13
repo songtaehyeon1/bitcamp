@@ -30,6 +30,10 @@
 			}
 
 		});
+		
+		$("#updateReturnD_status").submit(function(){
+			alert("반품되었습니다.");
+		});
 
 	});
 </script>
@@ -133,7 +137,7 @@
 	<h4 class="allgoodsnum">
 		총 <span class="red">${pagevo.totalRecord }</span>개의 주문건이 있습니다.
 	</h4>
-	<form method="get" action="/bitcamp/admin/updateReturnD_status">
+	<form method="get" action="/bitcamp/admin/updateReturnD_status" id = "updateReturnD_status">
 		<table class="goodslist">
 			<tbody>
 				<tr>

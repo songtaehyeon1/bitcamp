@@ -20,10 +20,10 @@
 <div id="admin_top_menu_box">
 	<ul>
 		<a href="<%=request.getContextPath()%>/admin/home"><li id="homemenu">관리자홈</li></a>
-		<!--  <a href="#"><li>기본설정</li></a>-->
+		<a href="<%=request.getContextPath()%>/admin/basicinfo"><li id="basicinfo" >기본설정</li></a>
 		<a href="<%=request.getContextPath()%>/admin/member"><li id="membermenu">회원관리</li></a>
 		<a href="<%=request.getContextPath()%>/admin/product"><li id="productmenu">상품관리</li></a>
 		<a href="<%=request.getContextPath()%>/admin/orderList"><li id="ordermenu">주문관리</li></a>
-		<!-- <a href="#"><li>매출관리</li></a>-->
+		<a href="<%=request.getContextPath()%>/admin/sales"><li id="salemenu">매출관리</li></a>
 	</ul>
 </div>

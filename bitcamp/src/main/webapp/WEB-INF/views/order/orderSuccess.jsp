@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<script>
+history.pushState(null, null, location.href);
+window.onpopstate = function () {
+    history.go(1);
+};
 
+</script>
 <style>
 a{text-decoration:none;}
 a:hover{text-decoration:none;}
@@ -47,9 +53,22 @@ a:hover{text-decoration:none;}
 	<h1>결제 완료</h1>
 	<div class="content">
 	  <p>결제가 완료 되었습니다.</p>
+	  <c:if test="${logStatus=='N' }">
+	  <p class="log"> 주문번호는 <b>${vo.o_no }</b> 입니다.</p>
+	  </c:if>
 	</div>
 	<div class="buttons">
 	  <a href="/bitcamp">홈으로</a>
+	  <c:if test="${logStatus=='Y' }">
 	  <a href="/bitcamp/mypageOrderHistory" class="log">결제내역 조회</a>
+	  </c:if>
+	  <c:if test="${logStatus=='N' }">
+	  <a href="/bitcamp/nonmemberOrderHistory" class="log">비회원 결제내역 조회</a>
+	  </c:if>
 	</div>
 </div>
+
+
+
+
+

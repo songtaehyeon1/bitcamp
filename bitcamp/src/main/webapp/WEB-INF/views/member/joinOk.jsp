@@ -46,7 +46,7 @@ a:hover{text-decoration:none;}
 <div class="container">
 	<h1>회원가입 완료</h1>
 	<div class="content">
-	  <p>회원가입이 완료되었습니다. <br><br>회원가입을 진심으로 환영합니다! <br>♡회원가입 2,000 마일리지 적립 혜택</p>
+	  <p>회원가입이 완료되었습니다. <br><br>회원가입을 진심으로 환영합니다!</p>
 	</div>
 	<div class="buttons">
 	  <a href="/bitcamp">홈으로</a>

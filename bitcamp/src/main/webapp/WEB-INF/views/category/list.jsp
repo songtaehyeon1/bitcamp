@@ -88,7 +88,7 @@ $(function(){
 		} 
 		 */
 		});
-
+	
 		//장바구니 fadeToggle
 		$(".product-list>ul li").hover(function() {
 			//마우스 오버일때
@@ -384,7 +384,7 @@ function addCart(p_no, p_filename, p_name,  delivery_fee, product_borrow_period,
 			<p>선택하신 상품을 관심상품에 담았습니다. <br>지금 관심상품을 확인하시겠습니까?</p>
 		</div>
 		<div class="btnArea">
-			<a href="#" onclick="$('.layerWish').hide();">쇼핑계속하기</a> <a href="#" class="wishlist-confirm">관심상품확인</a>
+			<a href="#" onclick="$('.layerWish').hide();">쇼핑계속하기</a> <a href="<%=request.getContextPath()%>/mypageWishList" class="wishlist-confirm">관심상품확인</a>
 		</div>
 		<div class="close">
 			<a onclick="$('.layerWish').hide();"><img src="<%=request.getContextPath()%>/resources/category/close_btn.png" alt="닫기 버튼"></a>

@@ -85,20 +85,40 @@
 	
 	<!-- 주문조회 정보 가져오기 ======================================================================= 주문조회 -->
 	<select id = "mypageOrderList" resultType = "kr.co.bitcamp.member.MypageOrderVO">
-		select ot.o_no o_no, userno, r_no, oi_no, mileage, totalprice, to_char(order_date, 'YYYY-MM-DD') order_date, 
-		to_char(delivery_date, 'YYYY-MM-DD') delivery_date, to_char(delivery_arrival_date, 'YYYY-MM-DD') delivery_arrival_date, 
-		delivery_status, payment_price, delivery_code, p_count, p_commnet, p_filename1 
-		from ordertable ot, order_product op, product p 
-		where ot.o_no(+) = op.o_no and op.p_no = p.p_no(+) and userno = #{param1} 
-		<if test = "param2 != 'all'">
-			and delivery_status = #{param2} 
+		select * from (
+			select * from (
+				select ot.o_no o_no, userno, r_no, oi_no, mileage, totalprice, to_char(order_date, 'YYYY-MM-DD') order_date, 
+				to_char(delivery_date, 'YYYY-MM-DD') delivery_date, to_char(delivery_arrival_date, 'YYYY-MM-DD') delivery_arrival_date, 
+				delivery_status, payment_price, delivery_code, p_count, p_commnet, p_filename1 
+				from ordertable ot full join order_product op on ot.o_no = op.o_no full join product p on op.p_no = p.p_no 
+				where userno = ${userno} 
+				<if test = "delivery_status != 'all'">
+					and delivery_status = #{delivery_status} 
+				</if>
+				<if test = "order_date_start != '' and order_date_start != null">
+					and order_date <![CDATA[>=]]> #{order_date_start} 
+				</if>
+				<if test = "order_date_end != '' and order_date_end != null">
+					and order_date - 1 <![CDATA[<=]]> #{order_date_end} 
+				</if> 
+				order by r_no desc) 
+			where rownum <![CDATA[<=]]> #{pageNum} * #{onePageRecord} 
+			order by r_no asc) 
+		where rownum <![CDATA[<=]]> <if test = "pageNum == totalPage">#{lastPageRecord}</if><if test = "pageNum != totalPage">#{onePageRecord}</if> 
+		order by r_no desc
+	</select>
+	<!-- 전체 페이지 구하기(검색) -->
+	<select id = "getTotalRecord" resultType = "int">
+		select count(r_no) from ordertable where userno = #{userno} 
+		<if test = "delivery_status != 'all'">
+			and delivery_status = #{delivery_status} 
 		</if>
-		<if test = "param3 != '' and param3 != null">
-			and order_date <![CDATA[>=]]> #{param3} 
+		<if test = "order_date_start != '' and order_date_start != null">
+			and order_date <![CDATA[>=]]> #{order_date_start} 
 		</if>
-		<if test = "param4 != '' and param4 != null">
-			and order_date - 1 <![CDATA[<=]]> #{param4} 
-		</if>
+		<if test = "order_date_end != '' and order_date_end != null">
+			and order_date - 1 <![CDATA[<=]]> #{order_date_end} 
+		</if> 
 	</select>
 	<!-- 주문 하나 선택 -->
 	<select id="selectOrder" resultType="kr.co.bitcamp.order.OrderVO">

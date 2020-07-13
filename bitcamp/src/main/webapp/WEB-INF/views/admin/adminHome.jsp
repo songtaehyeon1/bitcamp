@@ -20,7 +20,7 @@
 			</tr>
 			<tr>
 				<td width="49%"
-					style="font-weight: bold; background: #ddd; padding-left: 20px;">게시판 현황</td>
+					style="font-weight: bold; background: #ddd; padding-left: 20px;"><a href="/bitcamp/boardNotice">게시판 현황</a></td>
 				<td width="2%"></td>
 				<td width="49%"	style="font-weight: bold; background: #ddd; padding-left: 20px;">회원정보</td>
 			</tr>
@@ -80,18 +80,15 @@
 					<table border="0" width="100%" class="tb01">
 						<tbody>
 							<tr style="font-weight: bold;">
-								<td width="20%" style="padding-left: 20px;">현재 접속자</td>
-								<td width="30%" style="text-align: right; padding-right: 5px;">1
-									명</td>
 								<td width="20%" style="padding-left: 20px;">오늘 접속자</td>
-								<td width="30%" style="text-align: right; padding-right: 5px;">16
+								<td width="30%" style="text-align: right; padding-right: 5px;">${todayAccessor}
 									명</td>
+								<td style="padding-left: 20px;">어제 접속자</td>
+								<td style="text-align: right; padding-right: 5px;">${yesterdayAccessor} 명</td>
 							</tr>
 							<tr style="font-weight: bold;">
 								<td style="padding-left: 20px;">총 접속자</td>
-								<td style="text-align: right; padding-right: 5px;">103950 명</td>
-								<td style="padding-left: 20px;">어제 접속자</td>
-								<td style="text-align: right; padding-right: 5px;">35 명</td>
+								<td style="text-align: right; padding-right: 5px;">${totalAccessor} 명</td>
 							</tr>
 						</tbody>
 					</table>

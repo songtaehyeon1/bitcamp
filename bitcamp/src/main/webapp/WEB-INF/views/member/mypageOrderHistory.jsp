@@ -81,7 +81,7 @@
 						<label style = "margin-left : 20px;">[</label><label class = "wordCut">${list.o_no}</label><label>]</label>
 					</div>
 				</li>
-				<li><img src = "/bitcamp/upload/${list.p_filename1}" alt = ""></li>
+				<li><img src = "/bitcamp/upload/${list.p_filename1}" alt = "" class = "mypageOHImg"></li>
 				<li>${list.p_commnet}</li>
 				<li>${list.p_count}</li>
 				<li>${list.totalprice}원</li>

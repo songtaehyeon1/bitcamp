@@ -28,4 +28,43 @@
 	<select id="productAllSelectDate" parameterType="int" resultType="String">
 		select to_char(stock_date,'YYYYMMDD') from reservate where s_no = #{param1}
 	</select>
+	<insert id="addInterest" parameterType="kr.co.bitcamp.category.InterestVO">
+		insert into interest(userno, p_no) values(${userno}, ${p_no})
+	</insert>
+	<select id="allHearts" resultType="Integer">
+		select p_no from interest where userno=${param1}
+	</select>
+	
+	<select id = "allReviewList" parameterType="int" resultType="kr.co.bitcamp.board.ReviewVO">
+			select * from (
+				select review_no, b.userno userno , b.c_no, b.p_no, review_subject, review_content, review_hit, review_recommend, 
+					to_char(review_writedate, 'YYYY-MM-DD') review_writedate, review_ip, review_file1, review_file2, review_file3, review_file4, 
+					review_file5, userid, review_rating, p_name, p_filename1 
+					from board_review b, member m, product p 
+				where b.userno = m.userno and b.p_no = p.p_no(+) and b.p_no=#{p_no}
+				order by review_no desc) 
+			where rownum <![CDATA[<=]]> 10 
+			order by review_no asc
+	</select>
+	<select id = "allQandAList" parameterType="kr.co.bitcamp.board.EnquiryVO" resultType="kr.co.bitcamp.board.EnquiryVO">
+			select * from (
+				select enquiry_no, enquiry_subject, enquiry_hit, to_char(enquiry_writedate, 'YYYY-MM-DD') enquiry_writedate, userid, enquiry_secret, c_no ,
+				enquiry_content
+				from board_enquiry b, member m 
+				where b.userno = m.userno and b.p_no=#{p_no}
+				order by enquiry_no desc) 
+			where rownum <![CDATA[<=]]> 10 
+			order by enquiry_no asc 
+	</select>
+	<select id = "replyAll" parameterType="int" resultType = "kr.co.bitcamp.board.ReplyVO">
+		select e.e_reply_no e_reply_no, e.enquiry_no enquiry_no, e.e_reply_content e_reply_content, 
+		to_char(e.e_reply_writedate, 'YYYY-MM-DD') e_reply_writedate, e.userno userno, m.userid userid 
+		from enquiry_reply e, member m 
+		where e.userno = m.userno(+) and enquiry_no = #{enquiry_no} 
+		order by e_reply_no desc
+	</select>
+	
+	
+	
+	
 </mapper>

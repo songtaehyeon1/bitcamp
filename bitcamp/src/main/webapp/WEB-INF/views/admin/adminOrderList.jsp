@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <script type="text/javascript">
 	$(function() {
 		$("#ordermenu").attr("class", "over");
@@ -231,7 +232,7 @@
 					<li class="page-item"><a class="page-link text-white black"
 						href="/bitcamp/admin/orderList?pageNum=${pagevo.pageNum - 1}					
 					<c:if test = "${pagevo.payment_type !=null }">&payment_type=${pagevo.payment_type }</c:if>
-					<c:if test = "${pagevo.ndate !=null }">&ndaye = ${pagevo.ndate }</c:if>
+					<c:if test = "${pagevo.ndate !=null }">&ndate=${pagevo.ndate }</c:if>
 					<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null  && pagevo.s_date !='' && pagevo.e_date !='' }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>
 					<c:if test = "${pagevo.s_price !=null&& pagevo.s_price !='' }">&s_price=${pagevo.s_price }</c:if>
 					<c:if test = "${pagevo.e_price !=null&& pagevo.e_price !='' }">&e_price=${pagevo.e_price }</c:if>
@@ -251,7 +252,7 @@
 						<li class="page-item"><a class="page-link pages"
 							href="/bitcamp/admin/orderList?pageNum=${i}
 						<c:if test = "${pagevo.payment_type !=null }">&payment_type=${pagevo.payment_type }</c:if>
-						<c:if test = "${pagevo.ndate !=null }">&ndaye = ${pagevo.ndate }</c:if>
+						<c:if test = "${pagevo.ndate !=null }">&ndate=${pagevo.ndate }</c:if>
 						<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null && pagevo.s_date !='' && pagevo.e_date !='' }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>
 						<c:if test = "${pagevo.s_price !=null&& pagevo.s_price !='' }">&s_price=${pagevo.s_price }</c:if>
 						<c:if test = "${pagevo.e_price !=null&& pagevo.e_price !='' }">&e_price=${pagevo.e_price }</c:if>
@@ -275,7 +276,7 @@
 					<li class="page-item"><a class="page-link text-white black"
 						href="/bitcamp/admin/orderList?pageNum=${pagevo.pageNum + 1}
 					<c:if test = "${pagevo.payment_type !=null }">&payment_type=${pagevo.payment_type }</c:if>
-					<c:if test = "${pagevo.ndate !=null }">&ndaye = ${pagevo.ndate }</c:if>
+					<c:if test = "${pagevo.ndate !=null }">&ndate=${pagevo.ndate }</c:if>
 					<c:if test = "${pagevo.s_date !=null && pagevo.e_date !=null  && pagevo.s_date !='' && pagevo.e_date !=''  }">&s_date=${pagevo.s_date }&e_date=${pagevo.e_date }</c:if>
 					<c:if test = "${pagevo.s_price !=null && pagevo.s_price !='' }">&s_price=${pagevo.s_price }</c:if>
 					<c:if test = "${pagevo.e_price !=null&& pagevo.e_price !='' }">&e_price=${pagevo.e_price }</c:if>

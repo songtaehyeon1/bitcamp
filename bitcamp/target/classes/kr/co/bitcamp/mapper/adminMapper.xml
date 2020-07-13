@@ -41,8 +41,24 @@
 	<select id="todayCancelcnt" resultType="int">
 		select count(o_no) from cancel where to_char(cancel_date,'YYYY-MM-DD') = to_char(sysdate,'YYYY-MM-DD')
 	</select>
-	
-	
+	<!-- 접속자 -->
+	<select id = "todayAccessor" resultType = "int">
+		select count(accessor_date) from accessor where to_char(accessor_date) = to_char(sysdate)
+	</select>
+	<select id = "yesterdayAccessor" resultType = "int">
+		select count(accessor_date) from accessor where to_char(accessor_date) = to_char(sysdate - 1)
+	</select>
+	<select id = "totalAccessor" resultType = "int">
+		select count(accessor_date) from accessor
+	</select>
+	<!-- 기본정보 -->
+	<select id="basicinfoselect" resultType="kr.co.bitcamp.admin.BasicinfoVO">
+		select * from basic_info
+	</select>
+	<!-- 기본정보 업데이트 -->
+	<update id="basicinfoupdate" parameterType="kr.co.bitcamp.admin.BasicinfoVO">
+		update basic_info set corpname=#{corpname},ceoname=#{ceoname},licenseno=#{licenseno},reportno=#{reportno},corptel=#{corptel},corpzipcode=#{corpzipcode},corpaddr=#{corpaddr},managername=#{managername},manageremail=#{manageremail},kakao=#{kakao},instagram=#{instagram},account1=#{account1},account1bank=#{account1bank},account1name=#{account1name},account2=#{account2},account2bank=#{account2bank},account2name=#{account2name},account3=#{account3},account3bank=#{account3bank},account3name=#{account3name},tel=#{tel},memo=#{memo}
+	</update>
 	<!-- 상품 추가 -->
 	<insert id="productWrite"
 		parameterType="kr.co.bitcamp.product.ProductVO">
@@ -71,6 +87,10 @@
 		select
 		p_no,c_no,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5,c_name,p_deltype,day_price
 		from product left join category using(c_no) where p_no=${param1}
+	</select>
+	<!-- 상품 3개 선택 -->
+	<select id="getmainproduct" resultType="kr.co.bitcamp.product.ProductVO">
+		select p_no,c_no,p_name,price,delivery_fee,p_commnet,p_filename1 from (select p_no,c_no,p_name,price,delivery_fee,p_commnet,p_filename1,p_filename2,p_filename3,p_filename4,p_filename5 from product order by p_date desc) where ROWNUM <![CDATA[<=]]> 3
 	</select>
 	<!-- sno_sq의 nextval 반환 -->
 	<select id="getsno_sq" resultType="int">
@@ -141,9 +161,8 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
-				AND to_char(regdate,'YYYY-MM-DD') <![CDATA[>]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(regdate,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(regdate,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
 		</where>
 		order by userno desc)
@@ -185,10 +204,9 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
-				AND to_char(withdrawaldate,'YYYY-MM-DD') <![CDATA[>]]>
-				TO_DATE('${s_date}','YYYY-MM-DD') and
-				to_char(withdrawaldate,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(withdrawaldate,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
+				
 			</if>
 		</where>
 		order by withdrawaldate desc)
@@ -226,9 +244,8 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
-				AND to_char(p_date,'YYYY-MM-DD') <![CDATA[>]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(p_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(p_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
 		</where>
 		order by p_no desc)
@@ -273,10 +290,10 @@
 		select
 		o.o_no,nvl(o.userno,0) userno,o.r_no,o.oi_no,mileage,
 		totalprice,to_char(order_date,'YYYY-MM-DD')
-		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
+		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,payment_price,
 		to_char(delivery_arrival_date,'YYYY-MM-DD')
 		delivery_arrival_date,delivery_status,payment_type,nvl(userid,'비회원') userid,cash_time,card_time,oname,otel,oemail,ozipcode,oaddr,oaddrdetail,opassword,rname,rtel,rzipcode,raddr,raddrdetail,rcommnet,delivery_code
-		from ( select O_NO, USERNO,userid, R_NO, OI_NO, MILEAGE, TOTALPRICE, ORDER_DATE, DELIVERY_DATE, DELIVERY_ARRIVAL_DATE,delivery_code, DELIVERY_STATUS, PAYMENT_TYPE, card.PAYMENT_TIME card_time, BANK, DEPOSITOR, cash.PAYMENT_TIME cash_time from ordertable left join card card using(o_no) left join cash cash using(o_no) left join member m using(userno)) o 
+		from ( select O_NO,payment_price, USERNO,userid, R_NO, OI_NO, MILEAGE, TOTALPRICE, ORDER_DATE, DELIVERY_DATE, DELIVERY_ARRIVAL_DATE,delivery_code, DELIVERY_STATUS, PAYMENT_TYPE, card.PAYMENT_TIME card_time, BANK, DEPOSITOR, cash.PAYMENT_TIME cash_time from ordertable left join card card using(o_no) left join cash cash using(o_no) left join member m using(userno)) o 
         inner join order_info i on o.oi_no = i.oi_no
 		inner join Recipient r on o.r_no = r.r_no where o.o_no = #{param1}
 	</select>
@@ -287,6 +304,9 @@
 	<!-- 주문 수정 -->
 	<update id="orderEdit" parameterType="kr.co.bitcamp.order.OrderVO">
 		update Recipient set rname=#{rname}, rtel=#{rtel}, rzipcode = #{rzipcode}, raddr =#{raddr}, raddrdetail =#{raddrdetail},rcommnet=#{rcommnet} 
+	</update>
+	<update id="orderPayEdit" parameterType="kr.co.bitcamp.order.OrderVO">
+		update ordertable set payment_price=${payment_price} where o_no = #{o_no} 
 	</update>
 	<!-- 선택 주문 배송상태 일괄 변경 -->
 	<update id="allD_statusUpdate">	
@@ -350,13 +370,17 @@
 		<if test="payment_type !=null and payment_type=='cash'">
 			inner join cash on o.o_no = cash.o_no
 		</if>
-		<where>			
+		<where>
+							
 			<if test="delivery_status != null">
 				AND delivery_status in
 				<foreach collection="delivery_status" item="delivery_status"
 					index="i" open="(" close=")" separator=",">
 					#{delivery_status}
 				</foreach>
+			</if>
+			<if test="delivery_status ==null">
+				delivery_status not in('취소','취소요청''반품','반품요청')
 			</if>
 			<if
 				test="searchKey != null and searchWord != null and searchKey != '' and searchWord != ''">
@@ -377,32 +401,29 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !='' and ndate =='order_date'">
-				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(order_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !='' and ndate =='delivery_arrival_date'">
-				AND to_char(delivery_arrival_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(delivery_arrival_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(delivery_arrival_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !='' and ndate =='delivery_date'">
-				AND to_char(delivery_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(delivery_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(delivery_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
 		</where>
-		order by o_no desc)
+		order by order_date desc)
 		where
 		rownum <![CDATA[<=]]>
 		#{pageNum} * #{onePageRecord}
-		order by o_no asc)
+		order by order_date asc)
 		where rownum <![CDATA[<=]]>
 		<if test="pageNum == totalPage">#{lastPageRecord}</if>
 		<if test="pageNum != totalPage">#{onePageRecord}</if>
-		order by o_no desc
+		order by order_date desc
 	</select>
 	<!-- 모든 주문 취소 -->
 	<select id="allOrderCancelSelect"
@@ -452,9 +473,8 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
-				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(order_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>			
 		</where>
 		order by o_no desc)
@@ -516,9 +536,8 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
-				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(order_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>			
 		</where>
 		order by o_no desc)
@@ -548,9 +567,8 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !='' ">
-				AND to_char(p_date,'YYYY-MM-DD') <![CDATA[>]]>to_date('${s_date}','YYYY-MM-DD')
-				and to_char(p_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(p_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
 		</where>
 
@@ -582,13 +600,15 @@
 			inner join cash on o.o_no = cash.o_no
 		</if>
 		<where>
+		
 			<if test="delivery_status != null and delivery_status !=''">
 				AND delivery_status in
 				<foreach collection="delivery_status" item="delivery_status"
 					index="i" open="(" close=")" separator=",">
 					#{delivery_status}
 				</foreach>
-			</if>
+			</if>							
+		
 			<if
 				test="searchKey != null and searchWord != null and searchKey != '' and searchWord != ''">
 				AND ${searchKey} like '%'||#{searchWord}||'%'
@@ -600,24 +620,19 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !='' and ndate =='order_date'">
-				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(order_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !='' and ndate =='delivery_arrival_date'">
-				AND to_char(delivery_arrival_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(delivery_arrival_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(delivery_arrival_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !='' and ndate =='delivery_date'">
-				AND to_char(delivery_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(delivery_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(delivery_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
-
-
 		</where>
 		)
 
@@ -659,9 +674,9 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
-				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(order_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
+				
 			</if>			
 		</where>
 		order by o_no desc)
@@ -710,9 +725,8 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
-				AND to_char(order_date,'YYYY-MM-DD') <![CDATA[>=]]>TO_DATE('${s_date}','YYYY-MM-DD')
-				and to_char(order_date,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(order_date,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>			
 		</where>
 		order by o_no desc)
@@ -739,9 +753,8 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
-				AND to_char(regdate,'YYYY-MM-DD') <![CDATA[>]]>to_date('${s_date}','YYYY-MM-DD')
-				and to_char(regdate,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(regdate,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
 		</where>
 
@@ -761,9 +774,8 @@
 			</if>
 			<if
 				test="s_date != null and e_date != null and s_date !='' and e_date !=''">
-				AND to_char(withdrawaldate,'YYYY-MM-DD') <![CDATA[>]]>to_date('${s_date}','YYYY-MM-DD')
-				and to_char(withdrawaldate,'YYYY-MM-DD') <![CDATA[<=]]>
-				to_date('${e_date}','YYYY-MM-DD')
+				AND to_char(withdrawaldate,'YYYY-MM-DD') between TO_DATE('${s_date}','YYYY-MM-DD')
+				and to_date('${e_date}','YYYY-MM-DD')
 			</if>
 		</where>
 
@@ -826,6 +838,37 @@
 	<delete id="delMemberTodelList">
 		delete from m_withdrawal where userno =${param1}
 	</delete>
+	<!-- 토탈 카드 매출 -->
+	<select id="getTodayTotalCard" resultType="String">
+		select to_char(nvl(sum(totalprice),0)) totalcard from ordertable where payment_type = 'card' and to_date(order_date)=#{param1}	
+	</select>
+	<select id="getTodayTotalCash" resultType="String">
+		select to_char(nvl(sum(totalprice),0)) totalcash from ordertable where payment_type = 'cash' and to_date(order_date)=#{param1}	
+	</select>
+	<select id="getTodayTotalsale" resultType="String">
+		select to_char(nvl(sum(totalprice),0)) totalsale from ordertable where to_date(order_date)=#{param1}	
+	</select>
+	
+	<select id="total_list" resultType="kr.co.bitcamp.admin.TotalVO">		
+		select* from (select sum(totalprice) totalcash,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where payment_type ='cash' GROUP by to_char(order_date,'YYYY-MM-DD')) cash 
+		left join (select sum(totalprice) totalcard,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where payment_type ='card' GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(totalprice) totalsale,to_char(order_date,'YYYY-MM-DD') order_date from ordertable GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date) 
+     	left join (select sum(payment_price) totalpayment,to_char(order_date,'YYYY-MM-DD') order_date from ordertable GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date) 
+        left join (select sum(total_delivery_fee) totaldfee,to_char(order_date,'YYYY-MM-DD') order_date from ordertable GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(nvl(totalprice,0)) totalcprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('취소','취소요청') GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date) 
+        left join (select sum(nvl(totalprice,0)) totalrprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('반품','반품요청') GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(nvl(totalprice,0)) cardcprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('취소','취소요청') and payment_type ='card' GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(nvl(totalprice,0)) cardrprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('반품','반품요청') and payment_type ='card' GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(nvl(totalprice,0)) cashcprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('취소','취소요청') and payment_type ='cash' GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(nvl(totalprice,0)) cashrprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('반품','반품요청') and payment_type ='cash' GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(nvl(payment_price,0)) totalpaycprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('취소','취소요청') GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date) 
+        left join (select sum(nvl(payment_price,0)) totalpayrprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('반품','반품요청') GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(nvl(payment_price,0)) cardpaycprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('취소','취소요청') and payment_type ='card' GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(nvl(payment_price,0)) cardpayrprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('반품','반품요청') and payment_type ='card' GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(nvl(payment_price,0)) cashpaycprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('취소','취소요청') and payment_type ='cash' GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        left join (select sum(nvl(payment_price,0)) cashpayrprice,to_char(order_date,'YYYY-MM-DD') order_date from ordertable where ordertable.delivery_status in('반품','반품요청') and payment_type ='cash' GROUP by to_char(order_date,'YYYY-MM-DD')) card using(order_date)
+        where to_date(order_date) between #{db_startDate} and #{db_endDate}		
+	</select>
 
 
 

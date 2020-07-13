@@ -60,7 +60,11 @@ $(function(){
 			alert("이메일을 입력해주세요.");
 			return false; 
 		}
-		
+		if($("#emailChkResult").val()=="no"){
+			alert("이메일 인증요청을 진행해 주세요");
+			return false; 
+		}
+	
 		//휴대전화 검사
 		var reg = /^01[0|1|6|7|8|9][0-9]{7,8}$/;
 		//var reg = /^(010|011|016|017|018|019)[1][0-9]{9,10}$/;
@@ -149,6 +153,90 @@ $(function(){
 			$("#idChk").attr("disabled",true);	
 		}
 	});
+	
+	//ajax로 이메일 보내기(네이버 이용)
+	//이메일 인증
+	function userEmail(url, params, msg1, msg2){
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : params,
+			success : function(result){
+				console.log("result=" +result);
+				
+				if(result=='N'){     //이메일 사용 불가(중복 이메일)
+					alert(msg2);
+					$("#caution").css("display","block");					
+				}else if(result=="Y"){     //이메일 인증코드 전송 성공
+					alert(msg1);
+					//이메일 인증코드 입력창 비활성화 → 활성화
+					$("#email_code").attr('disabled', false); 
+				}else if(result=='yes'){     //이메일 인증확인 성공
+					$("#emailChkResult").val("yes");
+					alert(msg1);
+					//이메일 인증코드 입력창, 인증확인 버튼 활성화 → 비활성화
+					$("#email_code").attr('disabled', true);
+					$(".emailCodeChk").attr('disabled', true); 
+				}else if(result=='no'){     //이메일 인증확인 실패
+					alert(msg2);
+				}
+			},
+			error : function(){
+				console.log("이메일 인증 에러...");
+			}
+		});
+	}
+
+	//이메일 인증요청 클릭 시 (이메일 인증코드 받기)
+	$(".emailCheck").click(function(){
+		$("#emailChkResult").val("no");
+		//이메일(아이디) 정규식 검사
+		//reg = /^\w{8,20}[@][a-zA-Z]{2,10}[.][a-zA-Z]{2,3}([.][a-zA-Z]{2,3})?$/;
+		if($("#useremail").val()==""){     //이메일 미입력 시
+			alert("이메일 주소를 입력해주세요.");
+		}/*else if(!reg.test($("#useremail").val())){     //이메일 정규식 불일치 시
+			alert("이메일 주소를 잘못 입력하였습니다.");
+		}*/else{   
+			//이메일 인증코드 받기
+			var url ="<%=request.getContextPath()%>/mailChk";
+		
+			//폼의 데이터를 직렬화 시키기
+			var params = "useremail="+$("#useremail").val();
+			var msg1 = "해당 이메일 주소로 인증코드를 전송하였습니다.";
+			var msg2 = "이미 가입된 이메일 주소입니다.";
+			userEmail(url, params, msg1, msg2);
+		}
+	});
+	
+	//이메일 인증요청 버튼 비활성화 → 활성화
+	$(document).on("keyup paste","#useremail",function(){
+		$(".emailCheck").attr("disabled", false);
+	});
+	
+	//이메일 인증요청 실패 (사용할 수 없는 이메일)
+	$("#useremail").on('keyup', function() {
+		$("#caution").css("display","none");
+	});	
+	
+	//이메일 인증코드 입력값 인증확인 
+	$("#email_code").on("keyup paste",function(){
+		//인증확인 버튼 비활성화 → 활성화
+		$(".emailCodeChk").attr('disabled', false);
+	});
+
+	//이메일 인증하기
+	$(document).on('click','.emailCodeChk',function(){			
+		var url = "<%=request.getContextPath()%>/mailcodeChk";
+			
+		//폼의 데이터를 직렬화 시키기
+		var params = "email_code="+$("#email_code").val(); 
+		console.log("params="+params)
+		var msg1 = "이메일 인증이 완료되었습니다.";
+		var msg2 = "이메일 인증에 실패하였습니다.";
+		userEmail(url, params, msg1, msg2);
+	});  
+	//////////ajax로 이메일 보내기(네이버 이용) 끝
+	
 
 	//전체동의 체크박스 선택 및 해제
 	$("#checkAll").change(function(){  
@@ -230,13 +318,28 @@ function openDaumZipAddress() {
 			</div>
 	
 			<div class="form-group">
-				<label for="text">이름</label> 
+				<label for="username">이름</label> 
 				<input type="text" class="form-control" id="username" placeholder="이름" name="username" maxlength="20">
 			</div>
 			
-			<div class="form-group">
-				<label for="eamil" class="lbl_email">이메일</label> 
-				<input type="email" class="form-control" id="useremail" placeholder="이메일 주소" name="useremail"> 
+			<div class="form-group input-group">
+				<label for="useremail" class="lbl_email">이메일</label> 
+				<small><code id="caution">사용 할 수 없는 이메일 주소입니다.</code></small>
+				<input type="email" class="form-control" id="useremail" placeholder="이메일 주소" name="useremail"/> 
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary emailCheck" type="button" disabled>인증요청</button>
+				</div>
+			</div>
+	
+			<div class="form-group input-group">
+				<label for="email_code" class="lbl_email">이메일 인증코드</label>
+				<small>메일함을 확인하여 이메일 인증코드를 입력해주세요.</small>
+				<input type="text" class="form-control" id="email_code" placeholder="인증코드" name="email_code" disabled>
+				<!-- 이메일 인증확인 여부 설정 -->
+				<input type="hidden" id="emailChkResult" name="emailChkResult" value="no"/>
+				<div class="input-group-append">
+					<button class="btn btn-secondary emailCodeChk" type="button" disabled>인증확인</button>
+				</div>
 			</div>
 			
 			<div class="form-group input-group">

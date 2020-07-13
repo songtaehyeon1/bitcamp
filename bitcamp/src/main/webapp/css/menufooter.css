@@ -303,14 +303,24 @@ header {
 }
 
 #footer-corpinfo span {
-	margin-right: 20px;
+	margin-right: 25px;
 	font: 0.75em Nanum Gothic, "³ª´®°íµñ", 'Noto Sans KR', Dotum, AppleGothic,
 		Verdana, 'FontAwesome', sans-serif;
 	color: #a2a2a2;
 	font-size: 13px;
 	line-height: 22px;
 	font-weight: 700;
-	padding: 0 25px 0 0;
+	padding: 0 20px 0 0;
+}
+#footer-corpinfo b {
+	margin-right: 0px;
+	font: 0.75em Nanum Gothic, "³ª´®°íµñ", 'Noto Sans KR', Dotum, AppleGothic,
+		Verdana, 'FontAwesome', sans-serif;
+	color: #a2a2a2;
+	font-size: 13px;
+	line-height: 22px;
+	font-weight: 700;
+	padding: 0;
 }
 
 #footer-corpinfo a {

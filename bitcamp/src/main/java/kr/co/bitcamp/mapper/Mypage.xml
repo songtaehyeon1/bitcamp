@@ -91,7 +91,7 @@
 				to_char(delivery_date, 'YYYY-MM-DD') delivery_date, to_char(delivery_arrival_date, 'YYYY-MM-DD') delivery_arrival_date, 
 				delivery_status, payment_price, delivery_code, p_count, p_commnet, p_filename1 
 				from ordertable ot full join order_product op on ot.o_no = op.o_no full join product p on op.p_no = p.p_no 
-				where userno = #{userno} 
+				where userno = ${userno} 
 				<if test = "delivery_status != 'all'">
 					and delivery_status = #{delivery_status} 
 				</if>

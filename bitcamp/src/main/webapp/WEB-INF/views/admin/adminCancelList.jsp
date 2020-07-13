@@ -31,6 +31,10 @@
 
 		});
 
+		$("#updateCancelD_status").submit(function(){
+			alert("취소되었습니다.");
+		});
+
 	});
 </script>
 <style>
@@ -133,7 +137,7 @@
 	<h4 class="allgoodsnum">
 		총 <span class="red">${pagevo.totalRecord }</span>개의 주문건이 있습니다.
 	</h4>
-	<form method="get" action="/bitcamp/admin/updateCancelD_status">
+	<form method="get" action="/bitcamp/admin/updateCancelD_status" id = "updateCancelD_status">
 		<table class="goodslist">
 			<tbody>
 				<tr>

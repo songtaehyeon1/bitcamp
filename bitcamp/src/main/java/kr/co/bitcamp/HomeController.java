@@ -1,5 +1,7 @@
 package kr.co.bitcamp;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.session.SqlSession;
@@ -7,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import kr.co.bitcamp.admin.AdminDAOImp;
+import kr.co.bitcamp.product.ProductVO;
 
 @Controller
 public class HomeController {
@@ -23,10 +29,14 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(HttpServletRequest request) {
+	public ModelAndView home(HttpServletRequest request) {
+		AdminDAOImp dao = sqlSession.getMapper(AdminDAOImp.class);
+		List<ProductVO> plist = dao.getmainproduct();
+		ModelAndView mav = new ModelAndView();
 		accessorManage(request);
-		
-		return "home";
+		mav.addObject("plist", plist);
+		mav.setViewName("home");	
+		return mav;
 	}
 	
 	// 접속한 ip 체크하고 넣기

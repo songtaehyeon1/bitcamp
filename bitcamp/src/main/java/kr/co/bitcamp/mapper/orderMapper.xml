@@ -33,13 +33,18 @@
 	
 	<insert id="ordertable" parameterType="kr.co.bitcamp.order.OrderVO">
 		insert into ordertable 
-		(o_no, userno, r_no, oi_no, mileage, totalprice, order_date, delivery_date, delivery_arrival_date, delivery_status, payment_type,payment_price)
-		values(#{o_no},${userno},#{r_no},#{oi_no},
+		(o_no, userno, r_no, oi_no, mileage, totalprice, order_date, delivery_date, delivery_arrival_date, delivery_status, payment_type,payment_price,total_delivery_fee)
+		values(#{o_no},#{userno},#{r_no},#{oi_no},
+			   #{mileage},#{totalprice},sysdate,#{delivery_date},#{delivery_arrival_date},#{delivery_status},#{payment_type},#{payment_price},#{total_delivery_fee} )
+	</insert>
+	<insert id="ordertable_nonmember" parameterType="kr.co.bitcamp.order.OrderVO">
+		insert into ordertable 
+		(o_no, r_no, oi_no, mileage, totalprice, order_date, delivery_date, delivery_arrival_date, delivery_status, payment_type,payment_price)
+		values(#{o_no},#{r_no},#{oi_no},
 			   #{mileage},#{totalprice},sysdate,#{delivery_date},#{delivery_arrival_date},#{delivery_status},#{payment_type},#{payment_price} )
 	</insert>
-	
 	<insert id="paymethod_card" parameterType="kr.co.bitcamp.order.OrderVO">
-		insert into card (o_no,payment_time) values(#{o_no},sysdate)
+		insert into card (card_corp,o_no,payment_time) values(#{card_corp},#{o_no},sysdate)
 	</insert>
 	<insert id="paymethod_cash" parameterType="kr.co.bitcamp.order.OrderVO">
 		insert into cash (bank,depositor,o_no,payment_time) values(#{bank},#{depositor},#{o_no},sysdate)
@@ -62,9 +67,31 @@
 		insert into order_stock (o_no,s_no) values(#{o_no},#{s_no})
 	</insert>
 	<insert id="paymentInfoInsert" parameterType="kr.co.bitcamp.order.OrderVO">
-		insert into paymentInfoInsert (o_no,oname,ozipcode,otel,oemail,rname,raddr,raddrdetail,totalprice,rcommnet)
-		values(#{o_no},#{oname},#{ozipcode},#{otel},#{oemail},#{rname},#{raddr},#{raddrdetail},#{totalprice},#{rcommnet})
+		insert into paymentInfoInsert (o_no,buyer_name,buyer_email,buyer_tel,imp_uid,merchant_uid,card_name,apply_num,formattedTime,paid_amount)
+		values(#{o_no},#{buyer_name},#{buyer_email},#{buyer_tel},#{imp_uid},#{merchant_uid},#{card_name},#{apply_num},#{formattedTime},#{paid_amount})
 	</insert>
+	<select id="selectMember" parameterType="int"
+		resultType="kr.co.bitcamp.member.MemberVO">
+		select * from member where userno = ${param1}
+	</select>
+	
+		<!-- 주문 하나 선택 -->
+	<select id="selectOrder" resultType="kr.co.bitcamp.order.OrderVO">
+		select
+		o.o_no,o.r_no,o.oi_no,mileage,
+		totalprice,to_char(order_date,'YYYY-MM-DD')
+		order_date,to_char(delivery_date,'YYYY-MM-DD') delivery_date,
+		to_char(delivery_arrival_date,'YYYY-MM-DD')
+		delivery_arrival_date,delivery_status,
+        payment_type,delivery_code,cash_time,card_time,oname,otel,oemail,ozipcode,oaddr,oaddrdetail,opassword,rname,rtel,rzipcode,raddr,raddrdetail,rcommnet,delivery_code
+		from 
+(select O_NO, R_NO, OI_NO, MILEAGE, TOTALPRICE, ORDER_DATE, DELIVERY_DATE, DELIVERY_ARRIVAL_DATE,delivery_code, DELIVERY_STATUS, PAYMENT_TYPE, CARD_CORP, card.PAYMENT_TIME card_time, BANK
+, DEPOSITOR, cash.PAYMENT_TIME cash_time 
+from ordertable left join card card using(o_no) left join cash cash using(o_no))o
+        inner join order_info i on o.oi_no = i.oi_no
+		inner join Recipient r on o.r_no = r.r_no 
+where o.o_no = #{param1} and i.oname=#{param2} and i.opassword=#{param3}
+	</select>
 </mapper>
 
 

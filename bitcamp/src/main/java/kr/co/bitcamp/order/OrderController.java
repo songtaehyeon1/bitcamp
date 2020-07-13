@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.bitcamp.admin.AdminDAOImp;
+import kr.co.bitcamp.admin.BasicinfoVO;
 import kr.co.bitcamp.member.MemberVO;
+import kr.co.bitcamp.member.MypageDAO;
 import kr.co.bitcamp.product.ProductDAOImp;
 import kr.co.bitcamp.product.ProductVO;
 
@@ -38,8 +40,21 @@ public class OrderController {
 
 	// 장바구니에서 구매하기
 	@RequestMapping(value = "/cartOrder", method = RequestMethod.POST)
-	public ModelAndView cartOrder(HttpServletRequest req) {
+	public ModelAndView cartOrder(HttpServletRequest req, MemberVO mvo) {
+		HttpSession ses = req.getSession();
 		ModelAndView mav = new ModelAndView();
+		int userno = 0;
+		if(ses.getAttribute("userno")!=null) {
+			userno = (Integer) (ses.getAttribute("userno"));
+			System.out.println("유저넘버"+userno);
+			ses.setAttribute("logStatus", "Y");
+			mvo.setUserno(userno);
+		}else {
+			ses.setAttribute("logStatus", "N");
+		}
+		OrderDAOImp orderdao = sqlSession.getMapper(OrderDAOImp.class);
+		AdminDAOImp admindao = sqlSession.getMapper(AdminDAOImp.class);
+		BasicinfoVO bvo = admindao.basicinfoselect();
 		ArrayList<ProductVO> pvolist = new ArrayList<ProductVO>();
 		String[] p_noList = req.getParameterValues("p_no");
 		String[] p_name = req.getParameterValues("p_name");
@@ -65,7 +80,9 @@ public class OrderController {
 			vo.setLimitQuantity(Integer.parseInt(limitQuantity[i]));
 			pvolist.add(i, vo);
 		}
-
+		mav.addObject("memberInfo",orderdao.selectMember(userno));
+		System.out.println("유저 정보 가져오기"+orderdao.selectMember(userno));
+		mav.addObject("bvo", bvo);
 		mav.addObject("cart", pvolist);
 		mav.setViewName("order/orderForm_cart");
 		return mav;
@@ -73,8 +90,22 @@ public class OrderController {
 
 	// 바로 구매하기
 	@RequestMapping(value = "/orderDirect", method = RequestMethod.POST)
-	public ModelAndView order(HttpServletRequest req, int p_no, ProductVO vo) {
+	public ModelAndView order(HttpServletRequest req, int p_no, ProductVO pvo,MemberVO mvo,OrderVO ovo) {
+		HttpSession ses = req.getSession();
+		int userno = 0;
+		if(ses.getAttribute("userno")!=null) {
+			userno = (Integer) (ses.getAttribute("userno"));
+			System.out.println("유저넘버"+userno);
+			ses.setAttribute("logStatus", "Y");
+			mvo.setUserno(userno);
+		}else {
+			ses.setAttribute("logStatus", "N");
+		}
+		
+		OrderDAOImp orderdao = sqlSession.getMapper(OrderDAOImp.class);
 		ProductDAOImp dao = sqlSession.getMapper(ProductDAOImp.class);
+		AdminDAOImp admindao = sqlSession.getMapper(AdminDAOImp.class);
+		BasicinfoVO bvo = admindao.basicinfoselect();
 		ModelAndView mav = new ModelAndView();
 		// 파라미터값을 받아와서 vo에 저장함.
 
@@ -85,32 +116,46 @@ public class OrderController {
 
 		int zero = 0;
 		if (Integer.parseInt(req.getParameter("product_payment")) == 0) {
-			vo.setDelivery_fee(zero);
+			pvo.setDelivery_fee(zero);
 		} else if (req.getParameter("product_payment") == "1") {
-			vo.setDelivery_fee(delivery_fee);
+			pvo.setDelivery_fee(delivery_fee);
 		}
-		vo.setPeriod(orderStart, orderEnd, borrowPeriod);// 기간 yyyy-mm-dd~yyyy-mm-dd(x박x일)
-
-		mav.addObject("vo", vo);
-
+		pvo.setPeriod(orderStart, orderEnd, borrowPeriod);// 기간 yyyy-mm-dd~yyyy-mm-dd(x박x일)
+		
+		mav.addObject("memberInfo",orderdao.selectMember(userno));
+		System.out.println("유저 정보 가져오기"+orderdao.selectMember(userno));
+		mav.addObject("bvo", bvo);
+		mav.addObject("vo", pvo);
 		mav.addObject("product", dao.productView(p_no));
 		mav.setViewName("order/orderForm");
 		return mav;
 	}
 
-	// 제품 구매 완료
+	// 바로구매하기 완료
 	@RequestMapping("/orderOk")
 	public ModelAndView orderOk(HttpServletRequest req, ProductVO pvo, OrderVO ovo) throws ParseException {
 		HttpSession ses = req.getSession();
-		if(ses.getAttribute("userno")!=null) {
-			int userno = Integer.parseInt(String.valueOf(ses.getAttribute("userno")));
-			ovo.setUserno(userno);
-		}
-		// 마일리지
-		int mileage = Integer.parseInt(req.getParameter("mileage"));
-		ovo.setMileage(mileage);
 		ModelAndView mav = new ModelAndView();
 		OrderDAOImp dao = sqlSession.getMapper(OrderDAOImp.class);
+		if(ses.getAttribute("userno")!=null) {
+			ses.setAttribute("logStatus", "Y");
+			int userno = (Integer)(ses.getAttribute("userno"));
+			ovo.setUserno(userno);
+		}else {
+			ses.setAttribute("logStatus", "N");
+		}
+		//카드 주문 정보 저장
+		ovo.setImp_uid(req.getParameter("imp_uid"));
+		ovo.setBuyer_name(req.getParameter("buyer_name"));
+		ovo.setMerchant_uid(req.getParameter("merchant_uid"));
+		ovo.setCard_corp(req.getParameter("card_name"));
+		ovo.setApply_num(req.getParameter("apply_num"));
+		ovo.setBuyer_email(req.getParameter("buyer_email"));
+		ovo.setBuyer_tel(req.getParameter("buyer_tel"));
+		ovo.setFormattedTime(req.getParameter("formattedTime"));
+		ovo.setPaid_amount(req.getParameter("paid_amount"));
+		
+	
 		/// 오더넘버에 난수 넣기.......굳이 필요 없었지만...
 		String ono_sq = dao.orderNumber(ovo);
 		String uuid_ono = UUID.randomUUID().toString();
@@ -169,7 +214,11 @@ public class OrderController {
 		try {
 			dao.order_info(ovo);
 			dao.order_recipient(ovo);
-			dao.ordertable(ovo);
+			if(ovo.getUserno()!=0) {
+				dao.ordertable(ovo);
+			}else {
+				dao.ordertable_nonmember(ovo);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("orderinfo,orderrecipient,ordertable에서 에러" + e.getMessage());
@@ -203,15 +252,12 @@ public class OrderController {
 		// pvo.setProductCount(s_noList2.size()); // 갯수
 		// pvo.setS_noList(s_noList2); // 가능한 재고코드 리스트
 		// reservation테이블,order_stock 테이블 입력
-		System.out.println(pvo.getO_no());
 		ArrayList<Integer> slist = pvo.getS_noList();////////////////////////
-		System.out.println("s_nolist 구하기..." + pvo.getS_noList());
 		for (int i = 0; i < pvo.getCurrentQty(); i++) {
 			pvo.setS_no(slist.get(i));
 			System.out.println("s_no==" + pvo.getS_no() + "에 대한 예약일은===");
 			while (c1.compareTo(c2) != 1) {
 				pvo.setStock_date(c1.getTime());
-				System.out.println("예약날짜는????" + pvo.getStock_date());
 				System.out.printf("pvo.getStock_date는 == %tF\n", pvo.getStock_date());
 				try {
 					dao.reservate(pvo);
@@ -233,15 +279,19 @@ public class OrderController {
 				return mav;
 			}
 		}
-		// 결제 테이블
+		// 카드결제 정보 입력 테이블
 		try {
-			dao.paymentInfoInsert(ovo);
+			if (req.getParameter("addr_paymethod").equals("card")) {
+				dao.paymentInfoInsert(ovo);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("paymentInfoInsert테이블 에러" + e.getMessage());
+			System.out.println("결제테이블 에러" + e.getMessage());
 			mav.setViewName("redirect:orderFail");
 			return mav;
 		}
+		
+		mav.addObject("vo", ovo);
 		return mav;
 	}
 
@@ -251,13 +301,27 @@ public class OrderController {
 		ModelAndView mav = new ModelAndView();
 		OrderDAOImp dao = sqlSession.getMapper(OrderDAOImp.class);
 		HttpSession ses = req.getSession();
+		int userno = 0;
 		if(ses.getAttribute("userno")!=null) {
-			int userno = Integer.parseInt(String.valueOf(ses.getAttribute("userno")));
+			userno = (Integer) (ses.getAttribute("userno"));
+			System.out.println("유저넘버"+userno);
+			ses.setAttribute("logStatus", "Y");
 			ovo.setUserno(userno);
+		}else {
+			ses.setAttribute("logStatus", "N");
 		}
-		// 마일리지
-		int mileage = Integer.parseInt(req.getParameter("mileage"));
-		ovo.setMileage(mileage);
+		//카드 주문 정보 저장
+		ovo.setImp_uid(req.getParameter("imp_uid"));
+		ovo.setBuyer_name(req.getParameter("buyer_name"));
+		ovo.setMerchant_uid(req.getParameter("merchant_uid"));
+		ovo.setCard_corp(req.getParameter("card_name"));
+		ovo.setApply_num(req.getParameter("apply_num"));
+		ovo.setBuyer_email(req.getParameter("buyer_email"));
+		ovo.setBuyer_tel(req.getParameter("buyer_tel"));
+		ovo.setFormattedTime(req.getParameter("formattedTime"));
+		ovo.setPaid_amount(req.getParameter("paid_amount"));
+		
+		
 		/// 오더넘버에 난수 넣기.......
 		String ono_sq = dao.orderNumber(ovo);
 		String uuid_ono = UUID.randomUUID().toString();
@@ -269,6 +333,10 @@ public class OrderController {
 		o_no = (ono_sq + "_" + time + "_" + o_no);
 		ovo.setO_no(o_no);
 		System.out.println("세션객체들.." + ses.getAttribute("productList"));
+		if(ses.getAttribute("productList")==null) {// 시간이 오래 지나거나 해서 세션이 날라갔을때 결제 실패페이지로 연결해야함.
+			mav.setViewName("redirect:orderFail");
+			return mav;
+		}
 		ArrayList<ProductVO> pvolist = (ArrayList) ses.getAttribute("productList"); // 장바구니에 담긴 품목 리스트
 		ArrayList<ProductVO> pvolist2 = (ArrayList) ses.getAttribute("productList"); // 장바구니에 담긴 품목 리스트
 		if (pvolist == null) {
@@ -320,7 +388,11 @@ public class OrderController {
 		try {
 			dao.order_info(ovo);
 			dao.order_recipient(ovo);
-			dao.ordertable(ovo);
+			if(ovo.getUserno()!=0) {
+				dao.ordertable(ovo);
+			}else {
+				dao.ordertable_nonmember(ovo);
+			}
 			if (req.getParameter("addr_paymethod").equals("card")) {
 				dao.paymethod_card(ovo);
 			} else if (req.getParameter("addr_paymethod").equals("cash")) {
@@ -369,13 +441,8 @@ public class OrderController {
 			Calendar c2 = Calendar.getInstance();
 			c1.setTime(d1);
 			c2.setTime(d2);
-//			System.out.println("선택한것의 구매 갯수" + pvolist.get(i).getCurrentQty());
-//			System.out.println("날짜들" + c1.getTime() + "~" + c2.getTime());
-//			System.out.println("order넘버는===" + pvo.getO_no());
-//			System.out.println("p_no넘버는===" + pvo.getP_no());
 			ArrayList<Integer> slist = pvo.getS_noList();
 			System.out.println("가능한s_noList=="+slist);
-			System.out.println(pvo.getS_noList());
 			for (int i2 = 0; i2 < pvo.getCurrentQty(); i2++) {
 				System.out.println("현재 구매 갯수"+pvo.getCurrentQty());
 				pvo.setS_no(slist.get(i2));
@@ -405,15 +472,20 @@ public class OrderController {
 				}
 			}
 		}
-		// 결제 테이블
+		// 카드결제 정보 입력 테이블
 		try {
-			dao.paymentInfoInsert(ovo);
+			if (req.getParameter("addr_paymethod").equals("card")) {
+				dao.paymentInfoInsert(ovo);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("결제테이블 에러" + e.getMessage());
 			mav.setViewName("redirect:orderFail");
 			return mav;
 		}
+		
+		ses.removeAttribute("productList");
+		mav.addObject("vo", ovo);
 		return mav;
 	}
 
@@ -421,4 +493,49 @@ public class OrderController {
 	public String orderFail() {
 		return "order/orderFail";
 	}
+	
+	@RequestMapping("/orderShipping")
+	public ModelAndView mypageshipping(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		HttpSession session = request.getSession();
+		if((Integer)session.getAttribute("userno") == null) {
+			mv.setViewName("redirect:loginFrm");
+			return mv;
+		}
+		int userno = (Integer)session.getAttribute("userno");
+		MypageDAO dao = sqlSession.getMapper(MypageDAO.class);
+		mv.addObject("list", dao.shippingList(userno));
+		mv.setViewName("/order/orderShipping");
+		return mv;
+	}
+	
+	@RequestMapping("/CancleOrder")
+	public String CancleOrder() {
+		return "order/cancleOrder";
+	}
+	
+	@RequestMapping("/nonmemberOrderHistory")
+	public String nonmemberOrderHistory() {
+		return "order/nonmember_orderHistory";
+	}
+	@RequestMapping(value="/nonSearchHistory",method = RequestMethod.POST)
+	public ModelAndView nonSearchHistory(HttpServletRequest req) {
+		String o_no = req.getParameter("o_no");
+		String username = req.getParameter("username");
+		String password = req.getParameter("opassword");
+		System.out.println("주문자 이름"+username+"//"+"비밀번호"+password+"//"+"오더넘버"+o_no);
+		ModelAndView mav = new ModelAndView();
+		OrderDAOImp dao = sqlSession.getMapper(OrderDAOImp.class);
+		System.out.println(dao.selectOrder(o_no,username,password)+"<<---vo 결과");
+		if(dao.selectOrder(o_no,username,password)==null) {
+			System.out.println("주문번호 없음");
+			mav.addObject("result", 0);
+			mav.setViewName("/order/nonmember_searchFail");
+		}else {
+			mav.addObject("vo", dao.selectOrder(o_no,username,password));
+			mav.setViewName("/member/mypageOrderView");
+		}
+		return mav;
+	}
+	
 }

@@ -37,18 +37,16 @@
 	<dl>
 		<dt>주문관리</dt>
 		<dd>
-			<a href="">- 주문리스트</a>
-		</dd>		
+			<a href="/bitcamp/admin/orderList">- 주문리스트</a>
+		</dd>
 		<dt>취소/교환/반품/환불</dt>
 		<dd>
-			<a href="">- 취소리스트</a>
+			<a href="/bitcamp/admin/orderCancelList">- 취소리스트</a>
 		</dd>
 		<dd>
-			<a href="">- 교환/반품리스트</a>
+			<a href="/bitcamp/admin/orderReturnList">- 교환/반품리스트</a>
 		</dd>
-		<dd>
-			<a href="">- 환불리스트</a>
-		</dd>
+
 	</dl>
 </div>
 
@@ -87,16 +85,16 @@
 		<table class="admin_table">
 			<tbody>
 				<tr>
-					<th width="10%">무통장 주문금액</th>
-					<td width="40%"><b><c:if test="${vo.payment_type =='cash' }">${vo.totalprice }원</c:if></b></td>
-					<th width="10%">카드 주문금액</th>
-					<td width="40%"><b><c:if test="${vo.payment_type =='card' }">${vo.totalprice }원</c:if></b></td>
+					<c:if test="${vo.payment_type =='cash' }"><th width="10%">무통장 주문금액</th>
+					<td><b>${vo.totalprice }원</b></td></c:if>
+					<c:if test="${vo.payment_type =='card' }"><th width="10%">카드 주문금액</th>
+					<td ><b>${vo.totalprice }원</b></td></c:if>
 				</tr>
 				<tr>
-					<th>무통장 결제금액</th>
-					<td><input type="text" name="payment_price" value="0" class="text w120">원</td>
-					<th>카드 결제금액</th>
-					<td><b><c:if test="${vo.payment_type =='card' }">${vo.totalprice }원</c:if></b></td>
+					<c:if test="${vo.payment_type =='cash' }"><th>무통장 결제금액</th>
+					<td><input type="text" name="payment_price" value="${vo.payment_price }" class="text w120"/>원</td></c:if>
+					<c:if test="${vo.payment_type =='card' }"><th>카드 결제금액</th>
+					<td><b>${vo.totalprice }원</b></td></c:if>
 				</tr>
 			</tbody>
 		</table>

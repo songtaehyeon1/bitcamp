@@ -19,7 +19,10 @@
 			}
 			var rtel = $("#rtel").val();
 			reg = /(01[0|1|6|7|8|9])[-](\d{4})[-](\d{4}$)/;
-			if(!reg.test(rtel)){
+			var reg2 = /(02)[-](\d{3})[-](\d{4}$)/;
+			var reg3 = /(0[3|4|5|6|7][0|1|2|3|4|5])[-](\d{3})[-](\d{4})/;
+			var reg4 = /(050[2|3|4|5|6|7|8])[-](\d{4})[0](\d{4})/;
+			if(!reg.test(rtel) && !reg2.test(rtel) && !reg3.test(rtel) && !reg4.test(rtel)){
 				alert("연락처를 다시 입력해 주세요.(-까지 작성해 주세요.)");
 				return false;
 			}
@@ -46,11 +49,11 @@
 		<table class="admin_table">
 			<tbody>
 				<tr>
-					<th width="10%" style = "color : white;">무통장 주문금액</th>
-					<td width="40%"><b><c:if test="${vo.payment_type =='cash' }">${vo.totalprice }원</c:if></b></td>
-					<th width="10%" style = "color : white;">카드 주문금액</th>
-					<td width="40%"><b><c:if test="${vo.payment_type =='card' }">${vo.totalprice }원</c:if></b></td>
-				</tr>
+					<c:if test="${vo.payment_type =='cash' }"><th width="10%">무통장 주문금액</th>
+					<td><b>${vo.totalprice }원</b></td></c:if>
+					<c:if test="${vo.payment_type =='card' }"><th width="10%">카드 주문금액</th>
+					<td ><b>${vo.totalprice }원</b></td></c:if>
+				</tr>				
 			</tbody>
 		</table>
 

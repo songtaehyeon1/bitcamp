@@ -51,9 +51,6 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView();
 		NoticeDAO dao = sqlSession.getMapper(NoticeDAO.class);
 		pagevo.setTotalRecord(dao.getTotalRecord(pagevo));
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("adminStatus", "N");
 
 		mv.addObject("pagevo", pagevo);
 		mv.addObject("list", dao.allList(pagevo));
@@ -192,6 +189,7 @@ public class BoardController {
 	// 글 쓰기
 	@RequestMapping(value = "/enquiry_writeOk", method = RequestMethod.POST)
 	public ModelAndView enquiry_writeOk(EnquiryVO vo, HttpServletRequest request) {
+		vo.setEnquiry_content(vo.getEnquiry_content().replace("\r\n", "<br>"));
 		ModelAndView mv = new ModelAndView();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		HttpSession session = request.getSession();
@@ -317,6 +315,7 @@ public class BoardController {
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		EnquiryVO vo = dao.list(no);
 		vo.setC_no(dao.enquiryUpdateCate(vo.getP_no()));
+		vo.setEnquiry_content(vo.getEnquiry_content().replace("<br>", "\r\n"));
 		
 		mv.addObject("mypage", mypage);
 		mv.addObject("cateList", dao.enquiryCategory());
@@ -329,6 +328,7 @@ public class BoardController {
 	// 글 수정
 	@RequestMapping("/enquiry_editOk")
 	public ModelAndView enquiry_editOk(EnquiryVO vo, String mypage) {
+		vo.setEnquiry_content(vo.getEnquiry_content().replace("\r\n", "<br>"));
 		ModelAndView mv = new ModelAndView();
 		EnquiryDAO dao = sqlSession.getMapper(EnquiryDAO.class);
 		int cnt = dao.enquiryUpdate(vo);

@@ -1,4 +1,19 @@
+window.addEventListener( "pageshow", function ( event ) {
+  var historyTraversal = event.persisted || 
+                         ( typeof window.performance != "undefined" && 
+                              window.performance.navigation.type === 2 );
+  if ( historyTraversal ) {
+    // Handle page restore.
+    window.location.reload();
+  }
+});
 $(function() {
+	
+	
+	
+	$(".list2").click(function(){
+		allEnquiry(no, $(this));
+	});
 	//최대 대여갯수 설정
 	$("#putCart").click(this,function(){
 		var limitQty = parseInt($("#limitQuantity").html());
@@ -12,7 +27,7 @@ $(function() {
 	
 	// 바로 구매하기 옵션이 있어야만 전송이 됨
 	$('.buyRightNow').click(this, function() {
-
+		
 		var payment = $('#product_payment');
 		var period = $('#product_borrow_period');
 		var start = $('#borrow_start');
@@ -31,36 +46,38 @@ $(function() {
 			start.focus();
 			return false
 		}
+		if ($("input[name='currentQty']").val()==0){
+			alert('상품의 재고가 없습니다. 관리자에게 문의해주세요')
+			return false;
+		}
 	})
 	// 주문수량 조정
-	$('.productQty').click(
-			this,
-			function() {
-				$('.quantity_msg').css('display', 'none');
-				var currentQty = parseInt($('.currentQty').val());// 현재 주문 수량
+	$('.productQty').click(this,function() {
+		$('.quantity_msg').css('display', 'none');
+		var currentQty = parseInt($('.currentQty').val());// 현재 주문 수량
+		$('.quantity_wrap').css('border-bottom',
+				'1px solid rgba(0, 0, 0, .1)');
+		var limitQty = parseInt($('#limitQuantity').html())
+		if ($(this).hasClass("plus")) {
+			if (currentQty < limitQty) {
+				var plus = currentQty + 1;
+				$('.currentQty').attr('value', plus)
+			}
+			if (currentQty >= limitQty) {
+				$('.quantity_msg').css('display', 'block');
 				$('.quantity_wrap').css('border-bottom',
-						'1px solid rgba(0, 0, 0, .1)');
-				var limitQty = parseInt($('#limitQuantity').html())
-				if ($(this).hasClass("plus")) {
-					if (currentQty < limitQty) {
-						var plus = currentQty + 1;
-						$('.currentQty').attr('value', plus)
-					}
-					if (currentQty >= limitQty) {
-						$('.quantity_msg').css('display', 'block');
-						$('.quantity_wrap').css('border-bottom',
-								'1px solid red');
-						$('.currentQty').attr('value', limitQty)
-						return false;
-					}
-				}
-				if ($(this).hasClass("minus")) {
-					if (currentQty > 1) {
-						var minus = currentQty - 1;
-						$('.currentQty').attr('value', minus)
-					}
-				}
-			})
+						'1px solid red');
+				$('.currentQty').attr('value', limitQty)
+				return false;
+			}
+		}
+		if ($(this).hasClass("minus")) {
+			if (currentQty > 1) {
+				var minus = currentQty - 1;
+				$('.currentQty').attr('value', minus)
+			}
+		}
+	})
 
 	// inputbox에 클릭이나 커서표시가 안되게 하기
 	$('.input_noclick').click(this, function(event) {
@@ -273,12 +290,46 @@ function availableChk() {
 		},
 		success : function(result) {
 			console.log(result.productCount)
+			$('.currentQty').attr('value', 1)
+			if(result.productCount==0){
+				$('.currentQty').attr('value', 0)
+			}
 			$("#limitQuantity").html(result.productCount)
 		},
 		error : function(e) {
 			alert("재고 데이터 선택 실패" + e.responseText);
 		}
 	});
+}
+//질문글 다 가져오기
+var no;
+function allEnquiry(no,li){
 
-
+//	alert(no)
+	$.ajax({
+		type:"get",
+		url:"/bitcamp/getReply",
+		data:{
+			"no":no
+		},
+		success:function(result){
+			var $result = $(result);
+			var tag="<ul class='QAList2'>";
+			$result.each(function(idx,vo){
+				tag+='<li style="width:5%"><img src="/bitcamp/resources/products/repl.png"></li>';
+				tag+='<li style="width:25%">'+"&nbsp"+vo.userid+'</li>';
+				tag+='<li style="width:50%">'+vo.e_reply_content+'</li>';
+				tag+='<li style="width:20%">'+vo.e_reply_writedate+'</li>';
+			tag+="</ul><ul class='QAList2'>";
+			});
+//			tag+="</ul>";
+//			alert(tag)
+			$(li).parent().find('.reply').html(tag)
+//			$(".reply").html(tag);
+		},
+		error:function(e){
+			console.log("리플 가져오기 실패+"+e.responseText)
+		}
+	});
+	
 }
